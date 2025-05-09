@@ -16,21 +16,3 @@ type Story = StoryObj<typeof TokenDemo>;
 export const Default: Story = {
   name: 'Token Demonstration',
 };
-
-export const TagaddodBrand: Story = {
-  name: 'Tagaddod Brand',
-  parameters: {
-    globals: {
-      brand: 'tagaddod',
-    },
-  },
-};
-
-export const GreenPanBrand: Story = {
-  name: 'GreenPan Brand',
-  parameters: {
-    globals: {
-      brand: 'greenpan',
-    },
-  },
-};

@@ -4,6 +4,8 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
 // Import tokens CSS globally
 import '@tagaddod/tokens/dist/css/tokens.css';
+// Import theme-specific CSS
+import '@tagaddod/themes/dist/css/themes.css';
 
 const rtlDecorator = (Story: any, context: any) => {
   const { locale } = context.globals;
@@ -38,21 +40,32 @@ export const decorators = [
 export const globalTypes = {
   brand: {
     name: 'Brand',
+    description: 'Global brand for components',
     defaultValue: 'tagaddod',
     toolbar: { 
+      icon: 'paintbrush',
       items: ['tagaddod', 'greenpan'],
-      showName: true 
+      showName: true,
+      title: 'Brand'
     }
   },
   locale: {
     name: 'Locale',
+    description: 'Internationalization locale',
     defaultValue: 'en',
     toolbar: { 
+      icon: 'globe',
       items: [
         { value: 'en', title: 'English', right: '🇺🇸' }, 
         { value: 'ar', title: 'العربية', right: '🇪🇬' }
       ],
-      showName: true
+      showName: true,
+      title: 'Locale'
     }
   }
+};
+
+export const initialGlobals = {
+  brand: 'tagaddod',
+  locale: 'en'
 };

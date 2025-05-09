@@ -1,34 +1,40 @@
 import React, { createContext, useContext, useEffect } from 'react';
 
-interface ThemeContextType {
-  name: string;
+export interface ThemeContextValue {
+  brand: 'tagaddod' | 'greenpan';
 }
 
-const ThemeContext = createContext<ThemeContextType>({ name: 'tagaddod' });
+const ThemeContext = createContext<ThemeContextValue>({
+  brand: 'tagaddod',
+});
 
-export const useTheme = () => useContext(ThemeContext);
-
-interface ThemeProviderProps {
-  name?: string;
+export interface ThemeProviderProps {
   children: React.ReactNode;
+  name?: 'tagaddod' | 'greenpan';
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ 
-  name = 'tagaddod', 
-  children 
+  children, 
+  name = 'tagaddod' 
 }) => {
   useEffect(() => {
-    // Apply theme class to root element
-    const root = document.documentElement;
     // Remove all theme classes
-    root.classList.remove('Polaris-Theme--Tagaddod', 'Polaris-Theme--Greenpan');
-    // Add the selected theme class
-    root.classList.add(`Polaris-Theme--${name.charAt(0).toUpperCase() + name.slice(1)}`);
+    document.documentElement.classList.remove('theme-tagaddod', 'theme-greenpan');
+    // Add the current theme class
+    document.documentElement.classList.add(`theme-${name}`);
   }, [name]);
 
   return (
-    <ThemeContext.Provider value={{ name }}>
+    <ThemeContext.Provider value={{ brand: name }}>
       {children}
     </ThemeContext.Provider>
   );
+};
+
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
 };
