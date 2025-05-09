@@ -1,0 +1,10 @@
+yarn run v1.22.22
+warning package.json: No license field
+$ ts-node scripts/build.ts && ts-node scripts/build-types.ts
+Warning: @tagaddod/tokens not found, using mock data for build
+✔ Themes built successfully
+  - dist/tagaddod.json
+  - dist/greenpan.json
+  - dist/index.js
+✔ Types generated successfully
+Done in 3.77s.

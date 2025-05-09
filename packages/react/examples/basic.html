@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tagaddod React Components - Basic Example</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script type="module">
+    import React from 'https://esm.sh/react@18';
+    import ReactDOM from 'https://esm.sh/react-dom@18/client';
+    
+    // This would be imported from @tagaddod/react in a real app
+    const Button = ({ variant = 'primary', size = 'md', children, ...props }) => {
+      return React.createElement('button', {
+        className: `button ${variant} ${size}`,
+        ...props
+      }, children);
+    };
+    
+    function App() {
+      return React.createElement('div', { style: { display: 'flex', gap: '1rem', flexWrap: 'wrap' } },
+        React.createElement(Button, { variant: 'primary', size: 'md' }, 'Primary Button'),
+        React.createElement(Button, { variant: 'primary', size: 'lg' }, 'Large Primary'),
+        React.createElement(Button, { variant: 'secondary', size: 'md' }, 'Secondary Button'),
+        React.createElement(Button, { variant: 'secondary', size: 'lg' }, 'Large Secondary'),
+        React.createElement(Button, { variant: 'primary', disabled: true }, 'Disabled Button')
+      );
+    }
+    
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(App));
+  </script>
+  
+  <style>
+    /* Minimal styles for demo - in real app these would come from CSS modules */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .primary {
+      color: white;
+      background: #25b24b;
+    }
+    
+    .primary:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+    
+    .secondary {
+      color: #333;
+      background: white;
+      border: 1px solid #ccc;
+    }
+    
+    .secondary:hover:not(:disabled) {
+      background: #f5f5f5;
+    }
+    
+    .md {
+      height: 36px;
+      font-size: 14px;
+    }
+    
+    .lg {
+      height: 44px;
+      font-size: 16px;
+      padding: 0.5rem 1.25rem;
+    }
+    
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "surface": {
+    "background": {
+      "default": { "value": "{color.neutral.50}", "type": "color" }
+    },
+    "text": {
+      "default": { "value": "{color.neutral.900}", "type": "color" }
+    }
+  }
+}

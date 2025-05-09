@@ -1,0 +1,21 @@
+{
+  "color": {
+    "green": {
+      "500": { "value": "#009f4d", "type": "color", "comment": "GreenPan brand green" }
+    },
+    "red": {
+      "500": { "value": "#e53935", "type": "color", "comment": "GreenPan error color" }
+    }
+  },
+  "button": {
+    "primary": {
+      "background": { "value": "{color.green.500}", "type": "color" }
+    }
+  },
+  "feedback": {
+    "error": {
+      "text": { "value": "{color.red.500}", "type": "color" },
+      "background": { "value": "{color.red.500}", "type": "color" }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "feedback": {
+    "error": {
+      "text": { "value": "{color.red.500}", "type": "color" },
+      "background": { "value": "{color.red.500}", "type": "color" }
+    }
+  }
+}

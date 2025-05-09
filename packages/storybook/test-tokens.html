@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Token Test</title>
+    <link rel="stylesheet" href="../tokens/dist/css/tokens.css">
+    <style>
+        body {
+            font-family: var(--t-typography-font-family-base);
+            padding: var(--t-space-400);
+        }
+        .test-box {
+            background: var(--t-color-green-500);
+            padding: var(--t-space-400);
+            border-radius: var(--t-radius-200);
+            color: white;
+            margin-bottom: var(--t-space-300);
+        }
+        .button-test {
+            background: var(--t-button-primary-background);
+            color: var(--t-button-primary-text);
+            padding: var(--t-space-300) var(--t-space-400);
+            border: none;
+            border-radius: var(--t-radius-200);
+            cursor: pointer;
+            font-weight: var(--t-typography-font-weight-medium);
+        }
+    </style>
+</head>
+<body>
+    <h1>Token System Test</h1>
+    
+    <div class="test-box">
+        This box should have a green background using --t-color-green-500: #25b24b
+    </div>
+    
+    <button class="button-test">
+        Primary Button (using --t-button-primary-background)
+    </button>
+    
+    <pre>
+Current Token Values:
+--t-color-blue-500: #0066ff
+--t-color-green-500: #25b24b (Tagaddod green)
+--t-button-primary-background: #25b24b
+--t-button-primary-text: #f7f8fa
+    </pre>
+</body>
+</html>

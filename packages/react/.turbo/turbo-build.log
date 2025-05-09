@@ -1,0 +1,15 @@
+yarn run v1.22.22
+warning package.json: No license field
+$ vite build && tsc --project tsconfig.build.json
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+vite v6.3.5 building for production...
+transforming...
+✓ 37 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/react.css   3.33 kB │ gzip: 1.03 kB
+dist/index.mjs  17.02 kB │ gzip: 5.81 kB
+dist/react.css   3.33 kB │ gzip: 1.03 kB
+dist/index.js   12.39 kB │ gzip: 5.17 kB
+✓ built in 645ms
+Done in 3.26s.

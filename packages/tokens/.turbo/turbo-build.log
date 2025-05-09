@@ -1,0 +1,13 @@
+yarn run v1.22.22
+$ style-dictionary build
+
+css
+✔︎ dist/css/tokens.css
+
+scss
+✔︎ dist/scss/_tokens.scss
+
+js
+✔︎ dist/index.js
+✔︎ dist/tokens.js
+Done in 0.66s.

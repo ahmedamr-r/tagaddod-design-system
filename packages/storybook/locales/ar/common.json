@@ -1,0 +1,33 @@
+{
+  "button": {
+    "primary": "زر أساسي",
+    "secondary": "زر ثانوي",
+    "large": "كبير",
+    "medium": "متوسط",
+    "loading": "جار التحميل..."
+  },
+  "common": {
+    "close": "إغلاق",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "search": "بحث",
+    "filter": "تصفية",
+    "apply": "تطبيق",
+    "reset": "إعادة تعيين"
+  },
+  "form": {
+    "required": "مطلوب",
+    "optional": "اختياري",
+    "error": "خطأ",
+    "success": "نجاح",
+    "placeholder": "أدخل {field}"
+  },
+  "demo": {
+    "title": "نظام تصميم تقدد",
+    "description": "نظام تصميم شامل لعلامتي تقدد وجرين بان التجارية",
+    "welcome": "مرحباً بك في TDS"
+  }
+}

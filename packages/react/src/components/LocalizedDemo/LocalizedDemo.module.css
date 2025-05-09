@@ -1,0 +1,64 @@
+.wrapper {
+  padding: var(--t-space-400);
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: var(--t-space-300);
+  color: var(--t-color-text);
+}
+
+.description {
+  font-size: 1.1rem;
+  margin-bottom: var(--t-space-400);
+  color: var(--t-color-text-subtle);
+}
+
+.welcome {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: var(--t-space-500);
+  color: var(--t-color-text-emphasis);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: var(--t-space-300);
+  justify-content: center;
+  margin-bottom: var(--t-space-500);
+}
+
+.actionGroup {
+  display: flex;
+  gap: var(--t-space-200);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.action {
+  padding: var(--t-space-200) var(--t-space-300);
+  border: 1px solid var(--t-color-border);
+  border-radius: var(--t-radius-200);
+  background: var(--t-color-bg);
+  color: var(--t-color-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action:hover {
+  background: var(--t-color-bg-hover);
+  border-color: var(--t-color-border-hover);
+}
+
+/* RTL-specific styles */
+:global(.rtl) .wrapper {
+  text-align: right;
+}
+
+:global(.rtl) .buttonGroup,
+:global(.rtl) .actionGroup {
+  flex-direction: row-reverse;
+}

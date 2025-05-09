@@ -1,0 +1,33 @@
+{
+  "button": {
+    "primary": "Primary Button",
+    "secondary": "Secondary Button",
+    "large": "Large",
+    "medium": "Medium",
+    "loading": "Loading..."
+  },
+  "common": {
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "apply": "Apply",
+    "reset": "Reset"
+  },
+  "form": {
+    "required": "Required",
+    "optional": "Optional",
+    "error": "Error",
+    "success": "Success",
+    "placeholder": "Enter {field}"
+  },
+  "demo": {
+    "title": "Tagaddod Design System",
+    "description": "A comprehensive design system for Tagaddod and GreenPan brands",
+    "welcome": "Welcome to TDS"
+  }
+}
