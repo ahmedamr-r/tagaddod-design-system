@@ -1,17 +1,30 @@
 {
-  "color": {
-    "blue": {
-      "500": { "value": "#0066ff", "type": "color" }
+  "blue": {
+    "500": {
+      "value": "#0066ff",
+      "type": "color"
+    }
+  },
+  "green": {
+    "500": {
+      "value": "#25b24b",
+      "type": "color"
+    }
+  },
+  "neutral": {
+    "50": {
+      "value": "#f7f8fa",
+      "type": "color"
     },
-    "green": {
-      "500": { "value": "#25b24b", "type": "color", "comment": "Tagaddod green" }
-    },
-    "red": {
-      "500": { "value": "#d32f2f", "type": "color", "comment": "Error color" }
-    },
-    "neutral": {
-      "50":  { "value": "#f7f8fa", "type": "color" },
-      "900": { "value": "#1c1d22", "type": "color" }
+    "900": {
+      "value": "#1c1d22",
+      "type": "color"
+    }
+  },
+  "red": {
+    "500": {
+      "value": "#d32f2f",
+      "type": "color"
     }
   }
 }
