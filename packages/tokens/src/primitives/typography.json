@@ -1,19 +1,38 @@
 {
-  "typography": {
-    "fontFamily": {
-      "base": { "value": "Inter, system-ui, sans-serif", "type": "fontFamily" }
-    },
-    "fontSize": {
-      "100": { "value": "12px", "type": "dimension" },
-      "200": { "value": "14px", "type": "dimension" },
-      "300": { "value": "16px", "type": "dimension" },
-      "400": { "value": "18px", "type": "dimension" },
-      "500": { "value": "20px", "type": "dimension" }
-    },
-    "fontWeight": {
-      "regular": { "value": "400", "type": "fontWeight" },
-      "medium": { "value": "500", "type": "fontWeight" },
-      "semibold": { "value": "600", "type": "fontWeight" }
-    }
+  "font-family-base": {
+    "value": "Inter, system-ui, sans-serif",
+    "type": "string"
+  },
+  "font-size100": {
+    "value": "12px",
+    "type": "string"
+  },
+  "font-size200": {
+    "value": "14px",
+    "type": "string"
+  },
+  "font-size300": {
+    "value": "16px",
+    "type": "string"
+  },
+  "font-size400": {
+    "value": "18px",
+    "type": "string"
+  },
+  "font-size500": {
+    "value": "20px",
+    "type": "string"
+  },
+  "font-weight-medium": {
+    "value": "500",
+    "type": "string"
+  },
+  "font-weight-regular": {
+    "value": "400",
+    "type": "string"
+  },
+  "font-weight-semibold": {
+    "value": "600",
+    "type": "string"
   }
 }
