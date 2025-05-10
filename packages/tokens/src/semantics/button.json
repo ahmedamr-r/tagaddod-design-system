@@ -1,0 +1,12 @@
+{
+  "primary": {
+    "background": {
+      "value": "#25b24b",
+      "type": "color"
+    },
+    "text": {
+      "value": "#f7f8fa",
+      "type": "color"
+    }
+  }
+}
