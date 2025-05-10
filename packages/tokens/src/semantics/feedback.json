@@ -1,8 +1,40 @@
 {
-  "feedback": {
-    "error": {
-      "text": { "value": "{color.red.500}", "type": "color" },
-      "background": { "value": "{color.red.500}", "type": "color" }
+  "error": {},
+  "success": {},
+  "errorbackgroun": {
+    "d": {
+      "value": "#d32f2f",
+      "type": "color"
+    }
+  },
+  "errorborde": {
+    "r": {
+      "value": "#d32f2f",
+      "type": "color"
+    }
+  },
+  "errortex": {
+    "t": {
+      "value": "#d32f2f",
+      "type": "color"
+    }
+  },
+  "successbackgroun": {
+    "d": {
+      "value": "rgba(#25b24b, 0.1)",
+      "type": "color"
+    }
+  },
+  "successborde": {
+    "r": {
+      "value": "#25b24b",
+      "type": "color"
+    }
+  },
+  "successtex": {
+    "t": {
+      "value": "#25b24b",
+      "type": "color"
     }
   }
 }
