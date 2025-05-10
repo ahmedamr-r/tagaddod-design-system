@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "storybook": "storybook dev -p 6006",
+    "watch": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "clean": "rm -rf .storybook-static"
   },

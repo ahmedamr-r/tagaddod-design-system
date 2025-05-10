@@ -1,15 +1,12 @@
-yarn run v1.22.22
-warning package.json: No license field
-$ vite build && tsc --project tsconfig.build.json
-[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
-vite v6.3.5 building for production...
-transforming...
-✓ 37 modules transformed.
-rendering chunks...
-computing gzip size...
-dist/react.css   3.33 kB │ gzip: 1.03 kB
-dist/index.mjs  17.02 kB │ gzip: 5.81 kB
-dist/react.css   3.33 kB │ gzip: 1.03 kB
-dist/index.js   12.39 kB │ gzip: 5.17 kB
-✓ built in 645ms
-Done in 3.26s.
+
+[2K[1G[1myarn run v1.22.22[22m
+[2K[1G[33mwarning[39m package.json: No license field
+[2K[1G[2m$ vite build && tsc --project tsconfig.build.json[22m
+[36mvite v6.3.5 [32mbuilding for production...[36m[39m
+[2K[1Gtransforming (1) [2msrc/index.ts[22m[2K[1Gtransforming (37) [2m../../node_modules/void-elements/index.js[22m[2K[1G[32m✓[39m 38 modules transformed.
+[2K[1Grendering chunks (1)...[2K[1G[2K[1Gcomputing gzip size (0)...[2K[1Gcomputing gzip size (1)...[2K[1Gcomputing gzip size (2)...[2K[1G[2mdist/[22m[35mreact.css  [39m[1m[2m 4.10 kB[22m[1m[22m[2m │ gzip: 1.11 kB[22m
+[2mdist/[22m[36mindex.mjs  [39m[1m[2m21.21 kB[22m[1m[22m[2m │ gzip: 6.46 kB[22m
+[2K[1Grendering chunks (1)...[2K[1G[2K[1Gcomputing gzip size (1)...[2K[1Gcomputing gzip size (2)...[2K[1G[2mdist/[22m[35mreact.css  [39m[1m[2m 4.10 kB[22m[1m[22m[2m │ gzip: 1.11 kB[22m
+[2mdist/[22m[36mindex.js   [39m[1m[2m15.34 kB[22m[1m[22m[2m │ gzip: 5.75 kB[22m
+[32m✓ built in 616ms[39m
+[2K[1G✨  Done in 2.62s.

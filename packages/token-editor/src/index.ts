@@ -1,9 +1,6 @@
-// Export register and preview entry points
-export * from './register';
-export * from './preview';
 export { TokenManager } from './panel/TokenManager';
-
-// Initialize preview functionality if in iframe
-if (typeof window !== 'undefined' && window.parent !== window) {
-  import('./preview');
-}
+export { ThemeAwareTokenManager } from './panel/ThemeAwareTokenManager';
+export * from './validation/tokenSchema';
+export * from './validation/contrastChecker';
+export * from './types/index';
+export { tokenCache } from './preview';

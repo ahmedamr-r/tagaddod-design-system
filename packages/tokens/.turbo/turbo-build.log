@@ -1,13 +1,18 @@
-yarn run v1.22.22
-$ style-dictionary build
+
+[2K[1G[1myarn run v1.22.22[22m
+[2K[1G[2m$ style-dictionary build[22m
+[38;2;255;140;0m[1m[22m[39m
+[38;2;255;140;0m[1mToken collisions detected (66):[22m[39m
+[38;2;255;140;0m[1mUse log.verbosity "verbose" or use CLI option --verbose for more details.[22m[39m
+[38;2;255;140;0m[1mRefer to: https://styledictionary.com/reference/logging/[22m[39m
 
 css
-✔︎ dist/css/tokens.css
+[1m[32m✔︎ dist/css/tokens.css[39m[22m
 
 scss
-✔︎ dist/scss/_tokens.scss
+[1m[32m✔︎ dist/scss/_tokens.scss[39m[22m
 
 js
-✔︎ dist/index.js
-✔︎ dist/tokens.js
-Done in 0.66s.
+[1m[32m✔︎ dist/index.js[39m[22m
+[1m[32m✔︎ dist/tokens.js[39m[22m
+[2K[1G✨  Done in 0.49s.

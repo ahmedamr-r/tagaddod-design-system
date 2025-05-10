@@ -1,0 +1,236 @@
+name: Token Sync
+
+on:
+  push:
+    branches:
+      - 'design-tokens-sync/*'
+
+env:
+  NODE_VERSION: 20
+  TOKENS_SYNC_BRANCH_PREFIX: design-tokens-sync/
+
+jobs:
+  validate-and-sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Extract primitives and semantics
+        id: extract-tokens
+        run: |
+          # Create temp directory for validation
+          mkdir -p tmp/tokens
+          
+          # Copy token files to temp directory
+          if [ -f "primitives.json" ]; then
+            cp primitives.json tmp/tokens/
+          fi
+          
+          if [ -f "semantics.json" ]; then
+            cp semantics.json tmp/tokens/
+          fi
+          
+          # Check if any token files exist
+          if [ ! -f "tmp/tokens/primitives.json" ] && [ ! -f "tmp/tokens/semantics.json" ]; then
+            echo "No token files found in push"
+            exit 1
+          fi
+
+      - name: Validate token format
+        id: validate
+        run: |
+          # Create validation script
+          cat > validate-tokens.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          
+          // W3C Design Token format validator (simplified)
+          function validateToken(token, path = []) {
+            const errors = [];
+            
+            // Check if it's a token object
+            if (token && typeof token === 'object' && 'value' in token && 'type' in token) {
+              // Validate token structure
+              if (typeof token.type !== 'string') {
+                errors.push(`${path.join('.')}: 'type' must be a string`);
+              }
+              
+              // Validate known types
+              const validTypes = ['color', 'dimension', 'font', 'number', 'string', 'shadow', 'gradient', 'transition', 'cubic-bezier'];
+              if (!validTypes.includes(token.type)) {
+                errors.push(`${path.join('.')}: Unknown type '${token.type}'`);
+              }
+              
+              // Type-specific validation
+              if (token.type === 'color' && typeof token.value === 'string') {
+                const colorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$|^rgb\(|^rgba\(|^hsl\(|^hsla\(/;
+                if (!colorRegex.test(token.value)) {
+                  errors.push(`${path.join('.')}: Invalid color value '${token.value}'`);
+                }
+              }
+              
+              return errors;
+            }
+            
+            // If it's an object, recurse through properties
+            if (token && typeof token === 'object') {
+              Object.entries(token).forEach(([key, value]) => {
+                errors.push(...validateToken(value, [...path, key]));
+              });
+            }
+            
+            return errors;
+          }
+          
+          // Validate files
+          let allErrors = [];
+          
+          if (fs.existsSync('tmp/tokens/primitives.json')) {
+            try {
+              const primitives = JSON.parse(fs.readFileSync('tmp/tokens/primitives.json', 'utf8'));
+              const errors = validateToken(primitives);
+              if (errors.length > 0) {
+                console.error('Primitives validation errors:');
+                errors.forEach(err => console.error(`  - ${err}`));
+                allErrors.push(...errors);
+              }
+            } catch (e) {
+              console.error('Failed to parse primitives.json:', e.message);
+              allErrors.push('Invalid JSON in primitives.json');
+            }
+          }
+          
+          if (fs.existsSync('tmp/tokens/semantics.json')) {
+            try {
+              const semantics = JSON.parse(fs.readFileSync('tmp/tokens/semantics.json', 'utf8'));
+              const errors = validateToken(semantics);
+              if (errors.length > 0) {
+                console.error('Semantics validation errors:');
+                errors.forEach(err => console.error(`  - ${err}`));
+                allErrors.push(...errors);
+              }
+            } catch (e) {
+              console.error('Failed to parse semantics.json:', e.message);
+              allErrors.push('Invalid JSON in semantics.json');
+            }
+          }
+          
+          if (allErrors.length > 0) {
+            console.error(`Total validation errors: ${allErrors.length}`);
+            process.exit(1);
+          }
+          
+          console.log('All tokens validated successfully');
+          EOF
+          
+          node validate-tokens.js
+
+      - name: Copy tokens to source directory
+        run: |
+          # Copy primitives
+          if [ -f "tmp/tokens/primitives.json" ]; then
+            mkdir -p packages/tokens/src/primitives
+            # Split primitives into category files
+            node -e "
+              const fs = require('fs');
+              const primitives = JSON.parse(fs.readFileSync('tmp/tokens/primitives.json', 'utf8'));
+              
+              Object.entries(primitives).forEach(([category, tokens]) => {
+                const outputPath = \`packages/tokens/src/primitives/\${category}.json\`;
+                fs.writeFileSync(outputPath, JSON.stringify(tokens, null, 2));
+                console.log(\`Created \${outputPath}\`);
+              });
+            "
+          fi
+          
+          # Copy semantics
+          if [ -f "tmp/tokens/semantics.json" ]; then
+            mkdir -p packages/tokens/src/semantics
+            # Split semantics into category files
+            node -e "
+              const fs = require('fs');
+              const semantics = JSON.parse(fs.readFileSync('tmp/tokens/semantics.json', 'utf8'));
+              
+              Object.entries(semantics).forEach(([category, tokens]) => {
+                const outputPath = \`packages/tokens/src/semantics/\${category}.json\`;
+                fs.writeFileSync(outputPath, JSON.stringify(tokens, null, 2));
+                console.log(\`Created \${outputPath}\`);
+              });
+            "
+          fi
+
+      - name: Build tokens
+        run: |
+          cd packages/tokens
+          yarn build
+
+      - name: Create changeset
+        run: |
+          # Create changeset directory
+          mkdir -p .changeset
+          
+          # Generate changeset file
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          cat > .changeset/token-sync-${TIMESTAMP}.md << EOF
+          ---
+          "@tagaddod/tokens": patch
+          "@tagaddod/themes": patch
+          ---
+          
+          Updated design tokens from Tokens Studio
+          
+          Source branch: ${{ github.ref_name }}
+          Synced on: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          EOF
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: sync design tokens from Tokens Studio"
+          title: "chore: sync design tokens from ${{ github.ref_name }}"
+          body: |
+            ## Token Sync from Tokens Studio
+
+            This PR was automatically generated from the Tokens Studio sync branch: `${{ github.ref_name }}`
+
+            ### Changes
+            - Updated design tokens from Tokens Studio export
+            - All tokens have been validated against W3C Design Token format
+            - Tokens have been split into appropriate category files
+
+            ### Validation Status
+            ✅ All tokens passed validation
+
+            ### Next Steps
+            1. Review the token changes
+            2. Check visual regression tests
+            3. Merge if all checks pass
+
+            ---
+            Auto-generated on: ${{ github.event.head_commit.timestamp }}
+          branch: token-update/${{ github.ref_name }}
+          delete-branch: true
+          labels: |
+            tokens-update
+            automated-pr
+          draft: true

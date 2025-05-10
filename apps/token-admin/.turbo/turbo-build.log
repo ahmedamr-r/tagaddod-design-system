@@ -1,0 +1,20 @@
+
+[2K[1G[1myarn run v1.22.22[22m
+[2K[1G[2m$ next build[22m
+  [1m[38;2;173;127;168m▲ Next.js 14.2.28[39m[22m
+
+ [37m[1m [22m[39m Creating an optimized production build ...
+Failed to compile.
+
+./src/lib/tokenLoader.ts
+Module not found: Can't resolve 'fs'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./src/components/TokenAdmin.tsx
+
+
+> Build failed because of webpack errors
+[2K[1G[31merror[39m Command failed with exit code 1.
+[2K[1G[34minfo[39m Visit [1mhttps://yarnpkg.com/en/docs/cli/run[22m for documentation about this command.

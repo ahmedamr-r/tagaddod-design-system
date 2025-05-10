@@ -1,5 +1,5 @@
-// Import global token CSS
-import '@tagaddod/tokens/dist/css/tokens.css';
+// Import global token CSS - TEMPORARILY COMMENTED OUT
+// import '@tagaddod/tokens/dist/css/tokens.css';
 
 // Export components
 export { Button } from './components/Button';

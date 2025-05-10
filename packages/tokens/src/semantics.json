@@ -1,0 +1,24 @@
+{
+  "button": {
+    "primary": {
+      "background": { "value": "{color.green.500}", "type": "color" },
+      "text":       { "value": "{color.neutral.50}", "type": "color" }
+    }
+  },
+  "feedback": {
+    "error": {
+      "background": { "value": "rgba({color.red.500}, 0.1)", "type": "color" },
+      "border": { "value": "{color.red.500}", "type": "color" },
+      "text": { "value": "{color.red.500}", "type": "color" }
+    },
+    "success": {
+      "background": { "value": "rgba({color.green.500}, 0.1)", "type": "color" },
+      "border": { "value": "{color.green.500}", "type": "color" },
+      "text": { "value": "{color.green.500}", "type": "color" }
+    }
+  },
+  "surface": {
+    "background": { "value": "{color.neutral.50}", "type": "color" },
+    "text": { "value": "{color.neutral.900}", "type": "color" }
+  }
+}

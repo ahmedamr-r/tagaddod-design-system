@@ -4,8 +4,8 @@ const config: StorybookConfig = {
   stories: ['../../react/src/**/*.stories.@(js|tsx)'],
   addons: [
     '@storybook/addon-essentials',
-    'storybook-design-token',
-    '@tagaddod/token-editor/register'
+    // Temporarily disable token editor
+    // path.resolve(__dirname, '../../token-editor/dist/register.js')
   ],
   framework: { 
     name: '@storybook/react-vite', 

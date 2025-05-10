@@ -4,8 +4,14 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./src/tagaddod.json": "./src/tagaddod.json",
+    "./src/greenpan.json": "./src/greenpan.json"
+  },
   "scripts": {
     "build": "ts-node scripts/build.ts && ts-node scripts/build-types.ts && ts-node scripts/build-theme-css.ts",
     "clean": "rm -rf dist",

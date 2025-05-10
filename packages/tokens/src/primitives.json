@@ -1,0 +1,28 @@
+{
+  "color": {
+    "blue": {
+      "500": { "value": "#0066ff", "type": "color" }
+    },
+    "green": {
+      "500": { "value": "#25b24b", "type": "color", "comment": "Tagaddod green" }
+    },
+    "red": {
+      "500": { "value": "#d32f2f", "type": "color", "comment": "Error color" }
+    },
+    "neutral": {
+      "50":  { "value": "#f7f8fa", "type": "color" },
+      "900": { "value": "#1c1d22", "type": "color" }
+    }
+  },
+  "space": {
+    "100": { "value": "0.25rem", "type": "dimension" },
+    "200": { "value": "0.5rem", "type": "dimension" },
+    "300": { "value": "0.75rem", "type": "dimension" },
+    "400": { "value": "1rem", "type": "dimension" }
+  },
+  "radius": {
+    "100": { "value": "4px", "type": "dimension" },
+    "200": { "value": "8px", "type": "dimension" },
+    "300": { "value": "12px", "type": "dimension" }
+  }
+}
