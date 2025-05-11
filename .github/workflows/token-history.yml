@@ -1,0 +1,225 @@
+name: Token History Tracking
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/tokens/**'
+      - 'packages/themes/**'
+
+jobs:
+  track-changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Need previous commit for comparison
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Install dependencies
+        run: yarn install --immutable
+      
+      - name: Generate token changelog
+        run: |
+          # Create script to track changes
+          cat > track-changes.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          const { execSync } = require('child_process');
+          
+          // Get changed files
+          const changedFiles = execSync('git diff --name-only HEAD~1..HEAD', { encoding: 'utf8' })
+            .trim()
+            .split('\n')
+            .filter(file => file.includes('packages/tokens/') || file.includes('packages/themes/'));
+          
+          if (changedFiles.length === 0) {
+            console.log('No token changes detected');
+            process.exit(0);
+          }
+          
+          // Analyze changes
+          const changes = {
+            added: [],
+            modified: [],
+            removed: [],
+            timestamp: new Date().toISOString(),
+            commit: process.env.GITHUB_SHA,
+            author: process.env.GITHUB_ACTOR
+          };
+          
+          changedFiles.forEach(file => {
+            try {
+              const status = execSync(`git diff --name-status HEAD~1..HEAD -- "${file}"`, { encoding: 'utf8' }).trim();
+              const [changeType] = status.split('\t');
+              
+              if (changeType === 'A') {
+                changes.added.push(file);
+              } else if (changeType === 'M') {
+                changes.modified.push(file);
+                
+                // Get specific token changes
+                if (file.endsWith('.json')) {
+                  try {
+                    const oldContent = execSync(`git show HEAD~1:"${file}"`, { encoding: 'utf8' });
+                    const newContent = fs.readFileSync(file, 'utf8');
+                    
+                    const oldTokens = JSON.parse(oldContent);
+                    const newTokens = JSON.parse(newContent);
+                    
+                    // Compare tokens (simplified)
+                    const tokenChanges = compareTokens(oldTokens, newTokens);
+                    if (tokenChanges.length > 0) {
+                      changes.tokenChanges = changes.tokenChanges || {};
+                      changes.tokenChanges[file] = tokenChanges;
+                    }
+                  } catch (e) {
+                    console.error(`Error comparing ${file}:`, e.message);
+                  }
+                }
+              } else if (changeType === 'D') {
+                changes.removed.push(file);
+              }
+            } catch (e) {
+              console.error(`Error processing ${file}:`, e.message);
+            }
+          });
+          
+          function compareTokens(oldTokens, newTokens, path = []) {
+            const changes = [];
+            
+            // Check for added/modified tokens
+            Object.keys(newTokens).forEach(key => {
+              const currentPath = [...path, key];
+              const newValue = newTokens[key];
+              const oldValue = oldTokens[key];
+              
+              if (newValue && typeof newValue === 'object' && 'value' in newValue) {
+                // This is a token
+                if (!oldValue) {
+                  changes.push({
+                    type: 'added',
+                    path: currentPath.join('.'),
+                    value: newValue.value
+                  });
+                } else if (oldValue.value !== newValue.value) {
+                  changes.push({
+                    type: 'modified',
+                    path: currentPath.join('.'),
+                    oldValue: oldValue.value,
+                    newValue: newValue.value
+                  });
+                }
+              } else if (newValue && typeof newValue === 'object') {
+                // Recurse into nested object
+                changes.push(...compareTokens(oldValue || {}, newValue, currentPath));
+              }
+            });
+            
+            // Check for removed tokens
+            Object.keys(oldTokens).forEach(key => {
+              if (!newTokens[key]) {
+                const currentPath = [...path, key];
+                const oldValue = oldTokens[key];
+                
+                if (oldValue && typeof oldValue === 'object' && 'value' in oldValue) {
+                  changes.push({
+                    type: 'removed',
+                    path: currentPath.join('.'),
+                    value: oldValue.value
+                  });
+                }
+              }
+            });
+            
+            return changes;
+          }
+          
+          // Write changes to history file
+          const historyFile = '.token-history/history.json';
+          let history = [];
+          
+          if (fs.existsSync(historyFile)) {
+            history = JSON.parse(fs.readFileSync(historyFile, 'utf8'));
+          }
+          
+          history.unshift(changes);
+          
+          // Keep only last 100 changes
+          if (history.length > 100) {
+            history = history.slice(0, 100);
+          }
+          
+          fs.mkdirSync(path.dirname(historyFile), { recursive: true });
+          fs.writeFileSync(historyFile, JSON.stringify(history, null, 2));
+          
+          // Generate markdown summary
+          const summaryFile = '.token-history/CHANGELOG.md';
+          let summary = '# Token Change History\n\n';
+          
+          history.slice(0, 10).forEach((change, index) => {
+            summary += `## ${change.timestamp}\n\n`;
+            summary += `- **Commit**: ${change.commit.substring(0, 7)}\n`;
+            summary += `- **Author**: ${change.author}\n\n`;
+            
+            if (change.added.length > 0) {
+              summary += '### Added\n';
+              change.added.forEach(file => summary += `- ${file}\n`);
+              summary += '\n';
+            }
+            
+            if (change.modified.length > 0) {
+              summary += '### Modified\n';
+              change.modified.forEach(file => {
+                summary += `- ${file}\n`;
+                if (change.tokenChanges && change.tokenChanges[file]) {
+                  change.tokenChanges[file].forEach(tokenChange => {
+                    if (tokenChange.type === 'modified') {
+                      summary += `  - ${tokenChange.path}: ${tokenChange.oldValue} → ${tokenChange.newValue}\n`;
+                    }
+                  });
+                }
+              });
+              summary += '\n';
+            }
+            
+            if (change.removed.length > 0) {
+              summary += '### Removed\n';
+              change.removed.forEach(file => summary += `- ${file}\n`);
+              summary += '\n';
+            }
+            
+            summary += '---\n\n';
+          });
+          
+          fs.writeFileSync(summaryFile, summary);
+          
+          console.log('Token history updated');
+          EOF
+          
+          GITHUB_SHA=${{ github.sha }} GITHUB_ACTOR=${{ github.actor }} node track-changes.js
+      
+      - name: Commit history
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git add .token-history/
+            git commit -m "chore: update token history [skip ci]"
+            git push
+          fi

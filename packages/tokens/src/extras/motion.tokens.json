@@ -1,0 +1,27 @@
+{
+  "duration": {
+    "fast": {
+      "$type": "duration",
+      "$value": "150ms"
+    },
+    "base": {
+      "$type": "duration",
+      "$value": "300ms"
+    }
+  },
+  "easing": {
+    "inOut": {
+      "$type": "cubicBezier",
+      "$value": [0.4, 0.0, 0.2, 1.0]
+    }
+  },
+  "transition": {
+    "soft": {
+      "$type": "transition",
+      "$value": {
+        "duration": "{duration.base}",
+        "timingFunction": "{easing.inOut}"
+      }
+    }
+  }
+}

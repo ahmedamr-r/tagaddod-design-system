@@ -1,0 +1,39 @@
+{
+  "name": "token-admin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "watch": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.2",
+    "@tagaddod/react": "*",
+    "@tagaddod/tokens": "*",
+    "@tanstack/react-table": "^8.21.3",
+    "deepmerge": "^4.3.1",
+    "next": "^15.3.2",
+    "react": "^18",
+    "react-dom": "^18",
+    "vaul": "^1.1.2",
+    "wcag-contrast": "^3.0.0",
+    "zod": "^3.24.4",
+    "zustand": "^5.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/wcag-contrast": "^3.0.3",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8",
+    "eslint-config-next": "15.0.3",
+    "postcss": "^8",
+    "postcss-import": "^16.1.0",
+    "tailwindcss": "3",
+    "typescript": "^5"
+  }
+}

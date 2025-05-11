@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "composite": true,
+    "noEmit": false,
+    "declaration": true,
+    "declarationDir": "dist",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "target": "es2020"
+  },
+  "include": ["style-dictionary.config.js", "sd.config.mjs", "scripts/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

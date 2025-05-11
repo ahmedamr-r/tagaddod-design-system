@@ -1,0 +1,16 @@
+{
+  "color": {
+    "bgFillBrand": {
+      "$value": "{color.purple.1200}",
+      "$type": "color"
+    },
+    "bgFillBrandHover": {
+      "$value": "{color.purple.1300}",
+      "$type": "color"
+    },
+    "bgFillBrandActive": {
+      "$value": "{color.purple.1400}",
+      "$type": "color"
+    }
+  }
+}

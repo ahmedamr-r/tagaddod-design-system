@@ -1,0 +1,580 @@
+/*! tailwindcss v4.1.6 | MIT License | https://tailwindcss.com */
+@layer properties;
+:root {
+  --t-color-action-primary-bg: #8c34ff;
+  --t-color-action-primary-bg-hover: #7b18fd;
+  --t-color-blue-100: #fafaff;
+  --t-color-blue-200: #f8f8ff;
+  --t-color-blue-300: #f4f4ff;
+  --t-color-blue-400: #f1f2ff;
+  --t-color-blue-500: #ebecff;
+  --t-color-blue-600: #e9eaff;
+  --t-color-blue-700: #e4e6ff;
+  --t-color-blue-800: #d9dcfe;
+  --t-color-blue-900: #d0d4fe;
+  --t-color-blue-1000: #bcc2fe;
+  --t-color-blue-1100: #828efe;
+  --t-color-blue-1200: #3959fe;
+  --t-color-blue-1300: #0b48fe;
+  --t-color-blue-1400: #0033c2;
+  --t-color-blue-1500: #00238f;
+  --t-color-blue-1600: #001157;
+  --t-color-green-100: #effff4;
+  --t-color-green-200: #e8ffee;
+  --t-color-green-300: #d7ffe3;
+  --t-color-green-400: #ceffdd;
+  --t-color-green-500: #b1ffcb;
+  --t-color-green-600: #a0ffc1;
+  --t-color-green-700: #8dffb7;
+  --t-color-green-800: #29fe94;
+  --t-color-green-900: #00f68b;
+  --t-color-green-1000: #00e380;
+  --t-color-green-1100: #00ae61;
+  --t-color-green-1200: #007d44;
+  --t-color-green-1300: #00703c;
+  --t-color-green-1400: #00522b;
+  --t-color-green-1500: #003a1d;
+  --t-color-green-1600: #00200d;
+  --t-color-red-100: #fef9f9;
+  --t-color-red-200: #fef6f6;
+  --t-color-red-300: #fdf3f3;
+  --t-color-red-400: #fdf0f1;
+  --t-color-red-500: #fceaeb;
+  --t-color-red-600: #fce6e6;
+  --t-color-red-700: #fbe1e2;
+  --t-color-red-800: #fad7d8;
+  --t-color-red-900: #f8ccce;
+  --t-color-red-1000: #f5b6b8;
+  --t-color-red-1100: #ec7378;
+  --t-color-red-1200: #d51e25;
+  --t-color-red-1300: #bf1b21;
+  --t-color-red-1400: #8d1419;
+  --t-color-red-1500: #660e12;
+  --t-color-red-1600: #3a080a;
+  --t-color-orange-100: #fefaf6;
+  --t-color-orange-200: #fef8f2;
+  --t-color-orange-300: #fef4ea;
+  --t-color-orange-400: #fef0e1;
+  --t-color-orange-500: #feebd8;
+  --t-color-orange-600: #fee7cf;
+  --t-color-orange-700: #fee3c5;
+  --t-color-orange-800: #fed8ab;
+  --t-color-orange-900: #fecf90;
+  --t-color-orange-1000: #feba2f;
+  --t-color-orange-1100: #c78e00;
+  --t-color-orange-1200: #8f6500;
+  --t-color-orange-1300: #805a00;
+  --t-color-orange-1400: #5e4200;
+  --t-color-orange-1500: #442e00;
+  --t-color-orange-1600: #261800;
+  --t-color-gray-100: #ffffff;
+  --t-color-gray-200: #fcfcfd;
+  --t-color-gray-300: #f9f9fa;
+  --t-color-gray-400: #f7f7f8;
+  --t-color-gray-500: #f1f1f3;
+  --t-color-gray-600: #eaeaed;
+  --t-color-gray-700: #e0e2e6;
+  --t-color-gray-800: #cfd1d8;
+  --t-color-gray-900: #c7c8d1;
+  --t-color-gray-1000: #adafbd;
+  --t-color-gray-1100: #7d8096;
+  --t-color-gray-1200: #686c83;
+  --t-color-gray-1300: #55596c;
+  --t-color-gray-1400: #414353;
+  --t-color-gray-1500: #2a2c37;
+  --t-color-gray-1600: #16161d;
+  --t-color-purple-100: #fcfaff;
+  --t-color-purple-200: #fbf7ff;
+  --t-color-purple-300: #f9f4ff;
+  --t-color-purple-400: #f6efff;
+  --t-color-purple-500: #f3eaff;
+  --t-color-purple-600: #f2e7ff;
+  --t-color-purple-700: #efe2ff;
+  --t-color-purple-800: #e9d7ff;
+  --t-color-purple-900: #e3cdff;
+  --t-color-purple-1000: #d7b8ff;
+  --t-color-purple-1100: #b57cff;
+  --t-color-purple-1200: #8c34ff;
+  --t-color-purple-1300: #7b18fd;
+  --t-color-purple-1400: #5b12bc;
+  --t-color-purple-1500: #410d87;
+  --t-color-purple-1600: #25074d;
+  --t-color-border-primary: #c7c8d1;
+  --t-color-border-secondary: #e0e2e6;
+  --t-color-border-tertiary: #f1f1f3;
+  --t-color-border-hover: #7d8096;
+  --t-color-border-active: #55596c;
+  --t-color-border-disabled: #cfd1d8;
+  --t-color-border-brand: #16161d;
+  --t-color-border-brand-hover: #2a2c37;
+  --t-color-border-brand-active: #16161d;
+  --t-color-border-success: #00ae61;
+  --t-color-border-success-hover: #007d44;
+  --t-color-border-success-active: #00703c;
+  --t-color-border-critical: #d51e25;
+  --t-color-border-critical-hover: #bf1b21;
+  --t-color-border-critical-active: #8d1419;
+  --t-color-border-warning: #feba2f;
+  --t-color-border-magic: #8c34ff;
+  --t-color-border-magic-hover: #7b18fd;
+  --t-color-border-magic-active: #5b12bc;
+  --t-color-surface-background-color: #f7f7f8;
+  --t-color-surface-background-color-light: #f9f9fa;
+  --t-color-surface-background: #ffffff;
+  --t-color-surface-background-hover: #f9f9fa;
+  --t-color-surface-background-active: #f1f1f3;
+  --t-color-surface-background-disabled: #c7c8d1;
+  --t-color-surface-background-brand: #16161d;
+  --t-color-surface-background-brand-hover: #2a2c37;
+  --t-color-surface-background-brand-active: #16161d;
+  --t-color-surface-background-secondary: #f1f1f3;
+  --t-color-surface-background-secondary-hover: #eaeaed;
+  --t-color-surface-background-secondary-active: #e0e2e6;
+  --t-color-surface-background-warning: #feba2f;
+  --t-color-surface-background-warning-hover: #c78e00;
+  --t-color-surface-background-warning-active: #8f6500;
+  --t-color-surface-background-warning-secondary: #fef0e1;
+  --t-color-surface-background-warning-secondary-hover: #fee7cf;
+  --t-color-surface-background-warning-secondary-active: #fee3c5;
+  --t-color-surface-background-magic: #8c34ff;
+  --t-color-surface-background-magic-hover: #7b18fd;
+  --t-color-surface-background-magic-active: #5b12bc;
+  --t-color-surface-background-magic-secondary: #f6efff;
+  --t-color-surface-background-magic-secondary-hover: #f2e7ff;
+  --t-color-surface-background-magic-secondary-active: #e9d7ff;
+  --t-color-surface-background-success: #00ae61;
+  --t-color-surface-background-success-hover: #007d44;
+  --t-color-surface-background-success-active: #00703c;
+  --t-color-surface-background-success-secondary: #e8ffee;
+  --t-color-surface-background-success-secondary-hover: #d7ffe3;
+  --t-color-surface-background-success-secondary-active: #b1ffcb;
+  --t-color-surface-background-critical: #d51e25;
+  --t-color-surface-background-critical-hover: #bf1b21;
+  --t-color-surface-background-critical-active: #8d1419;
+  --t-color-surface-background-critical-secondary: #fdf0f1;
+  --t-color-surface-background-critical-secondary-hover: #fce6e6;
+  --t-color-surface-background-critical-secondary-active: #fad7d8;
+  --t-color-overlay-light20: rgba(255, 255, 255, 0.2);
+  --t-color-overlay-dark12: rgba(22, 22, 29, 0.12);
+  --t-color-overlay-dark60: rgba(22, 22, 29, 0.6);
+  --t-color-overlay-dark70: rgba(22, 22, 29, 0.7);
+  --t-color-overlay-dark85: rgba(22, 22, 29, 0.85);
+  --t-color-overlay-brand12: rgba(22, 22, 29, 0.12);
+  --t-color-text-primary: #16161d;
+  --t-color-text-secondary: #686c83;
+  --t-color-text-disabled: #adafbd;
+  --t-color-text-on-brand: #ffffff;
+  --t-color-text-on-brand-hover: #f9f9fa;
+  --t-color-text-on-brand-active: #f1f1f3;
+  --t-color-text-on-brand-disabled: #ffffff;
+  --t-color-text-link: #16161d;
+  --t-color-text-link-hover: #2a2c37;
+  --t-color-text-link-active: #16161d;
+  --t-color-text-magic: #8c34ff;
+  --t-color-text-magic-hover: #7b18fd;
+  --t-color-text-magic-active: #5b12bc;
+  --t-color-text-magic-secondary: #7b18fd;
+  --t-color-text-success: #00ae61;
+  --t-color-text-success-hover: #007d44;
+  --t-color-text-success-active: #00703c;
+  --t-color-text-success-secondary: #007d44;
+  --t-color-text-critical: #d51e25;
+  --t-color-text-critical-hover: #bf1b21;
+  --t-color-text-critical-active: #8d1419;
+  --t-color-text-critical-secondary: #bf1b21;
+  --t-color-text-warning: #8f6500;
+  --t-color-text-warning-secondary: #c78e00;
+  --t-color-icon-primary: #16161d;
+  --t-color-icon-secondary: #7d8096;
+  --t-color-icon-disabled: #adafbd;
+  --t-color-icon-on-brand: #ffffff;
+  --t-color-icon-on-brand-hover: #f9f9fa;
+  --t-color-icon-on-brand-active: #f1f1f3;
+  --t-color-icon-on-brand-disabled: #ffffff;
+  --t-color-icon-link: #16161d;
+  --t-color-icon-link-hover: #2a2c37;
+  --t-color-icon-link-active: #16161d;
+  --t-color-icon-success: #00ae61;
+  --t-color-icon-success-hover: #007d44;
+  --t-color-icon-success-active: #00703c;
+  --t-color-icon-warning: #c78e00;
+  --t-color-icon-warning-dark: #8f6500;
+  --t-color-icon-critical: #d51e25;
+  --t-color-icon-critical-hover: #bf1b21;
+  --t-color-icon-critical-active: #8d1419;
+  --t-color-icon-magic: #8c34ff;
+  --t-color-icon-magic-hover: #7b18fd;
+  --t-color-icon-magic-active: #5b12bc;
+  --t-border-radius-0: 0px;
+  --t-border-radius-50: 2px;
+  --t-border-radius-100: 4px;
+  --t-border-radius-200: 8px;
+  --t-border-radius-300: 12px;
+  --t-border-radius-600: 24px;
+  --t-border-radius-800: 32px;
+  --t-border-radius-full: 99999px;
+  --t-border-width-25: 1px;
+  --t-border-width-50: 2px;
+  --t-border-width-100: 4px;
+  --t-border-width-icon: 1.5px;
+  --t-size-0: 0px;
+  --t-size-25: 1px;
+  --t-size-50: 2px;
+  --t-size-100: 4px;
+  --t-size-150: 6px;
+  --t-size-200: 8px;
+  --t-size-250: 10px;
+  --t-size-300: 12px;
+  --t-size-350: 14px;
+  --t-size-400: 16px;
+  --t-size-450: 18px;
+  --t-size-500: 20px;
+  --t-size-550: 22px;
+  --t-size-600: 24px;
+  --t-size-700: 28px;
+  --t-size-800: 32px;
+  --t-size-900: 36px;
+  --t-size-1000: 40px;
+  --t-size-1200: 48px;
+  --t-size-1400: 56px;
+  --t-size-1600: 64px;
+  --t-size-2000: 80px;
+  --t-size-2400: 96px;
+  --t-size-2800: 112px;
+  --t-size-3200: 128px;
+  --t-space-0: 0px;
+  --t-space-25: 1px;
+  --t-space-50: 2px;
+  --t-space-100: 4px;
+  --t-space-150: 6px;
+  --t-space-200: 8px;
+  --t-space-250: 10px;
+  --t-space-300: 12px;
+  --t-space-400: 16px;
+  --t-space-500: 20px;
+  --t-space-600: 24px;
+  --t-space-800: 32px;
+  --t-space-1000: 40px;
+  --t-space-1200: 48px;
+  --t-space-1600: 64px;
+  --t-space-2000: 80px;
+  --t-space-2400: 96px;
+  --t-space-3200: 128px;
+  --t-duration-fast: 150ms;
+  --t-duration-base: 300ms;
+  --t-easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --t-transition-soft: 300ms cubic-bezier(0.4, 0, 0.2, 1) undefined;
+  --t-shadow-1: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+  --t-shadow-2: 0px 4px 6px -1px rgba(0, 0, 0, 0.15);
+  --t-z-base: 0;
+  --t-z-dropdown: 10;
+  --t-z-modal: 100;
+  --t-z-toast: 1000;
+  --t-font-family-primary: Outfit, sans-serif;
+  --t-font-weight-regular: 400;
+  --t-font-weight-medium: 500;
+  --t-font-weight-semibold: 600;
+  --t-font-weight-bold: 700;
+  --t-font-size-250: 10px;
+  --t-font-size-300: 12px;
+  --t-font-size-350: 14px;
+  --t-font-size-400: 16px;
+  --t-font-size-450: 18px;
+  --t-font-size-500: 20px;
+  --t-font-size-550: 22px;
+  --t-font-size-600: 24px;
+  --t-font-size-700: 28px;
+  --t-font-size-800: 32px;
+  --t-font-size-900: 36px;
+  --t-font-size-1000: 40px;
+  --t-font-size-1200: 48px;
+  --t-font-size-1400: 48px;
+  --t-font-line-height-300: 12px;
+  --t-font-line-height-400: 16px;
+  --t-font-line-height-500: 20px;
+  --t-font-line-height-600: 24px;
+  --t-font-line-height-800: 32px;
+  --t-font-line-height-1000: 40px;
+  --t-font-line-height-1200: 48px;
+  --t-typography-heading-3xl: 600 48px Outfit, sans-serif;
+  --t-typography-heading-2xl: 600 40px Outfit, sans-serif;
+  --t-typography-heading-xl: 600 36px Outfit, sans-serif;
+  --t-typography-heading-lg: 600 32px Outfit, sans-serif;
+  --t-typography-heading-md: 600 24px Outfit, sans-serif;
+  --t-typography-heading-sm: 600 20px Outfit, sans-serif;
+  --t-typography-body-lg-default: 400 18px Outfit, sans-serif;
+  --t-typography-body-lg-medium: 500 18px Outfit, sans-serif;
+  --t-typography-body-lg-semibold: 600 18px Outfit, sans-serif;
+  --t-typography-body-md-default: 400 16px Outfit, sans-serif;
+  --t-typography-body-md-medium: 500 16px Outfit, sans-serif;
+  --t-typography-body-md-semibold: 600 16px Outfit, sans-serif;
+  --t-typography-body-sm-default: 400 14px Outfit, sans-serif;
+  --t-typography-body-sm-medium: 500 14px Outfit, sans-serif;
+  --t-typography-body-sm-semibold: 600 14px Outfit, sans-serif;
+  --t-typography-caption-lg-default: 400 12px Outfit, sans-serif;
+  --t-typography-caption-lg-medium: 500 12px Outfit, sans-serif;
+  --t-typography-caption-lg-semibold: 600 12px Outfit, sans-serif;
+  --t-typography-caption-sm-default: 400 10px Outfit, sans-serif;
+  --t-typography-caption-sm-semibold: 600 10px Outfit, sans-serif;
+}
+.invisible {
+  visibility: hidden;
+}
+.absolute {
+  position: absolute;
+}
+.relative {
+  position: relative;
+}
+.flex {
+  display: flex;
+}
+.inline-flex {
+  display: inline-flex;
+}
+.w-full {
+  width: 100%;
+}
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+.items-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
+.border {
+  border-style: var(--tw-border-style);
+  border-width: 1px;
+}
+.border-t {
+  border-top-style: var(--tw-border-style);
+  border-top-width: 1px;
+}
+.border-\[var\(--t-color-border-primary\)\] {
+  border-color: var(--t-color-border-primary);
+}
+.border-transparent {
+  border-color: transparent;
+}
+.bg-\[var\(--t-color-action-primary-bg\)\] {
+  background-color: var(--t-color-action-primary-bg);
+}
+.bg-\[var\(--t-color-surface-background\)\] {
+  background-color: var(--t-color-surface-background);
+}
+.bg-\[var\(--t-color-surface-background-critical\)\] {
+  background-color: var(--t-color-surface-background-critical);
+}
+.bg-\[var\(--t-color-surface-background-disabled\)\] {
+  background-color: var(--t-color-surface-background-disabled);
+}
+.bg-\[var\(--t-color-surface-background-success\)\] {
+  background-color: var(--t-color-surface-background-success);
+}
+.text-\[var\(--t-color-text-critical\)\] {
+  color: var(--t-color-text-critical);
+}
+.text-\[var\(--t-color-text-disabled\)\] {
+  color: var(--t-color-text-disabled);
+}
+.text-\[var\(--t-color-text-on-brand\)\] {
+  color: var(--t-color-text-on-brand);
+}
+.text-\[var\(--t-color-text-primary\)\] {
+  color: var(--t-color-text-primary);
+}
+.text-\[var\(--t-color-text-success\)\] {
+  color: var(--t-color-text-success);
+}
+.text-current {
+  color: currentcolor;
+}
+.opacity-25 {
+  opacity: 25%;
+}
+.opacity-75 {
+  opacity: 75%;
+}
+.transition-all {
+  transition-property: all;
+  transition-timing-function: var(--tw-ease, ease);
+  transition-duration: var(--tw-duration, 0s);
+}
+.duration-200 {
+  --tw-duration: 200ms;
+  transition-duration: 200ms;
+}
+.hover\:bg-\[var\(--t-color-action-primary-bg-hover\)\] {
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--t-color-action-primary-bg-hover);
+    }
+  }
+}
+.hover\:bg-\[var\(--t-color-surface-background-critical-hover\)\] {
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--t-color-surface-background-critical-hover);
+    }
+  }
+}
+.hover\:bg-\[var\(--t-color-surface-background-hover\)\] {
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--t-color-surface-background-hover);
+    }
+  }
+}
+.hover\:bg-\[var\(--t-color-surface-background-success-hover\)\] {
+  &:hover {
+    @media (hover: hover) {
+      background-color: var(--t-color-surface-background-success-hover);
+    }
+  }
+}
+.focus\:ring-2 {
+  &:focus {
+    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+}
+.focus\:ring-\[var\(--t-color-action-primary-bg\)\] {
+  &:focus {
+    --tw-ring-color: var(--t-color-action-primary-bg);
+  }
+}
+.focus\:ring-\[var\(--t-color-border-critical\)\] {
+  &:focus {
+    --tw-ring-color: var(--t-color-border-critical);
+  }
+}
+.focus\:ring-\[var\(--t-color-border-primary\)\] {
+  &:focus {
+    --tw-ring-color: var(--t-color-border-primary);
+  }
+}
+.focus\:ring-\[var\(--t-color-border-success\)\] {
+  &:focus {
+    --tw-ring-color: var(--t-color-border-success);
+  }
+}
+.focus\:ring-offset-2 {
+  &:focus {
+    --tw-ring-offset-width: 2px;
+    --tw-ring-offset-shadow: var(--tw-ring-inset,) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  }
+}
+.focus\:outline-none {
+  &:focus {
+    --tw-outline-style: none;
+    outline-style: none;
+  }
+}
+.disabled\:cursor-not-allowed {
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+.disabled\:opacity-50 {
+  &:disabled {
+    opacity: 50%;
+  }
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-inset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-ring-inset {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-offset-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --tw-ring-offset-color {
+  syntax: "*";
+  inherits: false;
+  initial-value: #fff;
+}
+@property --tw-ring-offset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-border-style: solid;
+      --tw-duration: initial;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-shadow-alpha: 100%;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-inset-shadow-alpha: 100%;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+    }
+  }
+}

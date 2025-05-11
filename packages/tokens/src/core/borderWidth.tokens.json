@@ -1,0 +1,16 @@
+{
+  "borderWidth": {
+    "25": {
+      "$value": "{size.25}",
+      "$type": "dimension"
+    },
+    "50": {
+      "$value": "{size.50}",
+      "$type": "dimension"
+    },
+    "100": {
+      "$value": "{size.100}",
+      "$type": "dimension"
+    }
+  }
+}

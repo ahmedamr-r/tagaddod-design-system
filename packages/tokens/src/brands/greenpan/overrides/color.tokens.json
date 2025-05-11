@@ -1,0 +1,22 @@
+{
+  "color": {
+    "green": {
+      "1200": {
+        "$value": "f1f1f1", 
+        "$type": "color"
+      }
+    },
+    "bgFillBrand": {
+      "$value": "{color.green.1200}",
+      "$type": "color"
+    },
+    "bgFillBrandHover": {
+      "$value": "{color.green.1300}",
+      "$type": "color"
+    },
+    "bgFillBrandActive": {
+      "$value": "{color.green.1400}",
+      "$type": "color"
+    }
+  }
+}

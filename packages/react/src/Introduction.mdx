@@ -1,0 +1,55 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction" />
+
+# Tagaddod Design System
+
+Welcome to the Tagaddod Design System documentation. This design system provides a comprehensive collection of reusable components, design tokens, and guidelines to help build consistent and accessible user interfaces across the Tagaddod ecosystem.
+
+## Features
+
+- **Multi-brand support**: Switch between Tagaddod and GreenPan themes
+- **RTL/LTR support**: Full bidirectional text support for Arabic and English
+- **Design tokens**: Comprehensive token system for colors, spacing, typography, and more
+- **Accessible components**: Built with accessibility in mind
+- **Type-safe**: Full TypeScript support
+- **Responsive**: Mobile-first approach with responsive components
+
+## Getting Started
+
+The design system is built as a monorepo with the following packages:
+
+- `@tagaddod/tokens`: Design tokens (colors, spacing, typography, etc.)
+- `@tagaddod/react`: React components library
+- `@tagaddod/themes`: Brand theme configurations
+
+## Usage
+
+```tsx
+import { Button } from '@tagaddod/react';
+import '@tagaddod/react/styles/index.css';
+
+function App() {
+  return (
+    <Button variant="primary">
+      Click me
+    </Button>
+  );
+}
+```
+
+## Theme Switching
+
+Use the toolbar above to switch between themes and text directions to see how components adapt to different contexts.
+
+## Available Tokens
+
+- **Colors**: Brand colors, semantic colors, surface colors
+- **Spacing**: Consistent spacing scale from 0 to 3200
+- **Typography**: Font families, sizes, weights, and line heights
+- **Border**: Radius and width tokens
+- **Motion**: Duration and easing curves
+- **Shadow**: Elevation shadows
+- **Z-index**: Layering system
+
+Explore the components and tokens sections to learn more!
