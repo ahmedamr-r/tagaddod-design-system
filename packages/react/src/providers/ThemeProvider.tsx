@@ -13,7 +13,7 @@ interface ThemeContextType {
   setLocale: (locale: Locale) => void;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export interface ThemeProviderProps {
   children: React.ReactNode;
@@ -85,16 +85,18 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 
   // Apply theme, locale and direction to root element
   useEffect(() => {
-    const root = document.documentElement;
-    root.setAttribute('data-theme', theme);
-    root.setAttribute('data-locale', locale);
-    root.setAttribute('dir', direction);
-    
-    // Update document direction
-    document.dir = direction;
-    
-    // Store preferences
-    localStorage.setItem(storageKey, JSON.stringify({ theme, direction, locale }));
+    if (typeof document !== 'undefined') {
+      const root = document.documentElement;
+      root.setAttribute('data-theme', theme);
+      root.setAttribute('data-locale', locale);
+      root.setAttribute('dir', direction);
+      
+      // Update document direction
+      document.dir = direction;
+      
+      // Store preferences
+      localStorage.setItem(storageKey, JSON.stringify({ theme, direction, locale }));
+    }
   }, [theme, direction, locale, storageKey]);
 
   // Automatically sync locale with direction changes
@@ -103,7 +105,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     if (locale !== expectedLocale) {
       setLocale(expectedLocale);
     }
-  }, [direction]);
+  }, [direction, locale]);
 
   const value = {
     theme,

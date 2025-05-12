@@ -8,3 +8,4 @@ export { textInputSizes } from './TextInput';
 
 export { Checkbox } from './Checkbox';
 export type { CheckboxProps } from './Checkbox';
+export * from './RadioButton';

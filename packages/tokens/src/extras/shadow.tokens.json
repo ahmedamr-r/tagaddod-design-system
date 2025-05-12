@@ -4,20 +4,20 @@
       "$type": "shadow",
       "$value": {
         "color": "rgba(0, 0, 0, 0.1)",
-        "offsetX": "0px",
-        "offsetY": "1px",
-        "blur": "3px",
-        "spread": "0px"
+        "offsetX": "0",
+        "offsetY": "0.0625rem",
+        "blur": "0.1875rem",
+        "spread": "0"
       }
     },
     "2": {
       "$type": "shadow",
       "$value": {
         "color": "rgba(0, 0, 0, 0.15)",
-        "offsetX": "0px",
-        "offsetY": "4px",
-        "blur": "6px",
-        "spread": "-1px"
+        "offsetX": "0",
+        "offsetY": "0.25rem",
+        "blur": "0.375rem",
+        "spread": "-0.0625rem"
       }
     }
   }

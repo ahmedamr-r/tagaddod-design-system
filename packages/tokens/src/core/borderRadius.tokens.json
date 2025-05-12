@@ -29,7 +29,7 @@
       "$type": "dimension"
     },
     "full": {
-      "$value": "99999px",
+      "$value": "624.994rem",
       "$type": "dimension"
     }
   }

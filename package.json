@@ -50,5 +50,8 @@
     "@storybook/theming": "8.6.12",
     "@storybook/types": "8.6.12",
     "storybook": "8.6.12"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1"
   }
 }
