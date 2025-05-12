@@ -1,5 +1,18 @@
 # Token Change History
 
+## 2025-05-12T19:15:03.136Z
+
+- **Commit**: 85a60ce
+- **Author**: ahmedamr-r
+
+### Modified
+- packages/tokens/src/brands/greenpan/overrides/color.tokens.json
+- packages/tokens/src/brands/tagaddod/overrides/color.tokens.json
+- packages/tokens/src/core/color.tokens.json
+- packages/tokens/src/semantic/color.semantic.json
+
+---
+
 ## 2025-05-11T15:38:06.190Z
 
 - **Commit**: 97af3a1

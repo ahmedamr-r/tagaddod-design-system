@@ -2,6 +2,19 @@
   {
     "added": [],
     "modified": [
+      "packages/tokens/src/brands/greenpan/overrides/color.tokens.json",
+      "packages/tokens/src/brands/tagaddod/overrides/color.tokens.json",
+      "packages/tokens/src/core/color.tokens.json",
+      "packages/tokens/src/semantic/color.semantic.json"
+    ],
+    "removed": [],
+    "timestamp": "2025-05-12T19:15:03.136Z",
+    "commit": "85a60cea8621400c89460c870b5c88779a8fef76",
+    "author": "ahmedamr-r"
+  },
+  {
+    "added": [],
+    "modified": [
       "packages/tokens/package.json",
       "packages/tokens/sd.config.mjs",
       "packages/tokens/src/brands/greenpan/overrides/color.tokens.json",
