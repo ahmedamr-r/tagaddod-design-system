@@ -1576,9 +1576,9 @@
     react-dom "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-essentials@^8.6.12":
+"@storybook/addon-essentials@8.6.12", "@storybook/addon-essentials@^8.6.12":
   version "8.6.12"
-  resolved "https://registry.npmjs.org/@storybook/addon-essentials/-/addon-essentials-8.6.12.tgz"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-essentials/-/addon-essentials-8.6.12.tgz#8553b25e365e33905f4e5fe1e35bc22c15d525b3"
   integrity sha512-Y/7e8KFlttaNfv7q2zoHMPdX6hPXHdsuQMAjYl5NG9HOAJREu4XBy4KZpbcozRe4ApZ78rYsN/MO1EuA+bNMIA==
   dependencies:
     "@storybook/addon-actions" "8.6.12"
@@ -1599,9 +1599,9 @@
   dependencies:
     "@storybook/global" "^5.0.0"
 
-"@storybook/addon-interactions@^8.6.12":
+"@storybook/addon-interactions@8.6.12", "@storybook/addon-interactions@^8.6.12":
   version "8.6.12"
-  resolved "https://registry.npmjs.org/@storybook/addon-interactions/-/addon-interactions-8.6.12.tgz"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-interactions/-/addon-interactions-8.6.12.tgz#04fadf3809a6afdfa0ab38c52ca0584253f107dd"
   integrity sha512-cTAJlTq6uVZBEbtwdXkXoPQ4jHOAGKQnYSezBT4pfNkdjn/FnEeaQhMBDzf14h2wr5OgBnJa6Lmd8LD9ficz4A==
   dependencies:
     "@storybook/global" "^5.0.0"
@@ -1618,9 +1618,9 @@
     "@storybook/global" "^5.0.0"
     tiny-invariant "^1.3.1"
 
-"@storybook/addon-onboarding@^8.6.12":
+"@storybook/addon-onboarding@8.6.12", "@storybook/addon-onboarding@^8.6.12":
   version "8.6.12"
-  resolved "https://registry.npmjs.org/@storybook/addon-onboarding/-/addon-onboarding-8.6.12.tgz"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-onboarding/-/addon-onboarding-8.6.12.tgz#531899977b902abb03b9ff2969975993ffaf255b"
   integrity sha512-/cgxaLy6tr6xO0+QO+qV5rPZS5/c15Daywvg/F03lifLGkMuyn/JDuhu0J5i1LbFsL1RYdf4sjrTOmLXbOT6+Q==
 
 "@storybook/addon-outline@8.6.12":
@@ -1665,9 +1665,9 @@
   resolved "https://registry.npmjs.org/@storybook/components/-/components-8.6.12.tgz"
   integrity sha512-FiaE8xvCdvKC2arYusgtlDNZ77b8ysr8njAYQZwwaIHjy27TbR2tEpLDCmUwSbANNmivtc/xGEiDDwcNppMWlQ==
 
-"@storybook/core-events@^8.6.12":
+"@storybook/core-events@8.6.12", "@storybook/core-events@^8.6.12":
   version "8.6.12"
-  resolved "https://registry.npmjs.org/@storybook/core-events/-/core-events-8.6.12.tgz"
+  resolved "https://registry.yarnpkg.com/@storybook/core-events/-/core-events-8.6.12.tgz#dda61eece638faf95d4dfc30b40489911faa5fdd"
   integrity sha512-j2MUlSfYOhTsjlruRWTqSVwYreJGFIsWeqHFAhCdtmXe3qpFBM/LuxTKuaM1uWvs6vEAyGEzDw8+DXwuO6uISg==
 
 "@storybook/core@8.6.12":
@@ -1772,9 +1772,9 @@
   resolved "https://registry.npmjs.org/@storybook/theming/-/theming-8.6.12.tgz"
   integrity sha512-6VjZg8HJ2Op7+KV7ihJpYrDnFtd9D1jrQnUS8LckcpuBXrIEbaut5+34ObY8ssQnSqkk2GwIZBBBQYQBCVvkOw==
 
-"@storybook/types@^8.6.12":
+"@storybook/types@8.6.12", "@storybook/types@^8.6.12":
   version "8.6.12"
-  resolved "https://registry.npmjs.org/@storybook/types/-/types-8.6.12.tgz"
+  resolved "https://registry.yarnpkg.com/@storybook/types/-/types-8.6.12.tgz#774b80f40693a321980e200241de9b6c2725a682"
   integrity sha512-G/nR+js7KV1qKH3nAcOfwceERBic5e03dpkeA6PDmqBiQ8XeM9B6N4NTMhXi/2gM5ZAGJ+NxJMaW6zLnc32DjA==
 
 "@swc/counter@0.1.3":
@@ -1950,16 +1950,9 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-12.20.55.tgz"
   integrity sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==
 
-"@types/node@^20":
-  version "20.17.46"
-  resolved "https://registry.npmjs.org/@types/node/-/node-20.17.46.tgz"
-  integrity sha512-0PQHLhZPWOxGW4auogW0eOQAuNIlCYvibIpG67ja0TOJ6/sehu+1en7sfceUn+QQtx4Rk3GxbLNwPh0Cav7TWw==
-  dependencies:
-    undici-types "~6.19.2"
-
-"@types/node@^22.15.17":
+"@types/node@^22", "@types/node@^22.15.17":
   version "22.15.17"
-  resolved "https://registry.npmjs.org/@types/node/-/node-22.15.17.tgz"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.15.17.tgz#355ccec95f705b664e4332bb64a7f07db30b7055"
   integrity sha512-wIX2aSZL5FE+MR0JlvF87BNVrtFWf6AE6rxSE9X7OwnVvoyCQjpzSRJ+M87se/4QCkCiebQAqrJ0y6fwIyi7nw==
   dependencies:
     undici-types "~6.21.0"
@@ -6229,9 +6222,9 @@ storybook-design-token@3.2.0:
     react-use-clipboard "^1.0.9"
     react-virtual "^2.10.4"
 
-storybook@^8.6.12:
+storybook@8.6.12, storybook@^8.6.12:
   version "8.6.12"
-  resolved "https://registry.npmjs.org/storybook/-/storybook-8.6.12.tgz"
+  resolved "https://registry.yarnpkg.com/storybook/-/storybook-8.6.12.tgz#dddd11644f0344524577bb600a4dabda9a73af55"
   integrity sha512-Z/nWYEHBTLK1ZBtAWdhxC0l5zf7ioJ7G4+zYqtTdYeb67gTnxNj80gehf8o8QY9L2zA2+eyMRGLC2V5fI7Z3Tw==
   dependencies:
     "@storybook/core" "8.6.12"
@@ -6776,11 +6769,6 @@ unbox-primitive@^1.1.0:
     has-bigints "^1.0.2"
     has-symbols "^1.1.0"
     which-boxed-primitive "^1.1.1"
-
-undici-types@~6.19.2:
-  version "6.19.8"
-  resolved "https://registry.npmjs.org/undici-types/-/undici-types-6.19.8.tgz"
-  integrity sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==
 
 undici-types@~6.21.0:
   version "6.21.0"
