@@ -1,0 +1,36 @@
+{
+  "borderRadius": {
+    "0": {
+      "$value": "{size.0}",
+      "$type": "dimension"
+    },
+    "50": {
+      "$value": "{size.50}",
+      "$type": "dimension"
+    },
+    "100": {
+      "$value": "{size.100}",
+      "$type": "dimension"
+    },
+    "200": {
+      "$value": "{size.200}",
+      "$type": "dimension"
+    },
+    "300": {
+      "$value": "{size.300}",
+      "$type": "dimension"
+    },
+    "600": {
+      "$value": "{size.600}",
+      "$type": "dimension"
+    },
+    "800": {
+      "$value": "{size.800}",
+      "$type": "dimension"
+    },
+    "full": {
+      "$value": "99999px",
+      "$type": "dimension"
+    }
+  }
+}

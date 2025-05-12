@@ -1,0 +1,220 @@
+{
+  "typography": {
+    "heading": {
+      "3xl": {
+        "$type": "typography", 
+        "$value": {
+          "fontFamily": "{font.family.primary}",
+          "fontWeight": "{font.weight.semibold}",
+          "fontSize": "{size.1200}",
+          "letterSpacing": "0",
+          "textCase": "none"
+        }
+      },
+      "2xl": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.primary}",
+          "fontWeight": "{font.weight.semibold}",
+          "fontSize": "{size.1000}",
+          "letterSpacing": "-2%",
+          "textCase": "none"
+        }
+      },
+      "xl": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.primary}",
+          "fontWeight": "{font.weight.semibold}",
+          "fontSize": "{size.900}",
+          "letterSpacing": "-2%",
+          "textCase": "none"
+        }
+      },
+      "lg": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.primary}",
+          "fontWeight": "{font.weight.semibold}",
+          "fontSize": "{size.800}",
+          "letterSpacing": "-2%",
+          "textCase": "none"
+        }
+      },
+      "md": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.primary}",
+          "fontWeight": "{font.weight.semibold}",
+          "fontSize": "{size.600}",
+          "letterSpacing": "-2%",
+          "textCase": "none"
+        }
+      },
+      "sm": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.primary}",
+          "fontWeight": "{font.weight.semibold}",
+          "fontSize": "{size.500}",
+          "letterSpacing": "-2%",
+          "textCase": "none"
+        }
+      }
+    },
+    "body": {
+      "lg": {
+        "default": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.regular}",
+            "fontSize": "{size.450}",
+            "letterSpacing": "0",
+            "textCase": "none"
+          }
+        },
+        "medium": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.medium}",
+            "fontSize": "{size.450}",
+            "letterSpacing": "0",
+            "textCase": "none"
+          }
+        },
+        "semibold": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.semibold}",
+            "fontSize": "{size.450}",
+            "letterSpacing": "0",
+            "textCase": "none"
+          }
+        }
+      },
+      "md": {
+        "default": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.regular}",
+            "fontSize": "{size.400}",
+            "letterSpacing": "0",
+            "textCase": "none"
+          }
+        },
+        "medium": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.medium}",
+            "fontSize": "{size.400}",
+            "letterSpacing": "0",
+            "textCase": "none"
+          }
+        },
+        "semibold": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.semibold}",
+            "fontSize": "{size.400}",
+            "letterSpacing": "0",
+            "textCase": "none"
+          }
+        }
+      },
+      "sm": {
+        "default": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.regular}",
+            "fontSize": "{size.350}",
+            "letterSpacing": "0",
+            "textCase": "none"
+          }
+        },
+        "medium": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.medium}",
+            "fontSize": "{size.350}",
+            "letterSpacing": "0",
+            "textCase": "none"
+          }
+        },
+        "semibold": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.semibold}",
+            "fontSize": "{size.350}",
+            "letterSpacing": "0",
+            "textCase": "none"
+          }
+        }
+      }
+    },
+    "caption": {
+      "lg": {
+        "default": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.regular}",
+            "fontSize": "{size.300}",
+            "letterSpacing": "0",
+            "textCase": "none"
+          }
+        },
+        "medium": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.medium}",
+            "fontSize": "{size.300}",
+            "letterSpacing": "-2%",
+            "textCase": "none"
+          }
+        },
+        "semibold": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.semibold}",
+            "fontSize": "{size.300}",
+            "letterSpacing": "-2%",
+            "textCase": "none"
+          }
+        }
+      },
+      "sm": {
+        "default": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.regular}",
+            "fontSize": "{size.250}",
+            "letterSpacing": "0",
+            "textCase": "none"
+          }
+        },
+        "semibold": {
+          "$type": "typography",
+          "$value": {
+            "fontFamily": "{font.family.primary}",
+            "fontWeight": "{font.weight.semibold}",
+            "fontSize": "{size.250}",
+            "letterSpacing": "0",
+            "textCase": "none"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$description": "Left-to-right specific spacing overrides",
+  "spacing": {
+    "inlineStart": {
+      "$value": "{space.100}",
+      "$type": "spacing"
+    },
+    "inlineEnd": {
+      "$value": "{space.100}",
+      "$type": "spacing"
+    },
+    "blockStart": {
+      "$value": "{space.100}",
+      "$type": "spacing"
+    },
+    "blockEnd": {
+      "$value": "{space.100}",
+      "$type": "spacing"
+    }
+  },
+  "padding": {
+    "inline": {
+      "start": {
+        "$value": "{space.400}",
+        "$type": "spacing"
+      },
+      "end": {
+        "$value": "{space.400}",
+        "$type": "spacing"
+      }
+    }
+  },
+  "margin": {
+    "inline": {
+      "start": {
+        "$value": "{space.200}",
+        "$type": "spacing"
+      },
+      "end": {
+        "$value": "{space.200}",
+        "$type": "spacing"
+      }
+    }
+  }
+}

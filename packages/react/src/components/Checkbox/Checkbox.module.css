@@ -1,0 +1,196 @@
+/* Checkbox Component Styles */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: var(--t-space-200);
+  /* Align the entire component contents to the start of the container */
+  align-items: flex-start;
+}
+
+/* For RTL, align everything to the end (right side) */
+:global([dir="rtl"]) .container {
+  align-items: flex-start;
+}
+
+.checkboxWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--t-space-200);
+}
+
+/* For RTL mode, we keep the same DOM order but visually reverse it */
+:global([dir="rtl"]) .checkboxWrapper {
+  flex-direction: row;
+}
+
+.checkbox {
+  all: unset;
+  width: var(--t-size-400);
+  height: var(--t-size-400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--t-border-radius-50);
+  border: var(--t-border-width-25) solid var(--t-color-border-primary);
+  background-color: var(--t-color-surface-background);
+  cursor: pointer;
+  transition: all var(--t-duration-fast) var(--t-easing-in-out);
+  flex-shrink: 0;
+}
+
+.checkbox:hover {
+  border-color: var(--t-color-border-hover);
+  background-color: var(--t-color-surface-background-hover);
+}
+
+.checkbox:focus-visible {
+  outline: 2px solid var(--t-color-bg-fill-brand);
+  outline-offset: 2px;
+}
+
+.checkbox[data-state="checked"] {
+  background-color: var(--t-color-bg-fill-brand);
+  border-color: var(--t-color-bg-fill-brand);
+}
+
+.checkbox[data-state="checked"]:hover {
+  background-color: var(--t-color-bg-fill-brand-hover);
+  border-color: var(--t-color-bg-fill-brand-hover);
+}
+
+.checkbox[data-state="indeterminate"] {
+  background-color: var(--t-color-bg-fill-brand);
+  border-color: var(--t-color-bg-fill-brand);
+}
+
+.checkbox[data-state="indeterminate"]:hover {
+  background-color: var(--t-color-bg-fill-brand-hover);
+  border-color: var(--t-color-bg-fill-brand-hover);
+}
+
+.checkbox[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--t-color-surface-background-disabled);
+  border-color: var(--t-color-border-disabled);
+}
+
+.checkbox[data-disabled]:hover {
+  background-color: var(--t-color-surface-background-disabled);
+  border-color: var(--t-color-border-disabled);
+}
+
+.indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--t-color-icon-on-brand);
+}
+
+.label {
+  font-family: var(--t-font-family-primary);
+  font-size: var(--t-font-size-350);
+  font-weight: var(--t-font-weight-medium);
+  color: var(--t-color-text-primary);
+}
+
+.required {
+  color: var(--t-color-surface-background-critical);
+  margin-inline-start: var(--t-space-50);
+}
+
+.disabled .label {
+  color: var(--t-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.helpText {
+  font-family: var(--t-font-family-primary);
+  font-size: var(--t-font-size-300);
+  color: var(--t-color-text-secondary);
+  padding: 0;
+}
+
+/* In LTR, indent the helpText from the left */
+:global([dir="ltr"]) .helpText {
+  padding-left: calc(var(--t-size-400) + var(--t-space-200));
+}
+
+/* In RTL, indent the helpText from the right, exactly 24px as specified in Figma */
+:global([dir="rtl"]) .helpText {
+  padding-right: var(--t-space-600);
+}
+
+.errorMessage {
+  display: flex;
+  align-items: center;
+  gap: var(--t-space-100);
+  font-family: var(--t-font-family-primary);
+  font-size: var(--t-font-size-300);
+  color: var(--t-color-text-critical);
+  padding: 0;
+}
+
+/* In LTR mode, indent and set normal direction */
+:global([dir="ltr"]) .errorMessage {
+  padding-left: calc(var(--t-size-400) + var(--t-space-200));
+  flex-direction: row;
+}
+
+/* In RTL mode, indent from right and reverse icon order */
+:global([dir="rtl"]) .errorMessage {
+  padding-right: var(--t-space-600);
+  flex-direction: row;
+}
+
+.errorIcon {
+  color: var(--t-color-icon-critical);
+}
+
+.error .checkbox {
+  border-color: var(--t-color-border-critical);
+}
+
+.error .checkbox:hover {
+  border-color: var(--t-color-border-critical-hover);
+}
+
+.error .checkbox[data-state="checked"],
+.error .checkbox[data-state="indeterminate"] {
+  background-color: var(--t-color-surface-background-critical);
+  border-color: var(--t-color-surface-background-critical);
+}
+
+.error .checkbox[data-state="checked"]:hover,
+.error .checkbox[data-state="indeterminate"]:hover {
+  background-color: var(--t-color-surface-background-critical-hover);
+  border-color: var(--t-color-surface-background-critical-hover);
+}
+
+.icon {
+  display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .label {
+    font-size: var(--t-font-size-300);
+  }
+}

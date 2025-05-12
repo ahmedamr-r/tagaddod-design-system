@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RTL Checkbox Test</title>
+  <link rel="stylesheet" href="../../../dist/styles/index.css">
+  <style>
+    /* Import the component styles */
+    @import url('../../../dist/react.css');
+    
+    body {
+      direction: rtl;
+      text-align: right;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    
+    .test-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>RTL Checkbox Test</h1>
+    
+    <!-- Test the checkbox manually -->
+    <div class="checkbox-container">
+      <div class="checkbox-wrapper">
+        <div class="checkbox">
+          <div class="indicator">✓</div>
+        </div>
+        <label class="label">تسمية</label>
+      </div>
+      <div class="error-message">
+        <span class="error-icon">⚠️</span>
+        <span>رسالة خطأ</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

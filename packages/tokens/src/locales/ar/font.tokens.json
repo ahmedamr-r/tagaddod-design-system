@@ -1,0 +1,116 @@
+{
+  "font": {
+    "family": {
+      "primary": {
+        "$value": "Tajawal, sans-serif",
+        "$type": "fontFamily"
+      }
+    },
+    "weight": {
+      "regular": {
+        "$value": "500",
+        "$type": "fontWeight"
+      },
+      "medium": {
+        "$value": "700",
+        "$type": "fontWeight"
+      },
+      "semibold": {
+        "$value": "700",
+        "$type": "fontWeight"
+      },
+      "bold": {
+        "$value": "700",
+        "$type": "fontWeight"
+      }
+    },
+    "size": {
+      "250": {
+        "$value": "{size.250}",
+        "$type": "dimension"
+      },
+      "300": {
+        "$value": "{size.300}",
+        "$type": "dimension"
+      },
+      "350": {
+        "$value": "{size.350}",
+        "$type": "dimension"
+      },
+      "400": {
+        "$value": "{size.400}",
+        "$type": "dimension"
+      },
+      "450": {
+        "$value": "{size.450}",
+        "$type": "dimension"
+      },
+      "500": {
+        "$value": "{size.500}",
+        "$type": "dimension"
+      },
+      "550": {
+        "$value": "{size.550}",
+        "$type": "dimension"
+      },
+      "600": {
+        "$value": "{size.600}",
+        "$type": "dimension"
+      },
+      "700": {
+        "$value": "{size.700}",
+        "$type": "dimension"
+      },
+      "800": {
+        "$value": "{size.800}",
+        "$type": "dimension"
+      },
+      "900": {
+        "$value": "{size.900}",
+        "$type": "dimension"
+      },
+      "1000": {
+        "$value": "{size.1000}",
+        "$type": "dimension"
+      },
+      "1200": {
+        "$value": "{size.1200}",
+        "$type": "dimension"
+      },
+      "1400": {
+        "$value": "{size.1200}",
+        "$type": "dimension"
+      }
+    },
+    "lineHeight": {
+      "300": {
+        "$value": "{size.300}",
+        "$type": "dimension"
+      },
+      "400": {
+        "$value": "{size.400}",
+        "$type": "dimension"
+      },
+      "500": {
+        "$value": "{size.500}",
+        "$type": "dimension"
+      },
+      "600": {
+        "$value": "{size.600}",
+        "$type": "dimension"
+      },
+      "800": {
+        "$value": "{size.800}",
+        "$type": "dimension"
+      },
+      "1000": {
+        "$value": "{size.1000}",
+        "$type": "dimension"
+      },
+      "1200": {
+        "$value": "{size.1200}",
+        "$type": "dimension"
+      }
+    }
+  }
+}

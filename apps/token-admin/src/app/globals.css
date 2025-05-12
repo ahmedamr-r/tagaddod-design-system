@@ -1,0 +1,218 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import design tokens */
+@import '@tagaddod/tokens/css/tokens.css';
+@import '@tagaddod/tokens/tagaddod';
+@import '@tagaddod/tokens/greenpan';
+
+/* Base styles */
+body {
+  font-family: var(--t-font-family-primary);
+  color: var(--t-color-text-primary);
+  background-color: var(--t-color-bg-app);
+  line-height: var(--t-line-height-medium);
+}
+
+/* Component overrides */
+.btn-primary {
+  background-color: var(--t-color-bg-fill-brand);
+  color: var(--t-color-text-inverse);
+  border-radius: var(--t-border-radius-200);
+  padding: var(--t-space-100) var(--t-space-300);
+  font-weight: var(--t-font-weight-semibold);
+  transition: all var(--t-duration-short) var(--t-ease-default);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--t-color-bg-action-primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--t-color-text-primary);
+  border: 1px solid var(--t-color-border-secondary);
+  border-radius: var(--t-border-radius-200);
+  padding: var(--t-space-100) var(--t-space-300);
+  font-weight: var(--t-font-weight-medium);
+  transition: all var(--t-duration-short) var(--t-ease-default);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--t-color-bg-action-secondary-hover);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.card {
+  background-color: var(--t-color-bg-app);
+  border: 1px solid var(--t-color-border-primary);
+  border-radius: var(--t-border-radius-300);
+  padding: var(--t-space-400);
+  box-shadow: var(--t-shadow-small);
+}
+
+.input {
+  width: 100%;
+  padding: var(--t-space-100) var(--t-space-200);
+  border: 1px solid var(--t-color-border-secondary);
+  border-radius: var(--t-border-radius-200);
+  background-color: var(--t-color-bg-app);
+  color: var(--t-color-text-primary);
+  font-size: var(--t-font-size-300);
+  transition: border-color var(--t-duration-short) var(--t-ease-default);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--t-color-border-focus);
+  box-shadow: 0 0 0 3px var(--t-color-focus-ring);
+}
+
+.tab {
+  padding: var(--t-space-100) var(--t-space-300);
+  color: var(--t-color-text-secondary);
+  font-weight: var(--t-font-weight-medium);
+  border-bottom: 2px solid transparent;
+  transition: all var(--t-duration-short) var(--t-ease-default);
+}
+
+.tab:hover {
+  color: var(--t-color-text-primary);
+  background-color: var(--t-color-bg-action-secondary-hover);
+}
+
+.tab.active {
+  color: var(--t-color-text-brand);
+  border-color: var(--t-color-border-brand);
+}
+
+.select {
+  padding: var(--t-space-100) var(--t-space-200);
+  border: 1px solid var(--t-color-border-secondary);
+  border-radius: var(--t-border-radius-200);
+  background-color: var(--t-color-bg-app);
+  color: var(--t-color-text-primary);
+  font-size: var(--t-font-size-300);
+  transition: border-color var(--t-duration-short) var(--t-ease-default);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--t-color-border-focus);
+  box-shadow: 0 0 0 3px var(--t-color-focus-ring);
+}
+
+/* Layout utilities */
+.page-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--t-space-600);
+}
+
+.section-header {
+  font-size: var(--t-font-size-600);
+  font-weight: var(--t-font-weight-bold);
+  color: var(--t-color-text-primary);
+  margin-bottom: var(--t-space-400);
+}
+
+/* Token preview styles */
+.token-color-swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--t-border-radius-200);
+  border: 1px solid var(--t-color-border-secondary);
+}
+
+.token-value {
+  font-family: var(--t-font-family-code);
+  font-size: var(--t-font-size-200);
+  color: var(--t-color-text-secondary);
+}
+
+/* Table styles */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--t-font-size-300);
+}
+
+.data-table th {
+  text-align: left;
+  padding: var(--t-space-200);
+  border-bottom: 2px solid var(--t-color-border-secondary);
+  font-weight: var(--t-font-weight-semibold);
+  color: var(--t-color-text-secondary);
+}
+
+.data-table td {
+  padding: var(--t-space-200);
+  border-bottom: 1px solid var(--t-color-border-primary);
+  color: var(--t-color-text-primary);
+}
+
+.data-table tr:hover {
+  background-color: var(--t-color-bg-action-secondary-hover);
+}
+
+/* Status indicator */
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: var(--t-space-100);
+}
+
+.status-indicator.success {
+  background-color: var(--t-color-status-success);
+}
+
+.status-indicator.error {
+  background-color: var(--t-color-status-error);
+}
+
+.status-indicator.warning {
+  background-color: var(--t-color-status-warning);
+}
+
+/* Loading states */
+.skeleton {
+  background: linear-gradient(90deg, var(--t-color-bg-secondary) 25%, var(--t-color-bg-tertiary) 50%, var(--t-color-bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s ease-in-out infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Brand theme classes */
+[data-theme="tagaddod"] {
+  /* Tagaddod brand variables are set in imported CSS */
+}
+
+[data-theme="greenpan"] {
+  /* GreenPan brand variables are set in imported CSS */
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  /* Can add dark mode overrides here if needed */
+}
