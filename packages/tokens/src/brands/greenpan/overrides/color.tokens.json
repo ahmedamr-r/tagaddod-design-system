@@ -2,21 +2,23 @@
   "color": {
     "green": {
       "1200": {
-        "$value": "f1f1f1", 
+        "$value": "#009f4d", 
         "$type": "color"
       }
     },
-    "bgFillBrand": {
-      "$value": "{color.green.1200}",
-      "$type": "color"
-    },
-    "bgFillBrandHover": {
-      "$value": "{color.green.1300}",
-      "$type": "color"
-    },
-    "bgFillBrandActive": {
-      "$value": "{color.green.1400}",
-      "$type": "color"
+    "fill": {
+      "brand": {
+        "$value": "{color.green.1200}",
+        "$type": "color"
+      },
+      "brand-hover": {
+        "$value": "{color.green.1300}",
+        "$type": "color"
+      },
+      "brand-active": {
+        "$value": "{color.green.1400}",
+        "$type": "color"
+      }
     }
   }
 }

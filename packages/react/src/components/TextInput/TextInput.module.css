@@ -3,51 +3,92 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--t-space-200);
+  gap: var(--t-space-100);
   width: 100%;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+/* Label styles */
+.labelContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--t-space-100);
 }
 
 .label {
   font-family: var(--t-font-family-primary);
-  font-size: var(--t-font-size-300);
+  font-size: var(--t-font-size-350);
   font-weight: var(--t-font-weight-medium);
   color: var(--t-color-text-primary);
 }
 
 .required {
-  color: var(--t-color-surface-background-critical);
+  color: var(--t-color-fill-critical);
   margin-inline-start: var(--t-space-50);
 }
 
+.optional {
+  color: var(--t-color-text-secondary);
+  margin-inline-start: var(--t-space-100);
+  font-size: var(--t-font-size-300);
+  font-weight: var(--t-font-weight-regular);
+}
+
+/* Input wrapper and flex positioning */
 .inputWrapper {
   position: relative;
   display: flex;
   width: 100%;
-}
-
-.input {
-  width: 100%;
   border-radius: var(--t-border-radius-200);
   border: 1px solid var(--t-color-border-secondary);
-  background-color: var(--t-color-surface-background-secondary);
+  background-color: var(--t-color-surface-secondary);
+  overflow: hidden;
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
+}
+
+.inputWrapper:hover {
+  border-color: var(--t-color-border-hover);
+}
+
+.inputWrapper:focus-within {
+  border-color: var(--t-color-fill-brand);
+  box-shadow: 0 0 0 2px var(--t-color-fill-brand-hover);
+}
+
+/* Base input styles */
+.input {
+  flex: 1;
+  border: none;
+  background-color: transparent;
   color: var(--t-color-text-primary);
-  padding: var(--t-space-200) var(--t-space-300);
+  padding-block: var(--t-space-200);
+  padding-inline: var(--t-space-300);
   font-family: var(--t-font-family-primary);
   font-size: var(--t-font-size-350);
-  transition: all var(--t-duration-base) var(--t-easing-in-out);
   outline: none;
-  min-height: var(--t-size-1000);
+  width: 100%;
 }
 
-.input:focus {
-  border-color: var(--t-color-bg-fill-brand);
-  box-shadow: 0 0 0 2px var(--t-color-bg-fill-brand-hover);
-}
-
+/* Input states */
 .input:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background-color: var(--t-color-surface-background-disabled);
+}
+
+.inputWrapper.disabled {
+  background-color: var(--t-color-surface-disabled);
+  border-color: var(--t-color-border-disabled);
+  opacity: 0.5;
+}
+
+.inputWrapper.readOnly {
+  background-color: var(--t-color-surface-primary);
+  border-color: var(--t-color-border-secondary);
+  cursor: default;
+  pointer-events: none;
 }
 
 .input::placeholder {
@@ -55,51 +96,146 @@
   opacity: 0.7;
 }
 
-/* Error state */
-.error .input {
-  border-color: var(--t-color-surface-background-critical);
+/* Prefix and suffix positioning with flex */
+.prefix {
+  display: flex;
+  align-items: center;
+  padding-inline-start: var(--t-space-300);
+  color: var(--t-color-icon-secondary);
+  /* Add 6px gap to the right of the prefix */
+  margin-inline-end: var(--t-space-100); 
 }
 
-.error .input:focus {
-  box-shadow: 0 0 0 2px var(--t-color-surface-background-critical-hover);
+.suffix {
+  display: flex;
+  align-items: center;
+  padding-inline-end: var(--t-space-300);
+  color: var(--t-color-icon-secondary);
+  /* Add 6px gap to the left of the suffix */
+  margin-inline-start: var(--t-space-100);
+  gap: var(--t-space-100);
 }
 
-/* Message and error text */
-.message {
-  font-family: var(--t-font-family-primary);
+/* Add padding adjustments for input with prefix/suffix */
+.input.withPrefix {
+  padding-inline-start: 0;
+}
+
+.input.withSuffix {
+  padding-inline-end: 0;
+}
+
+/* Size variants with adjusted spacing */
+.sizeMicro .inputWrapper {
+  min-height: var(--t-size-800); /* 20px equivalent */
+}
+
+.sizeMicro .input {
   font-size: var(--t-font-size-300);
-  color: var(--t-color-text-secondary);
+  padding-block: var(--t-space-50);
+  padding-inline: var(--t-space-200);
+}
+
+.sizeMicro .prefix,
+.sizeMicro .suffix {
+  font-size: var(--t-font-size-300);
+}
+
+.sizeMicro .prefix {
+  padding-inline-start: var(--t-space-200);
+}
+
+.sizeMicro .suffix {
+  padding-inline-end: var(--t-space-200);
+}
+
+.sizeMedium .inputWrapper {
+  min-height: var(--t-size-1000); /* 32px equivalent */
+}
+
+.sizeMedium .input {
+  font-size: var(--t-font-size-350);
+  padding-block: var(--t-space-150);
+  padding-inline: var(--t-space-300);
+}
+
+.sizeMedium .prefix,
+.sizeMedium .suffix {
+  font-size: var(--t-font-size-350);
+}
+
+.sizeLarge .inputWrapper {
+  min-height: var(--t-size-1200); /* 40px equivalent */
+}
+
+.sizeLarge .input {
+  font-size: var(--t-font-size-400);
+  padding-block: var(--t-space-200);
+  padding-inline: var(--t-space-400);
+}
+
+.sizeLarge .prefix {
+  padding-inline-start: var(--t-space-400);
+}
+
+.sizeLarge .suffix {
+  padding-inline-end: var(--t-space-400);
+}
+
+.sizeLarge .prefix,
+.sizeLarge .suffix {
+  font-size: var(--t-font-size-400);
+}
+
+/* Icon button (for clear, password toggle, etc.) */
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--t-color-icon-secondary);
+  cursor: pointer;
+  padding: var(--t-space-50);
+  border-radius: var(--t-border-radius-100);
+  transition: background-color var(--t-duration-fast) var(--t-easing-in-out);
+}
+
+.iconButton:hover {
+  background-color: var(--t-color-surface-hover);
+}
+
+.iconButton:active {
+  background-color: var(--t-color-surface-active);
+}
+
+/* Error state */
+.error .inputWrapper {
+  border-color: var(--t-color-fill-critical);
+}
+
+.error .inputWrapper:focus-within {
+  box-shadow: 0 0 0 2px var(--t-color-fill-critical-secondary);
 }
 
 .errorMessage {
-  font-family: var(--t-font-family-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--t-space-100);
+  color: var(--t-color-text-critical);
   font-size: var(--t-font-size-300);
-  color: var(--t-color-surface-background-critical);
+  margin-top: var(--t-space-100);
 }
 
-/* Size variants */
-.sm .input {
-  height: var(--t-size-800);
+.errorIcon {
+  color: var(--t-color-icon-critical);
+}
+
+/* Help text */
+.helpText {
   font-size: var(--t-font-size-300);
-  padding: var(--t-space-100) var(--t-space-200);
-}
-
-.md .input {
-  height: var(--t-size-1000);
-  font-size: var(--t-font-size-350);
-  padding: var(--t-space-200) var(--t-space-300);
-}
-
-.lg .input {
-  height: var(--t-size-1200);
-  font-size: var(--t-font-size-400);
-  padding: var(--t-space-200) var(--t-space-400);
-}
-
-/* RTL support */
-:global([dir="rtl"]) .required {
-  margin-inline-start: 0;
-  margin-inline-end: var(--t-space-50);
+  color: var(--t-color-text-secondary);
+  margin-top: var(--t-space-100);
 }
 
 /* Responsive adjustments */

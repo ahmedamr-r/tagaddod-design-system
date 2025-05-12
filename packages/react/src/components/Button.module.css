@@ -25,7 +25,7 @@
 
 .button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--t-color-bg-fill-brand);
+  box-shadow: 0 0 0 2px var(--t-color-border-brand);
   outline-offset: 2px;
 }
 
@@ -41,27 +41,27 @@
 
 /* Variants */
 .primary {
-  background-color: var(--t-color-bg-fill-brand);
-  color: var(--t-color-text-on-brand);
+  background-color: var(--t-color-fill-brand);
+  color: var(--t-color-text-on-fill);
   border-color: transparent;
 }
 
 .primary:hover:not(:disabled) {
-  background-color: var(--t-color-bg-fill-brand-hover);
+  background-color: var(--t-color-fill-brand-hover);
 }
 
 .primary:focus {
-  box-shadow: 0 0 0 2px var(--t-color-bg-fill-brand);
+  box-shadow: 0 0 0 2px var(--t-color-border-brand);
 }
 
 .secondary {
-  background-color: var(--t-color-surface-background-secondary);
+  background-color: var(--t-color-surface-secondary);
   color: var(--t-color-text-primary);
   border-color: var(--t-color-border-secondary);
 }
 
 .secondary:hover:not(:disabled) {
-  background-color: var(--t-color-surface-background-secondary-hover);
+  background-color: var(--t-color-surface-secondary-hover);
 }
 
 .secondary:focus {
@@ -69,31 +69,31 @@
 }
 
 .success {
-  background-color: var(--t-color-surface-background-success);
-  color: var(--t-color-text-on-brand);
+  background-color: var(--t-color-fill-success);
+  color: var(--t-color-text-on-fill);
   border-color: transparent;
 }
 
 .success:hover:not(:disabled) {
-  background-color: var(--t-color-surface-background-success-hover);
+  background-color: var(--t-color-fill-success-hover);
 }
 
 .success:focus {
-  box-shadow: 0 0 0 2px var(--t-color-surface-background-success);
+  box-shadow: 0 0 0 2px var(--t-color-fill-success);
 }
 
 .critical {
-  background-color: var(--t-color-surface-background-critical);
-  color: var(--t-color-text-on-brand);
+  background-color: var(--t-color-fill-critical);
+  color: var(--t-color-text-on-fill);
   border-color: transparent;
 }
 
 .critical:hover:not(:disabled) {
-  background-color: var(--t-color-surface-background-critical-hover);
+  background-color: var(--t-color-fill-critical-hover);
 }
 
 .critical:focus {
-  box-shadow: 0 0 0 2px var(--t-color-surface-background-critical);
+  box-shadow: 0 0 0 2px var(--t-color-fill-critical);
 }
 
 /* Sizes */

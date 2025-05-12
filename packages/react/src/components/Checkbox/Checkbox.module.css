@@ -35,7 +35,7 @@
   justify-content: center;
   border-radius: var(--t-border-radius-50);
   border: var(--t-border-width-25) solid var(--t-color-border-primary);
-  background-color: var(--t-color-surface-background);
+  background-color: var(--t-color-surface-primary);
   cursor: pointer;
   transition: all var(--t-duration-fast) var(--t-easing-in-out);
   flex-shrink: 0;
@@ -43,43 +43,43 @@
 
 .checkbox:hover {
   border-color: var(--t-color-border-hover);
-  background-color: var(--t-color-surface-background-hover);
+  background-color: var(--t-color-surface-hover);
 }
 
 .checkbox:focus-visible {
-  outline: 2px solid var(--t-color-bg-fill-brand);
+  outline: 2px solid var(--t-color-fill-brand);
   outline-offset: 2px;
 }
 
 .checkbox[data-state="checked"] {
-  background-color: var(--t-color-bg-fill-brand);
-  border-color: var(--t-color-bg-fill-brand);
+  background-color: var(--t-color-fill-brand);
+  border-color: var(--t-color-fill-brand);
 }
 
 .checkbox[data-state="checked"]:hover {
-  background-color: var(--t-color-bg-fill-brand-hover);
-  border-color: var(--t-color-bg-fill-brand-hover);
+  background-color: var(--t-color-fill-brand-hover);
+  border-color: var(--t-color-fill-brand-hover);
 }
 
 .checkbox[data-state="indeterminate"] {
-  background-color: var(--t-color-bg-fill-brand);
-  border-color: var(--t-color-bg-fill-brand);
+  background-color: var(--t-color-fill-brand);
+  border-color: var(--t-color-fill-brand);
 }
 
 .checkbox[data-state="indeterminate"]:hover {
-  background-color: var(--t-color-bg-fill-brand-hover);
-  border-color: var(--t-color-bg-fill-brand-hover);
+  background-color: var(--t-color-fill-brand-hover);
+  border-color: var(--t-color-fill-brand-hover);
 }
 
 .checkbox[data-disabled] {
   opacity: 0.5;
   cursor: not-allowed;
-  background-color: var(--t-color-surface-background-disabled);
+  background-color: var(--t-color-surface-disabled);
   border-color: var(--t-color-border-disabled);
 }
 
 .checkbox[data-disabled]:hover {
-  background-color: var(--t-color-surface-background-disabled);
+  background-color: var(--t-color-surface-disabled);
   border-color: var(--t-color-border-disabled);
 }
 
@@ -89,7 +89,7 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  color: var(--t-color-icon-on-brand);
+  color: var(--t-color-icon-on-fill);
 }
 
 .label {
@@ -100,7 +100,7 @@
 }
 
 .required {
-  color: var(--t-color-surface-background-critical);
+  color: var(--t-color-fill-critical);
   margin-inline-start: var(--t-space-50);
 }
 
@@ -174,14 +174,14 @@
 
 .error .checkbox[data-state="checked"],
 .error .checkbox[data-state="indeterminate"] {
-  background-color: var(--t-color-surface-background-critical);
-  border-color: var(--t-color-surface-background-critical);
+  background-color: var(--t-color-fill-critical);
+  border-color: var(--t-color-fill-critical);
 }
 
 .error .checkbox[data-state="checked"]:hover,
 .error .checkbox[data-state="indeterminate"]:hover {
-  background-color: var(--t-color-surface-background-critical-hover);
-  border-color: var(--t-color-surface-background-critical-hover);
+  background-color: var(--t-color-fill-critical-hover);
+  border-color: var(--t-color-fill-critical-hover);
 }
 
 .icon {

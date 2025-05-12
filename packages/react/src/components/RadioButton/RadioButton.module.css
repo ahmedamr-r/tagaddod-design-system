@@ -35,7 +35,7 @@
   height: var(--t-size-400);
   border-radius: 100%;
   border: var(--t-border-width-25) solid var(--t-color-border-primary);
-  background-color: var(--t-color-surface-background);
+  background-color: var(--t-color-surface-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,17 +46,17 @@
 
 .RadioButtonItem:hover {
   border-color: var(--t-color-border-hover);
-  background-color: var(--t-color-surface-background-hover);
+  background-color: var(--t-color-surface-hover);
 }
 
 .RadioButtonItem:focus-visible {
-  outline: var(--t-border-width-25) solid var(--t-color-bg-fill-brand);
+  outline: var(--t-border-width-25) solid var(--t-color-fill-brand);
   outline-offset: var(--t-space-50);
 }
 
 /* When checked, change the border color */
 .RadioButtonItem[data-state="checked"] {
-  border-color: var(--t-color-bg-fill-brand);
+  border-color: var(--t-color-fill-brand);
 }
 
 /* The indicator (inner circle) when checked */
@@ -68,7 +68,7 @@
   height: calc(var(--t-size-400) / 2);
   position: relative;
   border-radius: 50%;
-  background-color: var(--t-color-bg-fill-brand);
+  background-color: var(--t-color-fill-brand);
   transform: scale(0);
   transition: transform var(--t-duration-fast) var(--t-easing-in-out);
 }
@@ -120,7 +120,7 @@
 
 /* Disabled state styling */
 .RadioButtonItem.disabled {
-  background-color: var(--t-color-surface-background-disabled);
+  background-color: var(--t-color-surface-disabled);
   border-color: var(--t-color-border-disabled);
   cursor: not-allowed;
 }
