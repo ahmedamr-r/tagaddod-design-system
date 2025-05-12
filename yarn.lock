@@ -1184,10 +1184,10 @@
   resolved "https://registry.npmjs.org/@next/env/-/env-15.3.2.tgz"
   integrity sha512-xURk++7P7qR9JG1jJtLzPzf0qEvqCN0A/T3DXf8IPMKo9/6FfjxtEffRJIIew/bIL4T3C2jLLqBor8B/zVlx6g==
 
-"@next/eslint-plugin-next@15.0.3":
-  version "15.0.3"
-  resolved "https://registry.npmjs.org/@next/eslint-plugin-next/-/eslint-plugin-next-15.0.3.tgz"
-  integrity sha512-3Ln/nHq2V+v8uIaxCR6YfYo7ceRgZNXfTd3yW1ukTaFbO+/I8jNakrjYWODvG9BuR2v5kgVtH/C8r0i11quOgw==
+"@next/eslint-plugin-next@15.3.2":
+  version "15.3.2"
+  resolved "https://registry.yarnpkg.com/@next/eslint-plugin-next/-/eslint-plugin-next-15.3.2.tgz#6a371b022d6de47f2bafc868c7c2220f4e6a2903"
+  integrity sha512-ijVRTXBgnHT33aWnDtmlG+LJD+5vhc9AKTJPquGG5NKXjpKNjc62woIhFtrAcWdBobt8kqjCoaJ0q6sDQoX7aQ==
   dependencies:
     fast-glob "3.3.1"
 
@@ -1576,9 +1576,9 @@
     react-dom "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-essentials@^8.6.12":
+"@storybook/addon-essentials@8.6.12", "@storybook/addon-essentials@^8.6.12":
   version "8.6.12"
-  resolved "https://registry.npmjs.org/@storybook/addon-essentials/-/addon-essentials-8.6.12.tgz"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-essentials/-/addon-essentials-8.6.12.tgz#8553b25e365e33905f4e5fe1e35bc22c15d525b3"
   integrity sha512-Y/7e8KFlttaNfv7q2zoHMPdX6hPXHdsuQMAjYl5NG9HOAJREu4XBy4KZpbcozRe4ApZ78rYsN/MO1EuA+bNMIA==
   dependencies:
     "@storybook/addon-actions" "8.6.12"
@@ -1599,9 +1599,9 @@
   dependencies:
     "@storybook/global" "^5.0.0"
 
-"@storybook/addon-interactions@^8.6.12":
+"@storybook/addon-interactions@8.6.12", "@storybook/addon-interactions@^8.6.12":
   version "8.6.12"
-  resolved "https://registry.npmjs.org/@storybook/addon-interactions/-/addon-interactions-8.6.12.tgz"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-interactions/-/addon-interactions-8.6.12.tgz#04fadf3809a6afdfa0ab38c52ca0584253f107dd"
   integrity sha512-cTAJlTq6uVZBEbtwdXkXoPQ4jHOAGKQnYSezBT4pfNkdjn/FnEeaQhMBDzf14h2wr5OgBnJa6Lmd8LD9ficz4A==
   dependencies:
     "@storybook/global" "^5.0.0"
@@ -1618,9 +1618,9 @@
     "@storybook/global" "^5.0.0"
     tiny-invariant "^1.3.1"
 
-"@storybook/addon-onboarding@^8.6.12":
+"@storybook/addon-onboarding@8.6.12", "@storybook/addon-onboarding@^8.6.12":
   version "8.6.12"
-  resolved "https://registry.npmjs.org/@storybook/addon-onboarding/-/addon-onboarding-8.6.12.tgz"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-onboarding/-/addon-onboarding-8.6.12.tgz#531899977b902abb03b9ff2969975993ffaf255b"
   integrity sha512-/cgxaLy6tr6xO0+QO+qV5rPZS5/c15Daywvg/F03lifLGkMuyn/JDuhu0J5i1LbFsL1RYdf4sjrTOmLXbOT6+Q==
 
 "@storybook/addon-outline@8.6.12":
@@ -1665,9 +1665,9 @@
   resolved "https://registry.npmjs.org/@storybook/components/-/components-8.6.12.tgz"
   integrity sha512-FiaE8xvCdvKC2arYusgtlDNZ77b8ysr8njAYQZwwaIHjy27TbR2tEpLDCmUwSbANNmivtc/xGEiDDwcNppMWlQ==
 
-"@storybook/core-events@^8.6.12":
+"@storybook/core-events@8.6.12", "@storybook/core-events@^8.6.12":
   version "8.6.12"
-  resolved "https://registry.npmjs.org/@storybook/core-events/-/core-events-8.6.12.tgz"
+  resolved "https://registry.yarnpkg.com/@storybook/core-events/-/core-events-8.6.12.tgz#dda61eece638faf95d4dfc30b40489911faa5fdd"
   integrity sha512-j2MUlSfYOhTsjlruRWTqSVwYreJGFIsWeqHFAhCdtmXe3qpFBM/LuxTKuaM1uWvs6vEAyGEzDw8+DXwuO6uISg==
 
 "@storybook/core@8.6.12":
@@ -1772,9 +1772,9 @@
   resolved "https://registry.npmjs.org/@storybook/theming/-/theming-8.6.12.tgz"
   integrity sha512-6VjZg8HJ2Op7+KV7ihJpYrDnFtd9D1jrQnUS8LckcpuBXrIEbaut5+34ObY8ssQnSqkk2GwIZBBBQYQBCVvkOw==
 
-"@storybook/types@^8.6.12":
+"@storybook/types@8.6.12", "@storybook/types@^8.6.12":
   version "8.6.12"
-  resolved "https://registry.npmjs.org/@storybook/types/-/types-8.6.12.tgz"
+  resolved "https://registry.yarnpkg.com/@storybook/types/-/types-8.6.12.tgz#774b80f40693a321980e200241de9b6c2725a682"
   integrity sha512-G/nR+js7KV1qKH3nAcOfwceERBic5e03dpkeA6PDmqBiQ8XeM9B6N4NTMhXi/2gM5ZAGJ+NxJMaW6zLnc32DjA==
 
 "@swc/counter@0.1.3":
@@ -3367,12 +3367,12 @@ escodegen@^2.0.0:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-config-next@15.0.3:
-  version "15.0.3"
-  resolved "https://registry.npmjs.org/eslint-config-next/-/eslint-config-next-15.0.3.tgz"
-  integrity sha512-IGP2DdQQrgjcr4mwFPve4DrCqo7CVVez1WoYY47XwKSrYO4hC0Dlb+iJA60i0YfICOzgNADIb8r28BpQ5Zs0wg==
+eslint-config-next@15.3.2:
+  version "15.3.2"
+  resolved "https://registry.yarnpkg.com/eslint-config-next/-/eslint-config-next-15.3.2.tgz#ed2bc6607f54555bbeaf23a032b4e430e453b63c"
+  integrity sha512-FerU4DYccO4FgeYFFglz0SnaKRe1ejXQrDb8kWUkTAg036YWi+jUsgg4sIGNCDhAsDITsZaL4MzBWKB6f4G1Dg==
   dependencies:
-    "@next/eslint-plugin-next" "15.0.3"
+    "@next/eslint-plugin-next" "15.3.2"
     "@rushstack/eslint-patch" "^1.10.3"
     "@typescript-eslint/eslint-plugin" "^5.4.2 || ^6.0.0 || ^7.0.0 || ^8.0.0"
     "@typescript-eslint/parser" "^5.4.2 || ^6.0.0 || ^7.0.0 || ^8.0.0"
@@ -3380,7 +3380,7 @@ eslint-config-next@15.0.3:
     eslint-import-resolver-typescript "^3.5.2"
     eslint-plugin-import "^2.31.0"
     eslint-plugin-jsx-a11y "^6.10.0"
-    eslint-plugin-react "^7.35.0"
+    eslint-plugin-react "^7.37.0"
     eslint-plugin-react-hooks "^5.0.0"
 
 eslint-import-resolver-node@^0.3.6, eslint-import-resolver-node@^0.3.9:
@@ -3463,9 +3463,9 @@ eslint-plugin-react-hooks@^5.0.0:
   resolved "https://registry.npmjs.org/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-5.2.0.tgz"
   integrity sha512-+f15FfK64YQwZdJNELETdn5ibXEUQmW1DZL6KXhNnc2heoy/sg9VJJeT7n8TlMWouzWqSWavFkIhHyIbIAEapg==
 
-eslint-plugin-react@^7.35.0:
+eslint-plugin-react@^7.37.0:
   version "7.37.5"
-  resolved "https://registry.npmjs.org/eslint-plugin-react/-/eslint-plugin-react-7.37.5.tgz"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.37.5.tgz#2975511472bdda1b272b34d779335c9b0e877065"
   integrity sha512-Qteup0SqU15kdocexFNAJMvCJEfa2xUKNV4CC1xsVMrIIqEy3SQ/rqyxCWNzfrd3/ldy6HMlD2e0JDVpDg2qIA==
   dependencies:
     array-includes "^3.1.8"
@@ -6229,9 +6229,9 @@ storybook-design-token@3.2.0:
     react-use-clipboard "^1.0.9"
     react-virtual "^2.10.4"
 
-storybook@^8.6.12:
+storybook@8.6.12, storybook@^8.6.12:
   version "8.6.12"
-  resolved "https://registry.npmjs.org/storybook/-/storybook-8.6.12.tgz"
+  resolved "https://registry.yarnpkg.com/storybook/-/storybook-8.6.12.tgz#dddd11644f0344524577bb600a4dabda9a73af55"
   integrity sha512-Z/nWYEHBTLK1ZBtAWdhxC0l5zf7ioJ7G4+zYqtTdYeb67gTnxNj80gehf8o8QY9L2zA2+eyMRGLC2V5fI7Z3Tw==
   dependencies:
     "@storybook/core" "8.6.12"
