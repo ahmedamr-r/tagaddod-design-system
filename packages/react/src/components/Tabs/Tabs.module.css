@@ -1,0 +1,217 @@
+/* Tabs Component Styles */
+
+/* Root styles */
+.tabsRoot {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--t-font-family-primary);
+}
+
+/* TabsList styles */
+.tabsList {
+  display: flex;
+  position: relative;
+  border-bottom: 1px solid var(--t-color-border-subtle);
+}
+
+/* Fitted styles */
+.fitted .tabsList {
+  width: 100%;
+}
+
+.fitted .tabsTrigger {
+  flex: 1;
+}
+
+/* TabsTrigger styles */
+.tabsTrigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--t-space-100);
+  padding: var(--t-space-200) var(--t-space-300);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: var(--t-font-size-350);
+  font-weight: var(--t-font-weight-medium);
+  color: var(--t-color-text-secondary);
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
+  position: relative;
+  outline: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tabsTrigger:hover {
+  color: var(--t-color-text-primary);
+}
+
+.tabsTrigger:focus-visible {
+  box-shadow: 0 0 0 2px var(--t-color-border-brand);
+  border-radius: var(--t-border-radius-100);
+}
+
+.tabsTrigger[data-state="active"] {
+  color: var(--t-color-text-brand);
+  font-weight: var(--t-font-weight-semibold);
+}
+
+/* Variant: Primary (Underlined tabs) */
+.variantPrimary .tabsTrigger {
+  padding-bottom: var(--t-space-300);
+  margin-bottom: -1px; /* To overlap the bottom border */
+}
+
+.variantPrimary .tabsTrigger[data-state="active"]::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--t-color-border-brand);
+  border-radius: var(--t-border-radius-100) var(--t-border-radius-100) 0 0;
+}
+
+/* Variant: Secondary (Box tabs) */
+.variantSecondary .tabsList {
+  gap: var(--t-space-200);
+  border-bottom: none;
+  margin-bottom: var(--t-space-200);
+}
+
+.variantSecondary .tabsTrigger {
+  border-radius: var(--t-border-radius-200);
+  border: 1px solid transparent;
+  padding: var(--t-space-100) var(--t-space-300);
+}
+
+.variantSecondary .tabsTrigger:hover {
+  background-color: var(--t-color-fill-brand-secondary-hover);
+}
+
+.variantSecondary .tabsTrigger[data-state="active"] {
+  background-color: var(--t-color-fill-brand-secondary);
+  border-color: var(--t-color-border-subtle);
+}
+
+/* TabsContent styles */
+.tabsContent {
+  padding: var(--t-space-300) 0;
+  outline: none;
+}
+
+/* Line height text elements */
+.tabsLabel {
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for all languages */
+.tabsLabel::before,
+.tabsLabel::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.tabsLabel::before {
+  margin-top: -0.15em;
+}
+
+.tabsLabel::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .tabsLabel::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .tabsLabel::after {
+  margin-bottom: -0.25em;
+}
+
+/* Icon styles */
+.tabsIcon {
+  display: flex;
+  align-items: center;
+  margin-right: var(--t-space-100);
+}
+
+:global([dir="rtl"]) .tabsIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-100);
+}
+
+/* Badge styles */
+.tabsBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--t-size-500);
+  height: var(--t-size-500);
+  padding: 0 var(--t-space-100);
+  font-size: var(--t-font-size-300);
+  font-weight: var(--t-font-weight-semibold);
+  color: var(--t-color-text-on-fill);
+  background-color: var(--t-color-fill-brand);
+  border-radius: var(--t-border-radius-round);
+  margin-left: var(--t-space-100);
+  line-height: 1;
+}
+
+:global([dir="rtl"]) .tabsBadge {
+  margin-left: 0;
+  margin-right: var(--t-space-100);
+}
+
+/* Count specific styles */
+.count2 .tabsList,
+.count3 .tabsList,
+.count4 .tabsList,
+.count5 .tabsList,
+.count6 .tabsList {
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.count2 .tabsList::-webkit-scrollbar,
+.count3 .tabsList::-webkit-scrollbar,
+.count4 .tabsList::-webkit-scrollbar,
+.count5 .tabsList::-webkit-scrollbar,
+.count6 .tabsList::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* States */
+.tabsTrigger[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Focus states */
+@media (prefers-reduced-motion: no-preference) {
+  .tabsTrigger:focus-visible {
+    transition: box-shadow 150ms ease-out;
+  }
+}
+
+/* RTL handling */
+:global([dir="rtl"]) .variantPrimary .tabsTrigger[data-state="active"]::after {
+  left: auto;
+  right: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .tabsList {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+}

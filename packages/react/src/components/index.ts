@@ -9,3 +9,22 @@ export { textInputSizes } from './TextInput';
 export { Checkbox } from './Checkbox';
 export type { CheckboxProps } from './Checkbox';
 export * from './RadioButton';
+
+export { 
+  Tabs, 
+  TabsList, 
+  TabsTrigger, 
+  TabsContent, 
+  Root, 
+  List, 
+  Trigger, 
+  Content 
+} from './Tabs';
+export type { 
+  TabsProps, 
+  TabsListProps, 
+  TabsTriggerProps, 
+  TabsContentProps, 
+  TabsRootProps 
+} from './Tabs';
+export { tabsVariants, tabsCounts } from './Tabs';
