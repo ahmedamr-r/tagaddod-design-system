@@ -1,0 +1,361 @@
+/* Button Component Styles */
+
+/* Base styles */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--t-space-100);
+  position: relative;
+  cursor: pointer;
+  font-family: var(--t-font-family-primary);
+  border-style: solid;
+  border-width: 1px;
+  box-sizing: border-box;
+  text-decoration: none;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
+  /* Line-height fix for perfect vertical text alignment */
+  line-height: 1;
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--t-color-border-brand);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Size variants */
+.sizeLarge {
+  min-height: 48px;
+  padding: 0 var(--t-space-400);
+  font-size: var(--t-font-size-400);
+  font-weight: var(--t-font-weight-semibold);
+  border-radius: var(--t-border-radius-200);
+}
+
+.sizeMedium {
+  min-height: 40px;
+  padding: 0 var(--t-space-300);
+  font-size: var(--t-font-size-350);
+  font-weight: var(--t-font-weight-semibold);
+  border-radius: var(--t-border-radius-200);
+}
+
+.sizeMicro {
+  min-height: 32px;
+  padding: 0 var(--t-space-200);
+  font-size: var(--t-font-size-300);
+  font-weight: var(--t-font-weight-medium);
+  border-radius: var(--t-border-radius-200);
+}
+
+/* Full width variant */
+.fullWidth {
+  width: 100%;
+}
+
+/* Icon-only button (square) */
+.iconOnly.sizeLarge {
+  width: 48px;
+  padding: 0;
+}
+
+.iconOnly.sizeMedium {
+  width: 40px;
+  padding: 0;
+}
+
+.iconOnly.sizeMicro {
+  width: 32px;
+  padding: 0;
+}
+
+/* Variant: Primary */
+.variantPrimary {
+  background-color: var(--t-color-fill-brand);
+  color: var(--t-color-text-on-fill);
+  border-color: transparent;
+}
+
+.variantPrimary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-brand-hover);
+}
+
+.variantPrimary:active:not(:disabled) {
+  background-color: var(--t-color-fill-brand-pressed);
+}
+
+/* Variant: Secondary */
+.variantSecondary {
+  background-color: var(--t-color-fill-brand-secondary);
+  color: var(--t-color-text-primary);
+  border-color: transparent;
+}
+
+.variantSecondary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-brand-secondary-hover);
+}
+
+.variantSecondary:active:not(:disabled) {
+  background-color: var(--t-color-fill-brand-secondary-pressed);
+}
+
+/* Variant: Tertiary */
+.variantTertiary {
+  background-color: transparent;
+  color: var(--t-color-text-brand);
+  border-color: var(--t-color-border-brand);
+}
+
+.variantTertiary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-brand-secondary);
+  border-color: var(--t-color-border-brand-hover);
+}
+
+.variantTertiary:active:not(:disabled) {
+  background-color: var(--t-color-fill-brand-secondary-pressed);
+  border-color: var(--t-color-border-brand-pressed);
+}
+
+/* Variant: Plain */
+.variantPlain {
+  background-color: transparent;
+  color: var(--t-color-text-brand);
+  border-color: transparent;
+  padding-left: var(--t-space-100);
+  padding-right: var(--t-space-100);
+}
+
+.variantPlain:hover:not(:disabled) {
+  background-color: var(--t-color-fill-brand-secondary);
+}
+
+.variantPlain:active:not(:disabled) {
+  background-color: var(--t-color-fill-brand-secondary-pressed);
+}
+
+/* Tones */
+/* Default tone uses the brand colors, defined above */
+
+/* Critical tone */
+.toneCritical.variantPrimary {
+  background-color: var(--t-color-fill-critical);
+  color: var(--t-color-text-on-fill);
+}
+
+.toneCritical.variantPrimary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-critical-hover);
+}
+
+.toneCritical.variantPrimary:active:not(:disabled) {
+  background-color: var(--t-color-fill-critical-pressed);
+}
+
+.toneCritical.variantSecondary {
+  background-color: var(--t-color-fill-critical-secondary);
+  color: var(--t-color-text-critical);
+}
+
+.toneCritical.variantSecondary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-critical-secondary-hover);
+}
+
+.toneCritical.variantSecondary:active:not(:disabled) {
+  background-color: var(--t-color-fill-critical-secondary-pressed);
+}
+
+.toneCritical.variantTertiary,
+.toneCritical.variantPlain {
+  color: var(--t-color-text-critical);
+  border-color: var(--t-color-border-critical);
+}
+
+.toneCritical.variantPlain {
+  border-color: transparent;
+}
+
+/* Success tone */
+.toneSuccess.variantPrimary {
+  background-color: var(--t-color-fill-success);
+  color: var(--t-color-text-on-fill);
+}
+
+.toneSuccess.variantPrimary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-success-hover);
+}
+
+.toneSuccess.variantPrimary:active:not(:disabled) {
+  background-color: var(--t-color-fill-success-pressed);
+}
+
+.toneSuccess.variantSecondary {
+  background-color: var(--t-color-fill-success-secondary);
+  color: var(--t-color-text-success);
+}
+
+.toneSuccess.variantSecondary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-success-secondary-hover);
+}
+
+.toneSuccess.variantSecondary:active:not(:disabled) {
+  background-color: var(--t-color-fill-success-secondary-pressed);
+}
+
+.toneSuccess.variantTertiary,
+.toneSuccess.variantPlain {
+  color: var(--t-color-text-success);
+  border-color: var(--t-color-border-success);
+}
+
+.toneSuccess.variantPlain {
+  border-color: transparent;
+}
+
+/* Neutral tone */
+.toneNeutral.variantPrimary {
+  background-color: var(--t-color-fill-neutral);
+  color: var(--t-color-text-on-fill);
+}
+
+.toneNeutral.variantPrimary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-neutral-hover);
+}
+
+.toneNeutral.variantPrimary:active:not(:disabled) {
+  background-color: var(--t-color-fill-neutral-pressed);
+}
+
+.toneNeutral.variantSecondary {
+  background-color: var(--t-color-fill-neutral-secondary);
+  color: var(--t-color-text-neutral);
+}
+
+.toneNeutral.variantSecondary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-neutral-secondary-hover);
+}
+
+.toneNeutral.variantSecondary:active:not(:disabled) {
+  background-color: var(--t-color-fill-neutral-secondary-pressed);
+}
+
+.toneNeutral.variantTertiary,
+.toneNeutral.variantPlain {
+  color: var(--t-color-text-neutral);
+  border-color: var(--t-color-border-neutral);
+}
+
+.toneNeutral.variantPlain {
+  border-color: transparent;
+}
+
+/* Magic tone */
+.toneMagic.variantPrimary {
+  background-color: var(--t-color-fill-magic);
+  color: var(--t-color-text-on-fill);
+}
+
+.toneMagic.variantPrimary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-magic-hover);
+}
+
+.toneMagic.variantPrimary:active:not(:disabled) {
+  background-color: var(--t-color-fill-magic-pressed);
+}
+
+.toneMagic.variantSecondary {
+  background-color: var(--t-color-fill-magic-secondary);
+  color: var(--t-color-text-magic);
+}
+
+.toneMagic.variantSecondary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-magic-secondary-hover);
+}
+
+.toneMagic.variantSecondary:active:not(:disabled) {
+  background-color: var(--t-color-fill-magic-secondary-pressed);
+}
+
+.toneMagic.variantTertiary,
+.toneMagic.variantPlain {
+  color: var(--t-color-text-magic);
+  border-color: var(--t-color-border-magic);
+}
+
+.toneMagic.variantPlain {
+  border-color: transparent;
+}
+
+/* Loading state */
+.loading {
+  cursor: wait;
+}
+
+.loadingWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--t-space-200);
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  height: var(--t-size-500);
+  width: var(--t-size-500);
+  color: currentColor;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Icon positioning */
+.prefixIcon {
+  display: flex;
+  align-items: center;
+  margin-inline-end: var(--t-space-100);
+}
+
+.suffixIcon {
+  display: flex;
+  align-items: center;
+  margin-inline-start: var(--t-space-100);
+}
+
+/* RTL Handling */
+[dir="rtl"] .prefixIcon {
+  margin-inline-end: 0;
+  margin-inline-start: var(--t-space-100);
+}
+
+[dir="rtl"] .suffixIcon {
+  margin-inline-start: 0;
+  margin-inline-end: var(--t-space-100);
+}
+
+/* Focus states */
+@media (prefers-reduced-motion: no-preference) {
+  .button:focus-visible {
+    transition: box-shadow 150ms ease-out;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .button.fullWidth {
+    width: 100%;
+  }
+}
