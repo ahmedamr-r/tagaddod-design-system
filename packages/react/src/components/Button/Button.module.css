@@ -322,6 +322,45 @@
   }
 }
 
+/* Text elements with line height trim */
+.label, 
+.loadingText {
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for all languages */
+.label::before,
+.label::after,
+.loadingText::before,
+.loadingText::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.label::before,
+.loadingText::before {
+  margin-top: -0.15em;
+}
+
+.label::after,
+.loadingText::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .label::before,
+:global([dir="rtl"]) .loadingText::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .label::after,
+:global([dir="rtl"]) .loadingText::after {
+  margin-bottom: -0.25em;
+}
+
 /* Icon positioning */
 .prefixIcon {
   display: flex;

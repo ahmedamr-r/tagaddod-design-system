@@ -72,6 +72,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   // Apply specific icon positioning for icon-only buttons
   const iconOnly = isIconOnly ? styles.iconOnly : '';
   
+  // Detect RTL for line height adjustments
+  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+  
+  // Create lineHeightStyle object for proper text rendering
+  const lineHeightStyle = {
+    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+  };
+  
   // Combine all classes for the button
   const buttonClasses = clsx(
     styles.button,
@@ -91,10 +99,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
         <span className={styles.loadingWrapper}>
           <IconLoader2 className={styles.spinner} />
           {!isIconOnly && (
-            <span className={styles.loadingText}>
-              {document.dir === 'rtl' || document.documentElement.dir === 'rtl' 
-                ? 'جارٍ التحميل...' 
-                : 'Loading...'}
+            <span className={styles.loadingText} style={lineHeightStyle}>
+              {isRTL ? 'جارٍ التحميل...' : 'Loading...'}
             </span>
           )}
         </span>
@@ -104,7 +110,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     return (
       <>
         {prefixIcon && <span className={styles.prefixIcon}>{prefixIcon}</span>}
-        {children && <span className={styles.label}>{children}</span>}
+        {children && <span className={styles.label} style={lineHeightStyle}>{children}</span>}
         {suffixIcon && <span className={styles.suffixIcon}>{suffixIcon}</span>}
       </>
     );

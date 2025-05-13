@@ -89,6 +89,14 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
     // Generate a unique ID if none provided
     const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
     
+    // Detect RTL for line height adjustments
+    const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+    
+    // Create lineHeightStyle object for proper text rendering
+    const lineHeightStyle = {
+      lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+    };
+    
     return (
       <div 
         className={clsx(
@@ -129,6 +137,7 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
                 styles.label,
                 hideLabel && styles.srOnly
               )}
+              style={lineHeightStyle}
             >
               {label}
               {required && <span className={styles.required}>*</span>}
@@ -137,12 +146,12 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
         </div>
         
         {error ? (
-          <div className={styles.errorMessage}>
+          <div className={styles.errorMessage} style={lineHeightStyle}>
             <IconAlertCircle size={14} className={styles.errorIcon} />
             {error}
           </div>
         ) : helpText ? (
-          <div className={styles.helpText}>
+          <div className={styles.helpText} style={lineHeightStyle}>
             {helpText}
           </div>
         ) : null}

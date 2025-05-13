@@ -23,6 +23,34 @@
   font-size: var(--t-font-size-350);
   font-weight: var(--t-font-weight-medium);
   color: var(--t-color-text-primary);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for label */
+.label::before,
+.label::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.label::before {
+  margin-top: -0.15em;
+}
+
+.label::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .label::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .label::after {
+  margin-bottom: -0.25em;
 }
 
 .required {
@@ -225,6 +253,34 @@
   color: var(--t-color-text-critical);
   font-size: var(--t-font-size-300);
   margin-top: var(--t-space-100);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for error message */
+.errorMessage::before,
+.errorMessage::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.errorMessage::before {
+  margin-top: -0.15em;
+}
+
+.errorMessage::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .errorMessage::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .errorMessage::after {
+  margin-bottom: -0.25em;
 }
 
 .errorIcon {
@@ -236,6 +292,34 @@
   font-size: var(--t-font-size-300);
   color: var(--t-color-text-secondary);
   margin-top: var(--t-space-100);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for help text */
+.helpText::before,
+.helpText::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.helpText::before {
+  margin-top: -0.15em;
+}
+
+.helpText::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .helpText::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .helpText::after {
+  margin-bottom: -0.25em;
 }
 
 /* Responsive adjustments */

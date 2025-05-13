@@ -74,6 +74,14 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     const [passwordVisible, setPasswordVisible] = useState(false);
     const uniqueId = id || `text-input-${Math.random().toString(36).substr(2, 9)}`;
     
+    // Detect RTL for line height adjustments
+    const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+    
+    // Create lineHeightStyle object for proper text rendering
+    const lineHeightStyle = {
+      lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+    };
+    
     // Initialize input value from props
     useEffect(() => {
       if (value !== undefined) {
@@ -157,7 +165,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         <Form.Field name={name || 'text-field'}>
           {label && !hideLabel && (
             <div className={styles.labelContainer}>
-              <Form.Label className={styles.label}>
+              <Form.Label className={styles.label} style={lineHeightStyle}>
                 {label}
                 {required && <span className={styles.required}>*</span>}
                 {optional && <span className={styles.optional}>(Optional)</span>}
@@ -203,12 +211,12 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           </div>
           
           {hasError ? (
-            <div id={`${uniqueId}-error`} className={styles.errorMessage}>
+            <div id={`${uniqueId}-error`} className={styles.errorMessage} style={lineHeightStyle}>
               <IconExclamationCircle size={16} className={styles.errorIcon} />
               {errorMessage}
             </div>
           ) : helpText ? (
-            <div id={`${uniqueId}-helptext`} className={styles.helpText}>
+            <div id={`${uniqueId}-helptext`} className={styles.helpText} style={lineHeightStyle}>
               {helpText}
             </div>
           ) : null}

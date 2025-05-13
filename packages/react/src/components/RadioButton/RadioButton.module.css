@@ -84,6 +84,34 @@
   font-weight: var(--t-font-weight-medium);
   color: var(--t-color-text-primary);
   cursor: pointer;
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for label */
+.Label::before,
+.Label::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.Label::before {
+  margin-top: -0.15em;
+}
+
+.Label::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .Label::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .Label::after {
+  margin-bottom: -0.25em;
 }
 
 /* Screen reader only class for hiding labels visually */
@@ -104,6 +132,34 @@
   font-family: var(--t-font-family-primary);
   font-size: var(--t-font-size-300);
   color: var(--t-color-text-secondary);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for help text */
+.HelpText::before,
+.HelpText::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.HelpText::before {
+  margin-top: -0.15em;
+}
+
+.HelpText::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .HelpText::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .HelpText::after {
+  margin-bottom: -0.25em;
 }
 
 /* In LTR, indent the helpText from the left */

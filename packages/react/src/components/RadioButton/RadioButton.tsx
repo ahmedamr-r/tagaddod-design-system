@@ -72,6 +72,14 @@ const RadioButtonItem = React.forwardRef<
   hideLabel = false,
   ...props 
 }, ref) => {
+  // Detect RTL for line height adjustments
+  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+  
+  // Create lineHeightStyle object for proper text rendering
+  const lineHeightStyle = {
+    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+  };
+  
   return (
     <div className={styles.RadioButtonContainer}>
       <div className={styles.RadioButtonWrapper}>
@@ -95,6 +103,7 @@ const RadioButtonItem = React.forwardRef<
               props.disabled && styles.disabled,
               hideLabel && styles.srOnly
             )}
+            style={lineHeightStyle}
           >
             {label}
           </label>
@@ -102,7 +111,7 @@ const RadioButtonItem = React.forwardRef<
       </div>
       
       {helpText && showHelpText && (
-        <div className={styles.HelpText}>{helpText}</div>
+        <div className={styles.HelpText} style={lineHeightStyle}>{helpText}</div>
       )}
     </div>
   );
