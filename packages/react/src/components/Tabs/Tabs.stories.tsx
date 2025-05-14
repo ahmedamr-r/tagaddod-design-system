@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Tabs, TabsTrigger, TabsContent, TabsList, tabsVariants, tabsCounts } from './Tabs';
+import { Tabs, TabsTrigger, TabsContent, TabsList, tabsVariants, tabsCounts, tabsOrientations } from './Tabs';
 import { 
   IconHome, 
   IconUser, 
@@ -14,6 +14,11 @@ const meta = {
   component: Tabs,
   parameters: {
     layout: 'padded',
+    docs: {
+      description: {
+        component: 'A set of layered sections of content—known as tab panels—that are displayed one at a time. The component follows WAI-ARIA guidelines for tabs with keyboard navigation support and proper ARIA roles and attributes.',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
@@ -31,6 +36,11 @@ const meta = {
       options: tabsCounts,
       description: 'Number of tabs'
     },
+    orientation: {
+      control: 'radio',
+      options: tabsOrientations,
+      description: 'Tab orientation (horizontal or vertical)'
+    },
     defaultValue: {
       control: 'text',
       description: 'Default selected tab'
@@ -39,13 +49,23 @@ const meta = {
       control: 'radio',
       options: ['ltr', 'rtl'],
       description: 'Text direction'
+    },
+    ariaLabel: {
+      control: 'text',
+      description: 'Accessible label for the tab list'
+    },
+    ariaLabelledby: {
+      control: 'text',
+      description: 'ID of element that labels the tab list'
     }
   },
   args: {
     variant: 'primary',
     fitted: false,
     count: 3,
+    orientation: 'horizontal',
     defaultValue: 'tab1',
+    ariaLabel: 'Content tabs'
   },
 } satisfies Meta<typeof Tabs>;
 
@@ -315,6 +335,93 @@ export const RTL: Story = {
   ),
 };
 
+// Vertical orientation
+export const VerticalOrientation: Story = {
+  args: {
+    orientation: 'vertical',
+    variant: 'secondary', // Vertical works better with secondary style
+  },
+  render: (args) => (
+    <div style={{ display: 'flex', gap: '20px' }}>
+      <Tabs {...args}>
+        <TabsList>
+          <TabsTrigger value="tab1">Account</TabsTrigger>
+          <TabsTrigger value="tab2">Security</TabsTrigger>
+          <TabsTrigger value="tab3">Notifications</TabsTrigger>
+        </TabsList>
+        <TabsContent value="tab1">
+          <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', minHeight: '150px' }}>
+            <h3>Account Settings</h3>
+            <p>Manage your account information.</p>
+          </div>
+        </TabsContent>
+        <TabsContent value="tab2">
+          <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', minHeight: '150px' }}>
+            <h3>Security Settings</h3>
+            <p>Update your password and security preferences.</p>
+          </div>
+        </TabsContent>
+        <TabsContent value="tab3">
+          <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', minHeight: '150px' }}>
+            <h3>Notification Settings</h3>
+            <p>Control how you receive notifications.</p>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  ),
+};
+
+// With Tab Description (for screen readers)
+export const WithTabDescription: Story = {
+  render: (args) => (
+    <Tabs {...args}>
+      <TabsList>
+        <TabsTrigger 
+          value="tab1" 
+          description="View and edit your profile information">
+          Profile
+        </TabsTrigger>
+        <TabsTrigger 
+          value="tab2" 
+          description="Manage account security settings">
+          Security
+        </TabsTrigger>
+        <TabsTrigger 
+          value="tab3" 
+          description="Configure your notification preferences">
+          Notifications
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="tab1">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h3>Profile</h3>
+          <p>Edit your personal information and preferences.</p>
+        </div>
+      </TabsContent>
+      <TabsContent value="tab2">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h3>Security</h3>
+          <p>Update your password and security settings.</p>
+        </div>
+      </TabsContent>
+      <TabsContent value="tab3">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <h3>Notifications</h3>
+          <p>Control how you receive notifications.</p>
+        </div>
+      </TabsContent>
+    </Tabs>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Tabs with descriptions for screen readers. The descriptions are not visible but are announced by screen readers.',
+      },
+    },
+  },
+};
+
 // Count variations
 export const Count2: Story = {
   args: {
@@ -424,13 +531,87 @@ export const Count6: Story = {
   ),
 };
 
+// Animation Showcase
+export const AnimationShowcase: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <div>
+        <h3>Primary Tab Animation</h3>
+        <p>Click different tabs to see the animation in action.</p>
+        <Tabs defaultValue="tab1" variant="primary" ariaLabel="Animation showcase - primary">
+          <TabsList>
+            <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+            <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+            <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+          </TabsList>
+          <TabsContent value="tab1">
+            <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', height: '100px' }}>
+              <h4>Tab 1 Content</h4>
+              <p>Notice the slide-in underline animation and the fade-in of this content.</p>
+            </div>
+          </TabsContent>
+          <TabsContent value="tab2">
+            <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', height: '100px' }}>
+              <h4>Tab 2 Content</h4>
+              <p>Watch how the underline transitions from Tab 1 to Tab 2.</p>
+            </div>
+          </TabsContent>
+          <TabsContent value="tab3">
+            <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', height: '100px' }}>
+              <h4>Tab 3 Content</h4>
+              <p>Smooth animation respects the 'prefers-reduced-motion' setting.</p>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+      
+      <div>
+        <h3>Secondary Tab Animation</h3>
+        <p>Click different tabs to see the animation in action.</p>
+        <Tabs defaultValue="tab1" variant="secondary" ariaLabel="Animation showcase - secondary">
+          <TabsList>
+            <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+            <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+            <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+          </TabsList>
+          <TabsContent value="tab1">
+            <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', height: '100px' }}>
+              <h4>Tab 1 Content</h4>
+              <p>Notice the scale-in animation of the tab and fade-in of this content.</p>
+            </div>
+          </TabsContent>
+          <TabsContent value="tab2">
+            <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', height: '100px' }}>
+              <h4>Tab 2 Content</h4>
+              <p>Watch how the tab scales in when activated.</p>
+            </div>
+          </TabsContent>
+          <TabsContent value="tab3">
+            <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', height: '100px' }}>
+              <h4>Tab 3 Content</h4>
+              <p>The content also has a slight slide-in transition from top.</p>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Showcase of tab animations with different variants. The animations respect user preferences with `prefers-reduced-motion` media query.',
+      },
+    },
+  },
+};
+
 // All variants showcase
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
       <div>
         <h3>Primary Tabs</h3>
-        <Tabs defaultValue="tab1" variant="primary">
+        <Tabs defaultValue="tab1" variant="primary" ariaLabel="Primary tabs example">
           <TabsList>
             <TabsTrigger value="tab1">Tab 1</TabsTrigger>
             <TabsTrigger value="tab2">Tab 2</TabsTrigger>
@@ -456,7 +637,7 @@ export const AllVariants: Story = {
       
       <div>
         <h3>Secondary Tabs</h3>
-        <Tabs defaultValue="tab1" variant="secondary">
+        <Tabs defaultValue="tab1" variant="secondary" ariaLabel="Secondary tabs example">
           <TabsList>
             <TabsTrigger value="tab1">Tab 1</TabsTrigger>
             <TabsTrigger value="tab2">Tab 2</TabsTrigger>
@@ -482,7 +663,7 @@ export const AllVariants: Story = {
       
       <div>
         <h3>Primary Fitted Tabs</h3>
-        <Tabs defaultValue="tab1" variant="primary" fitted>
+        <Tabs defaultValue="tab1" variant="primary" fitted ariaLabel="Primary fitted tabs example">
           <TabsList>
             <TabsTrigger value="tab1">Tab 1</TabsTrigger>
             <TabsTrigger value="tab2">Tab 2</TabsTrigger>
@@ -508,7 +689,7 @@ export const AllVariants: Story = {
       
       <div>
         <h3>Secondary Fitted Tabs</h3>
-        <Tabs defaultValue="tab1" variant="secondary" fitted>
+        <Tabs defaultValue="tab1" variant="secondary" fitted ariaLabel="Secondary fitted tabs example">
           <TabsList>
             <TabsTrigger value="tab1">Tab 1</TabsTrigger>
             <TabsTrigger value="tab2">Tab 2</TabsTrigger>
@@ -541,12 +722,12 @@ export const CommonUseCases: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
       <div>
         <h3>Navigation Tabs</h3>
-        <Tabs defaultValue="home" variant="primary" fitted>
+        <Tabs defaultValue="home" variant="primary" fitted ariaLabel="Main navigation">
           <TabsList>
-            <TabsTrigger value="home" icon={<IconHome size={18} />}>Home</TabsTrigger>
-            <TabsTrigger value="profile" icon={<IconUser size={18} />}>Profile</TabsTrigger>
-            <TabsTrigger value="messages" icon={<IconMessage size={18} />} badge="3">Messages</TabsTrigger>
-            <TabsTrigger value="settings" icon={<IconSettings size={18} />}>Settings</TabsTrigger>
+            <TabsTrigger value="home" icon={<IconHome size={18} />} description="View your dashboard">Home</TabsTrigger>
+            <TabsTrigger value="profile" icon={<IconUser size={18} />} description="View and edit your profile">Profile</TabsTrigger>
+            <TabsTrigger value="messages" icon={<IconMessage size={18} />} badge="3" description="Read your messages">Messages</TabsTrigger>
+            <TabsTrigger value="settings" icon={<IconSettings size={18} />} description="Configure your account settings">Settings</TabsTrigger>
           </TabsList>
           <TabsContent value="home">
             <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
@@ -577,11 +758,11 @@ export const CommonUseCases: Story = {
       
       <div>
         <h3>Form Sections</h3>
-        <Tabs defaultValue="personal" variant="secondary">
+        <Tabs defaultValue="personal" variant="secondary" ariaLabel="Registration form sections">
           <TabsList>
-            <TabsTrigger value="personal">Personal Info</TabsTrigger>
-            <TabsTrigger value="address">Address</TabsTrigger>
-            <TabsTrigger value="payment">Payment</TabsTrigger>
+            <TabsTrigger value="personal" description="Fill in personal information">Personal Info</TabsTrigger>
+            <TabsTrigger value="address" description="Fill in address details">Address</TabsTrigger>
+            <TabsTrigger value="payment" description="Add payment information">Payment</TabsTrigger>
           </TabsList>
           <TabsContent value="personal">
             <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
@@ -603,6 +784,117 @@ export const CommonUseCases: Story = {
           </TabsContent>
         </Tabs>
       </div>
+
+      <div>
+        <h3>Settings Panel with Vertical Tabs</h3>
+        <Tabs defaultValue="account" variant="secondary" orientation="vertical" ariaLabel="Settings navigation">
+          <div style={{ display: 'flex', gap: '20px' }}>
+            <TabsList style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+              <TabsTrigger value="account" icon={<IconUser size={18} />} description="Manage account settings">Account</TabsTrigger>
+              <TabsTrigger value="security" icon={<IconSettings size={18} />} description="Adjust security options">Security</TabsTrigger>
+              <TabsTrigger value="notifications" icon={<IconBell size={18} />} badge="2" description="Configure notifications">Notifications</TabsTrigger>
+            </TabsList>
+            <div style={{ flex: 1 }}>
+              <TabsContent value="account">
+                <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', minHeight: '200px' }}>
+                  <h4>Account Settings</h4>
+                  <p>Manage your account information, profile picture, and personal details.</p>
+                </div>
+              </TabsContent>
+              <TabsContent value="security">
+                <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', minHeight: '200px' }}>
+                  <h4>Security Settings</h4>
+                  <p>Change your password, enable two-factor authentication, and review login activity.</p>
+                </div>
+              </TabsContent>
+              <TabsContent value="notifications">
+                <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', minHeight: '200px' }}>
+                  <h4>Notification Settings</h4>
+                  <p>Configure how you receive notifications via email, mobile, and in-app alerts.</p>
+                </div>
+              </TabsContent>
+            </div>
+          </div>
+        </Tabs>
+      </div>
     </div>
   ),
+};
+
+// Accessibility example
+export const AccessibilityFeatures: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <div>
+        <h3>Accessibility Features</h3>
+        <p>This component implements the following accessibility features:</p>
+        <ul>
+          <li>Correct ARIA roles (tablist, tab, tabpanel)</li>
+          <li>Proper keyboard navigation (arrow keys, Tab, Home, End)</li>
+          <li>Descriptive labels for screen readers</li>
+          <li>Tab indicators that respect "prefers-reduced-motion"</li>
+          <li>Focus management with proper focus indicators</li>
+        </ul>
+        
+        <div style={{ marginTop: '20px' }}>
+          <Tabs 
+            defaultValue="account" 
+            variant="primary" 
+            ariaLabel="Account management tabs"
+          >
+            <TabsList>
+              <TabsTrigger 
+                value="account" 
+                description="View and edit your account information"
+              >
+                Account Info
+              </TabsTrigger>
+              <TabsTrigger 
+                value="password" 
+                description="Change your account password"
+              >
+                Password
+              </TabsTrigger>
+              <TabsTrigger 
+                value="preferences" 
+                description="Manage your email and notification settings"
+              >
+                Preferences
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="account">
+              <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+                <h4>Account Information</h4>
+                <p>This section demonstrates the TabsContent component with proper ARIA attributes and keyboard focus management.</p>
+                <ul>
+                  <li>Try navigating with Tab key</li>
+                  <li>Use arrow keys to switch between tabs when focus is on a tab</li>
+                  <li>Notice how focus moves appropriately</li>
+                </ul>
+              </div>
+            </TabsContent>
+            <TabsContent value="password">
+              <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+                <h4>Password Management</h4>
+                <p>When you activate this tab with keyboard, the focus moves to the content area to maintain proper focus management.</p>
+              </div>
+            </TabsContent>
+            <TabsContent value="preferences">
+              <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+                <h4>User Preferences</h4>
+                <p>The tab indicators and content transitions respect the "prefers-reduced-motion" setting for users with motion sensitivity.</p>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Showcases the accessibility features of the Tabs component, including keyboard navigation, ARIA attributes, and focus management.',
+      },
+    },
+  },
 };

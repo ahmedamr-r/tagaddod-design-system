@@ -13,7 +13,7 @@
 .tabsList {
   display: flex;
   position: relative;
-  border-bottom: 1px solid var(--t-color-border-subtle);
+  border-bottom: 1px solid var(--t-color-border-secondary);
 }
 
 /* Fitted styles */
@@ -55,7 +55,7 @@
 }
 
 .tabsTrigger[data-state="active"] {
-  color: var(--t-color-text-brand);
+  color: var(--t-color-text-link);
   font-weight: var(--t-font-weight-semibold);
 }
 
@@ -74,6 +74,22 @@
   height: 2px;
   background-color: var(--t-color-border-brand);
   border-radius: var(--t-border-radius-100) var(--t-border-radius-100) 0 0;
+  animation: slideIn 250ms var(--t-easing-in-out) forwards;
+  transform-origin: left;
+}
+
+@keyframes slideIn {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Style for RTL */
+:global([dir="rtl"]) .variantPrimary .tabsTrigger[data-state="active"]::after {
+  transform-origin: right;
 }
 
 /* Variant: Secondary (Box tabs) */
@@ -87,6 +103,7 @@
   border-radius: var(--t-border-radius-200);
   border: 1px solid transparent;
   padding: var(--t-space-100) var(--t-space-300);
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
 }
 
 .variantSecondary .tabsTrigger:hover {
@@ -96,12 +113,34 @@
 .variantSecondary .tabsTrigger[data-state="active"] {
   background-color: var(--t-color-fill-brand-secondary);
   border-color: var(--t-color-border-subtle);
+  animation: scaleIn 250ms var(--t-easing-in-out) forwards;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
 /* TabsContent styles */
 .tabsContent {
   padding: var(--t-space-300) 0;
   outline: none;
+  animation: fadeIn 300ms var(--t-easing-in-out);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Line height text elements */
@@ -199,6 +238,38 @@
 @media (prefers-reduced-motion: no-preference) {
   .tabsTrigger:focus-visible {
     transition: box-shadow 150ms ease-out;
+  }
+  
+  /* Keep animations only for users without reduced motion preference */
+  .variantPrimary .tabsTrigger[data-state="active"]::after {
+    animation: slideIn 250ms var(--t-easing-in-out) forwards;
+  }
+  
+  .variantSecondary .tabsTrigger[data-state="active"] {
+    animation: scaleIn 250ms var(--t-easing-in-out) forwards;
+  }
+  
+  .tabsContent {
+    animation: fadeIn 300ms var(--t-easing-in-out);
+  }
+}
+
+/* For users who prefer reduced motion, disable animations */
+@media (prefers-reduced-motion: reduce) {
+  .variantPrimary .tabsTrigger[data-state="active"]::after {
+    animation: none;
+    transform: scaleX(1);
+  }
+  
+  .variantSecondary .tabsTrigger[data-state="active"] {
+    animation: none;
+    transform: scale(1);
+  }
+  
+  .tabsContent {
+    animation: none;
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

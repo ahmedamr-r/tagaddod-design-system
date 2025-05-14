@@ -12,6 +12,74 @@
       "brand-active": {
         "$value": "{color.blue.1400}",
         "$type": "color"
+      },
+      "brand-secondary": {
+        "$type": "color",
+        "$value": "{color.blue.400}"
+      },
+      "brand-secondary-hover": {
+        "$type": "color",
+        "$value": "{color.blue.600}"
+      },
+      "brand-secondary-active": {
+        "$type": "color",
+        "$value": "{color.blue.700}"
+      }
+    },
+    "text": {
+      "primary": {
+        "$type": "color",
+        "$value": "{color.gray.1600}"
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "{color.gray.1200}"
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "{color.gray.1000}"
+      },
+      "on-fill": {
+        "$type": "color",
+        "$value": "{color.gray.100}"
+      },
+      "on-fill-hover": {
+        "$type": "color",
+        "$value": "{color.gray.300}"
+      },
+      "on-fill-active": {
+        "$type": "color",
+        "$value": "{color.gray.500}"
+      },
+      "on-fill-disabled": {
+        "$type": "color",
+        "$value": "{color.gray.100}"
+      },
+      "link": {
+        "$type": "color",
+        "$value": "{color.blue.1200}"
+      },
+      "link-hover": {
+        "$type": "color",
+        "$value": "{color.blue.1300}"
+      },
+      "link-active": {
+        "$type": "color",
+        "$value": "{color.blue.1400}"
+      }
+    },
+        "border": {
+      "brand": {
+        "$type": "color",
+        "$value": "{color.blue.1200}"
+      },
+      "brand-hover": {
+        "$type": "color",
+        "$value": "{color.blue.1300}"
+      },
+      "brand-active": {
+        "$type": "color",
+        "$value": "{color.blue.1400}"
       }
     }
   }

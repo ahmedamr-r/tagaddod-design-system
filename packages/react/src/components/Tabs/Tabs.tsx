@@ -5,6 +5,7 @@ import styles from './Tabs.module.css';
 
 export type TabsVariant = 'primary' | 'secondary';
 export type TabsCount = 2 | 3 | 4 | 5 | 6;
+export type TabsOrientation = 'horizontal' | 'vertical';
 
 export interface TabsProps extends Omit<RadixTabs.TabsProps, 'orientation'> {
   /**
@@ -32,6 +33,12 @@ export interface TabsProps extends Omit<RadixTabs.TabsProps, 'orientation'> {
   dir?: 'ltr' | 'rtl';
 
   /**
+   * The orientation of the tabs component
+   * @default 'horizontal'
+   */
+  orientation?: TabsOrientation;
+
+  /**
    * Class name for the Tabs root element
    */
   className?: string;
@@ -40,6 +47,18 @@ export interface TabsProps extends Omit<RadixTabs.TabsProps, 'orientation'> {
    * Class name for the TabsList element
    */
   listClassName?: string;
+
+  /**
+   * Accessible label for the tabs
+   * When provided, it will be passed as aria-label to the tabs list
+   */
+  ariaLabel?: string;
+
+  /**
+   * ID of the element that labels the tabs
+   * Alternative to ariaLabel, this will be passed as aria-labelledby to the tabs list
+   */
+  ariaLabelledby?: string;
 
   /**
    * Children components
@@ -55,9 +74,12 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
   fitted = false,
   count = 2,
   dir,
+  orientation = 'horizontal',
   children,
   className,
   listClassName,
+  ariaLabel,
+  ariaLabelledby,
   ...props
 }, ref) => {
   // Detect if we need to apply RTL text fixes
@@ -77,6 +99,15 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
     (child) => React.isValidElement(child) && child.type === TabsContent
   );
 
+  // Set aria attributes for the list
+  const listProps: React.HTMLAttributes<HTMLDivElement> = {};
+  if (ariaLabel) {
+    listProps['aria-label'] = ariaLabel;
+  }
+  if (ariaLabelledby) {
+    listProps['aria-labelledby'] = ariaLabelledby;
+  }
+
   return (
     <RadixTabs.Root
       ref={ref}
@@ -88,6 +119,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
         className
       )}
       dir={dir}
+      orientation={orientation}
       {...props}
     >
       {tabsList && (
@@ -97,6 +129,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
             listClassName
           )}
           style={lineHeightStyle}
+          {...listProps}
         >
           {tabsList}
         </RadixTabs.List>
@@ -146,6 +179,12 @@ export interface TabsTriggerProps extends RadixTabs.TabsTriggerProps {
   icon?: React.ReactNode;
   
   /**
+   * Accessible description for the tab
+   * This will be passed to aria-description
+   */
+  description?: string;
+  
+  /**
    * Children components
    */
   children: React.ReactNode;
@@ -159,6 +198,7 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(({
   badge,
   icon,
   children,
+  description,
   ...props
 }, ref) => {
   // Detect if we need to apply RTL text fixes
@@ -169,6 +209,9 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(({
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
 
+  // Generate a unique ID for the description if provided
+  const descriptionId = description ? `tabs-desc-${React.useId()}` : undefined;
+
   return (
     <RadixTabs.Trigger
       ref={ref}
@@ -176,11 +219,13 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(({
         styles.tabsTrigger,
         className
       )}
+      aria-describedby={descriptionId}
       {...props}
     >
-      {icon && <span className={styles.tabsIcon}>{icon}</span>}
+      {icon && <span className={styles.tabsIcon} aria-hidden="true">{icon}</span>}
       <span className={styles.tabsLabel} style={lineHeightStyle}>{children}</span>
-      {badge && <span className={styles.tabsBadge}>{badge}</span>}
+      {badge && <span className={styles.tabsBadge} aria-label={`${badge} items`}>{badge}</span>}
+      {description && <span id={descriptionId} style={{ display: 'none' }}>{description}</span>}
     </RadixTabs.Trigger>
   );
 });
@@ -214,6 +259,7 @@ export const TabsContent = forwardRef<HTMLDivElement, TabsContentProps>(({
         styles.tabsContent,
         className
       )}
+      tabIndex={0} // Ensure focus can be set to the content
       {...props}
     >
       {children}
@@ -252,3 +298,4 @@ export {
 // Export variants/sizes for storybook
 export const tabsVariants = ['primary', 'secondary'] as const;
 export const tabsCounts = [2, 3, 4, 5, 6] as const;
+export const tabsOrientations = ['horizontal', 'vertical'] as const;
