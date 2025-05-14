@@ -1,0 +1,37 @@
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.5rem;
+  border-radius: var(--t-border-radius-200, 0.5rem);
+  border: 1px solid var(--t-border-color-base, #d9d9d9);
+  background-color: var(--t-color-surface-background, #ffffff);
+  cursor: pointer;
+  transition: all var(--t-duration-base, 0.2s);
+  outline: none;
+}
+
+.nav:hover:not(.disabled) {
+  border-color: var(--t-color-border-brand, #3959FE);
+  color: var(--t-color-text-brand, #3959FE);
+}
+
+.nav:hover:not(.disabled) svg {
+  stroke: var(--t-color-text-brand, #3959FE);
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.icon {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}

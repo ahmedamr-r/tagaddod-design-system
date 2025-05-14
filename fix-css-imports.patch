@@ -1,0 +1,53 @@
+--- a/packages/tokens/package.json
++++ b/packages/tokens/package.json
+@@ -5,7 +5,7 @@
+   "module": "dist/index.js",
+   "style": "dist/css/tokens.css",
+   "exports": {
+-    ".": "./dist/index.js",
++    ".": { "import": "./dist/index.js", "require": "./dist/index.js" },
+     "./css": "./dist/css/tokens.css",
+     "./scss": "./dist/scss/_tokens.scss",
+     "./tokens": "./dist/tokens.js",
+@@ -24,7 +24,8 @@
+     "./locales/ar/vars.css": "./dist/locales/ar/vars.css"
+   },
+   "scripts": {
+-    "build": "yarn clean && style-dictionary build && node sd.config.mjs",
++    "build": "yarn clean && style-dictionary build && node sd.config.mjs && yarn build:copy",
++    "build:copy": "mkdir -p ../../node_modules/@tagaddod/tokens/css && cp -r dist/css ../../node_modules/@tagaddod/tokens/",
+     "build:brands": "node sd.config.mjs",
+     "watch": "chokidar 'src/**/*.json' -c 'yarn build'",
+     "clean": "rm -rf dist"
+@@ -38,4 +38,4 @@
+     "typescript": "^5.8.3"
+   },
+   "license": "MIT"
+-}
+\ No newline at end of file
++}
+
+--- a/packages/react/package.json
++++ b/packages/react/package.json
+@@ -11,7 +11,8 @@
+   "exports": {
+     ".": {
+       "types": "./dist/index.d.ts",
+-      "import": "./dist/index.mjs",
++      "default": "./dist/index.mjs",
++      "import": "./dist/index.js",
+       "require": "./dist/index.js"
+     },
+     "./styles/index.css": "./dist/styles/index.css",
+@@ -20,9 +20,10 @@
+   "scripts": {
+     "prebuild": "yarn clean",
+     "build": "vite build && tsc --project tsconfig.build.json && yarn build:css",
+-    "postbuild": "echo 'Build complete with integrated tokens'",
++    "postbuild": "echo 'Build complete with integrated tokens' && yarn build:copy",
+     "dev": "vite",
+     "watch": "concurrently -n 'vite,css' -c 'yellow,green' 'vite build --watch' 'yarn watch:css'",
++    "build:copy": "mkdir -p ../../node_modules/@tagaddod/react/styles && cp -r dist/styles ../../node_modules/@tagaddod/react/",
+     "watch:css": "node scripts/watch-css.js",
+     "clean": "rm -rf dist",
+     "type-check": "tsc --noEmit",

@@ -97,7 +97,7 @@
 /* Variant: Secondary */
 .variantSecondary {
   background-color: var(--t-color-fill-brand-secondary);
-  color: var(--t-color-text-primary);
+  color: var(--t-color-text-link);
   border-color: transparent;
 }
 
@@ -112,7 +112,7 @@
 /* Variant: Tertiary */
 .variantTertiary {
   background-color: transparent;
-  color: var(--t-color-text-brand);
+  color: var(--t-color-text-link);
   border-color: var(--t-color-border-brand);
 }
 
@@ -129,7 +129,7 @@
 /* Variant: Plain */
 .variantPlain {
   background-color: transparent;
-  color: var(--t-color-text-brand);
+  color: var(--t-color-text-link);
   border-color: transparent;
   padding-left: var(--t-space-100);
   padding-right: var(--t-space-100);

@@ -28,3 +28,14 @@ export type {
   TabsRootProps 
 } from './Tabs';
 export { tabsVariants, tabsCounts } from './Tabs';
+
+export { Drawer } from './Drawer';
+export type { DrawerProps } from './Drawer';
+export { drawerSizes, drawerPositions } from './Drawer';
+
+export { DrawerTest } from './DrawerTest';
+
+// Export the new Pagination component
+export { Pagination } from './Pagination';
+export type { PaginationProps } from './Pagination/types';
+export { usePagination } from './Pagination/usePagination';

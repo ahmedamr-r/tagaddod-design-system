@@ -1,0 +1,160 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-family: var(--t-font-family-primary, 'Helvetica Neue LT Std');
+  /* For RTL support, set direction based on document dir */
+  direction: inherit;
+}
+
+.count {
+  font-size: var(--t-font-size-base, 0.875rem);
+  color: var(--t-color-text-primary, #16161D);
+  position: relative;
+}
+
+/* Line height trim for count text */
+.count::before,
+.count::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.count::before {
+  margin-top: -0.15em;
+}
+
+.count::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for count text */
+:global([dir="rtl"]) .count::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .count::after {
+  margin-bottom: -0.25em;
+}
+
+.paginationItems {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* RTL Support */
+:global([dir="rtl"]) .paginationItems {
+  flex-direction: row-reverse;
+}
+
+.rowsPerPage {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* RTL Support for rows per page */
+:global([dir="rtl"]) .rowsPerPage {
+  flex-direction: row-reverse;
+}
+
+.rowsLabel {
+  font-size: var(--t-font-size-base, 0.875rem);
+  color: var(--t-color-text-secondary, #7D8096);
+  position: relative;
+}
+
+/* Line height trim for rows label */
+.rowsLabel::before,
+.rowsLabel::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.rowsLabel::before {
+  margin-top: -0.15em;
+}
+
+.rowsLabel::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for rows label */
+:global([dir="rtl"]) .rowsLabel::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .rowsLabel::after {
+  margin-bottom: -0.25em;
+}
+
+.selectWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 2rem;
+  border-radius: var(--t-border-radius-200, 0.5rem);
+  border: 1px solid var(--t-border-color-base, #C7C8D1);
+  background-color: var(--t-color-surface-background, #ffffff);
+  padding: 0 0.75rem;
+  padding-right: 1.75rem;
+}
+
+.selectArrow {
+  position: absolute;
+  right: 0.5rem;
+  pointer-events: none;
+  color: var(--t-color-text-secondary, #7D8096);
+}
+
+:global([dir="rtl"]) .selectArrow {
+  right: auto;
+  left: 0.5rem;
+}
+
+.select {
+  appearance: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  height: 100%;
+  font-size: var(--t-font-size-base, 0.875rem);
+  color: var(--t-color-text-primary, #16161D);
+  outline: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.selectValue {
+  position: relative;
+}
+
+/* Line height trim for select value */
+.selectValue::before,
+.selectValue::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.selectValue::before {
+  margin-top: -0.15em;
+}
+
+.selectValue::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for select value */
+:global([dir="rtl"]) .selectValue::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .selectValue::after {
+  margin-bottom: -0.25em;
+}

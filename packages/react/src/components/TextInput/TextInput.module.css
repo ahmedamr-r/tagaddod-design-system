@@ -72,18 +72,20 @@
   width: 100%;
   border-radius: var(--t-border-radius-200);
   border: 1px solid var(--t-color-border-secondary);
-  background-color: var(--t-color-surface-secondary);
+  background-color: var(--t-color-surface-primary);
   overflow: hidden;
   transition: all var(--t-duration-base) var(--t-easing-in-out);
 }
 
 .inputWrapper:hover {
   border-color: var(--t-color-border-hover);
+    background-color: var(--t-color-surface-hover);
+
 }
 
 .inputWrapper:focus-within {
   border-color: var(--t-color-fill-brand);
-  box-shadow: 0 0 0 2px var(--t-color-fill-brand-hover);
+  box-shadow: 0 0 0 1px var(--t-color-fill-brand-hover);
 }
 
 /* Base input styles */
@@ -155,7 +157,7 @@
 
 /* Size variants with adjusted spacing */
 .sizeMicro .inputWrapper {
-  min-height: var(--t-size-800); /* 20px equivalent */
+  min-height: var(--t-size-700); /* 20px equivalent */
 }
 
 .sizeMicro .input {
