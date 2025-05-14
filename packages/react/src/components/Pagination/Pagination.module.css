@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  font-family: var(--t-font-family-primary, 'Helvetica Neue LT Std');
+  font-family: var(--t-font-family-primary);
   /* For RTL support, set direction based on document dir */
   direction: inherit;
 }
@@ -157,4 +157,17 @@
 
 :global([dir="rtl"]) .selectValue::after {
   margin-bottom: -0.25em;
+}
+
+/* Ellipsis styling */
+.ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  color: var(--t-color-text-disabled, rgba(0, 0, 0, 0.25));
+  font-family: Arial;
+  font-size: 0.875rem;
+  letter-spacing: 0.125rem;
 }

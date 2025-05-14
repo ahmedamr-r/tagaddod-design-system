@@ -1,6 +1,6 @@
 # Pagination Component
 
-The Pagination component allows users to navigate through multiple pages of content. It's designed following the Ant Design style while using the Tagaddod Design System tokens.
+The Pagination component allows users to navigate through multiple pages of content. It's designed following the Ant Design style while using the Tagaddod Design System tokens and components.
 
 ## Features
 
@@ -10,6 +10,7 @@ The Pagination component allows users to navigate through multiple pages of cont
 - Show/hide count text and rows selector
 - Fully controlled or uncontrolled usage
 - Line height adjustments for LTR and RTL modes
+- Integrated with Button component for consistent styling
 
 ## Usage
 
@@ -67,4 +68,4 @@ For pages with up to 8 options, the short pagination will show all page numbers 
 The component automatically detects the document's `dir` attribute to adjust layout and text for RTL languages.
 
 ## Theming
-The component uses the Tagaddod Design System tokens with the `--t-` prefix for styling, ensuring consistency with other components.
+The component uses the Tagaddod Design System tokens with the `--t-` prefix for styling, ensuring consistency with other components. It integrates with the Button component for navigation controls and page numbers, inheriting all the Button's theming capabilities.

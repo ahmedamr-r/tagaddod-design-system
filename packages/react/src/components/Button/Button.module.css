@@ -51,7 +51,8 @@
 }
 
 .sizeMicro {
-  min-height: 32px;
+  min-height: var(--t-size-800);  
+  min-width:   var(--t-size-800);  ;
   padding: 0 var(--t-space-200);
   font-size: var(--t-font-size-300);
   font-weight: var(--t-font-weight-medium);
@@ -249,8 +250,8 @@
 
 .toneNeutral.variantTertiary,
 .toneNeutral.variantPlain {
-  color: var(--t-color-text-neutral);
-  border-color: var(--t-color-border-neutral);
+  color: var(--t-color-text-primary);
+  border-color: var( --t-color-border-primary);
 }
 
 .toneNeutral.variantPlain {

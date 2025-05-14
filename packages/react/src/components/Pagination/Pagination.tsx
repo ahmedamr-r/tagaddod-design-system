@@ -1,12 +1,97 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import clsx from 'clsx';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import styles from './Pagination.module.css';
+import { Button } from '../Button/Button';
 import { PaginationProps } from './types';
-import { PaginationItem } from './PaginationItem';
-import { PaginationEllipsis } from './PaginationEllipsis';
-import { PaginationPrev, PaginationNext } from './PaginationNav';
-import { usePagination, DOTS } from './usePagination';
 
+// Define a constant for the ellipsis
+export const DOTS = '...';
+
+/**
+ * Pagination hook to calculate the range of pages to display
+ */
+export const usePagination = ({
+  total,
+  current,
+  pageSize = 10,
+  siblingCount = 1,
+}: {
+  total: number;
+  current: number;
+  pageSize?: number;
+  siblingCount?: number;
+}) => {
+  // Calculate total pages
+  const totalPages = Math.ceil(total / pageSize);
+  
+  // Create a range function helper
+  const range = (start: number, end: number): number[] => {
+    const length = end - start + 1;
+    return Array.from({ length }, (_, i) => start + i);
+  };
+  
+  // Calculate the range of pages to display
+  const paginationRange = useMemo(() => {
+    // Ensure current page is within valid range
+    const currentPage = Math.max(1, Math.min(current, totalPages));
+    
+    // Number of items to always display
+    const totalPageItems = siblingCount * 2 + 5; // siblings + first + last + current + 2 ellipsis
+    
+    // If we have fewer pages than the number we want to show
+    if (totalPages <= totalPageItems) {
+      return range(1, totalPages);
+    }
+    
+    // Determine if we need left or right ellipsis
+    const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
+    const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPages);
+    
+    // Don't show ellipsis if there's just one page missing
+    const shouldShowLeftDots = leftSiblingIndex > 2;
+    const shouldShowRightDots = rightSiblingIndex < totalPages - 1;
+    
+    const firstPageIndex = 1;
+    const lastPageIndex = totalPages;
+    
+    // No left ellipsis, but right ellipsis
+    if (!shouldShowLeftDots && shouldShowRightDots) {
+      const leftItemCount = 3 + 2 * siblingCount;
+      const leftRange = range(1, leftItemCount);
+      
+      return [...leftRange, DOTS, totalPages] as Array<number | typeof DOTS>;
+    }
+    
+    // No right ellipsis, but left ellipsis
+    if (shouldShowLeftDots && !shouldShowRightDots) {
+      const rightItemCount = 3 + 2 * siblingCount;
+      const rightRange = range(totalPages - rightItemCount + 1, totalPages);
+      
+      return [firstPageIndex, DOTS, ...rightRange] as Array<number | typeof DOTS>;
+    }
+    
+    // Both ellipsis
+    if (shouldShowLeftDots && shouldShowRightDots) {
+      const middleRange = range(leftSiblingIndex, rightSiblingIndex);
+      
+      return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex] as Array<number | typeof DOTS>;
+    }
+    
+    // Shouldn't get here, but just in case
+    return range(1, totalPages);
+  }, [total, current, pageSize, siblingCount]);
+  
+  return {
+    paginationRange,
+    totalPages,
+    currentPage: current,
+  };
+};
+
+/**
+ * Pagination component
+ */
 export const Pagination: React.FC<PaginationProps> = ({
   total,
   current = 1,
@@ -88,6 +173,11 @@ export const Pagination: React.FC<PaginationProps> = ({
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
   
+  // Render ellipsis
+  const renderEllipsis = (key: string) => (
+    <div className={styles.ellipsis} key={key} aria-hidden="true">•••</div>
+  );
+  
   // Don't render if no items or only one page
   if (total === 0 || totalPages <= 0) {
     return null;
@@ -108,31 +198,49 @@ export const Pagination: React.FC<PaginationProps> = ({
       )}
       
       <div className={styles.paginationItems}>
-        <PaginationPrev 
-          onClick={handlePrev} 
-          disabled={currentPage === 1} 
+        {/* Previous button */}
+        <Button
+          size="micro"
+          variant="tertiary"
+          tone="neutral"
+          onClick={handlePrev}
+          disabled={currentPage === 1}
+          aria-label="Previous page"
+          prefixIcon={<IconChevronLeft size={16} />}
         />
         
-        {/* Render page items */}
+        {/* Page buttons */}
         {paginationRange.map((pageNumber, index) => {
           if (pageNumber === DOTS) {
-            return <PaginationEllipsis key={`ellipsis-${index}`} />;
+            return renderEllipsis(`ellipsis-${index}`);
           }
           
           const page = pageNumber as number;
+          const isCurrentPage = page === currentPage;
+          
           return (
-            <PaginationItem
+            <Button
               key={`page-${page}`}
-              page={page}
-              isCurrent={page === currentPage}
-              onClick={handlePageChange}
-            />
+              size="micro"
+              variant={isCurrentPage ? "primary" : "tertiary"}
+              tone={isCurrentPage ? "default" : "neutral"}
+              onClick={() => handlePageChange(page)}
+              aria-current={isCurrentPage ? 'page' : undefined}
+            >
+              {page}
+            </Button>
           );
         })}
         
-        <PaginationNext
+        {/* Next button */}
+        <Button
+          size="micro"
+          variant="tertiary"
+          tone="neutral"
           onClick={handleNext}
           disabled={currentPage === totalPages}
+          aria-label="Next page"
+          suffixIcon={<IconChevronRight size={16} />}
         />
       </div>
       
