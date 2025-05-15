@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
-import { IconSearch, IconAdjustmentsHorizontal } from '@tabler/icons-react';
+import { IconSearch, IconAdjustmentsHorizontal, IconFileExport } from '@tabler/icons-react';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
-import { Popover } from '../Popover';
+import { TextInput } from '../TextInput';
 import styles from './Table.module.css';
 import { TableHeaderProps } from './types';
 
@@ -18,9 +18,8 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
   onFilterClick,
   onExport,
   className = '',
+  isFilterBarVisible = false,
 }) => {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  
   // Detect RTL for line height adjustments
   const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
   
@@ -30,7 +29,6 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
   };
 
   const handleFilterClick = () => {
-    setIsFilterOpen(!isFilterOpen);
     onFilterClick?.();
   };
 
@@ -53,41 +51,28 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
         <div className={styles.tableHeaderActions}>
           {showSearch && (
             <div className={styles.searchWrapper}>
-              <div className={styles.searchInputWrapper}>
-                <IconSearch size={16} className={styles.searchIcon} />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => onSearchChange?.(e.target.value)}
-                  placeholder={isRTL ? "ابحث باسم العنصر أو معرّفه..." : "Search by item name or ID..."}
-                  className={styles.searchInput}
-                  style={lineHeightStyle}
-                />
-              </div>
+              <TextInput
+                size="medium"
+                placeholder={isRTL ? "ابحث باسم العنصر أو معرّفه..." : "Search by item name or ID..."}
+                value={searchQuery}
+                onChange={(e) => onSearchChange?.(e.target.value)}
+                prefix={<IconSearch size={16} />}
+                hideLabel
+                fullWidth
+              />
             </div>
           )}
           
           {showFilters && (
-            <Popover
-              open={isFilterOpen}
-              onOpenChange={setIsFilterOpen}
-              trigger={
-                <Button 
-                  variant="tertiary" 
-                  tone="neutral" 
-                  onClick={handleFilterClick}
-                  prefixIcon={<IconAdjustmentsHorizontal size={16} />}
-                >
-                  {isRTL ? "تصفية" : "Filters"}
-                </Button>
-              }
-              content={
-                <div className={styles.filterPopoverContent}>
-                  {/* Filter content goes here */}
-                  <p style={lineHeightStyle}>Filter options</p>
-                </div>
-              }
-            />
+            <Button 
+              variant="tertiary" 
+              tone={isFilterBarVisible ? "magic" : "neutral"}
+              onClick={handleFilterClick}
+              prefixIcon={<IconAdjustmentsHorizontal size={16} />}
+              size="medium"
+            >
+              {isRTL ? "تصفية" : "Filters"}
+            </Button>
           )}
           
           {showExport && (
@@ -95,6 +80,8 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
               variant="tertiary" 
               tone="neutral" 
               onClick={onExport}
+              prefixIcon={<IconFileExport size={16} />}
+              size="medium"
             >
               {isRTL ? "تصدير CSV" : "Export CSV"}
             </Button>

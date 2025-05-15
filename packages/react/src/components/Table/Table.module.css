@@ -29,13 +29,15 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--t-space-400);
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Prevent wrapping */
 }
 
 .titleContainer {
   display: flex;
   align-items: center;
-  flex-grow: 1;
+  flex-shrink: 1; /* Allow title to shrink */
+  min-width: 0; /* Allow title to shrink below its content size */
+  overflow: hidden; /* Prevent overflow */
 }
 
 .title {
@@ -47,6 +49,9 @@
   align-items: center;
   gap: var(--t-space-200);
   position: relative;
+  white-space: nowrap; /* Prevent line breaks */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Add ellipsis for overflow */
 }
 
 /* Line height trim for title */
@@ -87,55 +92,14 @@
   display: flex;
   align-items: center;
   gap: var(--t-space-300);
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  flex-shrink: 0; /* Don't shrink actions */
 }
 
 /* Search styles */
 .searchWrapper {
-  min-width: 240px;
-  max-width: 320px;
-}
-
-.searchInputWrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.searchIcon {
-  position: absolute;
-  left: var(--t-space-300);
-  color: var(--t-color-text-secondary);
-}
-
-:global([dir="rtl"]) .searchIcon {
-  left: auto;
-  right: var(--t-space-300);
-}
-
-.searchInput {
-  height: 40px;
-  width: 100%;
-  border-radius: var(--t-border-radius-200);
-  border: 1px solid var(--t-color-border-base);
-  background-color: var(--t-color-surface-background);
-  padding: 0 var(--t-space-300) 0 var(--t-space-700);
-  font-size: var(--t-font-size-300);
-  color: var(--t-color-text-primary);
-  transition: border-color var(--t-duration-base) var(--t-easing-in-out);
-}
-
-:global([dir="rtl"]) .searchInput {
-  padding: 0 var(--t-space-700) 0 var(--t-space-300);
-}
-
-.searchInput:focus {
-  outline: none;
-  border-color: var(--t-color-border-focus);
-}
-
-.searchInput::placeholder {
-  color: var(--t-color-text-secondary);
+  width: 240px; /* Fix width */
+  flex-shrink: 0; /* Don't shrink search */
 }
 
 /* Filter bar */
@@ -625,10 +589,10 @@
   
   .tableHeaderActions {
     margin-top: var(--t-space-300);
+    flex-wrap: wrap;
   }
   
   .searchWrapper {
     width: 100%;
-    max-width: none;
   }
 }

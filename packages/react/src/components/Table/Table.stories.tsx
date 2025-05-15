@@ -182,17 +182,62 @@ export const WithPagination = () => {
   );
 };
 
-// NEW: Table with internal pagination (no pagination prop)
-export const WithInternalPagination = () => {
+// NEW: Table with enhanced search and filters
+export const WithEnhancedSearchAndFilters = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState<Record<string, any>>({
+    status: 'active',
+  });
+  const [isFilterBarVisible, setIsFilterBarVisible] = useState(true);
+  
+  // Add pagination state
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
+  
   return (
     <Table
       data={sampleProducts}
       columns={columns}
-      title="Internal Pagination Test"
+      title="Inventory Stock"
       striped={true}
       gridCells={false}
-      // No explicit pagination prop, will use internal state
-      showPagination={true}
+      showSearch={true}
+      showFilters={true}
+      showFilterBar={isFilterBarVisible}
+      showExport={true}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      activeFilters={filters}
+      onFilterChange={setFilters}
+      onFilterClick={() => setIsFilterBarVisible(!isFilterBarVisible)}
+      onExport={() => alert('Export clicked')}
+      pagination={{
+        pageIndex,
+        pageSize,
+        pageCount: Math.ceil(sampleProducts.length / pageSize),
+        onPageChange: setPageIndex,
+        onPageSizeChange: setPageSize,
+        pageSizeOptions: [5, 10, 20, 50],
+      }}
+      filterOptions={{
+        status: {
+          label: 'Status',
+          options: [
+            { label: 'All', value: 'all' },
+            { label: 'Active', value: 'active' },
+            { label: 'Inactive', value: 'inactive' },
+          ],
+        },
+        category: {
+          label: 'Category',
+          options: [
+            { label: 'All', value: 'all' },
+            { label: 'Food', value: 'food' },
+            { label: 'Cleaning', value: 'cleaning' },
+            { label: 'Drinks', value: 'drinks' },
+          ],
+        },
+      }}
       onRowClick={(row) => console.log('Row clicked:', row.original)}
     />
   );
@@ -267,6 +312,22 @@ export const WithFilters = () => {
           ],
         },
       }}
+      onRowClick={(row) => console.log('Row clicked:', row.original)}
+    />
+  );
+};
+
+// Table with export button
+export const WithExport = () => {
+  return (
+    <Table
+      data={sampleProducts}
+      columns={columns}
+      title="Inventory Stock"
+      striped={true}
+      gridCells={false}
+      showExport={true}
+      onExport={() => alert('Export CSV clicked')}
       onRowClick={(row) => console.log('Row clicked:', row.original)}
     />
   );

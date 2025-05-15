@@ -34,7 +34,7 @@ export const Table = <T extends object>({
   showPagination = true,
   showSearch = true,
   showFilters = true,
-  showFilterBar = false,
+  showFilterBar: defaultShowFilterBar = false,
   showExport = false,
   showTotalBadge = true,
   defaultSorting = [],
@@ -62,6 +62,7 @@ export const Table = <T extends object>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(defaultColumnVisibility);
   const [globalFilter, setGlobalFilter] = useState<string>(searchQuery);
   const [activeTab, setActiveTab] = useState<string>(tabItems.find(tab => tab.active)?.id || tabItems[0]?.id || '');
+  const [isFilterBarVisible, setIsFilterBarVisible] = useState<boolean>(defaultShowFilterBar);
   
   // Default pagination state for internal use when not provided
   const [internalPagination, setInternalPagination] = useState({
@@ -94,7 +95,7 @@ export const Table = <T extends object>({
       setGlobalFilter(String(value));
       onSearchChange?.(String(value));
     },
-    // Unified approach to handle pagination changes - no more conditional operator
+    // Unified approach to handle pagination changes
     onPaginationChange: (updater) => {
       // Handle both function updater and direct value
       const newPagination = typeof updater === 'function' 
@@ -125,6 +126,11 @@ export const Table = <T extends object>({
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
     onTabChange?.(tabId);
+  };
+
+  // Handle filter bar toggle
+  const handleFilterClick = () => {
+    setIsFilterBarVisible(!isFilterBarVisible);
   };
 
   // Handle filter changes
@@ -272,14 +278,13 @@ export const Table = <T extends object>({
           showExport={showExport}
           searchQuery={searchQuery}
           onSearchChange={onSearchChange}
-          onFilterClick={() => {
-            // Handle filter click
-          }}
+          onFilterClick={handleFilterClick}
           onExport={onExport}
+          isFilterBarVisible={isFilterBarVisible}
         />
       )}
       
-      {showFilterBar && Object.keys(filterOptions).length > 0 && (
+      {isFilterBarVisible && showFilters && Object.keys(filterOptions).length > 0 && (
         <div className={styles.filterBar}>
           <div className={styles.filterBarLabel} style={lineHeightStyle}>
             {isRTL ? "تصفية:" : "Filters:"}

@@ -263,6 +263,12 @@ export interface TableHeaderProps {
    * Additional CSS class name
    */
   className?: string;
+  
+  /**
+   * Whether the filter bar is currently visible
+   * @default false
+   */
+  isFilterBarVisible?: boolean;
 }
 
 export interface TableHeaderCellProps {
