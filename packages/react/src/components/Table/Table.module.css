@@ -1,0 +1,634 @@
+/* Table Component Styles */
+
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--t-color-surface-background);
+  border-radius: var(--t-border-radius-200);
+  border: 1px solid var(--t-color-border-tertiary);
+  overflow: hidden;
+  /* For RTL support, set direction based on document dir */
+  direction: inherit;
+}
+
+/* Tab styles */
+.tabsContainer {
+  border-bottom: 1px solid var(--t-color-border-tertiary);
+}
+
+/* Table header */
+.tableHeader {
+  padding: var(--t-space-400);
+  border-bottom: 1px solid var(--t-color-border-tertiary);
+}
+
+.tableHeaderTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--t-space-400);
+  flex-wrap: wrap;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.title {
+  font-size: var(--t-font-size-500);
+  font-weight: var(--t-font-weight-semibold);
+  color: var(--t-color-text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--t-space-200);
+  position: relative;
+}
+
+/* Line height trim for title */
+.title::before,
+.title::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.title::before {
+  margin-top: -0.15em;
+}
+
+.title::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for title */
+:global([dir="rtl"]) .title::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .title::after {
+  margin-bottom: -0.25em;
+}
+
+.titleBadge {
+  margin-left: var(--t-space-200);
+}
+
+:global([dir="rtl"]) .titleBadge {
+  margin-left: 0;
+  margin-right: var(--t-space-200);
+}
+
+.tableHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: var(--t-space-300);
+  flex-wrap: wrap;
+}
+
+/* Search styles */
+.searchWrapper {
+  min-width: 240px;
+  max-width: 320px;
+}
+
+.searchInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: var(--t-space-300);
+  color: var(--t-color-text-secondary);
+}
+
+:global([dir="rtl"]) .searchIcon {
+  left: auto;
+  right: var(--t-space-300);
+}
+
+.searchInput {
+  height: 40px;
+  width: 100%;
+  border-radius: var(--t-border-radius-200);
+  border: 1px solid var(--t-color-border-base);
+  background-color: var(--t-color-surface-background);
+  padding: 0 var(--t-space-300) 0 var(--t-space-700);
+  font-size: var(--t-font-size-300);
+  color: var(--t-color-text-primary);
+  transition: border-color var(--t-duration-base) var(--t-easing-in-out);
+}
+
+:global([dir="rtl"]) .searchInput {
+  padding: 0 var(--t-space-700) 0 var(--t-space-300);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--t-color-border-focus);
+}
+
+.searchInput::placeholder {
+  color: var(--t-color-text-secondary);
+}
+
+/* Filter bar */
+.filterBar {
+  display: flex;
+  align-items: center;
+  padding: var(--t-space-300) var(--t-space-400);
+  border-bottom: 1px solid var(--t-color-border-tertiary);
+  gap: var(--t-space-300);
+  flex-wrap: wrap;
+}
+
+.filterBarLabel {
+  font-size: var(--t-font-size-300);
+  font-weight: var(--t-font-weight-medium);
+  color: var(--t-color-text-secondary);
+  white-space: nowrap;
+  position: relative;
+}
+
+/* Line height trim for filter bar label */
+.filterBarLabel::before,
+.filterBarLabel::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.filterBarLabel::before {
+  margin-top: -0.15em;
+}
+
+.filterBarLabel::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for filter bar label */
+:global([dir="rtl"]) .filterBarLabel::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .filterBarLabel::after {
+  margin-bottom: -0.25em;
+}
+
+.filterItems {
+  display: flex;
+  align-items: center;
+  gap: var(--t-space-200);
+  flex-wrap: wrap;
+}
+
+.filterItem {
+  display: flex;
+  align-items: center;
+  background-color: var(--t-color-surface-secondary);
+  border: 1px solid var(--t-color-border-base);
+  border-radius: var(--t-border-radius-200);
+  height: 32px;
+  padding: 0 var(--t-space-200);
+  cursor: pointer;
+  transition: background-color var(--t-duration-base) var(--t-easing-in-out);
+}
+
+.filterItem:hover {
+  background-color: var(--t-color-surface-secondary-hover);
+}
+
+.filterItemContent {
+  display: flex;
+  align-items: center;
+  gap: var(--t-space-100);
+}
+
+.filterLabel {
+  font-size: var(--t-font-size-300);
+  font-weight: var(--t-font-weight-medium);
+  color: var(--t-color-text-primary);
+  position: relative;
+}
+
+/* Line height trim for filter label */
+.filterLabel::before,
+.filterLabel::after,
+.filterValue::before,
+.filterValue::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.filterLabel::before,
+.filterValue::before {
+  margin-top: -0.15em;
+}
+
+.filterLabel::after,
+.filterValue::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for filter label and value */
+:global([dir="rtl"]) .filterLabel::before,
+:global([dir="rtl"]) .filterValue::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .filterLabel::after,
+:global([dir="rtl"]) .filterValue::after {
+  margin-bottom: -0.25em;
+}
+
+.filterSeparator {
+  color: var(--t-color-text-tertiary);
+  margin: 0 var(--t-space-100);
+}
+
+.filterValue {
+  font-size: var(--t-font-size-300);
+  font-weight: var(--t-font-weight-medium);
+  color: var(--t-color-text-primary);
+  position: relative;
+}
+
+.filterChevron {
+  color: var(--t-color-text-tertiary);
+  margin-left: var(--t-space-100);
+}
+
+:global([dir="rtl"]) .filterChevron {
+  margin-left: 0;
+  margin-right: var(--t-space-100);
+}
+
+.filterRemoveButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--t-color-surface-tertiary);
+  border: none;
+  cursor: pointer;
+  margin-left: var(--t-space-100);
+  color: var(--t-color-text-tertiary);
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
+}
+
+:global([dir="rtl"]) .filterRemoveButton {
+  margin-left: 0;
+  margin-right: var(--t-space-100);
+}
+
+.filterRemoveButton:hover {
+  background-color: var(--t-color-surface-tertiary-hover);
+  color: var(--t-color-text-secondary);
+}
+
+.filterDropdown {
+  min-width: 160px;
+  max-width: 280px;
+  padding: var(--t-space-100);
+  box-shadow: var(--t-shadow-dropdown);
+  border-radius: var(--t-border-radius-200);
+  background-color: var(--t-color-surface-background);
+  border: 1px solid var(--t-color-border-base);
+}
+
+.filterOption {
+  padding: var(--t-space-200) var(--t-space-300);
+  cursor: pointer;
+  border-radius: var(--t-border-radius-100);
+  font-size: var(--t-font-size-300);
+  color: var(--t-color-text-primary);
+  transition: background-color var(--t-duration-base) var(--t-easing-in-out);
+  position: relative;
+}
+
+.filterOption:hover {
+  background-color: var(--t-color-surface-secondary);
+}
+
+.filterOptionSelected {
+  background-color: var(--t-color-surface-selected);
+  font-weight: var(--t-font-weight-medium);
+}
+
+.filterPopoverContent {
+  padding: var(--t-space-300);
+  min-width: 240px;
+}
+
+/* Table content */
+.tableContent {
+  overflow-x: auto;
+  flex: 1;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Table header */
+.tableHead {
+  background-color: var(--t-color-surface-secondary);
+}
+
+.tableHeaderCell {
+  padding: var(--t-space-300) var(--t-space-400);
+  text-align: left;
+  font-size: var(--t-font-size-300);
+  font-weight: var(--t-font-weight-semibold);
+  color: var(--t-color-text-secondary);
+  border-bottom: 1px solid var(--t-color-border-tertiary);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: var(--t-color-surface-secondary);
+}
+
+:global([dir="rtl"]) .tableHeaderCell {
+  text-align: right;
+}
+
+.headerCellContent {
+  display: flex;
+  align-items: center;
+  gap: var(--t-space-200);
+}
+
+.headerCellLabel {
+  position: relative;
+}
+
+/* Line height trim for header cell label */
+.headerCellLabel::before,
+.headerCellLabel::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.headerCellLabel::before {
+  margin-top: -0.15em;
+}
+
+.headerCellLabel::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for header cell label */
+:global([dir="rtl"]) .headerCellLabel::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .headerCellLabel::after {
+  margin-bottom: -0.25em;
+}
+
+.headerCheckbox {
+  display: flex;
+  align-items: center;
+  margin-right: var(--t-space-200);
+}
+
+:global([dir="rtl"]) .headerCheckbox {
+  margin-right: 0;
+  margin-left: var(--t-space-200);
+}
+
+.sortable {
+  cursor: pointer;
+}
+
+.sortIcon {
+  color: var(--t-color-text-brand);
+}
+
+.sortIconDefault {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
+}
+
+.sortIconInactive {
+  color: var(--t-color-text-tertiary);
+}
+
+.helpIconWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.helpIcon {
+  color: var(--t-color-text-tertiary);
+}
+
+/* Table cell */
+.tableCell {
+  padding: var(--t-space-300) var(--t-space-400);
+  text-align: left;
+  font-size: var(--t-font-size-300);
+  color: var(--t-color-text-primary);
+  border-bottom: 1px solid var(--t-color-border-tertiary);
+  line-height: 1;
+  vertical-align: middle;
+}
+
+:global([dir="rtl"]) .tableCell {
+  text-align: right;
+}
+
+.cellText {
+  position: relative;
+  display: inline-block;
+}
+
+/* Line height trim for cell text */
+.cellText::before,
+.cellText::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.cellText::before {
+  margin-top: -0.15em;
+}
+
+.cellText::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for cell text */
+:global([dir="rtl"]) .cellText::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .cellText::after {
+  margin-bottom: -0.25em;
+}
+
+/* Striped rows */
+.striped .tableCell.striped {
+  background-color: var( --t-color-bg-light);
+}
+
+/* Grid cells */
+.gridCells .tableCell {
+  border-right: 1px solid var(--t-color-border-tertiary);
+}
+
+.gridCells .tableCell:last-child {
+  border-right: none;
+}
+
+:global([dir="rtl"]) .gridCells .tableCell {
+  border-right: none;
+  border-left: 1px solid var(--t-color-border-tertiary);
+}
+
+:global([dir="rtl"]) .gridCells .tableCell:last-child {
+  border-left: none;
+}
+
+.gridCells .tableHeaderCell {
+  border-right: 1px solid var(--t-color-border-tertiary);
+}
+
+.gridCells .tableHeaderCell:last-child {
+  border-right: none;
+}
+
+:global([dir="rtl"]) .gridCells .tableHeaderCell {
+  border-right: none;
+  border-left: 1px solid var(--t-color-border-tertiary);
+}
+
+:global([dir="rtl"]) .gridCells .tableHeaderCell:last-child {
+  border-left: none;
+}
+
+/* Table rows */
+.tableRow {
+  transition: background-color var(--t-duration-base) var(--t-easing-in-out);
+}
+
+.clickableRow {
+  cursor: pointer;
+}
+
+.clickableRow:hover {
+  background-color: var(--t-color-surface-hover);
+}
+
+/* Pagination container */
+.paginationContainer {
+  padding: var(--t-space-300) var(--t-space-400);
+  border-top: 1px solid var(--t-color-border-tertiary);
+}
+
+/* Footer content */
+.footerContent {
+  padding: var(--t-space-300) var(--t-space-400);
+  border-top: 1px solid var(--t-color-border-tertiary);
+}
+
+/* Content cases (error, empty, loading) */
+.contentCaseContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--t-space-800);
+  min-height: 200px;
+  width: 100%;
+}
+
+.contentCaseContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--t-space-300);
+}
+
+.contentCaseIcon {
+  color: var(--t-color-text-tertiary);
+}
+
+.spinnerIcon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.contentCaseMessage {
+  font-size: var(--t-font-size-300);
+  color: var(--t-color-text-secondary);
+  text-align: center;
+  max-width: 400px;
+  position: relative;
+}
+
+/* Line height trim for content case message */
+.contentCaseMessage::before,
+.contentCaseMessage::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.contentCaseMessage::before {
+  margin-top: -0.15em;
+}
+
+.contentCaseMessage::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for content case message */
+:global([dir="rtl"]) .contentCaseMessage::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .contentCaseMessage::after {
+  margin-bottom: -0.25em;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .tableHeaderTitle {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .tableHeaderActions {
+    margin-top: var(--t-space-300);
+  }
+  
+  .searchWrapper {
+    width: 100%;
+    max-width: none;
+  }
+}

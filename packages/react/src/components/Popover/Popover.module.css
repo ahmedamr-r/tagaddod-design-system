@@ -1,0 +1,180 @@
+.content {
+  border-radius: var(--t-border-radius-300);
+  padding: var(--t-space-300);
+  background-color: var(--t-color-surface-primary);
+  box-shadow: var(--t-shadow-popover);
+  max-width: var(--t-width-350);
+  will-change: transform, opacity;
+  z-index: var(--t-z-index-popover);
+  position: relative;
+  border: 1px solid var(--t-color-border-subtle);
+  transform-origin: var(--radix-popover-content-transform-origin);
+  animation: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.content[data-state='open'] {
+  animation-name: contentShow;
+}
+
+.content[data-state='closed'] {
+  animation-name: contentHide;
+}
+
+.withScrollbar {
+  max-height: var(--t-height-350);
+  overflow-y: auto;
+}
+
+/* Apply line height trimming for better vertical spacing */
+.innerContent {
+  position: relative;
+  line-height: 1.5;
+}
+
+.innerContent::before,
+.innerContent::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.innerContent::before {
+  margin-top: -0.15em;
+}
+
+.innerContent::after {
+  margin-bottom: -0.15em;
+}
+
+/* RTL text adjustments */
+:global([dir="rtl"]) .innerContent::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .innerContent::after {
+  margin-bottom: -0.25em;
+}
+
+.arrow {
+  fill: var(--t-color-fill-primary);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  width: 10px;
+  height: 5px;
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.arrow[data-state='open'] {
+  animation-name: arrowShow;
+}
+
+.arrow[data-state='closed'] {
+  animation-name: arrowHide;
+}
+
+/* Side-specific positioning and origin */
+.content[data-side='top'] {
+  transform-origin: bottom;
+}
+
+.content[data-side='bottom'] {
+  transform-origin: top;
+}
+
+.content[data-side='left'] {
+  transform-origin: right;
+}
+
+.content[data-side='right'] {
+  transform-origin: left;
+}
+
+/* Main animations */
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes arrowShow {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes arrowHide {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+/* Keep both animation sets for backward compatibility */
+@keyframes slideDownAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRightAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideLeftAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

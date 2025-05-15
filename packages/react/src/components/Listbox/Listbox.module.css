@@ -1,0 +1,169 @@
+.listbox {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: var(--t-border-radius-200);
+  overflow: hidden;
+  background-color: var(--t-color-surface-primary);
+  outline: none;
+}
+
+.inPopover {
+  /* Remove any margins/padding if inside a popover, as it handles that */
+  margin: calc(-1 * var(--t-space-300));
+  width: calc(100% + 2 * var(--t-space-300));
+}
+
+/* Option styles */
+.option {
+  display: flex;
+  align-items: center;
+  padding: var(--t-space-300);
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  transition: background-color 150ms ease-in-out;
+}
+
+.option:hover:not(.disabled) {
+  background-color: var(--t-color-surface-hover);
+}
+
+.selected {
+  background-color: var(--t-color-surface-selected);
+  font-weight: var(--t-font-weight-semibold);
+}
+
+.selected:hover {
+  background-color: var(--t-color-surface-selected-hover);
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.divider {
+  border-bottom: 1px solid var(--t-color-border-subtle);
+}
+
+/* Option content layout */
+.optionContent {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: var(--t-space-200);
+}
+
+.prefix {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.labelContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--t-color-text-primary);
+  font-family: var(--t-font-family-body);
+  font-size: var(--t-font-size-body-md);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for text elements */
+.label::before,
+.label::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.label::before {
+  margin-top: -0.15em;
+}
+
+.label::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic (RTL) line height adjustments */
+:global([dir="rtl"]) .label::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .label::after {
+  margin-bottom: -0.25em;
+}
+
+.helpText {
+  font-size: var(--t-font-size-body-sm);
+  color: var(--t-color-text-subtle);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for help text */
+.helpText::before,
+.helpText::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.helpText::before {
+  margin-top: -0.15em;
+}
+
+.helpText::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic (RTL) line height adjustments for help text */
+:global([dir="rtl"]) .helpText::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .helpText::after {
+  margin-bottom: -0.25em;
+}
+
+.suffix {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* "More options" indicator */
+.moreOptions {
+  padding: var(--t-space-300);
+  color: var(--t-color-text-subtle);
+  font-size: var(--t-font-size-body-sm);
+  text-align: center;
+  border-top: 1px solid var(--t-color-border-subtle);
+  background-color: var(--t-color-surface-secondary);
+}
+
+/* Focus ring styling */
+.option:focus-visible {
+  outline: 2px solid var(--t-color-border-focus);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+/* RTL support */
+:global([dir="rtl"]) .optionContent {
+  flex-direction: row-reverse;
+}
+
+:global([dir="rtl"]) .labelContainer {
+  align-items: flex-end;
+}

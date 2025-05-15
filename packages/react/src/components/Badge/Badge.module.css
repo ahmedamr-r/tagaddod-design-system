@@ -1,0 +1,124 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px; /* Fully rounded */
+  position: relative;
+  white-space: nowrap;
+}
+
+/* Size variants */
+.size-medium {
+  height: 1.5rem; /* 24px */
+  padding-inline: var(--t-space-200); /* 8px */
+  font: var(--t-typography-caption-lg-medium); /* Typography Caption Large Medium */
+}
+
+.size-large {
+  height: 1.75rem; /* 28px */
+  padding-inline: var(--t-space-200); /* 8px */
+  font: var(--t-typography-caption-lg-medium); /* Typography Caption Large Medium */
+}
+
+.size-xlarge {
+  height: 2.25rem; /* 36px */
+  padding-inline: var(--t-space-300); /* 12px */
+  font: var(--t-typography-body-sm-medium); /* Typography Body Small Medium */
+}
+
+/* Default (non-strong) tone variants */
+.tone-default {
+  background-color: var(--t-color-gray-500);
+  color: var(--t-color-text-primary);
+}
+
+.tone-info {
+  background-color: var(--t-color-blue-500);
+  color: var(--t-color-text-link);
+}
+
+.tone-success {
+  background-color: var(--t-color-green-500);
+  color: var(---t-color-text-success);
+}
+
+.tone-warning {
+  background-color: var(--t-color-orange-500);
+  color: var(--t-color-text-warning);
+}
+
+.tone-critical {
+  background-color: var(--t-color-red-500);
+  color: var(--t-color-text-critical);
+}
+
+.tone-magic {
+  background-color: var(--t-color-purple-500);
+  color: var(--t-color-text-magic);
+}
+
+/* Strong tone variants */
+.strong.tone-default {
+  background-color: var(--t-color-gray-1200);
+  color: var(--t-color-text-on-fill);
+}
+
+.strong.tone-info {
+  background-color: var(--t-color-blue-1200);
+  color: var(--t-color-text-on-fill);
+}
+
+.strong.tone-success {
+  background-color: var(--t-color-green-1200);
+  color: var(--t-color-text-on-fill);
+}
+
+.strong.tone-warning {
+  background-color: var(--t-color-orange-1200);
+  color: var(--t-color-text-on-fill);
+}
+
+.strong.tone-critical {
+  background-color: var(--t-color-red-1200);
+  color: var(--t-color-text-on-fill);
+}
+
+.strong.tone-magic {
+  background-color: var(--t-color-purple-1200);
+  color: var(--t-color-text-on-fill);
+}
+
+/* Icon styling */
+.icon {
+  display: inline-flex;
+  margin-inline-end: var(--t-space-100);
+}
+
+/* Label styling with line height trim */
+.label {
+  position: relative;
+}
+
+.label::before,
+.label::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.label::before {
+  margin-top: -0.15em;
+}
+
+.label::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .label::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .label::after {
+  margin-bottom: -0.25em;
+}

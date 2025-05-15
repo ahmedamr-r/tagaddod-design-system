@@ -19,6 +19,17 @@
         "blur": "0.375rem",
         "spread": "-0.0625rem"
       }
+    },
+    "popover": {
+      "$type": "shadow",
+      "$value": {
+        "color": "rgba(26, 26, 26, 0.2)",
+        "offsetX": "0",
+        "offsetY": "4px",
+        "blur": "6px",
+        "spread": "-2px"
+      },
+      "$description": "Special shadow for popover components with values X: 0, Y: 4, Blur: 6, Spread: -2, Color: #1A1A1A at 20% opacity"
     }
   }
 }

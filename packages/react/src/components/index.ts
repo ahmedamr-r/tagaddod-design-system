@@ -44,3 +44,40 @@ export { usePagination } from './Pagination/usePagination';
 export { Avatar } from './Avatar';
 export type { AvatarProps } from './Avatar';
 export { avatarTypes, avatarSizes } from './Avatar';
+
+// Export the Badge component
+export { Badge } from './Badge';
+export type { BadgeProps, BadgeSize, BadgeTone } from './Badge';
+export { badgeTones, badgeSizes } from './Badge';
+
+// Export the Popover component
+export {
+  Popover,
+  PopoverRoot,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverClose
+} from './Popover';
+export type { PopoverProps, PopoverType } from './Popover';
+
+// Export the Listbox component
+export {
+  Listbox,
+  ListboxOption
+} from './Listbox';
+export type { ListboxProps, ListboxOptionProps } from './Listbox';
+
+// Export the Table component
+export { 
+  Table,
+  TableHeader,
+  TableHeaderCell,
+  TableCell
+} from './Table';
+export type { 
+  TableProps,
+  TableHeaderProps,
+  TableHeaderCellProps, 
+  TableCellProps 
+} from './Table/types';
