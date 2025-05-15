@@ -39,3 +39,8 @@ export { DrawerTest } from './DrawerTest';
 export { Pagination } from './Pagination';
 export type { PaginationProps } from './Pagination/types';
 export { usePagination } from './Pagination/usePagination';
+
+// Export the Avatar component
+export { Avatar } from './Avatar';
+export type { AvatarProps } from './Avatar';
+export { avatarTypes, avatarSizes } from './Avatar';

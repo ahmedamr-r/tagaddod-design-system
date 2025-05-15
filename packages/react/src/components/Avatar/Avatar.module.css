@@ -1,0 +1,132 @@
+/* Avatar Component Styles */
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--t-border-radius-full);
+  background-color: var(--t-color-fill-brand-secondary);
+  position: relative;
+  /* This will ensure the avatar maintains aspect ratio */
+  aspect-ratio: 1 / 1;
+}
+
+/* Size Variants */
+.sizeSm {
+  width: var(--t-size-600);  /* 24px = 1.5rem */
+  height: var(--t-size-600);
+}
+
+.sizeMd {
+  width: var(--t-size-800);  /* 32px = 2rem */
+  height: var(--t-size-800);
+}
+
+.sizeLg {
+  width: var(--t-size-1000);  /* 40px = 2.5rem */
+  height: var(--t-size-1000);
+}
+
+.sizeXl {
+  width: var(--t-size-1600);  /* 64px = 4rem */
+  height: var(--t-size-1600);
+}
+
+/* Avatar Image */
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Fallback Content */
+.fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--t-color-fill-brand-secondary);
+  color: var(--t-color-text-primary);
+}
+
+/* Icon style - base */
+.icon {
+  color: var(--t-color-text-primary);
+}
+
+/* Icon size variants */
+.sizeSm .icon {
+  width: var(--t-size-300);  /* 12px = 0.75rem */
+  height: var(--t-size-300);
+}
+
+.sizeMd .icon {
+  width: var(--t-size-450);  /* 18px = 1.125rem */
+  height: var(--t-size-450);
+}
+
+.sizeLg .icon {
+  width: var(--t-size-500);  /* 20px = 1.25rem */
+  height: var(--t-size-500);
+}
+
+.sizeXl .icon {
+  width: var(--t-size-800);  /* 32px = 2rem */
+  height: var(--t-size-800);
+}
+
+/* Initial text - base */
+.initial {
+  font-family: var(--t-font-family-primary);
+  font-weight: var(--t-font-weight-medium);
+  color: var(--t-color-text-primary);
+  position: relative;
+  text-align: center;
+  line-height: 1;
+}
+
+/* Initial text size variants */
+.sizeSm .initial {
+  font-size: var(--t-font-size-300);  /* 0.75rem */
+}
+
+.sizeMd .initial {
+  font-size: var(--t-font-size-350);  /* 0.875rem */
+}
+
+.sizeLg .initial {
+  font-size: var(--t-font-size-400);  /* 1rem */
+}
+
+.sizeXl .initial {
+  font-size: var(--t-font-size-600);  /* 1.5rem */
+}
+
+/* Line height trim for all languages */
+.initial::before,
+.initial::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.initial::before {
+  margin-top: -0.15em;
+}
+
+.initial::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .initial::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .initial::after {
+  margin-bottom: -0.25em;
+}
