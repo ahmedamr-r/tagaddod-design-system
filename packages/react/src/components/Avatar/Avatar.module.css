@@ -124,9 +124,9 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .initial::before {
-  margin-top: -0.25em;
+  margin-top: 0.2em;
 }
 
 :global([dir="rtl"]) .initial::after {
-  margin-bottom: -0.25em;
+  margin-bottom: -0.3em;
 }

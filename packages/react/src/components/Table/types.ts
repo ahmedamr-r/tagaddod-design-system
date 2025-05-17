@@ -9,6 +9,58 @@ import {
 
 export type SortDirection = 'asc' | 'desc' | false;
 
+/**
+ * Interface for table tab configuration
+ */
+export interface TableTab<T extends object> {
+  /**
+   * Unique ID for this tab
+   */
+  id: string;
+  
+  /**
+   * Label to display on the tab
+   */
+  label: string;
+  
+  /**
+   * Optional badge count to display next to tab label
+   */
+  badge?: number;
+  
+  /**
+   * Whether this tab is active by default
+   */
+  active?: boolean;
+  
+  /**
+   * Data array for this specific tab's table
+   */
+  data?: T[];
+  
+  /**
+   * Column definitions specific to this tab
+   */
+  columns?: ColumnDef<T, any>[];
+  
+  /**
+   * Tab-specific title (overrides main table title)
+   */
+  title?: string;
+  
+  /**
+   * Tab-specific pagination
+   */
+  pagination?: {
+    pageSize: number;
+    pageIndex: number;
+    pageCount: number;
+    onPageChange: (pageIndex: number) => void;
+    onPageSizeChange?: (pageSize: number) => void;
+    pageSizeOptions?: number[];
+  };
+}
+
 export interface TableProps<T extends object> {
   /**
    * Data array to display in the table
@@ -124,12 +176,22 @@ export interface TableProps<T extends object> {
   
   /**
    * Tab items if showTabs is true
+   * Simple version with just tab configuration
    */
   tabItems?: Array<{
     id: string;
     label: string;
     active?: boolean;
+    badge?: number;
   }>;
+  
+  /**
+   * Enhanced tab items with full table configuration per tab
+   * When this is provided, it overrides the simple tabItems
+   * In this case, the table's main data and columns are used as defaults for tabs
+   * that don't specify their own
+   */
+  tableTabs?: Array<TableTab<T>>;
   
   /**
    * Callback when tab is clicked

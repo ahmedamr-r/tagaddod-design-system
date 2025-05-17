@@ -35,7 +35,7 @@
 
 /* Size variants */
 .sizeLarge {
-  min-height: 48px;
+  min-height: var(--t-size-1200);  
   padding: 0 var(--t-space-400);
   font-size: var(--t-font-size-400);
   font-weight: var(--t-font-weight-semibold);
@@ -43,7 +43,7 @@
 }
 
 .sizeMedium {
-  min-height: 40px;
+  min-height: var(--t-size-1000);  
   padding: 0 var(--t-space-300);
   font-size: var(--t-font-size-350);
   font-weight: var(--t-font-weight-semibold);
@@ -223,35 +223,41 @@
 
 /* Neutral tone */
 .toneNeutral.variantPrimary {
-  background-color: var(--t-color-fill-neutral);
-  color: var(--t-color-text-on-fill);
+  background-color: var( --t-color-gray-1600);
+  color: var(  --t-color-text-on-fill);
 }
 
 .toneNeutral.variantPrimary:hover:not(:disabled) {
-  background-color: var(--t-color-fill-neutral-hover);
+  background-color: var( --t-color-gray-1400);
 }
 
 .toneNeutral.variantPrimary:active:not(:disabled) {
-  background-color: var(--t-color-fill-neutral-pressed);
+  background-color: var(--t-color-gray-1600);
 }
 
 .toneNeutral.variantSecondary {
-  background-color: var(--t-color-fill-neutral-secondary);
+  background-color: var( --t-color-surface-secondary);
   color: var(--t-color-text-neutral);
 }
 
 .toneNeutral.variantSecondary:hover:not(:disabled) {
-  background-color: var(--t-color-fill-neutral-secondary-hover);
+  background-color: var( --t-color-surface-secondary-hover);
 }
 
 .toneNeutral.variantSecondary:active:not(:disabled) {
-  background-color: var(--t-color-fill-neutral-secondary-pressed);
+  background-color: var(--t-color-surface-secondary-active);
 }
 
 .toneNeutral.variantTertiary,
 .toneNeutral.variantPlain {
+  background-color: var( --t-color-fill-primary);
   color: var(--t-color-text-primary);
   border-color: var( --t-color-border-primary);
+}
+
+.toneNeutral.variantTertiary:hover:not(:disabled) {
+    background-color: var( --t-color-fill-hover);
+  border-color: var(   --t-color-border-hover);
 }
 
 .toneNeutral.variantPlain {
@@ -375,6 +381,12 @@
   margin-inline-start: var(--t-space-100);
 }
 
+/* Remove margins for icon-only buttons */
+.iconOnly .prefixIcon,
+.iconOnly .suffixIcon {
+  margin-inline: 0;
+}
+
 /* RTL Handling */
 [dir="rtl"] .prefixIcon {
   margin-inline-end: 0;
@@ -384,6 +396,12 @@
 [dir="rtl"] .suffixIcon {
   margin-inline-start: 0;
   margin-inline-end: var(--t-space-100);
+}
+
+/* RTL also respects icon-only rule */
+[dir="rtl"] .iconOnly .prefixIcon,
+[dir="rtl"] .iconOnly .suffixIcon {
+  margin-inline: 0;
 }
 
 /* Focus states */

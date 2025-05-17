@@ -1,0 +1,123 @@
+/* Switch.module.css */
+.root {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--t-border-radius-full);
+  cursor: pointer;
+  border: none;
+  padding: 2px;
+  -webkit-tap-highlight-color: transparent;
+  
+  /* Background transition - exactly matching Figma specs */
+  transition: background-color 100ms cubic-bezier(0.4, 0, 0.2, 1); /* ease-in-out with 100ms */
+}
+
+/* Size variants based on Figma specs */
+.sizeSm {
+  width: 36px; /* 36px as in Figma */
+  height: 20px; /* 20px as in Figma */
+}
+
+.sizeMd {
+  width: 44px; /* 44px as in Figma */
+  height: 24px; /* 24px as in Figma */
+}
+
+/* States */
+.root {
+  background-color: var(--t-color-fill-brand-secondary, #f1f1f3); /* Default color */
+}
+
+.root:hover:not(.disabled) {
+  background-color: var(--t-color-fill-brand-secondary-hover, #eaeaed); /* Hover state */
+  /* Linear hover transition with 200ms - exactly as in Figma */
+  transition: background-color 200ms linear;
+}
+
+/* Pressed state */
+.pressed {
+  background-color: var(--t-color-blue-1300, #0b48fe); /* Pressed state */
+}
+
+.pressed:hover:not(.disabled) {
+  background-color: var(--t-color-blue-1200, #3959fe); /* Pressed hover state */
+  /* Linear hover transition with 200ms - exactly as in Figma */
+  transition: background-color 200ms linear;
+}
+
+.disabled {
+  background-color: var(--t-color-gray-700, #e0e2e6); /* Disabled state */
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pressed.disabled {
+  background-color: var(--t-color-blue-1300, #0b48fe); /* Pressed disabled state */
+  opacity: 0.5;
+}
+
+/* Thumb (the circle that moves) */
+.thumb {
+  position: absolute;
+  display: block;
+  background-color: var(--t-color-gray-100, #ffffff); /* White thumb */
+  border-radius: var(--t-border-radius-full);
+  box-shadow: var(--t-shadow-popover);
+  will-change: left, right;
+  
+  /* Toggle transition - exactly matching Figma specs */
+  transition: 
+    left 100ms cubic-bezier(0.4, 0, 0.2, 1),  /* ease-in-out with 100ms */
+    right 100ms cubic-bezier(0.4, 0, 0.2, 1); /* ease-in-out with 100ms */
+}
+
+/* Hover state for thumb */
+.root:hover:not(.disabled) .thumb {
+  /* Linear hover transition with 200ms - exactly as in Figma */
+  transition: 
+    box-shadow 200ms linear,
+    left 100ms cubic-bezier(0.4, 0, 0.2, 1), 
+    right 100ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Small thumb */
+.thumbSm {
+  width: 16px;
+  height: 16px;
+}
+
+/* Medium thumb */
+.thumbMd {
+  width: 20px;
+  height: 20px;
+}
+
+/* LTR mode positioning */
+html:not([dir="rtl"]) .thumb {
+  left: 2px; /* Exactly at left edge + padding */
+  right: auto;
+}
+
+html:not([dir="rtl"]) .thumbPressed {
+  left: auto;
+  right: 2px; /* Exactly at right edge + padding */
+}
+
+/* RTL mode positioning */
+html[dir="rtl"] .thumb {
+  right: 2px; /* Exactly at right edge + padding */
+  left: auto;
+}
+
+html[dir="rtl"] .thumbPressed {
+  right: auto;
+  left: 2px; /* Exactly at left edge + padding */
+}
+
+/* Accessible focus styles */
+.root:focus-visible {
+  outline: var(--t-border-width-50) solid var(--t-color-blue-1200);
+  outline-offset: var(--t-size-100);
+}

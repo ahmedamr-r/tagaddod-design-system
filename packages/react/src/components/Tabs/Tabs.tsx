@@ -299,3 +299,11 @@ export {
 export const tabsVariants = ['primary', 'secondary'] as const;
 export const tabsCounts = [2, 3, 4, 5, 6] as const;
 export const tabsOrientations = ['horizontal', 'vertical'] as const;
+
+// Export shared functions (for testing/stories)
+export const getTabStateClass = (isHovered: boolean, isActive: boolean, isDisabled: boolean) => {
+  if (isDisabled) return 'disabled';
+  if (isActive) return 'active';
+  if (isHovered) return 'hover';
+  return 'rest';
+};

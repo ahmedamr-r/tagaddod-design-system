@@ -197,79 +197,81 @@ export const Pagination: React.FC<PaginationProps> = ({
         </div>
       )}
       
-      <div className={styles.paginationItems}>
-        {/* Previous button */}
-        <Button
-          size="micro"
-          variant="tertiary"
-          tone="neutral"
-          onClick={handlePrev}
-          disabled={currentPage === 1}
-          aria-label="Previous page"
-          prefixIcon={<IconChevronLeft size={16} />}
-        />
-        
-        {/* Page buttons */}
-        {paginationRange.map((pageNumber, index) => {
-          if (pageNumber === DOTS) {
-            return renderEllipsis(`ellipsis-${index}`);
-          }
+      <div className={styles.controlsGroup}>
+        <div className={styles.paginationItems}>
+          {/* Previous button */}
+          <Button
+            size="micro"
+            variant="secondary"
+            tone="neutral"
+            onClick={handlePrev}
+            disabled={currentPage === 1}
+            aria-label="Previous page"
+            prefixIcon={<IconChevronLeft size={16} />}
+          />
           
-          const page = pageNumber as number;
-          const isCurrentPage = page === currentPage;
+          {/* Page buttons */}
+          {paginationRange.map((pageNumber, index) => {
+            if (pageNumber === DOTS) {
+              return renderEllipsis(`ellipsis-${index}`);
+            }
+            
+            const page = pageNumber as number;
+            const isCurrentPage = page === currentPage;
+            
+            return (
+              <Button
+                key={`page-${page}`}
+                size="micro"
+                variant={isCurrentPage ? "primary" : "secondary"}
+                tone={isCurrentPage ? "default" : "neutral"}
+                onClick={() => handlePageChange(page)}
+                aria-current={isCurrentPage ? 'page' : undefined}
+              >
+                {page}
+              </Button>
+            );
+          })}
           
-          return (
-            <Button
-              key={`page-${page}`}
-              size="micro"
-              variant={isCurrentPage ? "primary" : "tertiary"}
-              tone={isCurrentPage ? "default" : "neutral"}
-              onClick={() => handlePageChange(page)}
-              aria-current={isCurrentPage ? 'page' : undefined}
-            >
-              {page}
-            </Button>
-          );
-        })}
-        
-        {/* Next button */}
-        <Button
-          size="micro"
-          variant="tertiary"
-          tone="neutral"
-          onClick={handleNext}
-          disabled={currentPage === totalPages}
-          aria-label="Next page"
-          suffixIcon={<IconChevronRight size={16} />}
-        />
-      </div>
-      
-      {showRowsInPage && (
-        <div className={styles.rowsPerPage}>
-          <span className={styles.rowsLabel} style={lineHeightStyle}>
-            {isRTL ? 'عدد الصفوف' : 'Rows in Page'}
-          </span>
-          <div className={styles.selectWrapper}>
-            <select 
-              className={styles.select}
-              value={currentPageSize}
-              onChange={handlePageSizeChange}
-              aria-label={isRTL ? 'عدد الصفوف' : 'Rows in Page'}
-            >
-              {pageSizeOptions.map(size => (
-                <option key={size} value={size} className={styles.selectValue} style={lineHeightStyle}>
-                  {size}
-                </option>
-              ))}
-            </select>
-            <span className={styles.selectArrow}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </span>
-          </div>
+          {/* Next button */}
+          <Button
+            size="micro"
+            variant="secondary"
+            tone="neutral"
+            onClick={handleNext}
+            disabled={currentPage === totalPages}
+            aria-label="Next page"
+            suffixIcon={<IconChevronRight size={16} />}
+          />
         </div>
-      )}
+        
+        {showRowsInPage && (
+          <div className={styles.rowsPerPage}>
+            <span className={styles.rowsLabel} style={lineHeightStyle}>
+              {isRTL ? 'عدد الصفوف' : 'Rows in Page'}
+            </span>
+            <div className={styles.selectWrapper}>
+              <select 
+                className={styles.select}
+                value={currentPageSize}
+                onChange={handlePageSizeChange}
+                aria-label={isRTL ? 'عدد الصفوف' : 'Rows in Page'}
+              >
+                {pageSizeOptions.map(size => (
+                  <option key={size} value={size} className={styles.selectValue} style={lineHeightStyle}>
+                    {size}
+                  </option>
+                ))}
+              </select>
+              <span className={styles.selectArrow}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

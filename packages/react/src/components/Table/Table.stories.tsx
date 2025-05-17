@@ -21,7 +21,17 @@ interface Product {
   actions?: React.ReactNode;
 }
 
-// Sample data for the table
+// Define order data type
+interface Order {
+  id: number;
+  customer: string;
+  date: string;
+  status: string;
+  total: number;
+  actions?: React.ReactNode;
+}
+
+// Sample data for products
 const sampleProducts: Product[] = [
   {
     id: 34,
@@ -85,8 +95,54 @@ const sampleProducts: Product[] = [
   },
 ];
 
-// Define columns for the table
-const columns: ColumnDef<Product, any>[] = [
+// Sample data for orders
+const sampleOrders: Order[] = [
+  {
+    id: 1001,
+    customer: "John Doe",
+    date: "2025-05-10",
+    status: "Completed",
+    total: 359.98,
+  },
+  {
+    id: 1002,
+    customer: "Jane Smith",
+    date: "2025-05-11",
+    status: "Pending",
+    total: 499.99,
+  },
+  {
+    id: 1003,
+    customer: "Bob Johnson",
+    date: "2025-05-12",
+    status: "Processing",
+    total: 129.99,
+  },
+  {
+    id: 1004,
+    customer: "Alice Brown",
+    date: "2025-05-12",
+    status: "Completed",
+    total: 79.98,
+  },
+  {
+    id: 1005,
+    customer: "Charlie Wilson",
+    date: "2025-05-13",
+    status: "Pending",
+    total: 259.97,
+  },
+  {
+    id: 1006,
+    customer: "Eve Davis",
+    date: "2025-05-14",
+    status: "Completed",
+    total: 899.99,
+  }
+];
+
+// Define product columns
+const productColumns: ColumnDef<Product, any>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
@@ -142,12 +198,86 @@ const columns: ColumnDef<Product, any>[] = [
   },
 ];
 
+// Define order columns
+const orderColumns: ColumnDef<Order, any>[] = [
+  {
+    accessorKey: 'id',
+    header: 'Order #',
+    size: 100,
+  },
+  {
+    accessorKey: 'customer',
+    header: 'Customer',
+    size: 200,
+  },
+  {
+    accessorKey: 'date',
+    header: 'Date',
+    size: 150,
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    size: 150,
+    cell: info => (
+      <span 
+        style={{ 
+          color: 
+            info.getValue() === 'Completed' ? 'var(--t-color-text-success)' :
+            info.getValue() === 'Pending' ? 'var(--t-color-text-warning)' :
+            'var(--t-color-text-info)'
+        }}
+      >
+        {info.getValue()}
+      </span>
+    ),
+  },
+  {
+    accessorKey: 'total',
+    header: 'Total',
+    size: 150,
+    cell: info => `$${info.getValue().toFixed(2)}`,
+  },
+  {
+    id: 'actions',
+    header: '',
+    cell: () => (
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <Button
+          variant="plain"
+          size="micro"
+          tone="neutral"
+          prefixIcon={<IconEdit size={16} />}
+          onClick={(e) => {
+            e.stopPropagation();
+            alert('Edit clicked');
+          }}
+        />
+        <Button
+          variant="plain"
+          size="micro"
+          tone="critical"
+          prefixIcon={<IconTrash size={16} />}
+          onClick={(e) => {
+            e.stopPropagation();
+            alert('Delete clicked');
+          }}
+        />
+      </div>
+    ),
+    meta: {
+      headerClassName: 'actions-header',
+      cellClassName: 'actions-cell',
+    },
+  },
+];
+
 // Basic table example
 export const Default = () => {
   return (
     <Table
       data={sampleProducts}
-      columns={columns}
+      columns={productColumns}
       title="Inventory Stock"
       striped={true}
       gridCells={false}
@@ -165,7 +295,7 @@ export const WithPagination = () => {
   return (
     <Table
       data={sampleProducts}
-      columns={columns}
+      columns={productColumns}
       title="Inventory Stock"
       striped={true}
       gridCells={false}
@@ -182,7 +312,7 @@ export const WithPagination = () => {
   );
 };
 
-// NEW: Table with enhanced search and filters
+// Table with enhanced search and filters
 export const WithEnhancedSearchAndFilters = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<Record<string, any>>({
@@ -197,7 +327,7 @@ export const WithEnhancedSearchAndFilters = () => {
   return (
     <Table
       data={sampleProducts}
-      columns={columns}
+      columns={productColumns}
       title="Inventory Stock"
       striped={true}
       gridCells={false}
@@ -243,23 +373,146 @@ export const WithEnhancedSearchAndFilters = () => {
   );
 };
 
-// Table with tabs
+// Table with tabs (simple configuration)
 export const WithTabs = () => {
   const [activeTab, setActiveTab] = useState('inventory');
   
   return (
     <Table
       data={sampleProducts}
-      columns={columns}
-      title="Inventory Stock"
+      columns={productColumns}
+      title="Inventory Management"
       striped={true}
       gridCells={false}
       showTabs={true}
       tabItems={[
-        { id: 'inventory', label: 'Inventory Stock', active: activeTab === 'inventory' },
-        { id: 'orders', label: 'Orders', active: activeTab === 'orders' },
+        { id: 'inventory', label: 'Inventory Stock', active: activeTab === 'inventory', badge: sampleProducts.length },
+        { id: 'orders', label: 'Orders', active: activeTab === 'orders', badge: sampleOrders.length },
       ]}
-      onTabChange={setActiveTab}
+      onTabChange={(tabId) => {
+        setActiveTab(tabId);
+        console.log('Tab changed to:', tabId);
+      }}
+      onRowClick={(row) => console.log('Row clicked:', row.original)}
+    />
+  );
+};
+
+// Table with tabs (simple configuration) + manual data switching
+export const WithTabsAndManualDataSwitch = () => {
+  const [activeTab, setActiveTab] = useState('inventory');
+  
+  return (
+    <Table
+      data={activeTab === 'inventory' ? sampleProducts : sampleOrders}
+      columns={activeTab === 'inventory' ? productColumns : orderColumns}
+      title={activeTab === 'inventory' ? 'Inventory Stock' : 'Order History'}
+      striped={true}
+      gridCells={false}
+      showTabs={true}
+      tabItems={[
+        { id: 'inventory', label: 'Inventory Stock', active: activeTab === 'inventory', badge: sampleProducts.length },
+        { id: 'orders', label: 'Orders', active: activeTab === 'orders', badge: sampleOrders.length },
+      ]}
+      onTabChange={(tabId) => {
+        setActiveTab(tabId);
+        console.log('Tab changed to:', tabId);
+      }}
+      onRowClick={(row) => console.log('Row clicked:', row.original)}
+    />
+  );
+};
+
+// NEW: Table with enhanced tabs configuration
+export const WithEnhancedTabs = () => {
+  // Enhanced tabs automatically handle the tab switching
+  return (
+    <Table
+      data={[]} // Default data (not used with tableTabs)
+      columns={[]} // Default columns (not used with tableTabs)
+      title="Inventory Management" // Default title
+      striped={true}
+      gridCells={false}
+      showTabs={true}
+      tableTabs={[
+        {
+          id: 'inventory',
+          label: 'Inventory Stock',
+          active: true, // This tab will be active by default
+          badge: sampleProducts.length,
+          data: sampleProducts,
+          columns: productColumns,
+          title: 'Inventory Stock',
+        },
+        {
+          id: 'orders',
+          label: 'Orders',
+          badge: sampleOrders.length,
+          data: sampleOrders,
+          columns: orderColumns,
+          title: 'Order History',
+        },
+      ]}
+      onTabChange={(tabId) => console.log('Tab changed to:', tabId)}
+      onRowClick={(row) => console.log('Row clicked:', row.original)}
+    />
+  );
+};
+
+// NEW: Table with enhanced tabs with tab-specific pagination
+export const WithEnhancedTabsAndPagination = () => {
+  // State for product tab pagination
+  const [productPageIndex, setProductPageIndex] = useState(0);
+  const [productPageSize, setProductPageSize] = useState(5);
+  
+  // State for order tab pagination
+  const [orderPageIndex, setOrderPageIndex] = useState(0);
+  const [orderPageSize, setOrderPageSize] = useState(5);
+  
+  return (
+    <Table
+      data={[]} // Default data (not used with tableTabs)
+      columns={[]} // Default columns (not used with tableTabs)
+      title="Inventory Management" // Default title
+      striped={true}
+      gridCells={false}
+      showTabs={true}
+      tableTabs={[
+        {
+          id: 'inventory',
+          label: 'Inventory Stock',
+          active: true,
+          badge: sampleProducts.length,
+          data: sampleProducts,
+          columns: productColumns,
+          title: 'Inventory Stock',
+          pagination: {
+            pageIndex: productPageIndex,
+            pageSize: productPageSize,
+            pageCount: Math.ceil(sampleProducts.length / productPageSize),
+            onPageChange: setProductPageIndex,
+            onPageSizeChange: setProductPageSize,
+            pageSizeOptions: [5, 10, 20, 50],
+          },
+        },
+        {
+          id: 'orders',
+          label: 'Orders',
+          badge: sampleOrders.length,
+          data: sampleOrders,
+          columns: orderColumns,
+          title: 'Order History',
+          pagination: {
+            pageIndex: orderPageIndex,
+            pageSize: orderPageSize,
+            pageCount: Math.ceil(sampleOrders.length / orderPageSize),
+            onPageChange: setOrderPageIndex,
+            onPageSizeChange: setOrderPageSize,
+            pageSizeOptions: [5, 10, 20, 50],
+          },
+        },
+      ]}
+      onTabChange={(tabId) => console.log('Tab changed to:', tabId)}
       onRowClick={(row) => console.log('Row clicked:', row.original)}
     />
   );
@@ -278,7 +531,7 @@ export const WithFilters = () => {
   return (
     <Table
       data={sampleProducts}
-      columns={columns}
+      columns={productColumns}
       title="Inventory Stock"
       striped={true}
       gridCells={false}
@@ -322,7 +575,7 @@ export const WithExport = () => {
   return (
     <Table
       data={sampleProducts}
-      columns={columns}
+      columns={productColumns}
       title="Inventory Stock"
       striped={true}
       gridCells={false}
@@ -338,7 +591,7 @@ export const WithGridCells = () => {
   return (
     <Table
       data={sampleProducts}
-      columns={columns}
+      columns={productColumns}
       title="Inventory Stock"
       striped={true}
       gridCells={true}
@@ -354,10 +607,45 @@ export const RTLExample = () => {
     <div dir="rtl" style={{ width: '100%' }}>
       <Table
         data={sampleProducts}
-        columns={columns}
+        columns={productColumns}
         title="مخزون المنتجات"
         striped={true}
         gridCells={false}
+        onRowClick={(row) => console.log('Row clicked:', row.original)}
+      />
+    </div>
+  );
+};
+
+// NEW: RTL with Enhanced Tabs
+export const RTLWithEnhancedTabs = () => {
+  return (
+    <div dir="rtl" style={{ width: '100%' }}>
+      <Table
+        data={[]}
+        columns={[]}
+        striped={true}
+        gridCells={false}
+        showTabs={true}
+        tableTabs={[
+          {
+            id: 'inventory',
+            label: 'المخزون',
+            active: true,
+            badge: sampleProducts.length,
+            data: sampleProducts,
+            columns: productColumns,
+            title: 'مخزون المنتجات',
+          },
+          {
+            id: 'orders',
+            label: 'الطلبات',
+            badge: sampleOrders.length,
+            data: sampleOrders,
+            columns: orderColumns,
+            title: 'سجل الطلبات',
+          },
+        ]}
         onRowClick={(row) => console.log('Row clicked:', row.original)}
       />
     </div>
@@ -369,7 +657,7 @@ export const EmptyState = () => {
   return (
     <Table
       data={[]}
-      columns={columns}
+      columns={productColumns}
       title="Inventory Stock"
       striped={true}
       gridCells={false}
@@ -384,7 +672,7 @@ export const LoadingState = () => {
   return (
     <Table
       data={[]}
-      columns={columns}
+      columns={productColumns}
       title="Inventory Stock"
       striped={true}
       gridCells={false}
@@ -398,7 +686,7 @@ export const ErrorState = () => {
   return (
     <Table
       data={[]}
-      columns={columns}
+      columns={productColumns}
       title="Inventory Stock"
       striped={true}
       gridCells={false}
@@ -413,13 +701,45 @@ export const NotFoundState = () => {
   return (
     <Table
       data={[]}
-      columns={columns}
+      columns={productColumns}
       title="Inventory Stock"
       striped={true}
       gridCells={false}
       state="notFound"
       notFoundMessage="No available results for 'product XYZ'. Try different item name or ID."
       searchQuery="product XYZ"
+    />
+  );
+};
+
+// NEW: Hidden Tabs
+export const WithHiddenTabs = () => {
+  return (
+    <Table
+      data={[]}
+      columns={[]}
+      title="Inventory Management"
+      striped={true}
+      gridCells={false}
+      showTabs={false} // Explicitly hide tabs but still use tableTabs config
+      tableTabs={[
+        {
+          id: 'inventory',
+          label: 'Inventory Stock',
+          active: true,
+          data: sampleProducts,
+          columns: productColumns,
+          title: 'Inventory Stock',
+        },
+        {
+          id: 'orders',
+          label: 'Orders',
+          data: sampleOrders,
+          columns: orderColumns,
+          title: 'Order History',
+        },
+      ]}
+      onRowClick={(row) => console.log('Row clicked:', row.original)}
     />
   );
 };

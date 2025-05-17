@@ -14,6 +14,17 @@
   display: flex;
   position: relative;
   border-bottom: 1px solid var(--t-color-border-secondary);
+  align-items: normal; /* Center align items properly */
+}
+
+/* Vertical orientation */
+.tabsRoot[data-orientation="vertical"] .tabsList {
+  flex-direction: column;
+  align-items: flex-start;
+  border-bottom: none;
+  border-right: 1px solid var(--t-color-border-secondary);
+  margin-right: var(--t-space-400);
+  padding-right: var(--t-space-200);
 }
 
 /* Fitted styles */
@@ -32,9 +43,11 @@
   justify-content: center;
   gap: var(--t-space-100);
   padding: var(--t-space-200) var(--t-space-300);
+  margin: 0;
   background: transparent;
   border: none;
   cursor: pointer;
+    font-family: var(--t-font-family-primary);
   font-size: var(--t-font-size-350);
   font-weight: var(--t-font-weight-medium);
   color: var(--t-color-text-secondary);
@@ -45,8 +58,33 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Create a before element for hover effect - this gives the proper padding around the tab content */
+.tabsTrigger::before {
+  content: '';
+  position: absolute;
+  top: 4px;  /* Adjusted to give slight padding */
+  left: 4px;  /* Adjusted to give slight padding */
+  right: 4px;  /* Adjusted to give slight padding */
+  bottom: 4px;  /* Adjusted to give slight padding */
+  border-radius: var(--t-border-radius-200);
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
+  z-index: 0;
+}
+
+/* Ensure tab content is above the hover background */
+.tabsLabel, .tabsIcon, .tabsBadge {
+    font-family: var(--t-font-family-primary);
+
+  position: relative;
+  z-index: 1;
+}
+
 .tabsTrigger:hover {
   color: var(--t-color-text-primary);
+}
+
+.tabsTrigger:hover::before {
+  background-color: var(--t-color-fill-hover);
 }
 
 .tabsTrigger:focus-visible {
@@ -59,10 +97,20 @@
   font-weight: var(--t-font-weight-semibold);
 }
 
+.tabsTrigger[data-state="active"]::before {
+  background-color: transparent; /* No background for active tab */
+}
+
 /* Variant: Primary (Underlined tabs) */
 .variantPrimary .tabsTrigger {
   padding-bottom: var(--t-space-300);
   margin-bottom: -1px; /* To overlap the bottom border */
+}
+
+/* Specific styling for hover state in primary variant */
+.variantPrimary .tabsTrigger:hover::before,
+.variantPrimary .tabsTriggerHover::before {
+  bottom: 2px; /* Adjust to not overlap with the underline */
 }
 
 .variantPrimary .tabsTrigger[data-state="active"]::after {
@@ -106,7 +154,8 @@
   transition: all var(--t-duration-base) var(--t-easing-in-out);
 }
 
-.variantSecondary .tabsTrigger:hover {
+.variantSecondary .tabsTrigger:hover::before,
+.variantSecondary .tabsTriggerHover::before {
   background-color: var(--t-color-fill-brand-secondary-hover);
 }
 
@@ -114,6 +163,15 @@
   background-color: var(--t-color-fill-brand-secondary);
   border-color: var(--t-color-border-subtle);
   animation: scaleIn 250ms var(--t-easing-in-out) forwards;
+}
+
+.variantSecondary .tabsTrigger[data-state="active"]::before {
+  background-color: transparent; /* No hover background on active secondary tabs */
+  /* Set to match whole tab for secondary */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 @keyframes scaleIn {
@@ -187,26 +245,60 @@
   margin-left: var(--t-space-100);
 }
 
-/* Badge styles */
+/* Badge styles - base */
 .tabsBadge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: var(--t-size-500);
   height: var(--t-size-500);
-  padding: 0 var(--t-space-100);
-  font-size: var(--t-font-size-300);
-  font-weight: var(--t-font-weight-semibold);
-  color: var(--t-color-text-on-fill);
-  background-color: var(--t-color-fill-brand);
-  border-radius: var(--t-border-radius-round);
-  margin-left: var(--t-space-100);
+  padding: 2px var(--t-space-250);
+  font: var(--t-typography-caption-lg-medium);
+  border-radius: var(--t-border-radius-full);
+  margin-left: var(--t-space-200); /* Increased from space-100 to match Figma */
   line-height: 1;
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
 }
 
 :global([dir="rtl"]) .tabsBadge {
   margin-left: 0;
-  margin-right: var(--t-space-100);
+  margin-right: var(--t-space-200); /* Increased from space-100 to match Figma */
+}
+
+/* Badge in default (rest) state */
+.tabsTrigger .tabsBadge {
+  color: var(--t-color-text-secondary);
+  background-color: var(--t-color-fill-hover); /* grey background in rest state */
+}
+
+/* Explicit hover style for stories */
+.tabsTriggerHover, 
+.tabsTriggerHover:focus {
+  color: var(--t-color-text-primary);
+}
+
+.tabsTriggerHover::before {
+  background-color: var(--t-color-fill-hover);
+}
+
+/* Badge in hover state */
+.tabsTrigger:hover .tabsBadge,
+.tabsTriggerHover .tabsBadge {
+  color: var(--t-color-text-primary);
+  background-color: var(--t-color-fill-active); /* darker grey in hover state */
+}
+
+/* Badge in active state */
+.tabsTrigger[data-state="active"] .tabsBadge {
+  color: var(--t-color-text-link);
+  background-color: var(--t-color-fill-brand-secondary); /* blue background in active state */
+}
+
+/* Badge in disabled state */
+.tabsTrigger[data-disabled] .tabsBadge {
+color: var(--t-color-text-secondary);
+background-color: var(--t-color-background-primary); /* light grey in disabled state */
+  opacity: 0.7; /* Match the opacity of the tab itself */
 }
 
 /* Count specific styles */
@@ -230,8 +322,13 @@
 
 /* States */
 .tabsTrigger[data-disabled] {
-  opacity: 0.5;
+  opacity: 0.7;
   cursor: not-allowed;
+  color: var(--t-color-text-disabled);
+}
+
+.tabsTrigger[data-disabled]::before {
+  background-color: transparent;
 }
 
 /* Focus states */
@@ -273,10 +370,33 @@
   }
 }
 
-/* RTL handling */
+/* RTL handling for primary variant */
 :global([dir="rtl"]) .variantPrimary .tabsTrigger[data-state="active"]::after {
+  transform-origin: right;
   left: auto;
   right: 0;
+}
+
+/* Vertical orientation for primary variant */
+.tabsRoot[data-orientation="vertical"] .variantPrimary .tabsTrigger[data-state="active"]::after {
+  top: 0;
+  bottom: 0;
+  left: auto;
+  right: -2px; /* Offset to align with the border */
+  width: 2px;
+  height: auto;
+  border-radius: var(--t-border-radius-100) 0 0 var(--t-border-radius-100);
+  animation: slideInVertical 250ms var(--t-easing-in-out) forwards;
+  transform-origin: top;
+}
+
+@keyframes slideInVertical {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
 }
 
 /* Responsive adjustments */

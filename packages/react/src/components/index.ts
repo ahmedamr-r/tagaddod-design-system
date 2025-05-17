@@ -81,3 +81,11 @@ export type {
   TableHeaderCellProps, 
   TableCellProps 
 } from './Table/types';
+
+// Export the Switch component
+export { Switch } from './Switch';
+export type { SwitchProps } from './Switch';
+
+// Export the Modal component
+export { Modal } from './Modal';
+export type { ModalProps } from './Modal';

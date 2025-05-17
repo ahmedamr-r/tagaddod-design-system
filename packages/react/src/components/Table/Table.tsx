@@ -11,7 +11,7 @@ import {
   VisibilityState,
   flexRender,
 } from '@tanstack/react-table';
-import { Tabs } from '../Tabs';
+import { Tabs, TabsList, TabsTrigger } from '../Tabs';
 import { FilterItem } from './FilterItem';
 import { TableHeader } from './TableHeader';
 import { TableHeaderCell } from './TableHeaderCell';
@@ -19,7 +19,7 @@ import { TableCell } from './TableCell';
 import { TableContentCase } from './TableContentCase';
 import { Pagination } from '../Pagination';
 import styles from './Table.module.css';
-import { TableProps } from './types';
+import { TableProps, TableTab } from './types';
 
 export const Table = <T extends object>({
   data,
@@ -42,6 +42,7 @@ export const Table = <T extends object>({
   onRowClick,
   onCellClick,
   tabItems = [],
+  tableTabs = [],
   onTabChange,
   state = 'normal',
   errorMessage,
@@ -61,7 +62,6 @@ export const Table = <T extends object>({
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(defaultColumnVisibility);
   const [globalFilter, setGlobalFilter] = useState<string>(searchQuery);
-  const [activeTab, setActiveTab] = useState<string>(tabItems.find(tab => tab.active)?.id || tabItems[0]?.id || '');
   const [isFilterBarVisible, setIsFilterBarVisible] = useState<boolean>(defaultShowFilterBar);
   
   // Default pagination state for internal use when not provided
@@ -70,23 +70,104 @@ export const Table = <T extends object>({
     pageSize: 10,
   });
 
+  // Determine if we're using tableTabs (enhanced) or simple tabItems
+  const usingEnhancedTabs = tableTabs.length > 0;
+
+  // Initialize active tab from tableTabs or tabItems
+  const initialActiveTab = useMemo(() => {
+    // Check if tableTabs has active tab
+    if (usingEnhancedTabs) {
+      const activeTabItem = tableTabs.find(tab => tab.active);
+      if (activeTabItem) return activeTabItem.id;
+      return tableTabs[0]?.id || '';
+    }
+    
+    // Otherwise check tabItems
+    if (tabItems.length > 0) {
+      const activeTabItem = tabItems.find(tab => tab.active);
+      if (activeTabItem) return activeTabItem.id;
+      return tabItems[0]?.id || '';
+    }
+    
+    return '';
+  }, [tableTabs, tabItems, usingEnhancedTabs]);
+
+  const [activeTab, setActiveTab] = useState<string>(initialActiveTab);
+
+  // Get the current active tab configuration if using enhanced tabs
+  const activeTabConfig = useMemo<TableTab<T> | null>(() => {
+    if (!usingEnhancedTabs) return null;
+    return tableTabs.find(tab => tab.id === activeTab) || null;
+  }, [activeTab, tableTabs, usingEnhancedTabs]);
+
+  // Get the current data for the active tab (or default data)
+  const activeData = useMemo<T[]>(() => {
+    if (usingEnhancedTabs && activeTabConfig?.data) {
+      return activeTabConfig.data;
+    }
+    return data;
+  }, [data, activeTabConfig, usingEnhancedTabs]);
+
+  // Get the current columns for the active tab (or default columns)
+  const activeColumns = useMemo<ColumnDef<T, any>[]>(() => {
+    if (usingEnhancedTabs && activeTabConfig?.columns) {
+      return activeTabConfig.columns;
+    }
+    return columns;
+  }, [columns, activeTabConfig, usingEnhancedTabs]);
+
+  // Get the current title for the active tab (or default title)
+  const activeTitle = useMemo<string | undefined>(() => {
+    if (usingEnhancedTabs && activeTabConfig?.title) {
+      return activeTabConfig.title;
+    }
+    return title;
+  }, [title, activeTabConfig, usingEnhancedTabs]);
+
+  // Get the current pagination for the active tab (or default pagination)
+  const activePagination = useMemo(() => {
+    if (usingEnhancedTabs && activeTabConfig?.pagination) {
+      return activeTabConfig.pagination;
+    }
+    return pagination;
+  }, [pagination, activeTabConfig, usingEnhancedTabs]);
+
   // Sync search query with global filter
   useEffect(() => {
     setGlobalFilter(searchQuery);
   }, [searchQuery]);
 
+  // Transform tabItems or tableTabs to tab props needed by Tabs component
+  const tabsForDisplay = useMemo(() => {
+    if (usingEnhancedTabs) {
+      return tableTabs.map(tab => ({
+        id: tab.id,
+        label: tab.label,
+        active: tab.id === activeTab,
+        badge: tab.badge,
+      }));
+    } else {
+      return tabItems.map(tab => ({
+        id: tab.id,
+        label: tab.label,
+        active: tab.id === activeTab,
+        badge: tab.badge,
+      }));
+    }
+  }, [tableTabs, tabItems, activeTab, usingEnhancedTabs]);
+
   // Create the table instance
   const table = useReactTable({
-    data,
-    columns,
+    data: activeData,
+    columns: activeColumns,
     state: {
       sorting,
       columnVisibility,
       globalFilter,
       // Use either provided pagination or internal pagination state
-      pagination: pagination ? {
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
+      pagination: activePagination ? {
+        pageIndex: activePagination.pageIndex,
+        pageSize: activePagination.pageSize,
       } : internalPagination,
     },
     onSortingChange: setSorting,
@@ -99,13 +180,16 @@ export const Table = <T extends object>({
     onPaginationChange: (updater) => {
       // Handle both function updater and direct value
       const newPagination = typeof updater === 'function' 
-        ? updater(pagination ? { pageIndex: pagination.pageIndex, pageSize: pagination.pageSize } : internalPagination) 
+        ? updater(activePagination ? { 
+            pageIndex: activePagination.pageIndex, 
+            pageSize: activePagination.pageSize 
+          } : internalPagination) 
         : updater;
       
-      if (pagination) {
-        pagination.onPageChange(newPagination.pageIndex);
-        if (pagination.onPageSizeChange && newPagination.pageSize !== pagination.pageSize) {
-          pagination.onPageSizeChange(newPagination.pageSize);
+      if (activePagination) {
+        activePagination.onPageChange(newPagination.pageIndex);
+        if (activePagination.onPageSizeChange && newPagination.pageSize !== activePagination.pageSize) {
+          activePagination.onPageSizeChange(newPagination.pageSize);
         }
       } else {
         setInternalPagination(newPagination);
@@ -117,14 +201,22 @@ export const Table = <T extends object>({
     // Always use pagination model for consistent behavior
     getPaginationRowModel: getPaginationRowModel(),
     // Indicate if using manual pagination (e.g., server-side)
-    manualPagination: !!pagination,
+    manualPagination: !!activePagination,
     // Pagination page count
-    pageCount: pagination?.pageCount ?? Math.ceil(data.length / (pagination?.pageSize || internalPagination.pageSize)),
+    pageCount: activePagination?.pageCount ?? Math.ceil(activeData.length / (activePagination?.pageSize || internalPagination.pageSize)),
   });
 
   // Handle tab changes
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
+    
+    // Reset pagination when switching tabs
+    setInternalPagination({
+      pageIndex: 0,
+      pageSize: internalPagination.pageSize,
+    });
+    
+    // Callback
     onTabChange?.(tabId);
   };
 
@@ -165,7 +257,7 @@ export const Table = <T extends object>({
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
 
   // Get current pagination state (either from props or internal state)
-  const currentPagination = pagination || internalPagination;
+  const currentPagination = activePagination || internalPagination;
 
   // Helper to render content based on state
   const renderContent = () => {
@@ -181,7 +273,7 @@ export const Table = <T extends object>({
       return <TableContentCase type="notFound" message={notFoundMessage} />;
     }
     
-    if (state === 'empty' || data.length === 0) {
+    if (state === 'empty' || activeData.length === 0) {
       if (emptyStateNode) {
         return emptyStateNode;
       }
@@ -256,22 +348,32 @@ export const Table = <T extends object>({
         className
       )}
     >
-      {showTabs && tabItems.length > 0 && (
+      {showTabs && tabsForDisplay.length > 0 && (
         <div className={styles.tabsContainer}>
           <Tabs
-            items={tabItems.map(tab => ({
-              id: tab.id,
-              label: tab.label,
-              active: tab.id === activeTab,
-            }))}
-            onChange={handleTabChange}
-          />
+            defaultValue={activeTab}
+            onValueChange={handleTabChange}
+            value={activeTab}
+          >
+            <TabsList className={styles.tabsList}>
+              {tabsForDisplay.map(tab => (
+                <TabsTrigger 
+                  key={tab.id} 
+                  value={tab.id}
+                  badge={tab.badge}
+                  className={styles.tabTrigger}
+                >
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </div>
       )}
       
       {showHeader && (
         <TableHeader
-          title={hasActiveFilters && title ? `Filtered ${title}` : title}
+          title={hasActiveFilters && activeTitle ? `Filtered ${activeTitle}` : activeTitle}
           badge={effectiveBadge}
           showSearch={showSearch}
           showFilters={showFilters}
@@ -311,27 +413,27 @@ export const Table = <T extends object>({
         {renderContent()}
       </div>
       
-      {showPagination && state === 'normal' && data.length > 0 && (
+      {showPagination && state === 'normal' && activeData.length > 0 && (
         <div className={styles.paginationContainer}>
           <Pagination 
             total={table.getPrePaginationRowModel().rows.length}
             current={currentPagination.pageIndex + 1}
             pageSize={currentPagination.pageSize}
             onChange={(page) => {
-              if (pagination) {
-                pagination.onPageChange(page - 1);
+              if (activePagination) {
+                activePagination.onPageChange(page - 1);
               } else {
                 table.setPageIndex(page - 1);
               }
             }}
             onPageSizeChange={(newPageSize) => {
-              if (pagination && pagination.onPageSizeChange) {
-                pagination.onPageSizeChange(newPageSize);
+              if (activePagination && activePagination.onPageSizeChange) {
+                activePagination.onPageSizeChange(newPageSize);
               } else {
                 table.setPageSize(newPageSize);
               }
             }}
-            pageSizeOptions={pagination?.pageSizeOptions || [10, 20, 50, 100]}
+            pageSizeOptions={activePagination?.pageSizeOptions || [10, 20, 50, 100]}
             showRowsInPage={true}
             showCount={true}
           />

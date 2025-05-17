@@ -39,14 +39,24 @@
   margin-bottom: -0.25em;
 }
 
+.controlsGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .paginationItems {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.25rem; /* Reduced gap between buttons */
 }
 
 /* RTL Support */
 :global([dir="rtl"]) .paginationItems {
+  flex-direction: row-reverse;
+}
+
+:global([dir="rtl"]) .controlsGroup {
   flex-direction: row-reverse;
 }
 
@@ -165,9 +175,13 @@
   align-items: center;
   justify-content: center;
   width: 2rem;
-  height: 2rem;
+  height: var(--t-size-800);
+  min-width: var(--t-size-800);
   color: var(--t-color-text-disabled, rgba(0, 0, 0, 0.25));
   font-family: Arial;
   font-size: 0.875rem;
   letter-spacing: 0.125rem;
+  background-color: var(--t-color-surface-background, #ffffff);
+  border: 1px solid var(--t-border-color-base, #C7C8D1);
+  border-radius: var(--t-border-radius-200, 0.5rem);
 }

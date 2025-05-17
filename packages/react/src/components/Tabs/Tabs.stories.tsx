@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tabs, TabsTrigger, TabsContent, TabsList, tabsVariants, tabsCounts, tabsOrientations } from './Tabs';
+import styles from './Tabs.module.css';
 import { 
   IconHome, 
   IconUser, 
@@ -717,6 +718,105 @@ export const AllVariants: Story = {
 };
 
 // Common use cases showcase
+// Badge states showcase
+export const BadgeStatesShowcase: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+      <h3>Badge States in Different Tab States</h3>
+      <p>This showcase demonstrates how badges appear in different tab states.</p>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <h4>Default/Rest State</h4>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ padding: '12px 16px', borderRadius: '8px', background: '#fff' }}>
+            <TabsTrigger value="rest" badge="3">Label</TabsTrigger>
+          </div>
+          <p>Badge has a light gray background (fill-hover) with text-secondary color</p>
+        </div>
+        
+        <h4>Hover State</h4>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ padding: '12px 16px', borderRadius: '8px', background: '#f9f9fa' }}>
+            <TabsTrigger 
+              value="hover" 
+              badge="3"
+              // Force hover styles to be applied
+              className={styles.tabsTriggerHover}
+            >Label</TabsTrigger>
+          </div>
+          <p>Badge has a darker gray background (fill-active) with text-primary color</p>
+        </div>
+        
+        <h4>Active State</h4>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ padding: '12px 16px', borderRadius: '8px', background: '#fff' }}>
+            <TabsTrigger 
+              value="active" 
+              badge="3"
+              data-state="active"
+            >Label</TabsTrigger>
+          </div>
+          <p>Badge has a brand-secondary background with text-link color</p>
+        </div>
+        
+        <h4>Disabled State</h4>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ padding: '12px 16px', borderRadius: '8px', background: '#fff' }}>
+            <TabsTrigger 
+              value="disabled" 
+              badge="3"
+              disabled
+            >Label</TabsTrigger>
+          </div>
+          <p>Badge has background-primary and text-secondary color</p>
+        </div>
+      </div>
+
+      <div style={{ marginTop: '20px' }}>
+        <Tabs defaultValue="rest" variant="primary">
+          <TabsList>
+            <TabsTrigger value="rest" badge="3">Rest</TabsTrigger>
+            <TabsTrigger value="hover" badge="3">Hover</TabsTrigger>
+            <TabsTrigger value="active" badge="3">Active</TabsTrigger>
+            <TabsTrigger value="disabled" badge="3" disabled>Disabled</TabsTrigger>
+          </TabsList>
+          <TabsContent value="rest">
+            <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+              <h4>Rest State Badge</h4>
+              <p>In its default state, the badge has a subtle light gray background and secondary text color to blend with the rest of the tab.</p>
+            </div>
+          </TabsContent>
+          <TabsContent value="hover">
+            <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+              <h4>Hover State Badge</h4>
+              <p>When hovering, the badge background becomes slightly darker and the text becomes more prominent.</p>
+            </div>
+          </TabsContent>
+          <TabsContent value="active">
+            <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+              <h4>Active State Badge</h4>
+              <p>When the tab is active, the badge uses brand colors to increase visibility and emphasis.</p>
+            </div>
+          </TabsContent>
+          <TabsContent value="disabled">
+            <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+              <h4>Disabled State Badge</h4>
+              <p>When disabled, the badge has a more subtle appearance with reduced contrast.</p>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'This showcase demonstrates how badges appear in different tab states (rest, hover, active, disabled).',
+      },
+    },
+  },
+};
+
 export const CommonUseCases: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>

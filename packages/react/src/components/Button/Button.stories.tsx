@@ -265,6 +265,41 @@ export const IconButtonAllSizes: Story = {
   ),
 };
 
+// Icon-only variants
+export const IconOnlyVariants: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+      <Button variant="primary" prefixIcon={<IconPlus size={18} />} aria-label="Icon-only primary" />
+      <Button variant="secondary" prefixIcon={<IconEdit size={18} />} aria-label="Icon-only secondary" />
+      <Button variant="tertiary" prefixIcon={<IconDownload size={18} />} aria-label="Icon-only tertiary" />
+      <Button variant="plain" prefixIcon={<IconSearch size={18} />} aria-label="Icon-only plain" />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Icon-only buttons with different variants. These should have proper centering with no extra padding.',
+      },
+    },
+  },
+};
+
+// Icon-only with both prefix and suffix icons (should only show one, but test both cases)
+export const IconOnlyBothTypes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+        <span>Prefix Icon Only</span>
+        <Button prefixIcon={<IconPlus size={18} />} aria-label="Prefix icon only" />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+        <span>Suffix Icon Only</span>
+        <Button suffixIcon={<IconArrowRight size={18} />} aria-label="Suffix icon only" />
+      </div>
+    </div>
+  ),
+};
+
 // Common use cases
 export const CommonUseCases: Story = {
   render: () => (
