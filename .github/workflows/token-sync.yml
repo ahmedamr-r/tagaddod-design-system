@@ -192,8 +192,8 @@ jobs:
           TIMESTAMP=$(date +%Y%m%d%H%M%S)
           cat > .changeset/token-sync-${TIMESTAMP}.md << EOF
           ---
-          "@tagaddod/tokens": patch
-          "@tagaddod/themes": patch
+          "@tagaddod-design/tokens": patch
+          "@tagaddod-design/themes": patch
           ---
           
           Updated design tokens from Tokens Studio

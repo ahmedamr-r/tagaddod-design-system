@@ -15,41 +15,46 @@ async function buildCSS() {
     // Process CSS with PostCSS
     const result = await postcss([
       postcssImport({
-        // Resolve @tagaddod/tokens imports
+        // Resolve @tagaddod-design/tokens imports
         resolve: (id, basedir) => {
           // Handle the base token import
-          if (id === '@tagaddod/tokens/css' || id === '@tagaddod/tokens/css/tokens.css') {
+          if (id === '@tagaddod-design/tokens/css' || id === '@tagaddod-design/tokens/css/tokens.css') {
             return path.resolve(__dirname, '../../tokens/dist/css/tokens.css');
           }
           
           // Handle brand imports with the correct paths
-          if (id === '@tagaddod/tokens/tagaddod' || id === '@tagaddod/tokens/tagaddod/vars.css') {
+          if (id === '@tagaddod-design/tokens/tagaddod' || id === '@tagaddod-design/tokens/tagaddod/vars.css') {
             return path.resolve(__dirname, '../../tokens/dist/tagaddod/vars.css');
           }
-          if (id === '@tagaddod/tokens/greenpan' || id === '@tagaddod/tokens/greenpan/vars.css') {
+          if (id === '@tagaddod-design/tokens/greenpan' || id === '@tagaddod-design/tokens/greenpan/vars.css') {
             return path.resolve(__dirname, '../../tokens/dist/greenpan/vars.css');
           }
           
           // Handle locale-specific imports
-          if (id === '@tagaddod/tokens/locales/en/vars.css') {
+          if (id === '@tagaddod-design/tokens/locales/en/vars.css') {
             return path.resolve(__dirname, '../../tokens/dist/locales/en/vars.css');
           }
-          if (id === '@tagaddod/tokens/locales/ar/vars.css') {
+          if (id === '@tagaddod-design/tokens/locales/ar/vars.css') {
             return path.resolve(__dirname, '../../tokens/dist/locales/ar/vars.css');
           }
           
           // Handle brand + locale imports
-          if (id === '@tagaddod/tokens/tagaddod/en/vars.css') {
+          if (id === '@tagaddod-design/tokens/tagaddod/en/vars.css') {
             return path.resolve(__dirname, '../../tokens/dist/tagaddod/en/vars.css');
           }
-          if (id === '@tagaddod/tokens/tagaddod/ar/vars.css') {
+          if (id === '@tagaddod-design/tokens/tagaddod/ar/vars.css') {
             return path.resolve(__dirname, '../../tokens/dist/tagaddod/ar/vars.css');
           }
-          if (id === '@tagaddod/tokens/greenpan/en/vars.css') {
+          if (id === '@tagaddod-design/tokens/greenpan/en/vars.css') {
             return path.resolve(__dirname, '../../tokens/dist/greenpan/en/vars.css');
           }
-          if (id === '@tagaddod/tokens/greenpan/ar/vars.css') {
+          if (id === '@tagaddod-design/tokens/greenpan/ar/vars.css') {
             return path.resolve(__dirname, '../../tokens/dist/greenpan/ar/vars.css');
+          }
+          
+          // Backward compatibility for old references
+          if (id === '@tagaddod/tokens/css' || id === '@tagaddod/tokens/css/tokens.css') {
+            return path.resolve(__dirname, '../../tokens/dist/css/tokens.css');
           }
           
           return id;

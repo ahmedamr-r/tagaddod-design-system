@@ -1,9 +1,13 @@
 {
-  "name": "@tagaddod/tokens",
-  "version": "0.0.1",
+  "name": "@tagaddod-design/tokens",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "style": "dist/css/tokens.css",
+  "files": [
+    "dist",
+    "!dist/**/*.map"
+  ],
   "exports": {
     ".": "./dist/index.js",
     "./css": "./dist/css/tokens.css",
@@ -36,6 +40,9 @@
     "style-dictionary": "^4.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "license": "MIT"
 }

@@ -38,7 +38,7 @@ jobs:
         continue-on-error: true  # Since we haven't implemented tests yet
       
       - name: Build Storybook
-        run: yarn workspace @tagaddod/storybook build-storybook
+        run: yarn workspace @tagaddod-design/storybook build-storybook
       
       - name: Upload Storybook
         if: github.ref == 'refs/heads/main'
@@ -115,11 +115,13 @@ jobs:
         run: yarn build
       
       - name: Create Release Pull Request or Publish to npm
+        id: changesets
         uses: changesets/action@v1
         with:
           publish: yarn release
           version: yarn changeset version
+          commit: "chore(release): version packages"
+          title: "chore(release): version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        continue-on-error: true  # Since changesets might not be configured yet

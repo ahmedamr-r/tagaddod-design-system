@@ -1,6 +1,6 @@
 {
-  "name": "@tagaddod/storybook",
-  "version": "0.0.1",
+  "name": "@tagaddod-design/storybook",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "prestorybook": "cd ../react && yarn build:css",
@@ -13,8 +13,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@tagaddod/react": "*",
-    "@tagaddod/tokens": "*"
+    "@tagaddod-design/react": "*",
+    "@tagaddod-design/tokens": "*"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^8.6.12",

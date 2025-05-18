@@ -202,7 +202,7 @@ jobs:
         run: yarn build
       
       - name: Build Storybook
-        run: yarn workspace @tagaddod/storybook build-storybook
+        run: yarn workspace @tagaddod-design/storybook build-storybook
       
       - name: Publish to Chromatic
         uses: chromaui/action@v11

@@ -11,18 +11,19 @@
     "dev:fixed": "node scripts/dev-workflow-fixed.js",
     "dev:storybook": "node scripts/start-storybook-autoport.js",
     "build": "turbo run build",
-    "build:tokens": "turbo run build --filter=@tagaddod/tokens",
-    "build:react": "turbo run build --filter=@tagaddod/react",
+    "build:tokens": "turbo run build --filter=@tagaddod-design/tokens",
+    "build:react": "turbo run build --filter=@tagaddod-design/react",
     "build:core": "node scripts/build-core.js",
     "storybook": "node scripts/start-storybook-autoport.js",
-    "build-storybook": "turbo run build-storybook --filter=@tagaddod/storybook",
+    "build-storybook": "turbo run build-storybook --filter=@tagaddod-design/storybook",
     "test": "turbo run test",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
     "clean": "turbo run clean && rm -rf node_modules/.cache",
     "release": "changeset version && turbo run build && changeset publish",
     "changeset": "changeset",
-    "fix:deps": "node scripts/fix-storybook-deps.js"
+    "fix:deps": "node scripts/fix-storybook-deps.js",
+    "create-changeset": "changeset add"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
