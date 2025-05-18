@@ -43,15 +43,13 @@ jobs:
           mkdir -p .changeset
           
           # Create a changeset file if none exists
-          if [ ! -f ".changeset/publish-to-npm.md" ]; then
-            cat > .changeset/publish-to-npm.md << 'EOF'
+          cat > .changeset/publish-to-npm.md << EOF
 ---
 "@tagaddod-design/tokens": minor
 ---
 
 Initial release of Tagaddod Design System tokens package
 EOF
-          fi
           
           # Install changeset CLI
           npm install -g @changesets/cli
