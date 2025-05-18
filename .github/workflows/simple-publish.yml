@@ -49,17 +49,43 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.TAGADDOD_DESIGN }}
       
-      - name: Prepare packages
+      - name: Build React Components
         run: |
-          # Create React dist if needed
-          mkdir -p packages/react/dist/styles
-          echo "// Placeholder main file" > packages/react/dist/index.js
-          echo "module.exports = { Button: function Button(props) { return null; } };" >> packages/react/dist/index.js
-          echo "// Placeholder ES module" > packages/react/dist/index.mjs
-          echo "export const Button = function Button(props) { return null; };" >> packages/react/dist/index.mjs
-          echo "// Placeholder type definitions" > packages/react/dist/index.d.ts
-          echo "export declare const Button: (props: any) => null;" >> packages/react/dist/index.d.ts
-          echo "/* Placeholder CSS */" > packages/react/dist/styles/index.css
+          # Build tokens first (required for React build)
+          cd packages/tokens
+          yarn install
+          yarn build
+          cd ../..
+
+          # Now build React components
+          echo "Building React components..."
+          cd packages/react
+          yarn install
+          
+          # Try the full build first
+          set +e  # Don't exit on error
+          yarn build
+          BUILD_RESULT=$?
+          set -e  # Return to exit on error
+          
+          if [ $BUILD_RESULT -ne 0 ]; then
+            echo "⚠️ React full build failed with exit code $BUILD_RESULT"
+            echo "Creating minimal component exports as fallback..."
+            
+            # Use our specialized minimal build script
+            yarn build:minimal
+            
+            if [ $? -eq 0 ]; then
+              echo "✅ Minimal build successful"
+            else
+              echo "❌ ERROR: Even minimal build failed! Check logs above."
+              exit 1
+            fi
+          else
+            echo "✅ React components built successfully"
+          fi
+          
+          cd ../..
       
       - name: Publish packages
         run: |

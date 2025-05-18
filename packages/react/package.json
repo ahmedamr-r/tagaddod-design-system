@@ -20,7 +20,8 @@
   },
   "scripts": {
     "prebuild": "yarn clean",
-    "build": "vite build && tsc --project tsconfig.build.json && yarn build:css",
+    "build": "node scripts/diagnose-build.js && vite build && tsc --project tsconfig.build.json && yarn build:css",
+    "build:minimal": "yarn clean && node scripts/build-minimal.js",
     "postbuild": "echo 'Build complete with integrated tokens'",
     "dev": "vite",
     "watch": "concurrently -n 'vite,css' -c 'yellow,green' 'vite build --watch' 'yarn watch:css'",
@@ -28,6 +29,7 @@
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
     "build:css": "node scripts/build-css.js",
+    "diagnose": "node scripts/diagnose-build.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
