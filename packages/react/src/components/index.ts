@@ -89,3 +89,7 @@ export type { SwitchProps } from './Switch';
 // Export the Modal component
 export { Modal } from './Modal';
 export type { ModalProps } from './Modal';
+
+// Export the AspectRatio component
+export { AspectRatio } from './AspectRatio';
+export type { AspectRatioProps } from './AspectRatio/AspectRatio';

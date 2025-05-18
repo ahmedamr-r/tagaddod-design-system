@@ -1,0 +1,38 @@
+/* AspectRatio Component Styles */
+
+.container {
+  position: relative;
+  width: 100%;
+  border-radius: var(--t-border-radius-200);
+  overflow: hidden;
+}
+
+/* 
+ * This component primarily uses the modern `aspect-ratio` CSS property.
+ * The value is injected via inline style on the component through the `ratio` prop.
+ * 
+ * For browsers that don't support aspect-ratio, we use a JavaScript fallback
+ * that applies the padding hack technique.
+ */
+
+/* Fallback class for browsers without aspect-ratio support */
+.fallback {
+  position: relative;
+  display: block;
+  /* The padding-top will be set via JavaScript */
+}
+
+.fallback > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Smooth theme transitions */
+@media (prefers-reduced-motion: no-preference) {
+  .container {
+    transition: border-radius var(--t-duration-base) var(--t-easing-in-out);
+  }
+}
