@@ -62,14 +62,14 @@ jobs:
           cd packages/react
           yarn install
           
-          # Try the full build first
+          # Try the structured build first
           set +e  # Don't exit on error
           yarn build
           BUILD_RESULT=$?
           set -e  # Return to exit on error
           
           if [ $BUILD_RESULT -ne 0 ]; then
-            echo "⚠️ React full build failed with exit code $BUILD_RESULT"
+            echo "⚠️ React structured build failed with exit code $BUILD_RESULT"
             echo "Creating minimal component exports as fallback..."
             
             # Use our specialized minimal build script

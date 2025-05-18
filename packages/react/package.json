@@ -15,12 +15,18 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
+    "./styles": "./dist/styles/index.css",
     "./styles/index.css": "./dist/styles/index.css",
-    "./styles.css": "./dist/styles/index.css"
+    "./components/*": {
+      "types": "./dist/components/*/index.d.ts",
+      "import": "./dist/components/*/index.js",
+      "require": "./dist/components/*/index.js"
+    }
   },
   "scripts": {
     "prebuild": "yarn clean",
-    "build": "node scripts/diagnose-build.js && vite build && tsc --project tsconfig.build.json && yarn build:css",
+    "build": "node scripts/build-structured.js",
+    "build:vite": "node scripts/diagnose-build.js && vite build && tsc --project tsconfig.build.json && yarn build:css",
     "build:minimal": "yarn clean && node scripts/build-minimal.js",
     "postbuild": "echo 'Build complete with integrated tokens'",
     "dev": "vite",

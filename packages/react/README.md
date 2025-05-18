@@ -6,6 +6,29 @@ React component library for the Tagaddod Design System with multi-brand theming 
 
 This package provides a comprehensive set of React components built on top of the `@tagaddod-design/tokens` package. The components are designed to be accessible, customizable, and support RTL languages.
 
+## Import Methods
+
+You can import components in multiple ways:
+
+### Method 1: Import from the package root (recommended for bundling efficiency)
+
+```jsx
+import { Button, TextInput } from '@tagaddod-design/react';
+import '@tagaddod-design/tokens/css/tokens.css';
+import '@tagaddod-design/react/styles/index.css';
+```
+
+### Method 2: Import individual components
+
+```jsx
+import { Button } from '@tagaddod-design/react/components/Button';
+import { TextInput } from '@tagaddod-design/react/components/TextInput';
+import '@tagaddod-design/tokens/css/tokens.css';
+import '@tagaddod-design/react/styles/index.css';
+```
+
+Method 2 is useful if your bundler supports tree-shaking or if you want to explicitly reference components by their path.
+
 ## Features
 
 - **Design Token Integration**: Components use CSS variables from `@tagaddod-design/tokens`

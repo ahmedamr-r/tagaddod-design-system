@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import dts from 'rollup-plugin-dts';
 import { libInjectCss } from 'vite-plugin-lib-inject-css';
 
 export default defineConfig({
@@ -18,27 +19,24 @@ export default defineConfig({
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM'
-        }
+        },
+        preserveModules: true,
+        preserveModulesRoot: 'src',
+        entryFileNames: '[name].js',
       }
     },
+    outDir: 'dist',
+    emptyOutDir: true,
     minify: false,
     sourcemap: true
   },
   resolve: {
     alias: {
-      '@tagaddod/tokens/css/tokens.css': path.resolve(__dirname, '../tokens/dist/css/tokens.css'),
-      '@tagaddod/tokens/css': path.resolve(__dirname, '../tokens/dist/css/tokens.css'),
-      '@tagaddod/tokens/tagaddod': path.resolve(__dirname, '../tokens/dist/tagaddod/vars.css'),
-      '@tagaddod/tokens/greenpan': path.resolve(__dirname, '../tokens/dist/greenpan/vars.css'),
-      '@tagaddod/tokens': path.resolve(__dirname, '../tokens/dist')
-    }
-  },
-  css: {
-    preprocessorOptions: {
-      css: {
-        // Enable @import CSS syntax
-        modules: false
-      }
+      '@tagaddod-design/tokens/css/tokens.css': path.resolve(__dirname, '../tokens/dist/css/tokens.css'),
+      '@tagaddod-design/tokens/css': path.resolve(__dirname, '../tokens/dist/css/tokens.css'),
+      '@tagaddod-design/tokens/tagaddod': path.resolve(__dirname, '../tokens/dist/tagaddod/vars.css'),
+      '@tagaddod-design/tokens/greenpan': path.resolve(__dirname, '../tokens/dist/greenpan/vars.css'),
+      '@tagaddod-design/tokens': path.resolve(__dirname, '../tokens/dist')
     }
   }
 });
