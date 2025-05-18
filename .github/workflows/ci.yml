@@ -20,30 +20,23 @@ jobs:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
       
-      # Install dependencies
-      - name: Install dependencies
+      # Clean npm cache and install dependencies
+      - name: Clean and install dependencies
         run: |
+          npm cache clean --force
+          rm -rf node_modules package-lock.json
           npm install -g npm@latest
           npm install
       
-      # Build tokens package
+      # Build and publish tokens package only for now
       - name: Build tokens package
         run: |
           cd packages/tokens
           npm install
           npm run build
       
-      # Build react package
-      - name: Build react package (skip TypeScript)
-        run: |
-          cd packages/react
-          npm install
-          npm run clean || true
-          npx vite build
-          npm run build:css || true
-      
       # Only publish from main branch
-      - name: Publish to npm
+      - name: Publish tokens package to npm
         if: github.ref == 'refs/heads/main'
         run: |
           # Create changeset directory if it doesn't exist
@@ -54,25 +47,20 @@ jobs:
             cat > .changeset/publish-to-npm.md << 'EOF'
 ---
 "@tagaddod-design/tokens": minor
-"@tagaddod-design/react": minor
 ---
 
-Initial release of Tagaddod Design System
+Initial release of Tagaddod Design System tokens package
 EOF
           fi
           
           # Install changeset CLI
           npm install -g @changesets/cli
           
-          # Update versions
+          # Update version
           npx changeset version
           
-          # Publish to npm
+          # Publish tokens package to npm
           cd packages/tokens
           npm publish --access public
-          
-          cd ../react
-          npm publish --access public
         env:
-          # Using the custom token name TAGADDOD_DESIGN
           NODE_AUTH_TOKEN: ${{ secrets.TAGADDOD_DESIGN }}
