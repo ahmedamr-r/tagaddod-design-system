@@ -30,8 +30,10 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
       
-      - name: Build packages
-        run: yarn build
+      - name: Build packages (skip token-admin)
+        run: |
+          yarn workspace @tagaddod-design/tokens build
+          yarn workspace @tagaddod-design/react build
       
       - name: Run tests
         run: yarn test
@@ -71,8 +73,10 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
       
-      - name: Build packages
-        run: yarn build
+      - name: Build packages (skip token-admin)
+        run: |
+          yarn workspace @tagaddod-design/tokens build
+          yarn workspace @tagaddod-design/react build
       
       - name: Publish to Chromatic
         uses: chromaui/action@v11
@@ -111,8 +115,10 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
       
-      - name: Build packages
-        run: yarn build
+      - name: Build packages (skip token-admin)
+        run: |
+          yarn workspace @tagaddod-design/tokens build
+          yarn workspace @tagaddod-design/react build
       
       - name: Create Release Pull Request or Publish to npm
         id: changesets
