@@ -1,16 +1,24 @@
 module.exports = {
+  preset: 'ts-jest',
   testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
-    '\\.module\\.css$': 'identity-obj-proxy',
-    '\\.css$': '<rootDir>/__mocks__/styleMock.js',
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '^@tagaddod/tokens/css': '<rootDir>/__mocks__/styleMock.js',
+    '^@tagaddod/tokens': '<rootDir>/__mocks__/tokensMock.js'
   },
-  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   collectCoverageFrom: [
-    'src/components/**/*.{ts,tsx}',
-    '!src/components/**/*.stories.{ts,tsx}',
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.stories.{ts,tsx}',
+    '!src/**/*.test.{ts,tsx}',
+    '!src/**/*.types.{ts,tsx}'
   ],
-  transform: {
-    '^.+\\.(ts|tsx)$': 'babel-jest'
-  },
+  coverageThreshold: {
+    global: {
+      branches: 70,
+      functions: 70,
+      lines: 70,
+      statements: 70
+    }
+  }
 };

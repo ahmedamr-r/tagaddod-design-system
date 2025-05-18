@@ -1,29 +1,33 @@
-## Description
+# Description
 
-Brief description of the changes in this PR.
+<!-- 
+Please include a summary of the change and which issue is fixed.
+Please also include relevant motivation and context.
+List any dependencies that are required for this change.
+-->
 
-## Type of Change
+## Type of change
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
+<!-- Please delete options that are not relevant. -->
+
+- [ ] Token update (color, spacing, typography, etc.)
+- [ ] Bug fix (non-breaking change that fixes an issue)
+- [ ] New feature (non-breaking change that adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
-- [ ] Refactoring (no functional changes)
-- [ ] Other (please describe):
+- [ ] This change requires a documentation update
 
 ## Checklist
 
+- [ ] I have added a changeset describing the changes (`yarn create-changeset`)
 - [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
-- [ ] Any dependent changes have been merged and published in downstream modules
+- [ ] I have built and tested my changes locally
+- [ ] I have updated the documentation accordingly
+- [ ] My changes don't break existing functionality
 
-## Screenshots (if appropriate)
+## Screenshots (if applicable)
 
-## Additional Notes
+<!-- Add screenshots here if UI is affected -->
 
-Add any additional notes or context about the pull request here.
+## Additional context
+
+<!-- Add any other context about the PR here -->

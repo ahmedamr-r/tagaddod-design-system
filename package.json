@@ -23,7 +23,7 @@
     "release": "changeset version && turbo run build && changeset publish",
     "changeset": "changeset",
     "fix:deps": "node scripts/fix-storybook-deps.js",
-    "create-changeset": "changeset add"
+    "create-changeset": "node scripts/create-changeset.js"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
