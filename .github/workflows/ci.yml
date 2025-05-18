@@ -25,22 +25,14 @@ jobs:
           node-version: 20
           registry-url: 'https://registry.npmjs.org/'
       
-      # Fix Rollup Linux dependencies issue
-      - name: Install Linux-specific dependencies
-        run: |
-          npm install -g npm@latest
-          # Install Linux-specific Rollup dependency as optional
-          npm install --save-optional @rollup/rollup-linux-x64-gnu
-          npm install --save-optional @esbuild/linux-x64
-      
       # Install dependencies
       - name: Install dependencies
         run: |
+          npm install -g npm@latest
           npm cache clean --force
-          rm -rf node_modules package-lock.json
           npm install
       
-      # Build packages
+      # Build tokens package
       - name: Build tokens package
         run: |
           cd packages/tokens
@@ -48,37 +40,28 @@ jobs:
           npm run build
           cd ../..
       
-      # Create simple React package with placeholder
-      - name: Create simplified React package
+      # Check current npm versions
+      - name: Check current npm versions
         run: |
-          cd packages/react
-          npm install
-          npm run clean || true
+          echo "--- Checking current published versions ---"
+          # Set up npm authentication
+          npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
           
-          echo "--- Creating simplified React package ---"
-          # Create minimal dist directory with placeholder files
-          mkdir -p dist/styles
+          # Check tokens package version
+          echo "Checking tokens package..."
+          NPM_TOKENS_VERSION=$(npm view @tagaddod-design/tokens version 2>/dev/null || echo "not found")
+          echo "Current npm version: $NPM_TOKENS_VERSION"
           
-          # Create placeholder JS files
-          echo "// Placeholder main file" > dist/index.js
-          echo "module.exports = { Button: function Button(props) { return null; } };" >> dist/index.js
+          # Check react package version
+          echo "Checking react package..."
+          NPM_REACT_VERSION=$(npm view @tagaddod-design/react version 2>/dev/null || echo "not found")
+          echo "Current npm version: $NPM_REACT_VERSION"
           
-          # Create placeholder ESM file
-          echo "// Placeholder ES module" > dist/index.mjs
-          echo "export const Button = function Button(props) { return null; };" >> dist/index.mjs
-          
-          # Create placeholder type definitions
-          echo "// Placeholder type definitions" > dist/index.d.ts
-          echo "export declare const Button: (props: any) => null;" >> dist/index.d.ts
-          
-          # Create placeholder CSS
-          echo "/* Placeholder CSS */" > dist/styles/index.css
-          
-          # List the files we created
-          echo "--- React package dist contents ---"
-          ls -la dist/
-          ls -la dist/styles/
-          cd ../..
+          # Store versions for later steps
+          echo "NPM_TOKENS_VERSION=$NPM_TOKENS_VERSION" >> $GITHUB_ENV
+          echo "NPM_REACT_VERSION=$NPM_REACT_VERSION" >> $GITHUB_ENV
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.TAGADDOD_DESIGN }}
       
       # Create a new version tag
       - name: Create version tag
@@ -88,26 +71,63 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           
-          # Manual version updates
-          echo "--- Updating tokens package version ---"
+          # Update tokens package version
           cd packages/tokens
           CURRENT_VERSION=$(node -p "require('./package.json').version")
-          PATCH_VERSION=$(echo $CURRENT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
-          echo "Current version: $CURRENT_VERSION, New version: $PATCH_VERSION"
-          npm version $PATCH_VERSION --no-git-tag-version
+          if [ "$NPM_TOKENS_VERSION" == "$CURRENT_VERSION" ]; then
+            # Need to bump the version
+            PATCH_VERSION=$(echo $CURRENT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            echo "Tokens package needs update: $CURRENT_VERSION → $PATCH_VERSION"
+            npm version $PATCH_VERSION --no-git-tag-version
+          else
+            echo "Tokens package local version ($CURRENT_VERSION) differs from npm ($NPM_TOKENS_VERSION)"
+          fi
+          NEW_TOKENS_VERSION=$(node -p "require('./package.json').version")
+          echo "TOKENS_VERSION=$NEW_TOKENS_VERSION" >> $GITHUB_ENV
           cd ../..
           
-          echo "--- Updating React package version ---"
+          # Update react package version
           cd packages/react
           CURRENT_VERSION=$(node -p "require('./package.json').version")
-          MINOR_VERSION=$(echo $CURRENT_VERSION | awk -F. '{$(NF-1) = $(NF-1) + 1; $NF = 0;} 1' | sed 's/ /./g')
-          echo "Current version: $CURRENT_VERSION, New version: $MINOR_VERSION"
-          npm version $MINOR_VERSION --no-git-tag-version
+          if [ "$NPM_REACT_VERSION" == "$CURRENT_VERSION" ]; then
+            # Need to bump the version
+            PATCH_VERSION=$(echo $CURRENT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            echo "React package needs update: $CURRENT_VERSION → $PATCH_VERSION"
+            npm version $PATCH_VERSION --no-git-tag-version
+          else
+            echo "React package local version ($CURRENT_VERSION) differs from npm ($NPM_REACT_VERSION)"
+          fi
+          NEW_REACT_VERSION=$(node -p "require('./package.json').version")
+          echo "REACT_VERSION=$NEW_REACT_VERSION" >> $GITHUB_ENV
           cd ../..
+          
+          # Create placeholder files for React package if needed
+          if [ "$NPM_REACT_VERSION" != "$NEW_REACT_VERSION" ]; then
+            echo "--- Creating placeholder React package ---"
+            cd packages/react
+            mkdir -p dist/styles
+            
+            # Create placeholder JS files
+            echo "// Placeholder main file" > dist/index.js
+            echo "module.exports = { Button: function Button(props) { return null; } };" >> dist/index.js
+            
+            # Create placeholder ESM file
+            echo "// Placeholder ES module" > dist/index.mjs
+            echo "export const Button = function Button(props) { return null; };" >> dist/index.mjs
+            
+            # Create placeholder type definitions
+            echo "// Placeholder type definitions" > dist/index.d.ts
+            echo "export declare const Button: (props: any) => null;" >> dist/index.d.ts
+            
+            # Create placeholder CSS
+            echo "/* Placeholder CSS */" > dist/styles/index.css
+            cd ../..
+          fi
           
           # Commit version changes
           git add packages/*/package.json
           git commit -m "chore: bump package versions [skip ci]" || echo "No changes to commit"
+          git push || echo "Failed to push changes"
       
       # Publish packages
       - name: Publish packages to npm
@@ -120,50 +140,34 @@ jobs:
           echo "--- Checking npm authentication ---"
           npm whoami || echo "Not logged in with provided token"
           
-          # Try to publish tokens package
-          echo "--- Publishing tokens package ---"
+          # Publish tokens package if version changed
           cd packages/tokens
-          TOKEN_VERSION=$(node -p "require('./package.json').version")
-          echo "Publishing tokens@$TOKEN_VERSION"
-          npm publish --access public || echo "Failed to publish tokens package - may already exist"
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          if [ "$NPM_TOKENS_VERSION" != "$PACKAGE_VERSION" ]; then
+            echo "--- Publishing tokens@$PACKAGE_VERSION ---"
+            npm publish --access public && echo "✅ Published tokens@$PACKAGE_VERSION successfully"
+          else
+            echo "⏩ Skipping tokens@$PACKAGE_VERSION (already published)"
+          fi
           
-          # Try to publish react package
-          echo "--- Publishing react package ---"
+          # Publish react package if version changed
           cd ../react
-          REACT_VERSION=$(node -p "require('./package.json').version")
-          echo "Publishing react@$REACT_VERSION"
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          if [ "$NPM_REACT_VERSION" != "$PACKAGE_VERSION" ]; then
+            echo "--- Publishing react@$PACKAGE_VERSION ---"
+            npm publish --access public && echo "✅ Published react@$PACKAGE_VERSION successfully"
+          else
+            echo "⏩ Skipping react@$PACKAGE_VERSION (already published)"
+          fi
           
-          # Debug: Check what's in the package
-          echo "Files to be published:"
-          npm pack --dry-run
-          
-          npm publish --access public
-          REACT_SUCCESS=$?
-          
-          # Verify publications
+          # Display success message
           cd ../..
-          echo "--- Verifying package publications ---"
-          echo "Checking tokens package..."
-          npm view @tagaddod-design/tokens version || echo "Tokens package not found in registry"
-          
-          echo "Checking react package..."
-          npm view @tagaddod-design/react version || echo "React package not found in registry"
-          
-          # Push version changes
-          git push || echo "Failed to push version changes"
+          echo "---------------------------------------------------"
+          echo "🎉 Available on npm:"
+          echo "  @tagaddod-design/tokens@$TOKENS_VERSION"
+          echo "  @tagaddod-design/react@$REACT_VERSION"
+          echo "---------------------------------------------------"
+          echo "📦 Install with: npm install @tagaddod-design/tokens @tagaddod-design/react"
+          echo "---------------------------------------------------"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.TAGADDOD_DESIGN }}
-      
-      # Add a note about the placeholder implementation
-      - name: Add note about placeholder implementation
-        if: github.ref == 'refs/heads/main'
-        run: |
-          echo "-------------------------------------------------------------------"
-          echo "📝 NOTE: The React package currently contains placeholder components."
-          echo "   It can be imported and used in your project, but components will"
-          echo "   render empty nodes. This is a temporary solution to establish the"
-          echo "   package on npm while we work on a proper build process."
-          echo "-------------------------------------------------------------------"
-          echo "   You can still install the package with:"
-          echo "   npm install @tagaddod-design/react @tagaddod-design/tokens"
-          echo "-------------------------------------------------------------------"
