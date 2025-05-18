@@ -20,20 +20,27 @@ jobs:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
       
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          npm install -g npm@latest
+          npm install
+      
       # Build tokens package
       - name: Build tokens package
         run: |
           cd packages/tokens
-          yarn clean || true
-          yarn build
+          npm install
+          npm run build
       
       # Build react package
       - name: Build react package (skip TypeScript)
         run: |
           cd packages/react
-          yarn clean || true
+          npm install
+          npm run clean || true
           npx vite build
-          yarn build:css || true
+          npm run build:css || true
       
       # Only publish from main branch
       - name: Publish to npm
@@ -67,4 +74,5 @@ EOF
           cd ../react
           npm publish --access public
         env:
+          # This uses the NPM_TOKEN secret you already added to GitHub
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
