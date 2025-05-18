@@ -27,7 +27,11 @@
     "watch:css": "node scripts/watch-css.js",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
-    "build:css": "node scripts/build-css.js"
+    "build:css": "node scripts/build-css.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:index-coverage": "jest --coverage --collectCoverageFrom='**/index.ts'"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.9",
@@ -46,11 +50,23 @@
     "react-dom": ">=17.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^29.5.14",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
     "@vitejs/plugin-react": "^4.4.1",
+    "babel-jest": "^29.7.0",
     "concurrently": "^9.1.2",
     "i18next": "^25.1.2",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8.5.3",
     "postcss-import": "^16.1.0",
     "postcss-nested": "^7.0.2",

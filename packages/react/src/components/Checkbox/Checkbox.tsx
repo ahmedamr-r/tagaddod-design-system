@@ -147,7 +147,7 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
         
         {error ? (
           <div className={styles.errorMessage} style={lineHeightStyle}>
-            <IconAlertCircle size={14} className={styles.errorIcon} />
+            <IconAlertCircle size={20} className={styles.errorIcon} />
             {error}
           </div>
         ) : helpText ? (

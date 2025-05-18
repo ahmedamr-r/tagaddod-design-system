@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: var(--t-space-200);
+  gap: var(--t-space-50);
   /* Align the entire component contents to the start of the container */
   align-items: flex-start;
 }
@@ -28,12 +28,12 @@
 
 .checkbox {
   all: unset;
-  width: var(--t-size-400);
-  height: var(--t-size-400);
+  width: var(--t-size-500);
+  height: var(--t-size-500);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--t-border-radius-50);
+  border-radius: var(--t-border-radius-100);
   border: var(--t-border-width-25) solid var(--t-color-border-primary);
   background-color: var(--t-color-surface-primary);
   cursor: pointer;
@@ -91,11 +91,12 @@
   height: 100%;
   color: var(--t-color-icon-on-fill);
 }
+.indicator svg {
+  stroke-width: 3;
+}
 
 .label {
-  font-family: var(--t-font-family-primary);
-  font-size: var(--t-font-size-350);
-  font-weight: var(--t-font-weight-medium);
+font: var(--t-typography-body-sm-default);
   color: var(--t-color-text-primary);
   position: relative;
   line-height: 1.5;
@@ -150,8 +151,7 @@
 }
 
 .helpText {
-  font-family: var(--t-font-family-primary);
-  font-size: var(--t-font-size-300);
+  font: var(--t-typography-body-sm-default);
   color: var(--t-color-text-secondary);
   padding: 0;
   position: relative;
@@ -198,8 +198,7 @@
   display: flex;
   align-items: center;
   gap: var(--t-space-100);
-  font-family: var(--t-font-family-primary);
-  font-size: var(--t-font-size-300);
+  font: var(--t-typography-body-sm-default);
   color: var(--t-color-text-critical);
   padding: 0;
   position: relative;
@@ -254,6 +253,8 @@
 
 .error .checkbox:hover {
   border-color: var(--t-color-border-critical-hover);
+    background-color: var(--t-color-fill-critical-secondary);
+
 }
 
 .error .checkbox[data-state="checked"],
