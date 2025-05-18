@@ -56,50 +56,12 @@ try {
   // Continue as we might still have a working build
 }
 
-// Now, preserve component structure
-console.log(`${YELLOW}Preparing component directory structure...${RESET}`);
-
-// Source component directory
-const srcComponentsDir = path.resolve(__dirname, '../src/components');
-// Destination component directory
-const distComponentsDir = path.resolve(__dirname, '../dist/components');
-
-// Create the components directory in dist if it doesn't exist
-if (!fs.existsSync(distComponentsDir)) {
-  fs.mkdirSync(distComponentsDir, { recursive: true });
+// Now, copy component files
+try {
+  console.log(`${YELLOW}Copying component files to dist...${RESET}`);
+  require('./copy-components');
+} catch (err) {
+  console.error(`${RED}Error copying components: ${err.message}${RESET}`);
+  // Continue as this isn't critical if we have a working build
 }
-
-// Read all component directories
-const componentDirs = fs.readdirSync(srcComponentsDir, { withFileTypes: true })
-  .filter(dirent => dirent.isDirectory())
-  .map(dirent => dirent.name);
-
-// Process each component directory
-componentDirs.forEach(componentName => {
-  console.log(`Processing component: ${componentName}`);
-  
-  // Create component directory in dist
-  const componentDistDir = path.join(distComponentsDir, componentName);
-  if (!fs.existsSync(componentDistDir)) {
-    fs.mkdirSync(componentDistDir, { recursive: true });
-  }
-  
-  // Create an index.js file that re-exports the component from the main bundle
-  const indexJs = `// Re-export ${componentName} component from main bundle
-import { ${componentName} } from '../../index.js';
-export { ${componentName} };
-`;
-  
-  fs.writeFileSync(path.join(componentDistDir, 'index.js'), indexJs);
-  
-  // Create a matching TypeScript declaration file
-  const indexDts = `// Type declarations for ${componentName}
-import { ${componentName} } from '../../index';
-export { ${componentName} };
-`;
-  
-  fs.writeFileSync(path.join(componentDistDir, 'index.d.ts'), indexDts);
-});
-
-console.log(`${GREEN}✓${RESET} Component directory structure preserved in dist/components/`);
 console.log(`${GREEN}=== Build Complete ===${RESET}`);

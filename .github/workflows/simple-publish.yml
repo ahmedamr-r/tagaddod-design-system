@@ -87,6 +87,24 @@ jobs:
           
           cd ../..
       
+      - name: Copy components to dist
+        run: |
+          # Ensure components are copied to dist directories for both packages
+          echo "Ensuring component directories are properly structured..."
+          
+          cd packages/react
+          if [ -f "scripts/copy-components.js" ]; then
+            node scripts/copy-components.js
+            echo "✅ Component directories created for React package"
+          else
+            echo "⚠️ Component copy script not found"
+          fi
+          cd ../..
+          
+          # List dist contents for verification
+          echo "\nVerifying package contents:"
+          find packages/react/dist -type d | sort
+      
       - name: Publish packages
         run: |
           # Set auth token

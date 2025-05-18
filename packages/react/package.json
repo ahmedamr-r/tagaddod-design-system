@@ -1,12 +1,12 @@
 {
   "name": "@tagaddod-design/react",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "style": "dist/styles/index.css",
   "files": [
-    "dist",
+    "dist/**/*",
     "!dist/**/*.map"
   ],
   "exports": {
@@ -17,11 +17,7 @@
     },
     "./styles": "./dist/styles/index.css",
     "./styles/index.css": "./dist/styles/index.css",
-    "./components/*": {
-      "types": "./dist/components/*/index.d.ts",
-      "import": "./dist/components/*/index.js",
-      "require": "./dist/components/*/index.js"
-    }
+    "./components/*": "./dist/components/*"
   },
   "scripts": {
     "prebuild": "yarn clean",

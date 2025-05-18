@@ -293,58 +293,13 @@ console.log(`${GREEN}✓${RESET} Created package.json for distribution`);
 
 console.log(`\n${GREEN}=== Minimal package build complete ===${RESET}`);
 
-// Create component directories and exports
-console.log(`\n${BLUE}Creating component directories...${RESET}`);
-
-// Create components directory
-const componentsDir = path.join(distDir, 'components');
-if (!fs.existsSync(componentsDir)) {
-  fs.mkdirSync(componentsDir, { recursive: true });
+// Run the component copy script to ensure we have component directories
+try {
+  console.log(`\n${BLUE}Running component copy script...${RESET}`);
+  require('./copy-components');
+} catch (error) {
+  console.error(`${RED}Error copying components:${RESET}`, error.message);
 }
-
-// Component names to create directories for
-const componentNames = [
-  'Button',
-  'TextInput',
-  'Checkbox',
-  'RadioButton',
-  'Tabs',
-  'Badge',
-  'Avatar',
-  'Popover',
-  'Modal',
-  'Switch',
-  'Drawer',
-  'Table',
-  'Pagination',
-  'AspectRatio'
-];
-
-// Create directories and files for each component
-componentNames.forEach(componentName => {
-  const componentDir = path.join(componentsDir, componentName);
-  if (!fs.existsSync(componentDir)) {
-    fs.mkdirSync(componentDir, { recursive: true });
-  }
-  
-  // Create index.js file
-  const indexJs = `// Re-export ${componentName} component from main bundle
-import { ${componentName} } from '../../index.js';
-export { ${componentName} };
-`;
-  
-  fs.writeFileSync(path.join(componentDir, 'index.js'), indexJs);
-  
-  // Create index.d.ts file
-  const indexDts = `// Type declarations for ${componentName}
-import { ${componentName} } from '../../index';
-export { ${componentName} };
-`;
-  
-  fs.writeFileSync(path.join(componentDir, 'index.d.ts'), indexDts);
-  
-  console.log(`${GREEN}✓${RESET} Created ${componentName} component directory`);
-});
 
 console.log(`\n${YELLOW}NOTE:${RESET} This is a lightweight package intended for token/theme usage only.`);
 console.log(`For full component functionality, fix the build issues in a local environment.`);
