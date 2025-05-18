@@ -74,5 +74,5 @@ EOF
           cd ../react
           npm publish --access public
         env:
-          # This uses the NPM_TOKEN secret you already added to GitHub
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # Using the custom token name TAGADDOD_DESIGN
+          NODE_AUTH_TOKEN: ${{ secrets.TAGADDOD_DESIGN }}
