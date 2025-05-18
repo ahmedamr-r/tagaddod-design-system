@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: 'https://registry.npmjs.org/'
       
       # Clean npm cache and install dependencies
       - name: Clean and install dependencies
@@ -42,7 +42,7 @@ jobs:
           # Create changeset directory if it doesn't exist
           mkdir -p .changeset
           
-          # Create a changeset file if none exists
+          # Create a changeset file
           cat > .changeset/publish-to-npm.md << EOF
 ---
 "@tagaddod-design/tokens": minor
@@ -57,8 +57,27 @@ EOF
           # Update version
           npx changeset version
           
-          # Publish tokens package to npm
+          # Debug .npmrc
+          echo "--- Checking .npmrc for auth ---"
+          cat ~/.npmrc || echo "No ~/.npmrc file found"
+          echo "--- Setting up .npmrc manually ---"
+          echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > ~/.npmrc
+          
+          # Debug token availability (masked)
+          echo "--- Checking if token is available ---"
+          if [ -n "$NODE_AUTH_TOKEN" ]; then
+            echo "TOKEN AVAILABLE ✅ (masked for security)"
+          else
+            echo "TOKEN NOT AVAILABLE ❌"
+          fi
+          
+          # Debug npm whoami
+          echo "--- Checking npm identity ---"
+          npm whoami || echo "Not logged in to npm"
+          
+          # Attempt to publish
+          echo "--- Publishing package ---"
           cd packages/tokens
-          npm publish --access public
+          npm publish --access public --verbose
         env:
           NODE_AUTH_TOKEN: ${{ secrets.TAGADDOD_DESIGN }}
