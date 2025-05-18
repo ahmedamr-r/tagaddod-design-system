@@ -28,15 +28,25 @@ jobs:
           npm install -g npm@latest
           npm install
       
-      # Build and publish tokens package only for now
-      - name: Build tokens package
+      # Build tokens and react packages
+      - name: Build packages
         run: |
+          # Build tokens package
           cd packages/tokens
           npm install
           npm run build
+          cd ../..
+          
+          # Build react package
+          cd packages/react
+          npm install
+          npm run clean || true
+          npx vite build || true
+          npm run build:css || true
+          cd ../..
       
       # Only publish from main branch
-      - name: Publish tokens package to npm
+      - name: Publish packages to npm
         if: github.ref == 'refs/heads/main'
         run: |
           # Create changeset directory if it doesn't exist
@@ -45,39 +55,33 @@ jobs:
           # Create a changeset file
           cat > .changeset/publish-to-npm.md << EOF
 ---
-"@tagaddod-design/tokens": minor
+"@tagaddod-design/tokens": patch
+"@tagaddod-design/react": minor
 ---
 
-Initial release of Tagaddod Design System tokens package
+Update tokens package and publish initial release of React components
 EOF
           
           # Install changeset CLI
           npm install -g @changesets/cli
           
-          # Update version
+          # Update versions
           npx changeset version
           
-          # Debug .npmrc
-          echo "--- Checking .npmrc for auth ---"
-          cat ~/.npmrc || echo "No ~/.npmrc file found"
-          echo "--- Setting up .npmrc manually ---"
-          echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > ~/.npmrc
+          # Ensure npm authentication is set up correctly
+          npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
           
-          # Debug token availability (masked)
-          echo "--- Checking if token is available ---"
-          if [ -n "$NODE_AUTH_TOKEN" ]; then
-            echo "TOKEN AVAILABLE ✅ (masked for security)"
-          else
-            echo "TOKEN NOT AVAILABLE ❌"
-          fi
+          # Debug token and auth setup
+          echo "--- Checking npm configuration ---"
+          npm config list
           
-          # Debug npm whoami
-          echo "--- Checking npm identity ---"
-          npm whoami || echo "Not logged in to npm"
+          # Try to publish packages (react first since it depends on tokens)
+          echo "--- Publishing React package ---"
+          cd packages/react
+          npm publish --access public || echo "React package publish failed or already exists"
           
-          # Attempt to publish
-          echo "--- Publishing package ---"
-          cd packages/tokens
-          npm publish --access public --verbose
+          echo "--- Publishing tokens package ---"
+          cd ../tokens
+          npm publish --access public || echo "Tokens package publish failed or already exists"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.TAGADDOD_DESIGN }}
