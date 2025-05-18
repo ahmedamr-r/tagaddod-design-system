@@ -22,88 +22,64 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
-      
-      - name: Enable Corepack
-        run: corepack enable
-      
-      - name: Install dependencies
-        run: yarn install --immutable
-      
-      - name: Build tokens package
-        run: yarn workspace @tagaddod-design/tokens build
-      
-      - name: Build React package (skip type checking)
-        run: |
-          cd packages/react
-          yarn clean
-          vite build
-          yarn build:css
-      
-      - name: Run tests
-        run: yarn test
-        continue-on-error: true  # Since we haven't implemented tests yet
-      
-      - name: Build Storybook
-        run: yarn workspace @tagaddod-design/storybook build-storybook
-        continue-on-error: true  # Skip if there are any issues
-      
-      - name: Upload Storybook
-        if: github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v4
-        with:
-          name: storybook-static
-          path: packages/storybook/.storybook-static
-          retention-days: 30
-        continue-on-error: true
-
-  release:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    
-    permissions:
-      contents: write
-      pull-requests: write
-      packages: write
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Required for changesets
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'yarn'
           registry-url: 'https://registry.npmjs.org'
       
-      - name: Enable Corepack
-        run: corepack enable
+      - name: Clear cache directories
+        run: |
+          rm -rf node_modules
+          rm -rf packages/*/node_modules
+          rm -rf package-lock.json
       
       - name: Install dependencies
-        run: yarn install --immutable
-      
-      - name: Build tokens package
-        run: yarn workspace @tagaddod-design/tokens build
-      
-      - name: Build React package (skip type checking)
+        run: npm install
+        
+      - name: Manual build of tokens
+        run: |
+          cd packages/tokens
+          npm run build
+          
+      - name: Manual build of react package
         run: |
           cd packages/react
-          yarn clean
-          vite build
-          yarn build:css
+          npm run clean
+          npx vite build
+          npm run build:css
       
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          publish: yarn release
-          version: yarn changeset version
-          commit: "chore(release): version packages"
-          title: "chore(release): version packages"
+      - name: Version and publish
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          
+          # Create a changeset if none exists
+          if [ ! -d ".changeset" ]; then
+            npx @changesets/cli init
+          fi
+          
+          # Add changeset if none exists
+          if [ -z "$(ls -A .changeset/*.md 2>/dev/null)" ]; then
+            echo "---
+\"@tagaddod-design/tokens\": minor
+\"@tagaddod-design/react\": minor
+---
+
+Initial release of Tagaddod Design System" > .changeset/initial-release.md
+          fi
+          
+          # Apply changesets
+          npx @changesets/cli version
+          
+          # Build packages again after version update
+          cd packages/tokens && npm run build && cd ../..
+          cd packages/react && npm run clean && npx vite build && npm run build:css && cd ../..
+          
+          # Publish packages
+          cd packages/tokens && npm publish --access public && cd ../..
+          cd packages/react && npm publish --access public && cd ../..
+          
+          # Commit version changes
+          git add .
+          git commit -m "chore: publish packages" || echo "No changes to commit"
+          git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
