@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * This script creates a simplified build for CI environments where
+ * This script creates a simplified build for environments where
  * the full Vite build might fail. It generates a bare-minimum package
- * with empty components but proper CSS files and TypeScript definitions.
+ * with functional components that re-export types.
  */
 
 const fs = require('fs');
@@ -17,7 +17,7 @@ const YELLOW = '\x1b[33m';
 const BLUE = '\x1b[34m';
 const RESET = '\x1b[0m';
 
-console.log(`${BLUE}=== Creating minimal React package build ===${RESET}\n`);
+console.log(`${BLUE}=== Creating Improved Minimal React Package Build ===${RESET}\n`);
 
 // Ensure the dist directory exists
 const distDir = path.resolve(__dirname, '../dist');
@@ -58,197 +58,105 @@ try {
   console.log(`${YELLOW}⚠${RESET} Created fallback CSS file`);
 }
 
-// Step 2: Create minimal component exports
-console.log(`\n${BLUE}Creating component exports...${RESET}`);
+// Analyze the components to extract proper types
+console.log(`\n${BLUE}Analyzing component types...${RESET}`);
+const componentsDir = path.resolve(__dirname, '../src/components');
+const componentDirs = fs.readdirSync(componentsDir, { withFileTypes: true })
+  .filter(dirent => dirent.isDirectory())
+  .map(dirent => dirent.name);
 
-// CommonJS version
-const cjsContent = `// @tagaddod-design/react CommonJS build
-// This is a minimal build created for CI environments
-// Components are placeholders - use for CSS/theme only
+// Extract component exports and props from index.ts
+const componentIndexPath = path.resolve(componentsDir, 'index.ts');
+const componentIndexContent = fs.readFileSync(componentIndexPath, 'utf8');
 
-module.exports = {
-  // Main components
-  Button: function Button(props) { const { children, ...rest } = props || {}; return null; },
-  TextInput: function TextInput(props) { return null; },
-  Checkbox: function Checkbox(props) { return null; },
-  RadioButton: function RadioButton(props) { return null; },
-  
-  // Tabs components
-  Tabs: function Tabs(props) { return null; },
-  TabsContent: function TabsContent(props) { return null; },
-  TabsList: function TabsList(props) { return null; },
-  TabsTrigger: function TabsTrigger(props) { return null; },
-  
-  // Other components
-  Badge: function Badge(props) { return null; },
-  Avatar: function Avatar(props) { return null; },
-  Popover: function Popover(props) { return null; },
-  Modal: function Modal(props) { return null; },
-  Switch: function Switch(props) { return null; },
-  Drawer: function Drawer(props) { return null; },
-  Table: function Table(props) { return null; },
-  Pagination: function Pagination(props) { return null; },
-  AspectRatio: function AspectRatio(props) { return null; },
-  
-  // Provider
-  ThemeProvider: function ThemeProvider(props) { const { children } = props || {}; return children || null; }
-};
+// Extract component name and prop types
+const componentInfo = {};
+const exportRegex = /export\s+{\s*([A-Za-z0-9_]+)\s*}/g;
+const typeRegex = /export\s+type\s+{\s*([A-Za-z0-9_]+Props)\s*}/g;
+
+let match;
+while ((match = exportRegex.exec(componentIndexContent)) !== null) {
+  const componentName = match[1];
+  if (componentName[0] === componentName[0].toUpperCase()) {
+    componentInfo[componentName] = { hasProps: false };
+  }
+}
+
+while ((match = typeRegex.exec(componentIndexContent)) !== null) {
+  const propTypeName = match[1];
+  const componentName = propTypeName.replace('Props', '');
+  if (componentInfo[componentName]) {
+    componentInfo[componentName].hasProps = true;
+    componentInfo[componentName].propType = propTypeName;
+  }
+}
+
+console.log(`Analyzed ${Object.keys(componentInfo).length} components`);
+
+// Generate the code for ESM exports
+let esmExports = `// @tagaddod-design/react ESM build
+// This is an improved minimal build with proper types
+import React from 'react';
+
 `;
 
-fs.writeFileSync(path.join(distDir, 'index.js'), cjsContent);
-console.log(`${GREEN}✓${RESET} Created CommonJS module`);
+// Generate component implementations
+Object.entries(componentInfo).forEach(([componentName, info]) => {
+  const hasProps = info.hasProps;
+  
+  esmExports += `export const ${componentName} = function ${componentName}(props${hasProps ? `: ${componentName}Props` : ''}) {
+  // This is a minimal implementation
+  const { children, ...rest } = props || {};
+  return null;
+};\n\n`;
+});
 
-// ES Module version
-const esmContent = `// @tagaddod-design/react ESM build
-// This is a minimal build created for CI environments
-// Components are placeholders - use for CSS/theme only
+// Generate type definitions
+let dtsContent = `// @tagaddod-design/react TypeScript declarations
+// This is an improved minimal build with proper types
+import * as React from 'react';\n\n`;
 
-export const Button = function Button(props) { const { children, ...rest } = props || {}; return null; };
-export const TextInput = function TextInput(props) { return null; };
-export const Checkbox = function Checkbox(props) { return null; };
-export const RadioButton = function RadioButton(props) { return null; };
+// Read component props from original files if possible
+Object.entries(componentInfo).forEach(([componentName, info]) => {
+  if (info.hasProps) {
+    // Try to read the component file to extract prop definitions
+    const componentDir = path.join(componentsDir, componentName);
+    const componentFiles = fs.readdirSync(componentDir).filter(f => 
+      f.endsWith('.tsx') && !f.includes('.test.') && !f.includes('.stories.')
+    );
+    
+    if (componentFiles.length > 0) {
+      const componentFile = path.join(componentDir, componentFiles[0]);
+      const componentCode = fs.readFileSync(componentFile, 'utf8');
+      
+      // Extract the prop interface
+      const propRegex = /export\s+interface\s+([A-Za-z0-9_]+Props)[^{]*{([^}]*)}/s;
+      const propMatch = propRegex.exec(componentCode);
+      
+      if (propMatch) {
+        dtsContent += `export interface ${propMatch[1]} extends React.${componentName.includes('Input') ? 'InputHTMLAttributes' : 'HTMLAttributes'}<HTML${componentName.includes('Button') ? 'Button' : 'Div'}Element> {
+${propMatch[2]}
+}\n\n`;
+      } else {
+        // Fallback simple props
+        dtsContent += `export interface ${componentName}Props extends React.${componentName.includes('Button') ? 'ButtonHTMLAttributes' : 'HTMLAttributes'}<HTML${componentName.includes('Button') ? 'Button' : 'Div'}Element> {
+  children?: React.ReactNode;
+}\n\n`;
+      }
+    } else {
+      // Fallback simple props
+      dtsContent += `export interface ${componentName}Props extends React.${componentName.includes('Button') ? 'ButtonHTMLAttributes' : 'HTMLAttributes'}<HTML${componentName.includes('Button') ? 'Button' : 'Div'}Element> {
+  children?: React.ReactNode;
+}\n\n`;
+    }
+  }
+  
+  // Add the component declaration
+  dtsContent += `export declare const ${componentName}: React.FC<${info.hasProps ? `${componentName}Props` : 'any'}>;\n\n`;
+});
 
-export const Tabs = function Tabs(props) { return null; };
-export const TabsContent = function TabsContent(props) { return null; };
-export const TabsList = function TabsList(props) { return null; };
-export const TabsTrigger = function TabsTrigger(props) { return null; };
-
-export const Badge = function Badge(props) { return null; };
-export const Avatar = function Avatar(props) { return null; };
-export const Popover = function Popover(props) { return null; };
-export const Modal = function Modal(props) { return null; };
-export const Switch = function Switch(props) { return null; };
-export const Drawer = function Drawer(props) { return null; };
-export const Table = function Table(props) { return null; };
-export const Pagination = function Pagination(props) { return null; };
-export const AspectRatio = function AspectRatio(props) { return null; };
-
-export const ThemeProvider = function ThemeProvider(props) { const { children } = props || {}; return children || null; };
-`;
-
-fs.writeFileSync(path.join(distDir, 'index.mjs'), esmContent);
-console.log(`${GREEN}✓${RESET} Created ESM module`);
-
-// TypeScript declarations
-const dtsContent = `// @tagaddod-design/react TypeScript declarations
-// This is a minimal build created for CI environments
-
-import * as React from 'react';
-
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'plain';
-  tone?: 'default' | 'critical' | 'success' | 'neutral' | 'magic';
-  size?: 'large' | 'medium' | 'micro';
-  loading?: boolean;
-  fullWidth?: boolean;
-  prefixIcon?: React.ReactNode;
-  suffixIcon?: React.ReactNode;
-}
-
-export declare const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>;
-
-export interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  error?: string;
-  hint?: string;
-}
-
-export declare const TextInput: React.FC<TextInputProps>;
-
-export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-}
-
-export declare const Checkbox: React.FC<CheckboxProps>;
-
-export interface RadioButtonProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-}
-
-export declare const RadioButton: React.FC<RadioButtonProps>;
-
-export interface TabsProps {
-  children: React.ReactNode;
-  defaultValue?: string;
-  value?: string;
-  onValueChange?: (value: string) => void;
-}
-
-export declare const Tabs: React.FC<TabsProps>;
-export declare const TabsList: React.FC<React.HTMLAttributes<HTMLDivElement>>;
-export declare const TabsTrigger: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { value: string }>;
-export declare const TabsContent: React.FC<React.HTMLAttributes<HTMLDivElement> & { value: string }>;
-
-export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  tone?: 'default' | 'critical' | 'success' | 'neutral' | 'magic';
-  size?: 'small' | 'medium';
-}
-
-export declare const Badge: React.FC<BadgeProps>;
-
-export interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
-  src?: string;
-  name?: string;
-  size?: 'small' | 'medium' | 'large';
-}
-
-export declare const Avatar: React.FC<AvatarProps>;
-
-export interface PopoverProps {
-  children: React.ReactNode;
-  trigger: React.ReactNode;
-}
-
-export declare const Popover: React.FC<PopoverProps>;
-
-export interface ModalProps {
-  children: React.ReactNode;
-  isOpen: boolean;
-  onClose: () => void;
-  title?: string;
-}
-
-export declare const Modal: React.FC<ModalProps>;
-
-export interface SwitchProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-}
-
-export declare const Switch: React.FC<SwitchProps>;
-
-export interface DrawerProps {
-  children: React.ReactNode;
-  isOpen: boolean;
-  onClose: () => void;
-  position?: 'left' | 'right';
-}
-
-export declare const Drawer: React.FC<DrawerProps>;
-
-export interface TableProps {
-  data: any[];
-  columns: any[];
-}
-
-export declare const Table: React.FC<TableProps>;
-
-export interface PaginationProps {
-  totalItems: number;
-  itemsPerPage: number;
-  currentPage: number;
-  onPageChange: (page: number) => void;
-}
-
-export declare const Pagination: React.FC<PaginationProps>;
-
-export interface AspectRatioProps {
-  ratio?: number;
-  children: React.ReactNode;
-}
-
-export declare const AspectRatio: React.FC<AspectRatioProps>;
-
-export interface ThemeProviderProps {
+// Add ThemeProvider declaration
+dtsContent += `export interface ThemeProviderProps {
   children: React.ReactNode;
   theme?: 'tagaddod' | 'greenpan';
   direction?: 'ltr' | 'rtl';
@@ -257,20 +165,35 @@ export interface ThemeProviderProps {
 export declare const ThemeProvider: React.FC<ThemeProviderProps>;
 `;
 
-fs.writeFileSync(path.join(distDir, 'index.d.ts'), dtsContent);
-console.log(`${GREEN}✓${RESET} Created TypeScript declarations`);
+// Write the output files
+const esmPath = path.join(distDir, 'index.mjs');
+const cjsPath = path.join(distDir, 'index.js');
+const dtsPath = path.join(distDir, 'index.d.ts');
 
-// Create a package.json specifically for the dist folder
+// Write ESM version
+fs.writeFileSync(esmPath, esmExports);
+console.log(`${GREEN}✓${RESET} Created ESM module (index.mjs)`);
+
+// Write CommonJS version - using the same code since it's a simple implementation
+fs.writeFileSync(cjsPath, esmExports.replace('export const', 'exports.') + '\nmodule.exports = exports;');
+console.log(`${GREEN}✓${RESET} Created CommonJS module (index.js)`);
+
+// Write TypeScript declarations
+fs.writeFileSync(dtsPath, dtsContent);
+console.log(`${GREEN}✓${RESET} Created TypeScript declarations (index.d.ts)`);
+
+// Create a package.json for the dist folder
+const packageJson = require('../package.json');
 const distPackageJson = {
-  "name": "@tagaddod-design/react",
-  "version": require('../package.json').version,
+  "name": packageJson.name,
+  "version": packageJson.version,
   "license": "MIT",
   "main": "index.js",
   "module": "index.mjs",
   "types": "index.d.ts",
   "style": "styles/index.css",
   "dependencies": {
-    "@tagaddod-design/tokens": require('../package.json').dependencies["@tagaddod-design/tokens"]
+    "@tagaddod-design/tokens": packageJson.dependencies["@tagaddod-design/tokens"]
   },
   "peerDependencies": {
     "react": ">=17.0.0",
@@ -283,23 +206,50 @@ const distPackageJson = {
       "require": "./index.js"
     },
     "./styles/index.css": "./styles/index.css",
-    "./styles.css": "./styles/index.css"
+    "./styles": "./styles/index.css"
   },
   "sideEffects": ["./styles/index.css"]
 };
 
+// Add component exports
+componentDirs.forEach(componentName => {
+  const distComponentDir = path.join(distDir, 'components', componentName);
+  
+  // Create component directory in dist
+  if (!fs.existsSync(distComponentDir)) {
+    fs.mkdirSync(distComponentDir, { recursive: true });
+  }
+  
+  // Add component export to package.json
+  distPackageJson.exports[`./components/${componentName}`] = {
+    "types": `./components/${componentName}/index.d.ts`,
+    "import": `./components/${componentName}/index.mjs`,
+    "require": `./components/${componentName}/index.js`
+  };
+  
+  // Create minimal component entry points
+  const indexJs = `// Minimal component export - ${componentName}
+module.exports = require('../../index.js').${componentName};
+`;
+  
+  const indexMjs = `// Minimal component export - ${componentName}
+export { ${componentName} } from '../../index.mjs';
+`;
+  
+  const indexDts = `// Type declarations for ${componentName}
+export { ${componentName}, ${componentName}Props } from '../../index';
+`;
+  
+  fs.writeFileSync(path.join(distComponentDir, 'index.js'), indexJs);
+  fs.writeFileSync(path.join(distComponentDir, 'index.mjs'), indexMjs);
+  fs.writeFileSync(path.join(distComponentDir, 'index.d.ts'), indexDts);
+  
+  console.log(`${GREEN}✓${RESET} Created entry point for ${componentName}`);
+});
+
 fs.writeFileSync(path.join(distDir, 'package.json'), JSON.stringify(distPackageJson, null, 2));
 console.log(`${GREEN}✓${RESET} Created package.json for distribution`);
 
-console.log(`\n${GREEN}=== Minimal package build complete ===${RESET}`);
-
-// Run the component copy script to ensure we have component directories
-try {
-  console.log(`\n${BLUE}Running component copy script...${RESET}`);
-  require('./copy-components');
-} catch (error) {
-  console.error(`${RED}Error copying components:${RESET}`, error.message);
-}
-
-console.log(`\n${YELLOW}NOTE:${RESET} This is a lightweight package intended for token/theme usage only.`);
-console.log(`For full component functionality, fix the build issues in a local environment.`);
+console.log(`\n${GREEN}=== Improved minimal package build complete ===${RESET}`);
+console.log(`\n${YELLOW}NOTE:${RESET} This is a lightweight package with minimal implementation.`);
+console.log(`Components will not render anything, but they export the correct types and structure.`);

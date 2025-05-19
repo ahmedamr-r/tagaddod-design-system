@@ -1,5 +1,23 @@
 # @tagaddod-design/react
 
+## 0.0.4
+
+### Patch Changes
+
+- Fixed versioning to match npm registry and removed tokens dependency.
+
+## 0.4.0
+
+### Minor Changes
+
+- Publishing version 0.4.0 to npm with latest component updates.
+
+## 0.3.0
+
+### Minor Changes
+
+- Publishing version 0.3.0 to npm with latest component updates.
+
 ## 0.2.1
 
 ### Patch Changes

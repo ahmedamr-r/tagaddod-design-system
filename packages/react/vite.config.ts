@@ -1,42 +1,66 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import dts from 'rollup-plugin-dts';
-import { libInjectCss } from 'vite-plugin-lib-inject-css';
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 
 export default defineConfig({
-  plugins: [react(), libInjectCss()],
+  plugins: [
+    react(),
+    cssInjectedByJsPlugin({
+      // Inject CSS into JS bundle
+      topExecutionPriority: true,
+      jsAssetsFilterFunction: (chunkInfo) => {
+        // Apply CSS injection only to index.js 
+        return chunkInfo.name.includes('index');
+      }
+    })
+  ],
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'TagaddodReact',
-      formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'es' ? 'mjs' : 'js'}`
+      formats: ['es'],
+      fileName: () => 'esm/index.js'
     },
+    cssCodeSplit: false, // Keep CSS in a single file 
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: [
+        'react', 
+        'react-dom', 
+        'react/jsx-runtime',
+        '@radix-ui/react-avatar',
+        '@radix-ui/react-checkbox',
+        '@radix-ui/react-form',
+        '@radix-ui/react-popover',
+        '@radix-ui/react-radio-group',
+        '@radix-ui/react-switch',
+        '@radix-ui/react-tabs',
+        '@tabler/icons-react',
+        '@tagaddod-design/tokens',
+        '@tanstack/react-table',
+        'clsx'
+      ],
       output: {
+        exports: 'named',
         globals: {
           react: 'React',
-          'react-dom': 'ReactDOM'
+          'react-dom': 'ReactDOM',
+          'react/jsx-runtime': 'jsxRuntime',
+          'clsx': 'clsx',
         },
         preserveModules: true,
         preserveModulesRoot: 'src',
-        entryFileNames: '[name].js',
-      }
+        entryFileNames: (chunkInfo) => {
+          return `esm/${chunkInfo.name}.js`;
+        },
+        format: 'es', // Ensure ESM format for all modules
+      },
     },
-    outDir: 'dist',
-    emptyOutDir: true,
-    minify: false,
-    sourcemap: true
+    emptyOutDir: false,
+    sourcemap: true,
+    reportCompressedSize: true,
   },
-  resolve: {
-    alias: {
-      '@tagaddod-design/tokens/css/tokens.css': path.resolve(__dirname, '../tokens/dist/css/tokens.css'),
-      '@tagaddod-design/tokens/css': path.resolve(__dirname, '../tokens/dist/css/tokens.css'),
-      '@tagaddod-design/tokens/tagaddod': path.resolve(__dirname, '../tokens/dist/tagaddod/vars.css'),
-      '@tagaddod-design/tokens/greenpan': path.resolve(__dirname, '../tokens/dist/greenpan/vars.css'),
-      '@tagaddod-design/tokens': path.resolve(__dirname, '../tokens/dist')
-    }
+  css: {
+    postcss: './postcss.config.cjs'
   }
 });

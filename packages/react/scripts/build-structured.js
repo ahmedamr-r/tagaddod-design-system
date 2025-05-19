@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * This script builds the React components while preserving the component directory structure.
- * This allows users to import individual components from specific paths.
+ * This script builds the React components and ensures each component folder 
+ * contains the complete implementation, not just references.
  */
 
 const fs = require('fs');
@@ -16,7 +16,7 @@ const YELLOW = '\x1b[33m';
 const BLUE = '\x1b[34m';
 const RESET = '\x1b[0m';
 
-console.log(`${BLUE}=== Building React Components with Preserved Structure ===${RESET}\n`);
+console.log(`${BLUE}=== Building React Components with Full Implementations ===${RESET}\n`);
 
 // Clean the dist directory
 try {
@@ -36,32 +36,53 @@ try {
   process.exit(1);
 }
 
-// Run full build with Vite
+// Run diagnostics to ensure environment is ready
+try {
+  console.log(`${YELLOW}Running build diagnostics...${RESET}`);
+  execSync('node scripts/diagnose-build.js', { stdio: 'inherit' });
+} catch (err) {
+  console.log(`${YELLOW}Diagnostics completed with warnings. Continuing...${RESET}`);
+}
+
+// Run Vite build
 try {
   console.log(`${YELLOW}Building with Vite...${RESET}`);
   execSync('vite build', { stdio: 'inherit' });
+  console.log(`${GREEN}✓${RESET} Vite build completed successfully`);
 } catch (err) {
-  console.error(`${RED}Full build failed: ${err.message}${RESET}`);
-  console.log(`${YELLOW}Falling back to minimal build...${RESET}`);
-  execSync('node scripts/build-minimal.js', { stdio: 'inherit' });
-  process.exit(0); // Exit with success as we handled the fallback
+  console.error(`${RED}Build failed: ${err.message}${RESET}`);
+  process.exit(1);
 }
 
-// Run TypeScript for declarations
+// Create component export files with proper paths
 try {
-  console.log(`${YELLOW}Generating TypeScript declarations...${RESET}`);
-  execSync('tsc --project tsconfig.build.json', { stdio: 'inherit' });
+  console.log(`${YELLOW}Creating component exports with full implementations...${RESET}`);
+  execSync('node scripts/create-full-components.js', { stdio: 'inherit' });
 } catch (err) {
-  console.error(`${RED}TypeScript declarations failed: ${err.message}${RESET}`);
-  // Continue as we might still have a working build
+  console.error(`${RED}Failed to create component exports: ${err.message}${RESET}`);
+  process.exit(1);
 }
 
-// Now, copy component files
+// Update package.json exports field
 try {
-  console.log(`${YELLOW}Copying component files to dist...${RESET}`);
-  require('./copy-components');
+  console.log(`${YELLOW}Updating package.json exports...${RESET}`);
+  execSync('node scripts/update-package-exports.js', { stdio: 'inherit' });
 } catch (err) {
-  console.error(`${RED}Error copying components: ${err.message}${RESET}`);
-  // Continue as this isn't critical if we have a working build
+  console.error(`${RED}Failed to update package.json: ${err.message}${RESET}`);
 }
-console.log(`${GREEN}=== Build Complete ===${RESET}`);
+
+// Create ESM barrel exports
+try {
+  console.log(`${YELLOW}Creating ESM barrel exports...${RESET}`);
+  execSync('node scripts/create-esm-exports.js', { stdio: 'inherit' });
+} catch (err) {
+  console.error(`${RED}Failed to create ESM exports: ${err.message}${RESET}`);
+}
+
+console.log(`\n${GREEN}=== Build Completed Successfully ===${RESET}`);
+
+// Output import examples
+console.log(`\n${BLUE}Import Examples:${RESET}`);
+console.log(`import { Button } from '@tagaddod-design/react';            // Main bundle`);
+console.log(`import { Button } from '@tagaddod-design/react/components/Button'; // Direct component`);
+console.log(`import '@tagaddod-design/react/styles';                    // Styles import`);

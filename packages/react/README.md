@@ -10,27 +10,28 @@ This package provides a comprehensive set of React components built on top of th
 
 You can import components in multiple ways:
 
-### Method 1: Import from the package root (recommended for bundling efficiency)
+### Method 1: Import from the package root (simplest)
 
 ```jsx
 import { Button, TextInput } from '@tagaddod-design/react';
-import '@tagaddod-design/tokens/css/tokens.css';
-import '@tagaddod-design/react/styles/index.css';
+
+// No need to import CSS separately! Styles are automatically included
 ```
 
-### Method 2: Import individual components
+### Method 2: Import individual components (better tree-shaking)
 
 ```jsx
 import { Button } from '@tagaddod-design/react/components/Button';
 import { TextInput } from '@tagaddod-design/react/components/TextInput';
-import '@tagaddod-design/tokens/css/tokens.css';
-import '@tagaddod-design/react/styles/index.css';
+
+// CSS is automatically included with each component
 ```
 
 Method 2 is useful if your bundler supports tree-shaking or if you want to explicitly reference components by their path.
 
 ## Features
 
+- **Automatic Style Injection**: No need to import CSS separately
 - **Design Token Integration**: Components use CSS variables from `@tagaddod-design/tokens`
 - **Multi-brand Support**: Built-in support for Tagaddod and GreenPan brands
 - **RTL Support**: Fully bidirectional with Arabic/English language support
@@ -51,8 +52,6 @@ yarn add @tagaddod-design/react @tagaddod-design/tokens
 
 ```jsx
 import { Button } from '@tagaddod-design/react';
-import '@tagaddod-design/tokens/css/tokens.css'; // Base tokens
-import '@tagaddod-design/react/styles/index.css'; // Component styles
 
 function App() {
   return (
@@ -120,6 +119,7 @@ Each component:
 2. Handles directional styles with logical properties
 3. Supports multiple variants through prop-based class application
 4. Maintains accessibility with proper ARIA attributes
+5. **Automatically injects its own styles** when imported (no separate CSS imports needed)
 
 ## Browser Support
 
@@ -141,6 +141,8 @@ yarn test
 # Watch mode for development
 yarn watch
 ```
+
+See [BUILD.md](./BUILD.md) for detailed information about the build system.
 
 ## License
 
