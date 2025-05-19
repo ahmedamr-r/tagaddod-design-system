@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 
 // Check if ThemeProvider exists
@@ -7,7 +7,7 @@ try {
   ThemeProvider = require('../providers/ThemeProvider').ThemeProvider;
 } catch (e) {
   // If ThemeProvider is not available, create a simple wrapper
-  ThemeProvider = ({ children }) => <>{children}</>;
+  ThemeProvider = ({ children }: { children: ReactNode }) => <>{children}</>;
 }
 
 // Custom render function that wraps component in ThemeProvider
@@ -21,7 +21,7 @@ export function renderWithTheme(
   const { theme = 'tagaddod', direction = 'ltr', ...restOptions } = options || {};
   
   return render(ui, {
-    wrapper: ({ children }) => (
+    wrapper: ({ children }: { children: ReactNode }) => (
       <ThemeProvider defaultTheme={theme} defaultDirection={direction}>
         {children}
       </ThemeProvider>

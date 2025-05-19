@@ -25,6 +25,18 @@ export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
 
+  // Handle sort click, wrapped to handle event parameter
+  const handleSort = () => {
+    if (isSortable && onSort) {
+      onSort();
+    }
+  };
+
+  // Handle checkbox click to prevent propagation
+  const handleCheckboxClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent cell click when clicking checkbox
+  };
+
   // Helper to render sort icons
   const renderSortIcon = () => {
     if (!isSortable) return null;
@@ -52,15 +64,16 @@ export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
         isSortable && styles.sortable,
         className
       )}
-      onClick={isSortable ? onSort : undefined}
+      onClick={isSortable ? handleSort : undefined}
     >
       <div className={styles.headerCellContent}>
         {showCheckbox && (
           <div className={styles.headerCheckbox}>
             <Checkbox
               checked={isChecked}
-              onChange={(e) => onCheckboxChange?.(e.target.checked)}
-              onClick={(e) => e.stopPropagation()} // Prevent cell click when clicking checkbox
+              onCheckedChange={(checked) => onCheckboxChange?.(checked === true)}
+              // Use the typesafe event handler
+              onClick={handleCheckboxClick}
             />
           </div>
         )}

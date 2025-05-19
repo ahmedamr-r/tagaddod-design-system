@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import clsx from 'clsx';
 import {
   useReactTable,
@@ -12,6 +12,15 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 import { Tabs, TabsList, TabsTrigger } from '../Tabs';
+
+// Extend ColumnMeta to include custom properties
+declare module '@tanstack/react-table' {
+  interface ColumnMeta<TData extends object, TValue> {
+    headerClassName?: string;
+    cellClassName?: string;
+    width?: string;
+  }
+}
 import { FilterItem } from './FilterItem';
 import { TableHeader } from './TableHeader';
 import { TableHeaderCell } from './TableHeaderCell';
@@ -290,7 +299,7 @@ export const Table = <T extends object>({
                   key={header.id}
                   isSortable={header.column.getCanSort()}
                   sortDirection={header.column.getIsSorted() as any}
-                  onSort={header.column.getToggleSortingHandler()}
+                  onSort={() => header.column.getToggleSortingHandler()?.()}
                   className={header.column.columnDef.meta?.headerClassName}
                 >
                   {header.isPlaceholder ? null : (

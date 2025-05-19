@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-
+/**
+ * Build core packages: tokens and react
+ */
 const { execSync } = require('child_process');
 const path = require('path');
 
@@ -10,7 +12,7 @@ const projectRoot = path.resolve(__dirname, '..');
 // Build tokens first (since React depends on tokens)
 console.log('📦 Building tokens...');
 try {
-  execSync('yarn workspace @tagaddod/tokens build', { 
+  execSync('yarn workspace @tagaddod-design/tokens build', { 
     stdio: 'inherit',
     cwd: projectRoot
   });
@@ -23,7 +25,7 @@ try {
 // Build React
 console.log('⚛️ Building React components...');
 try {
-  execSync('yarn workspace @tagaddod/react build', { 
+  execSync('yarn workspace @tagaddod-design/react build', { 
     stdio: 'inherit',
     cwd: projectRoot
   });
