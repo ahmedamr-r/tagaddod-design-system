@@ -52,9 +52,33 @@ async function buildCSS() {
             return path.resolve(__dirname, '../../tokens/dist/greenpan/ar/vars.css');
           }
           
-          // Backward compatibility for old references
+          // Backward compatibility for old references with @tagaddod/tokens
           if (id === '@tagaddod/tokens/css' || id === '@tagaddod/tokens/css/tokens.css') {
             return path.resolve(__dirname, '../../tokens/dist/css/tokens.css');
+          }
+          if (id === '@tagaddod/tokens/tagaddod/vars.css') {
+            return path.resolve(__dirname, '../../tokens/dist/tagaddod/vars.css');
+          }
+          if (id === '@tagaddod/tokens/greenpan/vars.css') {
+            return path.resolve(__dirname, '../../tokens/dist/greenpan/vars.css');
+          }
+          if (id === '@tagaddod/tokens/locales/en/vars.css') {
+            return path.resolve(__dirname, '../../tokens/dist/locales/en/vars.css');
+          }
+          if (id === '@tagaddod/tokens/locales/ar/vars.css') {
+            return path.resolve(__dirname, '../../tokens/dist/locales/ar/vars.css');
+          }
+          if (id === '@tagaddod/tokens/tagaddod/en/vars.css') {
+            return path.resolve(__dirname, '../../tokens/dist/tagaddod/en/vars.css');
+          }
+          if (id === '@tagaddod/tokens/tagaddod/ar/vars.css') {
+            return path.resolve(__dirname, '../../tokens/dist/tagaddod/ar/vars.css');
+          }
+          if (id === '@tagaddod/tokens/greenpan/en/vars.css') {
+            return path.resolve(__dirname, '../../tokens/dist/greenpan/en/vars.css');
+          }
+          if (id === '@tagaddod/tokens/greenpan/ar/vars.css') {
+            return path.resolve(__dirname, '../../tokens/dist/greenpan/ar/vars.css');
           }
           
           return id;

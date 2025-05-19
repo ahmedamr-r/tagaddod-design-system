@@ -1,19 +1,19 @@
 /* Import design tokens */
-@import '@tagaddod/tokens/css/tokens.css';
+@import '@tagaddod-design/tokens/css/tokens.css';
 
 /* Import brand-specific tokens */
-@import '@tagaddod/tokens/tagaddod/vars.css';
-@import '@tagaddod/tokens/greenpan/vars.css';
+@import '@tagaddod-design/tokens/tagaddod/vars.css';
+@import '@tagaddod-design/tokens/greenpan/vars.css';
 
 /* NEW: Import locale-specific tokens */
-@import '@tagaddod/tokens/locales/en/vars.css';
-@import '@tagaddod/tokens/locales/ar/vars.css';
+@import '@tagaddod-design/tokens/locales/en/vars.css';
+@import '@tagaddod-design/tokens/locales/ar/vars.css';
 
 /* Optional: Import brand + locale combinations if needed */
-@import '@tagaddod/tokens/tagaddod/en/vars.css';
-@import '@tagaddod/tokens/tagaddod/ar/vars.css';
-@import '@tagaddod/tokens/greenpan/en/vars.css';
-@import '@tagaddod/tokens/greenpan/ar/vars.css';
+@import '@tagaddod-design/tokens/tagaddod/en/vars.css';
+@import '@tagaddod-design/tokens/tagaddod/ar/vars.css';
+@import '@tagaddod-design/tokens/greenpan/en/vars.css';
+@import '@tagaddod-design/tokens/greenpan/ar/vars.css';
 
 /* Import additional token utilities */
 @import './token-utilities.css';
