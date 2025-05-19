@@ -1,10 +1,12 @@
 {
-  "name": "@tagaddod/react",
-  "version": "0.0.1",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "name": "@tagaddod-design/react",
+  "version": "0.0.3",
+  "description": "Tagaddod Design System React Component Library",
+  "license": "MIT",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
-  "style": "dist/styles/index.css",
+  "style": "dist/react.css",
   "files": [
     "dist",
     "!dist/**/*.map"
@@ -12,22 +14,25 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
     },
+    "./styles.css": "./dist/react.css",
+    "./components.css": "./dist/react.css",
     "./styles/index.css": "./dist/styles/index.css",
-    "./styles.css": "./dist/styles/index.css"
+    "./all.css": "./dist/tagaddod-design-system.css"
   },
   "scripts": {
     "prebuild": "yarn clean",
-    "build": "vite build && tsc --project tsconfig.build.json && yarn build:css",
+    "build": "vite build && yarn build:types && yarn build:css",
+    "build:types": "node scripts/consolidated-types-utility.js",
+    "build:css": "node scripts/consolidated-css-utility.js build",
     "postbuild": "echo 'Build complete with integrated tokens'",
     "dev": "vite",
     "watch": "concurrently -n 'vite,css' -c 'yellow,green' 'vite build --watch' 'yarn watch:css'",
-    "watch:css": "node scripts/watch-css.js",
+    "watch:css": "node scripts/consolidated-css-utility.js watch",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
-    "build:css": "node scripts/build-css.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

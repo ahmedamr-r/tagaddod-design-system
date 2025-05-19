@@ -40,7 +40,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
             <h3 className={styles.title} style={lineHeightStyle}>
               {title}
               {badge !== undefined && badge !== null && (
-                <Badge tone="secondary" className={styles.titleBadge}>
+                <Badge tone="info" className={styles.titleBadge}>
                   {badge}
                 </Badge>
               )}

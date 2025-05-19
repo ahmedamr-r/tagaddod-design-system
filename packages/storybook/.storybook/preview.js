@@ -1,9 +1,9 @@
 import React from 'react';
-import { ThemeProvider } from '@tagaddod/react';
+import { ThemeProvider } from '@tagaddod-design/react';
 
 // Import styles using the full package paths
-import '@tagaddod/tokens/css/tokens.css';
-import '@tagaddod/react/styles/index.css';
+import '@tagaddod-design/tokens/css/tokens.css';
+import '@tagaddod-design/react/styles/index.css';
 
 // Create a wrapper component to handle global changes
 const ThemeWrapper = ({ children, theme, direction }) => {

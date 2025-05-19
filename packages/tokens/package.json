@@ -1,5 +1,5 @@
 {
-  "name": "@tagaddod/tokens",
+  "name": "@tagaddod-design/tokens",
   "version": "0.0.1",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -24,8 +24,7 @@
     "./locales/ar/vars.css": "./dist/locales/ar/vars.css"
   },
   "scripts": {
-    "build": "yarn clean && style-dictionary build && node sd.config.mjs",
-    "build:brands": "node sd.config.mjs",
+    "build": "yarn clean && node style-dictionary.unified.js",
     "watch": "chokidar 'src/**/*.json' -c 'yarn build'",
     "clean": "rm -rf dist"
   },

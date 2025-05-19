@@ -47,8 +47,8 @@ module.exports = {
     
     // Force optimization of dependencies that might cause issues
     config.optimizeDeps.include.push(
-      '@tagaddod/react',
-      '@tagaddod/tokens',
+      '@tagaddod-design/react',
+      '@tagaddod-design/tokens',
       '@storybook/react',
       '@storybook/react-vite',
       'react',
@@ -68,6 +68,8 @@ module.exports = {
     // Ensure proper resolution of modules
     config.resolve.alias = {
       ...config.resolve.alias,
+      '@tagaddod-design/react': path.resolve(__dirname, '../../react/src'),
+      '@tagaddod-design/tokens': path.resolve(__dirname, '../../tokens/dist'),
       '@tagaddod/react': path.resolve(__dirname, '../../react/src'),
       '@tagaddod/tokens': path.resolve(__dirname, '../../tokens/dist'),
     };
