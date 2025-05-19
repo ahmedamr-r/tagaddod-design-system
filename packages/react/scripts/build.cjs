@@ -177,56 +177,141 @@ function createMainBundle() {
       .filter(dirent => !COMPONENTS_TO_EXCLUDE.includes(dirent.name))
       .map(dirent => dirent.name);
     
-    // Create the ES Module entry point with individual component imports
-    let mainIndexJs = `// ES Module entry point - Explicit re-exports
-import { ThemeProvider, ThemeContext, useTheme, useThemeClasses } from './esm/providers/ThemeProvider.js';
-import { Avatar, avatarSizes, avatarTypes } from './esm/components/Avatar/Avatar.js';
-import { Badge, badgeSizes, badgeTones } from './esm/components/Badge/Badge.js';
-import { Button, buttonSizes, buttonTones, buttonVariants } from './esm/components/Button/Button.js';
-import { Checkbox } from './esm/components/Checkbox/Checkbox.js';
-import { Switch } from './esm/components/Switch/Switch.js';
-import { Drawer, drawerPositions, drawerSizes } from './esm/components/Drawer/Drawer.js';
-import { Listbox } from './esm/components/Listbox/Listbox.js';
-import { ListboxOption } from './esm/components/Listbox/ListboxOption.js';
-import { Modal } from './esm/components/Modal/Modal.js';
-import { Popover, PopoverArrow, PopoverClose, PopoverContent, PopoverRoot, PopoverTrigger } from './esm/components/Popover/Popover.js';
-import { Pagination } from './esm/components/Pagination/Pagination.js';
-import { usePagination } from './esm/components/Pagination/usePagination.js';
-import { RadioButtonItem, RadioGroup } from './esm/components/RadioButton/RadioButton.js';
-import { Table } from './esm/components/Table/Table.js';
-import { TableHeader } from './esm/components/Table/TableHeader.js';
-import { TableCell } from './esm/components/Table/TableCell.js';
-import { TableHeaderCell } from './esm/components/Table/TableHeaderCell.js';
-import { Tabs, TabsContent, TabsList, TabsTrigger, tabsVariants, tabsCounts, Root, List, Trigger, Content } from './esm/components/Tabs/Tabs.js';
-import { TextInput, textInputSizes } from './esm/components/TextInput/TextInput.js';
-import { AspectRatio } from './esm/components/AspectRatio/AspectRatio.js';
+    // Helper function to detect available exports for a component
+    const getComponentExports = (componentName) => {
+      try {
+        // Look for exports in the index.ts file of the component directory
+        const componentIndexPath = path.join(COMPONENTS_SRC_DIR, 'index.ts');
+        const indexContent = fs.readFileSync(componentIndexPath, 'utf8');
 
-// CSS import - essential for style injection
-import './styles/index.css';
+        // Extract exports related to this component
+        const exportLines = [];
 
-// Re-export everything
-export {
-  // Theme
-  ThemeProvider, ThemeContext, useTheme, useThemeClasses,
-  
-  // Components
-  Avatar, avatarSizes, avatarTypes,
-  Badge, badgeSizes, badgeTones,
-  Button, buttonSizes, buttonTones, buttonVariants,
-  Checkbox,
-  Switch,
-  Drawer, drawerPositions, drawerSizes,
-  Listbox, ListboxOption,
-  Modal,
-  Popover, PopoverArrow, PopoverClose, PopoverContent, PopoverRoot, PopoverTrigger,
-  Pagination, usePagination,
-  RadioButtonItem, RadioGroup,
-  Table, TableHeader, TableCell, TableHeaderCell,
-  Tabs, TabsContent, TabsList, TabsTrigger, tabsVariants, tabsCounts, Root, List, Trigger, Content,
-  TextInput, textInputSizes,
-  AspectRatio
-};
-`;
+        // Find component export
+        const componentExport = new RegExp(`export\\s+{\\s*${componentName}\\s*}`, 'g');
+        if (componentExport.test(indexContent)) {
+          exportLines.push(componentName);
+        }
+
+        // Check for standard patterns in component exports
+        // For example: avatarSizes, avatarTypes, buttonVariants, etc.
+        const sizeExport = new RegExp(`export\\s+{\\s*${componentName.toLowerCase()}Sizes\\s*}`, 'g');
+        if (sizeExport.test(indexContent)) {
+          exportLines.push(`${componentName.toLowerCase()}Sizes`);
+        }
+
+        const typeExport = new RegExp(`export\\s+{\\s*${componentName.toLowerCase()}Types\\s*}`, 'g');
+        if (typeExport.test(indexContent)) {
+          exportLines.push(`${componentName.toLowerCase()}Types`);
+        }
+
+        const toneExport = new RegExp(`export\\s+{\\s*${componentName.toLowerCase()}Tones\\s*}`, 'g');
+        if (toneExport.test(indexContent)) {
+          exportLines.push(`${componentName.toLowerCase()}Tones`);
+        }
+
+        const variantExport = new RegExp(`export\\s+{\\s*${componentName.toLowerCase()}Variants\\s*}`, 'g');
+        if (variantExport.test(indexContent)) {
+          exportLines.push(`${componentName.toLowerCase()}Variants`);
+        }
+
+        const positionExport = new RegExp(`export\\s+{\\s*${componentName.toLowerCase()}Positions\\s*}`, 'g');
+        if (positionExport.test(indexContent)) {
+          exportLines.push(`${componentName.toLowerCase()}Positions`);
+        }
+
+        // Match full export lines with multiple items, like: export { Popover, PopoverRoot, PopoverTrigger, ... }
+        const multiExportRegex = new RegExp(`export\\s*{\\s*${componentName}\\s*,([^}]+)}`, 'g');
+        const multiExportMatch = indexContent.match(multiExportRegex);
+        if (multiExportMatch) {
+          const subComponents = multiExportMatch[0]
+            .replace(/export\s*{\s*/, '')
+            .replace(/\s*}\s*/, '')
+            .split(',')
+            .map(item => item.trim())
+            .filter(item => item !== componentName && item !== ''); // Exclude the main component already added
+          
+          exportLines.push(...subComponents);
+        }
+
+        return exportLines;
+      } catch (error) {
+        console.warn(`${YELLOW}⚠️ Could not determine exports for ${componentName}. Using fallback approach.${RESET}`);
+
+        // Fallback for standard component exports based on naming patterns
+        switch (componentName) {
+          case 'Avatar':
+            return [componentName, 'avatarSizes', 'avatarTypes'];
+          case 'Badge':
+            return [componentName, 'badgeSizes', 'badgeTones'];
+          case 'Button':
+            return [componentName, 'buttonSizes', 'buttonTones', 'buttonVariants'];
+          case 'Drawer':
+            return [componentName, 'drawerPositions', 'drawerSizes'];
+          case 'Tabs':
+            return [componentName, 'TabsContent', 'TabsList', 'TabsTrigger', 'tabsVariants', 'tabsCounts', 'Root', 'List', 'Trigger', 'Content'];
+          case 'TextInput':
+            return [componentName, 'textInputSizes'];
+          case 'Popover':
+            return [componentName, 'PopoverArrow', 'PopoverClose', 'PopoverContent', 'PopoverRoot', 'PopoverTrigger'];
+          case 'Listbox':
+            return [componentName, 'ListboxOption'];
+          case 'Table':
+            return [componentName, 'TableHeader', 'TableCell', 'TableHeaderCell'];
+          case 'RadioButton':
+            return ['RadioButtonItem', 'RadioGroup'];
+          case 'Pagination':
+            return [componentName, 'usePagination'];
+          default:
+            return [componentName];
+        }
+      }
+    };
+
+    // Generate import statements
+    let imports = [
+      `// ES Module entry point - Explicit re-exports`,
+      `import { ThemeProvider, ThemeContext, useTheme, useThemeClasses } from './esm/providers/ThemeProvider.js';`
+    ];
+    
+    // Generate imports for each component
+    for (const componentName of componentDirs) {
+      const componentExports = getComponentExports(componentName);
+      const hasSubComponents = componentExports.length > 1;
+
+      if (hasSubComponents) {
+        // Component with additional exports (constants, sub-components)
+        const exportList = componentExports.join(', ');
+        imports.push(`import { ${exportList} } from './esm/components/${componentName}/${componentName}.js';`);
+      } else {
+        // Simple component with just the main export
+        imports.push(`import { ${componentName} } from './esm/components/${componentName}/${componentName}.js';`);
+      }
+    }
+
+    // Add CSS import
+    imports.push('', '// CSS import - essential for style injection', 'import \'./styles/index.css\';', '');
+
+    // Generate export statements
+    let exports = ['// Re-export everything', 'export {', '  // Theme', '  ThemeProvider, ThemeContext, useTheme, useThemeClasses,', '', '  // Components'];
+    
+    // Collect all exports
+    const allExports = [];
+    for (const componentName of componentDirs) {
+      allExports.push(...getComponentExports(componentName));
+    }
+
+    // Format exports, 5 items per line for readability
+    const ITEMS_PER_LINE = 5;
+    for (let i = 0; i < allExports.length; i += ITEMS_PER_LINE) {
+      const lineItems = allExports.slice(i, i + ITEMS_PER_LINE);
+      exports.push('  ' + lineItems.join(', ') + (i + ITEMS_PER_LINE < allExports.length ? ',' : ''));
+    }
+
+    exports.push('};');
+    
+    // Combine imports and exports
+    const mainIndexJs = [...imports, ...exports].join('\n');
     
     fs.writeFileSync(path.join(DIST_DIR, 'index.js'), mainIndexJs);
     
@@ -261,14 +346,95 @@ function createComponentEntryPoints() {
       .filter(dirent => !COMPONENTS_TO_EXCLUDE.includes(dirent.name))
       .map(dirent => dirent.name);
     
+    // Helper function to get component exports dynamically
+    const getComponentExportCode = (componentName) => {
+      // Check if the component has a specific export pattern based on the index.ts
+      const componentIndexPath = path.join(COMPONENTS_SRC_DIR, 'index.ts');
+      
+      try {
+        const indexContent = fs.readFileSync(componentIndexPath, 'utf8');
+        
+        // Match exports for this component specifically (like sizes, tones, variants)
+        const exportLines = [];
+        
+        // Check for size exports
+        if (indexContent.includes(`export { ${componentName.toLowerCase()}Sizes }`)) {
+          exportLines.push(`export const ${componentName.toLowerCase()}Sizes = ComponentModule.${componentName.toLowerCase()}Sizes;`);
+        }
+        
+        // Check for type exports
+        if (indexContent.includes(`export { ${componentName.toLowerCase()}Types }`)) {
+          exportLines.push(`export const ${componentName.toLowerCase()}Types = ComponentModule.${componentName.toLowerCase()}Types;`);
+        }
+
+        // Check for tone exports
+        if (indexContent.includes(`export { ${componentName.toLowerCase()}Tones }`)) {
+          exportLines.push(`export const ${componentName.toLowerCase()}Tones = ComponentModule.${componentName.toLowerCase()}Tones;`);
+        }
+
+        // Check for variant exports
+        if (indexContent.includes(`export { ${componentName.toLowerCase()}Variants }`)) {
+          exportLines.push(`export const ${componentName.toLowerCase()}Variants = ComponentModule.${componentName.toLowerCase()}Variants;`);
+        }
+
+        // Check for position exports
+        if (indexContent.includes(`export { ${componentName.toLowerCase()}Positions }`)) {
+          exportLines.push(`export const ${componentName.toLowerCase()}Positions = ComponentModule.${componentName.toLowerCase()}Positions;`);
+        }
+
+        // If no specific exports found, fall back to the standard patterns
+        if (exportLines.length === 0) {
+          // Fallback based on component name
+          switch (componentName) {
+            case 'Avatar':
+              return 'export const avatarSizes = ComponentModule.avatarSizes;\nexport const avatarTypes = ComponentModule.avatarTypes;';
+            case 'Badge':
+              return 'export const badgeSizes = ComponentModule.badgeSizes;\nexport const badgeTones = ComponentModule.badgeTones;';
+            case 'Button':
+              return 'export const buttonSizes = ComponentModule.buttonSizes;\nexport const buttonTones = ComponentModule.buttonTones;\nexport const buttonVariants = ComponentModule.buttonVariants;';
+            case 'Drawer':
+              return 'export const drawerSizes = ComponentModule.drawerSizes;\nexport const drawerPositions = ComponentModule.drawerPositions;';
+            case 'TextInput':
+              return 'export const textInputSizes = ComponentModule.textInputSizes;';
+            case 'Tabs':
+              return 'export const TabsContent = ComponentModule.TabsContent;\nexport const TabsList = ComponentModule.TabsList;\nexport const TabsTrigger = ComponentModule.TabsTrigger;\nexport const tabsVariants = ComponentModule.tabsVariants;\nexport const tabsCounts = ComponentModule.tabsCounts;\nexport const Root = ComponentModule.Root;\nexport const List = ComponentModule.List;\nexport const Trigger = ComponentModule.Trigger;\nexport const Content = ComponentModule.Content;';
+            default:
+              return '';
+          }
+        }
+        
+        return exportLines.join('\n');
+      } catch (error) {
+        // Fallback to standard patterns if anything goes wrong
+        switch (componentName) {
+          case 'Avatar':
+            return 'export const avatarSizes = ComponentModule.avatarSizes;\nexport const avatarTypes = ComponentModule.avatarTypes;';
+          case 'Badge':
+            return 'export const badgeSizes = ComponentModule.badgeSizes;\nexport const badgeTones = ComponentModule.badgeTones;';
+          case 'Button':
+            return 'export const buttonSizes = ComponentModule.buttonSizes;\nexport const buttonTones = ComponentModule.buttonTones;\nexport const buttonVariants = ComponentModule.buttonVariants;';
+          case 'Drawer':
+            return 'export const drawerSizes = ComponentModule.drawerSizes;\nexport const drawerPositions = ComponentModule.drawerPositions;';
+          case 'TextInput':
+            return 'export const textInputSizes = ComponentModule.textInputSizes;';
+          case 'Tabs':
+            return 'export const TabsContent = ComponentModule.TabsContent;\nexport const TabsList = ComponentModule.TabsList;\nexport const TabsTrigger = ComponentModule.TabsTrigger;\nexport const tabsVariants = ComponentModule.tabsVariants;\nexport const tabsCounts = ComponentModule.tabsCounts;\nexport const Root = ComponentModule.Root;\nexport const List = ComponentModule.List;\nexport const Trigger = ComponentModule.Trigger;\nexport const Content = ComponentModule.Content;';
+          default:
+            return '';
+        }
+      }
+    };
+    
     for (const componentName of componentDirs) {
       // Create the component directory in dist/components/
       const componentDistDir = path.join(DIST_DIR, 'components', componentName);
       fs.mkdirSync(componentDistDir, { recursive: true });
       
       // Create index.js that re-exports from ESM using explicit ES module syntax
-      // This creates a more reliable explicit import for each component
       const componentFile = `${componentName}.js`;
+      
+      // Get component-specific exports dynamically
+      const componentExportCode = getComponentExportCode(componentName);
       
       const indexJs = `// ES Module component entry point - Explicit re-exports
 // Import CSS for styling - will be injected at runtime
@@ -276,11 +442,7 @@ import '../../styles/index.css';
 
 import * as ComponentModule from '../../esm/components/${componentName}/${componentFile}';
 export const ${componentName} = ComponentModule.${componentName};
-${componentName === 'Avatar' ? 'export const avatarSizes = ComponentModule.avatarSizes;\nexport const avatarTypes = ComponentModule.avatarTypes;' : ''}
-${componentName === 'Badge' ? 'export const badgeSizes = ComponentModule.badgeSizes;\nexport const badgeTones = ComponentModule.badgeTones;' : ''}
-${componentName === 'Button' ? 'export const buttonSizes = ComponentModule.buttonSizes;\nexport const buttonTones = ComponentModule.buttonTones;\nexport const buttonVariants = ComponentModule.buttonVariants;' : ''}
-${componentName === 'Drawer' ? 'export const drawerSizes = ComponentModule.drawerSizes;\nexport const drawerPositions = ComponentModule.drawerPositions;' : ''}
-`;
+${componentExportCode}`;
       
       fs.writeFileSync(path.join(componentDistDir, 'index.js'), indexJs);
       

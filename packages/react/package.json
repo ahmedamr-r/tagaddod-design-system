@@ -96,6 +96,7 @@
     "prebuild": "yarn clean",
     "build": "node scripts/build.cjs",
     "build:legacy": "node scripts/build-with-esm.js",
+    "build:css": "node scripts/build-css-standalone.mjs",
     "dev": "vite",
     "watch": "concurrently -n 'vite,css' -c 'yellow,green' 'vite build --watch' 'node scripts/watch-css.js'",
     "clean": "rm -rf dist",
