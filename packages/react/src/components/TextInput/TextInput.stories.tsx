@@ -8,8 +8,11 @@ const meta = {
   component: TextInput,
   parameters: {
     layout: 'centered',
+    docs: {
+      page: () => import('./TextInput.mdx'),
+    },
   },
-  tags: ['autodocs'],
+  tags: [],
   argTypes: {
     size: {
       control: 'select',

@@ -8,8 +8,11 @@ const meta: Meta<typeof Drawer> = {
   component: Drawer,
   parameters: {
     layout: 'centered',
+    docs: {
+      page: () => import('./Drawer.mdx'),
+    },
   },
-  tags: ['autodocs'],
+  tags: [],
   argTypes: {
     title: {
       control: 'text',

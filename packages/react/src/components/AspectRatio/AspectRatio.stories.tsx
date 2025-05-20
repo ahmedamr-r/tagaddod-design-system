@@ -7,8 +7,11 @@ const meta: Meta<typeof AspectRatio> = {
   component: AspectRatio,
   parameters: {
     layout: 'centered',
+    docs: {
+      page: () => import('./AspectRatio.mdx'),
+    },
   },
-  tags: ['autodocs'],
+  tags: [],
   argTypes: {
     ratio: {
       control: { type: 'number', step: 0.1 },

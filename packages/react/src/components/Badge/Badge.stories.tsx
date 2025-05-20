@@ -6,8 +6,11 @@ const meta: Meta<typeof Badge> = {
   component: Badge,
   parameters: {
     layout: 'centered',
+    docs: {
+      page: () => import('./Badge.mdx'),
+    },
   },
-  tags: ['autodocs'],
+  tags: [],
   args: {
     children: 'Label',
     tone: 'default',

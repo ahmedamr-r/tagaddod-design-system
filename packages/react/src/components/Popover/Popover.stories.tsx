@@ -9,7 +9,7 @@ const meta: Meta<PopoverProps> = {
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
+  tags: [],
   argTypes: {
     type: {
       control: 'radio',

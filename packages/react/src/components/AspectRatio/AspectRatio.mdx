@@ -1,0 +1,223 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as AspectRatioStories from './AspectRatio.stories';
+import { AspectRatio } from './AspectRatio';
+
+<Meta of={AspectRatioStories} />
+
+# AspectRatio Component
+
+The AspectRatio component maintains a consistent width-to-height ratio for its children, regardless of the container's dimensions.
+
+## Overview
+
+The AspectRatio component is useful for maintaining consistent proportions for content like images, videos, maps, or embedded content. It ensures that content maintains its shape as its container resizes.
+
+## Import
+
+```jsx
+import { AspectRatio } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={AspectRatio} />
+
+## Basic Usage
+
+<Canvas of={AspectRatioStories.Default} />
+
+```jsx
+<AspectRatio ratio={1}>
+  <div style={{
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'var(--t-color-fill-brand)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'var(--t-color-text-on-fill)',
+  }}>
+    1:1
+  </div>
+</AspectRatio>
+```
+
+## Common Ratios
+
+### 1:1 (Square)
+
+<Canvas of={AspectRatioStories.Default} />
+
+```jsx
+<AspectRatio ratio={1}>
+  {/* Content */}
+</AspectRatio>
+```
+
+### 16:9 (Widescreen)
+
+<Canvas of={AspectRatioStories.Widescreen} />
+
+```jsx
+<AspectRatio ratio={16/9}>
+  {/* Content */}
+</AspectRatio>
+```
+
+### 4:3 (Standard)
+
+<Canvas of={AspectRatioStories.WithImage} />
+
+```jsx
+<AspectRatio ratio={4/3}>
+  {/* Content */}
+</AspectRatio>
+```
+
+### 2:3 (Portrait)
+
+<Canvas of={AspectRatioStories.Portrait} />
+
+```jsx
+<AspectRatio ratio={2/3}>
+  {/* Content */}
+</AspectRatio>
+```
+
+## Use Cases
+
+### Images with Consistent Ratios
+
+<Canvas of={AspectRatioStories.WithImage} />
+
+```jsx
+<AspectRatio ratio={4/3}>
+  <img 
+    src="https://placekitten.com/800/600" 
+    alt="A kitten" 
+    style={{ 
+      width: '100%', 
+      height: '100%', 
+      objectFit: 'cover' 
+    }} 
+  />
+</AspectRatio>
+```
+
+### Cards with Media
+
+<Canvas of={AspectRatioStories.CardExample} />
+
+```jsx
+<div style={{
+  maxWidth: '400px',
+  border: '1px solid var(--t-color-border-primary)',
+  borderRadius: 'var(--t-border-radius-300)',
+  overflow: 'hidden'
+}}>
+  <AspectRatio ratio={16/9}>
+    <img 
+      src="https://placekitten.com/1600/900" 
+      alt="A cute kitten" 
+      style={{ 
+        width: '100%', 
+        height: '100%', 
+        objectFit: 'cover' 
+      }} 
+    />
+  </AspectRatio>
+  <div style={{ padding: 'var(--t-space-300)' }}>
+    <h3>Card with AspectRatio</h3>
+    <p>This card uses the AspectRatio component to maintain a consistent 16:9 ratio for the image.</p>
+  </div>
+</div>
+```
+
+### Videos and Embeds
+
+```jsx
+<AspectRatio ratio={16/9}>
+  <iframe 
+    src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+    title="Video"
+    allowFullScreen
+    style={{ 
+      width: '100%', 
+      height: '100%', 
+      border: 'none' 
+    }}
+  />
+</AspectRatio>
+```
+
+### Maps
+
+```jsx
+<AspectRatio ratio={4/3}>
+  <iframe 
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6998.575412963273!2d31.233882!3d30.044409!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1458409d7064e783%3A0x5eeb83030d45206!2sCairo%2C%20Egypt!5e0!3m2!1sen!2sus!4v1652813095591!5m2!1sen!2sus" 
+    title="Map"
+    style={{ 
+      width: '100%', 
+      height: '100%', 
+      border: 'none' 
+    }}
+  />
+</AspectRatio>
+```
+
+## Customization
+
+The AspectRatio component accepts standard HTML div attributes such as `className` and `style` for customization.
+
+```jsx
+<AspectRatio 
+  ratio={16/9}
+  className="custom-container"
+  style={{ 
+    maxWidth: '600px',
+    boxShadow: 'var(--t-shadow-200)',
+    borderRadius: 'var(--t-border-radius-200)'
+  }}
+>
+  {/* Content */}
+</AspectRatio>
+```
+
+## Accessibility
+
+- The AspectRatio component is a presentational wrapper that doesn't affect the accessibility of its children
+- Ensure that content placed inside AspectRatio (especially images) has appropriate alt text and ARIA attributes
+- For iframe content, always provide a descriptive title attribute
+
+## Implementation Details
+
+### CSS Variables
+
+The AspectRatio component uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-border-radius-200` | Border radius for the container |
+| `--t-duration-base` | Duration for transitions |
+| `--t-easing-in-out` | Easing function for transitions |
+
+### Browser Compatibility
+
+The AspectRatio component has been designed with browser compatibility in mind:
+
+1. Modern browsers: Uses the CSS `aspect-ratio` property for simple, efficient aspect ratio control
+2. Legacy browsers: Falls back to the "padding-top hack" technique where the modern property isn't supported
+   
+The fallback is applied automatically through feature detection, providing consistent behavior across all supported browsers.
+
+### Technical Implementation
+
+The AspectRatio component:
+
+1. Checks for `aspect-ratio` CSS support at runtime
+2. For modern browsers, applies the `aspect-ratio` CSS property directly
+3. For legacy browsers, calculates a percentage-based padding-top value based on the ratio (e.g., a 16:9 ratio becomes padding-top: 56.25%)
+4. Ensures children are positioned correctly within the ratio container
+
+This dual approach ensures the most efficient implementation is used when available, while maintaining support for older browsers.

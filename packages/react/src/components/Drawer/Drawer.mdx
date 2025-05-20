@@ -1,0 +1,462 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as DrawerStories from './Drawer.stories';
+import { Drawer } from './Drawer';
+
+<Meta of={DrawerStories} />
+
+# Drawer Component
+
+The Drawer component is a side panel that slides in from the edge of the screen, providing additional content or actions without navigating away from the current page.
+
+## Overview
+
+Drawers are used to display supplementary content, forms, or detailed information while keeping the main context visible. They can appear from the right or left side of the screen and come in different sizes.
+
+## Import
+
+```jsx
+import { Drawer } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Drawer} />
+
+## Basic Usage
+
+<Canvas of={DrawerStories.Default} />
+
+```jsx
+import { useState } from 'react';
+import { Drawer, Button } from '@tagaddod/react';
+
+function MyComponent() {
+  const [open, setOpen] = useState(false);
+  
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>
+        Open Drawer
+      </Button>
+      
+      <Drawer
+        open={open}
+        onOpenChange={setOpen}
+        title="Drawer Title"
+      >
+        <div style={{ padding: '16px 0' }}>
+          <p>This is a default drawer content.</p>
+          <p>You can place any content here.</p>
+        </div>
+      </Drawer>
+    </>
+  );
+}
+```
+
+## Sizes
+
+The Drawer component comes in three sizes:
+
+### Medium (Default)
+
+<Canvas of={DrawerStories.Default} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Medium Drawer"
+  size="medium"
+>
+  {/* Content */}
+</Drawer>
+```
+
+### Small
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Small Drawer"
+  size="small"
+>
+  {/* Content */}
+</Drawer>
+```
+
+### Large
+
+<Canvas of={DrawerStories.LargeDrawer} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Large Drawer"
+  size="large"
+>
+  {/* Content */}
+</Drawer>
+```
+
+## Positions
+
+The Drawer can appear from either side of the screen:
+
+### Right (Default)
+
+<Canvas of={DrawerStories.Default} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Right Drawer"
+  position="right"
+>
+  {/* Content */}
+</Drawer>
+```
+
+### Left
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Left Drawer"
+  position="left"
+>
+  {/* Content */}
+</Drawer>
+```
+
+## Header Options
+
+### With Back Button
+
+<Canvas of={DrawerStories.WithBackButton} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Step 1 of 3"
+  showBackButton={true}
+  onBackClick={handleBack}
+>
+  {/* Content */}
+</Drawer>
+```
+
+### With Header Components
+
+<Canvas of={DrawerStories.WithHeaderComponents} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Drawer with Header Components"
+  headerPrefix={<span className="badge">Badge</span>}
+  headerSuffix={<Button variant="plain" size="micro">Action</Button>}
+>
+  {/* Content */}
+</Drawer>
+```
+
+### Without Title
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  showTitle={false}
+>
+  {/* Content */}
+</Drawer>
+```
+
+### Without Close Button
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Without Close Button"
+  showClose={false}
+>
+  {/* Content */}
+</Drawer>
+```
+
+## Footer
+
+<Canvas of={DrawerStories.WithFooter} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Drawer with Footer"
+  showFooter={true}
+  primaryAction={{
+    label: 'Save',
+    onClick: () => {
+      // Save action
+      setOpen(false);
+    },
+    variant: 'primary',
+  }}
+  secondaryAction={{
+    label: 'Cancel',
+    onClick: () => setOpen(false),
+    variant: 'tertiary',
+  }}
+  footerContent={<span>Last edited: Today</span>}
+>
+  {/* Content */}
+</Drawer>
+```
+
+## Visual Customization
+
+### Custom Overlay
+
+<Canvas of={DrawerStories.CustomOverlay} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Custom Overlay Drawer"
+  overlayOpacity={0.9}
+  blurBackground={true}
+>
+  {/* Content */}
+</Drawer>
+```
+
+### Surface Background
+
+<Canvas of={DrawerStories.SurfaceBackground} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Surface Background Drawer"
+  useSurfaceBackground={true}
+>
+  {/* Content */}
+</Drawer>
+```
+
+### Full Height
+
+<Canvas of={DrawerStories.FullHeightDrawer} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Full Height Drawer"
+  fullHeight={true}
+>
+  {/* Content */}
+</Drawer>
+```
+
+## Internationalization
+
+The Drawer component properly handles Right-to-Left (RTL) languages automatically by:
+
+1. Switching the position (right becomes left and vice versa)
+2. Flipping the direction of the back button icon
+3. Applying appropriate line height for Arabic text
+4. Ensuring correct alignment of text and buttons
+
+<Canvas of={DrawerStories.RTLDrawer} />
+
+```jsx
+<div dir="rtl">
+  <Drawer
+    open={open}
+    onOpenChange={setOpen}
+    title="عنوان الدرج"
+    showBackButton={true}
+    showFooter={true}
+    primaryAction={{
+      label: 'حفظ',
+      onClick: () => setOpen(false),
+    }}
+    secondaryAction={{
+      label: 'إلغاء',
+      onClick: () => setOpen(false),
+    }}
+  >
+    <div style={{ textAlign: 'right' }}>
+      <p>هذا محتوى الدرج باللغة العربية.</p>
+    </div>
+  </Drawer>
+</div>
+```
+
+## Use Cases
+
+### Form Entry
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Add New User"
+  showFooter={true}
+  primaryAction={{
+    label: 'Save',
+    onClick: handleSave,
+    disabled: !isFormValid,
+  }}
+  secondaryAction={{
+    label: 'Cancel',
+    onClick: () => setOpen(false),
+  }}
+>
+  <form onSubmit={handleSubmit}>
+    {/* Form fields */}
+  </form>
+</Drawer>
+```
+
+### Object Details
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title={`Order #${order.id}`}
+  showFooter={true}
+  primaryAction={{
+    label: 'Process Order',
+    onClick: handleProcessOrder,
+  }}
+  secondaryAction={{
+    label: 'Close',
+    onClick: () => setOpen(false),
+  }}
+>
+  <div>
+    {/* Order details */}
+  </div>
+</Drawer>
+```
+
+### Multi-step Flows
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title={`Step ${currentStep} of ${totalSteps}`}
+  showBackButton={currentStep > 1}
+  onBackClick={() => setCurrentStep(currentStep - 1)}
+  showFooter={true}
+  primaryAction={{
+    label: currentStep === totalSteps ? 'Finish' : 'Next',
+    onClick: handleNextStep,
+  }}
+  secondaryAction={{
+    label: 'Cancel',
+    onClick: () => setOpen(false),
+  }}
+>
+  <div>
+    {/* Step content */}
+  </div>
+</Drawer>
+```
+
+### Settings Panel
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Settings"
+  size="small"
+  position="right"
+>
+  <div>
+    {/* Settings options */}
+  </div>
+</Drawer>
+```
+
+## Accessibility
+
+The Drawer component follows accessibility best practices:
+
+- Uses a modal dialog pattern for proper focus management
+- Traps focus within the drawer when open
+- Closes on ESC key press
+- Uses proper headings for drawer title
+- Provides sufficient color contrast
+- Handles keyboard navigation properly
+- Maintains a logical tab order
+- Properly labeled buttons (back, close)
+- Uses `aria-label` for buttons without visible text
+- Prevents background scrolling when drawer is open
+
+## Implementation Details
+
+### CSS Variables
+
+The Drawer component uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-space-*` | Padding and spacing |
+| `--t-color-surface-*` | Background colors |
+| `--t-color-fill-*` | Button and background colors |
+| `--t-color-border-*` | Border colors |
+| `--t-color-text-*` | Text colors |
+| `--t-color-icon-*` | Icon colors |
+| `--t-font-size-*` | Font sizes |
+| `--t-font-weight-*` | Font weights |
+| `--t-border-radius-*` | Border radius values |
+| `--t-shadow-200` | Shadow for the drawer |
+| `--t-z-index-overlay` | Z-index for drawer and overlay |
+| `--t-duration-base` | Animation duration |
+| `--t-easing-in-out` | Animation timing function |
+| `--t-line-height-arabic` | Line height for Arabic text |
+| `--t-line-height-english` | Line height for English text |
+
+### Architecture
+
+The component is built on Vaul's Drawer component which provides:
+
+1. Animation and transitions for smooth entrance/exit
+2. Focus management for accessibility
+3. Supporting primitives for overlay and content
+
+The Tagaddod implementation extends this with:
+
+1. Design system integration with tokens
+2. Multiple sizes and positions
+3. Header and footer configurations
+4. RTL language support
+5. Responsive behavior for mobile devices
+
+### Browser Support
+
+The Drawer component is compatible with all modern browsers and includes RTL language support.
+
+### Mobile Behavior
+
+On smaller screens (below 640px):
+- The drawer takes the full width of the screen
+- It slides up from the bottom instead of from the side
+- It has a maximum height of 80% of the viewport
+- It uses rounded corners at the top

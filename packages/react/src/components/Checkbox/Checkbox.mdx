@@ -1,0 +1,338 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as CheckboxStories from './Checkbox.stories';
+import { Checkbox } from './Checkbox';
+
+<Meta of={CheckboxStories} />
+
+# Checkbox Component
+
+The Checkbox component allows users to select one or multiple items from a set or toggle a single option on or off.
+
+## Overview
+
+Checkboxes are form controls that let users make binary choices (checked or unchecked) and can also represent an indeterminate state. They're commonly used in forms, settings, and lists where multiple selections are allowed.
+
+## Import
+
+```jsx
+import { Checkbox } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Checkbox} />
+
+## Basic Usage
+
+<Canvas of={CheckboxStories.Default} />
+
+```jsx
+<Checkbox label="Label" />
+```
+
+## States
+
+### Checked
+
+<Canvas of={CheckboxStories.Checked} />
+
+```jsx
+<Checkbox label="Label" checked={true} />
+```
+
+### Indeterminate
+
+The indeterminate state is useful for representing partially checked states, often used in hierarchical selections.
+
+<Canvas of={CheckboxStories.Indeterminate} />
+
+```jsx
+<Checkbox label="Label" checked="indeterminate" />
+```
+
+### Disabled
+
+<Canvas of={CheckboxStories.Disabled} />
+
+```jsx
+<Checkbox label="Label" disabled={true} />
+```
+
+### Disabled and Checked
+
+<Canvas of={CheckboxStories.DisabledChecked} />
+
+```jsx
+<Checkbox 
+  label="Label" 
+  disabled={true} 
+  checked={true} 
+/>
+```
+
+## Validation and Information
+
+### With Help Text
+
+Add supplementary information below the checkbox with the `helpText` prop.
+
+<Canvas of={CheckboxStories.WithHelpText} />
+
+```jsx
+<Checkbox 
+  label="Label" 
+  helpText="Help text" 
+/>
+```
+
+### With Error
+
+Display error messages when validation fails.
+
+<Canvas of={CheckboxStories.WithError} />
+
+```jsx
+<Checkbox 
+  label="Label" 
+  error="Error message" 
+/>
+```
+
+### Required
+
+Required checkboxes display a red asterisk (*) next to the label.
+
+<Canvas of={CheckboxStories.Required} />
+
+```jsx
+<Checkbox 
+  label="Label" 
+  required={true} 
+/>
+```
+
+## Label Variations
+
+### Default Label
+
+Labels describe the purpose of the checkbox.
+
+<Canvas of={CheckboxStories.Default} />
+
+### No Label
+
+Checkboxes can be displayed without a label.
+
+<Canvas of={CheckboxStories.WithoutLabel} />
+
+```jsx
+<Checkbox />
+```
+
+### Hidden Label
+
+For visual layout purposes, you may want to hide the label visually while keeping it accessible to screen readers.
+
+<Canvas of={CheckboxStories.HiddenLabel} />
+
+```jsx
+<Checkbox 
+  label="Hidden Label" 
+  hideLabel={true} 
+/>
+```
+
+## Internationalization
+
+The Checkbox component properly handles Right-to-Left (RTL) languages automatically by:
+
+1. Adjusting the alignment and spacing for RTL text flow
+2. Applying appropriate line height for Arabic text
+3. Correctly positioning the help text and error messages
+
+<Canvas of={CheckboxStories.RTL} />
+
+```jsx
+<div dir="rtl">
+  <Checkbox 
+    label="تسمية" 
+    helpText="نص المساعدة" 
+  />
+</div>
+```
+
+### RTL with Error
+
+<Canvas of={CheckboxStories.RTLError} />
+
+```jsx
+<div dir="rtl">
+  <Checkbox 
+    label="تسمية" 
+    error="رسالة خطأ" 
+  />
+</div>
+```
+
+## Controlled Usage
+
+You can control the checkbox state and handle changes:
+
+```jsx
+import { useState } from 'react';
+
+function MyForm() {
+  const [isChecked, setIsChecked] = useState(false);
+  
+  return (
+    <Checkbox 
+      label="I agree to the terms" 
+      checked={isChecked}
+      onCheckedChange={setIsChecked}
+    />
+  );
+}
+```
+
+## Form Integration
+
+Checkbox is built on Radix UI's Checkbox component, making it compatible with forms:
+
+```jsx
+<form onSubmit={handleSubmit}>
+  <Checkbox 
+    name="terms" 
+    required={true} 
+    label="I agree to the terms and conditions"
+  />
+  <button type="submit">Submit</button>
+</form>
+```
+
+## Accessibility
+
+- Each checkbox has a unique ID that connects it to its label
+- Required checkboxes use both the `required` attribute and visual indication
+- Error states are clearly communicated visually and to assistive technologies
+- Focus states are clearly visible for keyboard navigation
+- Supports keyboard navigation (space to toggle)
+- The `hideLabel` prop maintains accessibility even when labels are visually hidden
+- Help text and error messages are properly associated with the checkbox
+
+## Common Use Cases
+
+### Terms Acceptance
+
+```jsx
+<Checkbox 
+  label="I accept the Terms of Service and Privacy Policy" 
+  required={true} 
+/>
+```
+
+### Preference Toggles
+
+```jsx
+<div>
+  <Checkbox label="Email notifications" />
+  <Checkbox label="SMS notifications" />
+  <Checkbox label="Push notifications" />
+</div>
+```
+
+### Multi-select Lists
+
+```jsx
+<div>
+  <Checkbox label="Apple" />
+  <Checkbox label="Orange" />
+  <Checkbox label="Banana" />
+  <Checkbox label="Strawberry" />
+</div>
+```
+
+### Tristate for Hierarchical Selection
+
+```jsx
+const [parentChecked, setParentChecked] = useState('indeterminate');
+const [child1Checked, setChild1Checked] = useState(true);
+const [child2Checked, setChild2Checked] = useState(false);
+
+// Update parent state based on children
+useEffect(() => {
+  if (child1Checked && child2Checked) {
+    setParentChecked(true);
+  } else if (!child1Checked && !child2Checked) {
+    setParentChecked(false);
+  } else {
+    setParentChecked('indeterminate');
+  }
+}, [child1Checked, child2Checked]);
+
+// Update children based on parent
+const handleParentChange = (newState) => {
+  setParentChecked(newState);
+  if (newState !== 'indeterminate') {
+    setChild1Checked(newState);
+    setChild2Checked(newState);
+  }
+};
+
+return (
+  <div>
+    <Checkbox 
+      label="Select All" 
+      checked={parentChecked}
+      onCheckedChange={handleParentChange}
+    />
+    <div style={{ marginLeft: '24px' }}>
+      <Checkbox 
+        label="Option 1" 
+        checked={child1Checked}
+        onCheckedChange={setChild1Checked}
+      />
+      <Checkbox 
+        label="Option 2" 
+        checked={child2Checked}
+        onCheckedChange={setChild2Checked}
+      />
+    </div>
+  </div>
+);
+```
+
+## Implementation Details
+
+### CSS Variables
+
+The Checkbox uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-size-*` | Checkbox dimensions |
+| `--t-space-*` | Padding and spacing |
+| `--t-typography-*` | Typography tokens |
+| `--t-color-fill-*` | Background colors |
+| `--t-color-text-*` | Text colors |
+| `--t-color-border-*` | Border colors |
+| `--t-color-surface-*` | Background colors |
+| `--t-color-icon-*` | Icon colors |
+| `--t-border-radius-*` | Border radius |
+| `--t-border-width-*` | Border width |
+| `--t-duration-*` | Animation duration |
+| `--t-easing-*` | Animation timing |
+| `--t-line-height-*` | Line height for different languages |
+
+### Architecture
+
+The component is built on Radix UI's Checkbox component, which provides accessibility and state management. The custom implementation adds:
+
+1. Label, help text, and error message handling
+2. Visual styling through CSS modules
+3. RTL support with appropriate text and layout adjustments
+4. Indeterminate state visualization
+5. Required field indication
+
+### Browser Support
+
+The Checkbox component is compatible with all modern browsers and includes RTL language support.

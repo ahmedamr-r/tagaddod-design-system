@@ -1,0 +1,714 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as TableStories from './Table.stories';
+import { Table } from './Table';
+
+<Meta of={TableStories} />
+
+# Table Component
+
+The Table component is a powerful, feature-rich data display component built on TanStack Table, offering extensive customization options including sorting, filtering, pagination, and tabbed interfaces.
+
+## Overview
+
+The Tagaddod Table component provides an intuitive way to display structured data with advanced features such as:
+
+- Column sorting
+- Text search and filtering
+- Pagination
+- Tabbed interfaces
+- Customizable row styling
+- Export functionality
+- Error, loading, and empty states
+- RTL language support
+
+This component is ideal for data-heavy applications where users need to view, sort, search, and interact with structured information.
+
+## Import
+
+```jsx
+import { Table } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Table} />
+
+## Basic Usage
+
+<Canvas of={TableStories.Default} />
+
+```jsx
+import { Table } from '@tagaddod/react';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { Button } from '@tagaddod/react';
+
+// Define column structure
+const columns = [
+  {
+    accessorKey: 'id',
+    header: 'ID',
+    size: 80,
+  },
+  {
+    accessorKey: 'name',
+    header: 'Item',
+    size: 250,
+  },
+  {
+    accessorKey: 'stockCollectors',
+    header: 'Dispatched to collectors',
+    size: 150,
+  },
+  {
+    accessorKey: 'stockWarehouse',
+    header: 'Available at warehouse',
+    size: 150,
+  },
+  {
+    id: 'actions',
+    header: '',
+    cell: () => (
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <Button
+          variant="plain"
+          size="micro"
+          tone="neutral"
+          prefixIcon={<IconEdit size={16} />}
+          onClick={(e) => {
+            e.stopPropagation();
+            alert('Edit clicked');
+          }}
+        />
+        <Button
+          variant="plain"
+          size="micro"
+          tone="critical"
+          prefixIcon={<IconTrash size={16} />}
+          onClick={(e) => {
+            e.stopPropagation();
+            alert('Delete clicked');
+          }}
+        />
+      </div>
+    ),
+  },
+];
+
+// Sample data
+const data = [
+  {
+    id: 34,
+    name: "زيت حلوة 700 مل",
+    stockCollectors: 325,
+    stockWarehouse: 325,
+  },
+  // Additional rows...
+];
+
+// Render the table
+<Table
+  data={data}
+  columns={columns}
+  title="Inventory Stock"
+  striped={true}
+  gridCells={false}
+  showHeader={true}
+  onRowClick={(row) => console.log('Row clicked:', row.original)}
+/>
+```
+
+## Features
+
+### Pagination
+
+Add pagination to control the number of records displayed per page.
+
+<Canvas of={TableStories.WithPagination} />
+
+```jsx
+import { useState } from 'react';
+
+const [pageIndex, setPageIndex] = useState(0);
+const [pageSize, setPageSize] = useState(5);
+
+<Table
+  data={data}
+  columns={columns}
+  title="Inventory Stock"
+  pagination={{
+    pageIndex,
+    pageSize,
+    pageCount: Math.ceil(data.length / pageSize),
+    onPageChange: setPageIndex,
+    onPageSizeChange: setPageSize,
+    pageSizeOptions: [5, 10, 20, 50],
+  }}
+/>
+```
+
+### Enhanced Search and Filters
+
+Enable search functionality and filters for more targeted data exploration.
+
+<Canvas of={TableStories.WithEnhancedSearchAndFilters} />
+
+```jsx
+const [searchQuery, setSearchQuery] = useState('');
+const [filters, setFilters] = useState({
+  status: 'active',
+});
+const [isFilterBarVisible, setIsFilterBarVisible] = useState(true);
+
+<Table
+  data={data}
+  columns={columns}
+  title="Inventory Stock"
+  showSearch={true}
+  showFilters={true}
+  showFilterBar={isFilterBarVisible}
+  showExport={true}
+  searchQuery={searchQuery}
+  onSearchChange={setSearchQuery}
+  activeFilters={filters}
+  onFilterChange={setFilters}
+  onFilterClick={() => setIsFilterBarVisible(!isFilterBarVisible)}
+  onExport={() => alert('Export clicked')}
+  filterOptions={{
+    status: {
+      label: 'Status',
+      options: [
+        { label: 'All', value: 'all' },
+        { label: 'Active', value: 'active' },
+        { label: 'Inactive', value: 'inactive' },
+      ],
+    },
+    category: {
+      label: 'Category',
+      options: [
+        { label: 'All', value: 'all' },
+        { label: 'Food', value: 'food' },
+        { label: 'Cleaning', value: 'cleaning' },
+        { label: 'Drinks', value: 'drinks' },
+      ],
+    },
+  }}
+/>
+```
+
+### Table with Tabs
+
+Create tabbed interfaces to organize different data sets.
+
+<Canvas of={TableStories.WithTabs} />
+
+```jsx
+const [activeTab, setActiveTab] = useState('inventory');
+
+<Table
+  data={data}
+  columns={columns}
+  title="Inventory Management"
+  showTabs={true}
+  tabItems={[
+    { id: 'inventory', label: 'Inventory Stock', active: activeTab === 'inventory', badge: productData.length },
+    { id: 'orders', label: 'Orders', active: activeTab === 'orders', badge: orderData.length },
+  ]}
+  onTabChange={(tabId) => {
+    setActiveTab(tabId);
+    console.log('Tab changed to:', tabId);
+  }}
+/>
+```
+
+### Enhanced Tabs with Automatic Data Switching
+
+For more complex tabbed interfaces, use `tableTabs` to define complete configurations for each tab.
+
+<Canvas of={TableStories.WithEnhancedTabs} />
+
+```jsx
+<Table
+  data={[]} // Default data (not used with tableTabs)
+  columns={[]} // Default columns (not used with tableTabs)
+  title="Inventory Management"
+  showTabs={true}
+  tableTabs={[
+    {
+      id: 'inventory',
+      label: 'Inventory Stock',
+      active: true, // This tab will be active by default
+      badge: productData.length,
+      data: productData,
+      columns: productColumns,
+      title: 'Inventory Stock',
+    },
+    {
+      id: 'orders',
+      label: 'Orders',
+      badge: orderData.length,
+      data: orderData,
+      columns: orderColumns,
+      title: 'Order History',
+    },
+  ]}
+  onRowClick={(row) => console.log('Row clicked:', row.original)}
+/>
+```
+
+### Grid Cells
+
+Enable grid cells to show borders between cells for better data visualization.
+
+<Canvas of={TableStories.WithGridCells} />
+
+```jsx
+<Table
+  data={data}
+  columns={columns}
+  title="Inventory Stock"
+  striped={true}
+  gridCells={true}
+/>
+```
+
+## Table States
+
+### Empty State
+
+Show a message when there's no data to display.
+
+<Canvas of={TableStories.EmptyState} />
+
+```jsx
+<Table
+  data={[]}
+  columns={columns}
+  title="Inventory Stock"
+  state="empty"
+  emptyMessage="There are no records to display."
+/>
+```
+
+### Loading State
+
+Display a loading indicator while data is being fetched.
+
+<Canvas of={TableStories.LoadingState} />
+
+```jsx
+<Table
+  data={[]}
+  columns={columns}
+  title="Inventory Stock"
+  state="loading"
+/>
+```
+
+### Error State
+
+Show an error message when data retrieval fails.
+
+<Canvas of={TableStories.ErrorState} />
+
+```jsx
+<Table
+  data={[]}
+  columns={columns}
+  title="Inventory Stock"
+  state="error"
+  errorMessage="Error in data retrieving. Don't worry, it's our fault. Please try again later."
+/>
+```
+
+### Not Found State
+
+Indicate when a search yields no results.
+
+<Canvas of={TableStories.NotFoundState} />
+
+```jsx
+<Table
+  data={[]}
+  columns={columns}
+  title="Inventory Stock"
+  state="notFound"
+  notFoundMessage="No available results for 'product XYZ'. Try different item name or ID."
+  searchQuery="product XYZ"
+/>
+```
+
+## Internationalization
+
+The Table component properly handles Right-to-Left (RTL) languages automatically.
+
+<Canvas of={TableStories.RTLExample} />
+
+```jsx
+<div dir="rtl" style={{ width: '100%' }}>
+  <Table
+    data={data}
+    columns={columns}
+    title="مخزون المنتجات"
+    striped={true}
+    gridCells={false}
+  />
+</div>
+```
+
+## Column Configuration
+
+The Table component accepts columns defined according to TanStack Table's `ColumnDef` interface, with additional Tagaddod-specific properties for styling.
+
+```jsx
+const columns = [
+  // Standard column with accessor and header
+  {
+    accessorKey: 'id',
+    header: 'ID',
+    size: 80,
+  },
+  
+  // Column with custom cell rendering
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    size: 150,
+    cell: info => (
+      <span 
+        style={{ 
+          color: 
+            info.getValue() === 'Completed' ? 'var(--t-color-text-success)' :
+            info.getValue() === 'Pending' ? 'var(--t-color-text-warning)' :
+            'var(--t-color-text-info)'
+        }}
+      >
+        {info.getValue()}
+      </span>
+    ),
+  },
+  
+  // Column with custom styling via meta
+  {
+    id: 'actions',
+    header: '',
+    cell: () => (/* Action buttons */),
+    meta: {
+      headerClassName: 'custom-header',
+      cellClassName: 'custom-cell',
+      width: '100px',
+    },
+  },
+];
+```
+
+## Advanced Usage
+
+### Controlled Table
+
+Full control of table state for advanced integration needs.
+
+```jsx
+const [sorting, setSorting] = useState([]);
+const [globalFilter, setGlobalFilter] = useState('');
+const [pagination, setPagination] = useState({
+  pageIndex: 0,
+  pageSize: 10,
+});
+const [filters, setFilters] = useState({});
+
+<Table
+  data={data}
+  columns={columns}
+  title="Advanced Table"
+  searchQuery={globalFilter}
+  onSearchChange={setGlobalFilter}
+  pagination={{
+    pageIndex: pagination.pageIndex,
+    pageSize: pagination.pageSize,
+    pageCount: Math.ceil(data.length / pagination.pageSize),
+    onPageChange: (pageIndex) => setPagination(prev => ({ ...prev, pageIndex })),
+    onPageSizeChange: (pageSize) => setPagination(prev => ({ ...prev, pageSize })),
+  }}
+  defaultSorting={sorting}
+  activeFilters={filters}
+  onFilterChange={setFilters}
+/>
+```
+
+### Server-Side Data
+
+For tables with server-side pagination, sorting, and filtering.
+
+```jsx
+const [data, setData] = useState([]);
+const [totalItems, setTotalItems] = useState(0);
+const [loading, setLoading] = useState(false);
+const [pagination, setPagination] = useState({
+  pageIndex: 0,
+  pageSize: 10,
+});
+const [sorting, setSorting] = useState([]);
+const [filters, setFilters] = useState({});
+
+// Fetch data on state changes
+useEffect(() => {
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await api.fetchData({
+        page: pagination.pageIndex,
+        limit: pagination.pageSize,
+        sort: sorting.length > 0 ? { 
+          field: sorting[0].id, 
+          direction: sorting[0].desc ? 'desc' : 'asc' 
+        } : undefined,
+        filters,
+      });
+      
+      setData(response.data);
+      setTotalItems(response.total);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  fetchData();
+}, [pagination, sorting, filters]);
+
+<Table
+  data={data}
+  columns={columns}
+  title="Server-Side Table"
+  state={loading ? 'loading' : 'normal'}
+  pagination={{
+    pageIndex: pagination.pageIndex,
+    pageSize: pagination.pageSize,
+    pageCount: Math.ceil(totalItems / pagination.pageSize),
+    onPageChange: (pageIndex) => setPagination(prev => ({ ...prev, pageIndex })),
+    onPageSizeChange: (pageSize) => setPagination(prev => ({ ...prev, pageSize })),
+  }}
+  defaultSorting={sorting}
+  activeFilters={filters}
+  onFilterChange={setFilters}
+/>
+```
+
+## Common Use Cases
+
+### Data Grid with Row Actions
+
+Table with row actions for data management operations.
+
+```jsx
+<Table
+  data={users}
+  columns={[
+    { accessorKey: 'name', header: 'Name' },
+    { accessorKey: 'email', header: 'Email' },
+    { accessorKey: 'role', header: 'Role' },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => (
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <Button
+            variant="plain"
+            size="micro"
+            tone="neutral"
+            prefixIcon={<IconEdit size={16} />}
+            onClick={(e) => {
+              e.stopPropagation();
+              editUser(row.original);
+            }}
+          />
+          <Button
+            variant="plain"
+            size="micro"
+            tone="critical"
+            prefixIcon={<IconTrash size={16} />}
+            onClick={(e) => {
+              e.stopPropagation();
+              deleteUser(row.original.id);
+            }}
+          />
+        </div>
+      ),
+    },
+  ]}
+  onRowClick={(row) => viewUserDetails(row.original.id)}
+/>
+```
+
+### Dashboard Analytics Table
+
+Display analytical data with metrics and visual indicators.
+
+```jsx
+<Table
+  data={analyticsData}
+  columns={[
+    { accessorKey: 'metric', header: 'Metric' },
+    { 
+      accessorKey: 'value', 
+      header: 'Value',
+      cell: ({ row }) => formatNumber(row.original.value),
+    },
+    { 
+      accessorKey: 'change', 
+      header: 'Change',
+      cell: ({ getValue }) => {
+        const change = getValue();
+        return (
+          <div style={{ 
+            color: change > 0 ? 'var(--t-color-text-success)' : 'var(--t-color-text-critical)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px'
+          }}>
+            {change > 0 ? '↑' : '↓'} {Math.abs(change)}%
+          </div>
+        );
+      },
+    },
+    { 
+      id: 'chart',
+      header: 'Trend',
+      cell: ({ row }) => <SparklineChart data={row.original.trend} />,
+    },
+  ]}
+  title="Performance Metrics"
+  gridCells={true}
+/>
+```
+
+### Record Selection Table
+
+Table with row selection for batch operations.
+
+```jsx
+const [selectedRows, setSelectedRows] = useState([]);
+
+// Define selection column
+const selectionColumn = {
+  id: 'selection',
+  header: ({ table }) => (
+    <input
+      type="checkbox"
+      checked={table.getIsAllRowsSelected()}
+      onChange={table.getToggleAllRowsSelectedHandler()}
+    />
+  ),
+  cell: ({ row }) => (
+    <input
+      type="checkbox"
+      checked={row.getIsSelected()}
+      onChange={row.getToggleSelectedHandler()}
+      onClick={(e) => e.stopPropagation()}
+    />
+  ),
+  size: 40,
+};
+
+// Columns with selection
+const columnsWithSelection = [selectionColumn, ...columns];
+
+<div>
+  <div style={{ marginBottom: '16px' }}>
+    <Button 
+      disabled={selectedRows.length === 0}
+      onClick={() => handleBatchAction(selectedRows)}
+    >
+      Process Selected ({selectedRows.length})
+    </Button>
+  </div>
+  
+  <Table
+    data={data}
+    columns={columnsWithSelection}
+    title="Select Records"
+    onRowSelectionChange={setSelectedRows}
+  />
+</div>
+```
+
+## Accessibility
+
+The Table component is built with accessibility in mind:
+
+- Semantic HTML table structure (`<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`) for optimal screen reader compatibility
+- Appropriate ARIA attributes for sorting, filtering, and pagination
+- Keyboard navigation support for all interactive elements
+- Focus management for row and cell interactions
+- Proper contrast ratios for all visual states
+- RTL language support with appropriate text alignment and directional changes
+- Visible focus indicators for keyboard users
+- Responsive design that works on various screen sizes and devices
+
+## Implementation Details
+
+### CSS Variables
+
+The Table component uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-space-*` | Padding and spacing |
+| `--t-font-family-primary` | Text font |
+| `--t-font-size-*` | Font sizes for text elements |
+| `--t-font-weight-*` | Font weights |
+| `--t-color-text-*` | Text colors |
+| `--t-color-border-*` | Border colors |
+| `--t-color-surface-*` | Background colors |
+| `--t-color-fill-*` | Highlight colors |
+| `--t-border-radius-*` | Border radius |
+| `--t-shadow-*` | Box shadows |
+| `--t-duration-*` | Animation duration |
+| `--t-line-height-*` | Line height for different languages |
+
+### Technical Architecture
+
+The Table component is built on TanStack Table and includes:
+
+- **Data Processing**: Core row model, filtering, sorting, and pagination
+- **State Management**: Component-level React state with controlled inputs
+- **Event Handling**: Row and cell click handlers
+- **Keyboard Navigation**: Accessible keyboard controls
+- **Rendering Optimization**: Efficient rendering with React memoization
+- **Styling**: CSS Modules with proper scoping
+- **Responsive Design**: Mobile-friendly layout and styling
+
+### Performance Considerations
+
+For optimal performance with large datasets:
+
+- Use server-side pagination for tables with more than 1,000 rows
+- Implement server-side sorting and filtering for tables with complex data structures
+- Consider virtualization for extremely large datasets
+- Optimize column rendering by minimizing complex cell renderers
+- Use memoization for expensive cell calculations
+- Enable the `manualPagination` option for custom data fetching
+
+### Table Integration with Other Components
+
+The Table component seamlessly integrates with other Tagaddod Design System components:
+
+- **Pagination**: For page navigation
+- **Tabs**: For tabbed data views
+- **Button**: For action buttons
+- **TextInput**: For search functionality
+- **FilterItem**: For applying data filters
+- **Badge**: For count indicators
+
+## Browser Support
+
+The Table component is compatible with all modern browsers:
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+- Mobile browsers (iOS Safari, Android Chrome)
+
+RTL language support works across all supported browsers.

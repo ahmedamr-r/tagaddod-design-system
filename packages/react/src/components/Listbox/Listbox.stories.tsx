@@ -11,8 +11,11 @@ const meta = {
   component: Listbox,
   parameters: {
     layout: 'centered',
+    docs: {
+      page: () => import('./Listbox.mdx'),
+    },
   },
-  tags: ['autodocs'],
+  tags: [],
   argTypes: {
     options: { control: 'object' },
     selectedValue: { control: 'text' },

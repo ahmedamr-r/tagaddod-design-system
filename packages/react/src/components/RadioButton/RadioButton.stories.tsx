@@ -8,7 +8,7 @@ const meta: Meta<typeof RadioGroup> = {
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
+  tags: [],
   argTypes: {
     defaultValue: {
       control: 'text',

@@ -1,0 +1,231 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as BadgeStories from './Badge.stories';
+import { Badge } from './Badge';
+
+<Meta of={BadgeStories} />
+
+# Badge Component
+
+The Badge component is a visual indicator used to highlight status, count, or categorize content with short text labels. Badges can appear in different tones, sizes, and can include icons.
+
+## Overview
+
+Badges help users quickly identify status, category, or other metadata about items. They're compact, high-contrast elements that stand out visually from surrounding content.
+
+## Import
+
+```jsx
+import { Badge } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Badge} />
+
+## Basic Usage
+
+<Canvas of={BadgeStories.Default} />
+
+```jsx
+<Badge>Badge</Badge>
+```
+
+## Tones
+
+Badges come in different tones to represent different states or categories.
+
+<Canvas of={BadgeStories.AllTones} />
+
+```jsx
+// Regular badges
+<Badge tone="default">Default</Badge>
+<Badge tone="info">Info</Badge>
+<Badge tone="success">Success</Badge>
+<Badge tone="warning">Warning</Badge>
+<Badge tone="critical">Critical</Badge>
+<Badge tone="magic">Magic</Badge>
+
+// Strong badges (higher contrast)
+<Badge tone="default" strong>Default</Badge>
+<Badge tone="info" strong>Info</Badge>
+<Badge tone="success" strong>Success</Badge>
+<Badge tone="warning" strong>Warning</Badge>
+<Badge tone="critical" strong>Critical</Badge>
+<Badge tone="magic" strong>Magic</Badge>
+```
+
+### Default
+
+Used for neutral or general-purpose labels.
+
+### Info
+
+For informational or helpful content.
+
+### Success
+
+Indicates successful status or positive completion.
+
+### Warning
+
+Alerts users to potential issues.
+
+### Critical
+
+Highlights errors or critical information.
+
+### Magic
+
+For special, featured, or premium items.
+
+## Strong Variant
+
+The strong variant provides higher contrast with a bold colored background, making badges more prominent.
+
+<Canvas of={BadgeStories.Strong} />
+
+```jsx
+<Badge tone="success" strong>Success</Badge>
+```
+
+## Sizes
+
+Badges come in three sizes to fit different UI contexts.
+
+<Canvas of={BadgeStories.AllSizes} />
+
+```jsx
+<Badge size="medium">Medium</Badge>
+<Badge size="large">Large</Badge>
+<Badge size="xlarge">X-Large</Badge>
+```
+
+### Medium (Default)
+
+Compact size suitable for most UI contexts.
+
+### Large
+
+Slightly larger for more prominence.
+
+### X-Large
+
+The largest size, for high-emphasis indicators or when a badge contains more text.
+
+## With Icon
+
+Badges can include an icon before the label text.
+
+<Canvas of={BadgeStories.WithIcon} />
+
+```jsx
+<Badge 
+  icon={<InfoIcon />}
+>
+  Badge with icon
+</Badge>
+```
+
+## Internationalization
+
+The Badge component properly handles Right-to-Left (RTL) languages automatically by:
+
+1. Adjusting icon positioning for RTL text flow
+2. Applying appropriate line height for Arabic text
+
+<Canvas of={BadgeStories.RTL} />
+
+```jsx
+// The badge will automatically adjust in RTL contexts
+<div dir="rtl">
+  <Badge tone="info">جداب</Badge>
+  <Badge tone="success">نجاح</Badge>
+  <Badge tone="warning">تحذير</Badge>
+</div>
+```
+
+## Accessibility
+
+- Badges are non-interactive elements used to convey information
+- Use appropriate color combinations to maintain sufficient contrast
+- For interactive badges, consider using a Button component instead
+- Screen readers will read badge content, so keep text concise and meaningful
+
+## Common Use Cases
+
+### Status Indicators
+
+```jsx
+<div>
+  <Badge tone="success">Completed</Badge>
+  <Badge tone="warning">Pending</Badge>
+  <Badge tone="critical">Failed</Badge>
+</div>
+```
+
+### Categorization
+
+```jsx
+<div>
+  <Badge>Design</Badge>
+  <Badge>Development</Badge>
+  <Badge>Marketing</Badge>
+</div>
+```
+
+### Notification Counts
+
+```jsx
+<Badge tone="critical" strong>5</Badge>
+```
+
+### Information with Icons
+
+```jsx
+import { InfoIcon, AlertIcon } from '@your-icon-library';
+
+<div>
+  <Badge icon={<InfoIcon />} tone="info">Information</Badge>
+  <Badge icon={<AlertIcon />} tone="warning">Notice</Badge>
+</div>
+```
+
+## Customizing
+
+The Badge component accepts additional class names and all standard HTML span attributes.
+
+```jsx
+<Badge 
+  className="custom-badge-class"
+  data-testid="status-badge"
+>
+  Custom Badge
+</Badge>
+```
+
+## Implementation Details
+
+### CSS Variables
+
+The Badge uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-space-100/200/300` | Padding and icon spacing |
+| `--t-typography-caption-lg-medium` | Typography for medium/large sizes |
+| `--t-typography-body-sm-medium` | Typography for xlarge size |
+| `--t-color-*-500/1200` | Background colors |
+| `--t-color-text-*` | Text colors |
+| `--t-line-height-arabic` | Line height for Arabic text |
+| `--t-line-height-english` | Line height for English text |
+
+### Rendering Logic
+
+1. The component applies classes based on tone, size, and strong props
+2. Detects RTL mode from the document direction
+3. Applies line height adjustments based on text direction
+4. Renders the icon (if provided) and label text
+
+### Browser Support
+
+The Badge component is compatible with all modern browsers and includes RTL language support.

@@ -16,8 +16,11 @@ const meta = {
   component: Button,
   parameters: {
     layout: 'centered',
+    docs: {
+      page: () => import('./Button.mdx'),
+    },
   },
-  tags: ['autodocs'],
+  tags: [],
   argTypes: {
     variant: {
       control: 'select',

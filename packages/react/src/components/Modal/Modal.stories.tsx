@@ -9,7 +9,11 @@ const meta: Meta<typeof Modal> = {
   component: Modal,
   parameters: {
     layout: 'centered',
+    docs: {
+      page: () => import('./Modal.mdx'),
+    },
   },
+  tags: [],
   argTypes: {
     size: {
       control: 'select',

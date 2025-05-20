@@ -7,8 +7,11 @@ const meta: Meta<typeof Checkbox> = {
   component: Checkbox,
   parameters: {
     layout: 'centered',
+    docs: {
+      page: () => import('./Checkbox.mdx'),
+    },
   },
-  tags: ['autodocs'],
+  tags: [],
   argTypes: {
     checked: {
       control: {

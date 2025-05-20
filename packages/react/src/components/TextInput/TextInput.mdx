@@ -1,0 +1,427 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as TextInputStories from './TextInput.stories';
+import { TextInput } from './TextInput';
+import { IconSearch, IconMail } from '@tabler/icons-react';
+
+<Meta of={TextInputStories} />
+
+# TextInput Component
+
+The TextInput component is a form element for collecting user text input with support for various states, sizes, and visual treatments.
+
+## Overview
+
+TextInput is a fundamental component for forms and data collection, offering a rich set of features including various states (error, disabled, read-only), prefix and suffix elements, password visibility toggle, and clear functionality.
+
+## Import
+
+```jsx
+import { TextInput } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={TextInput} />
+
+## Basic Usage
+
+<Canvas of={TextInputStories.Default} />
+
+```jsx
+<TextInput 
+  label="Name"
+  placeholder="Enter your name"
+/>
+```
+
+## Labels and Help Text
+
+### Standard Label
+
+Labels describe the purpose of the input field.
+
+<Canvas of={TextInputStories.Default} />
+
+### Optional Fields
+
+Mark non-required fields with the "optional" flag to display "(Optional)" next to the label.
+
+<Canvas of={TextInputStories.Optional} />
+
+```jsx
+<TextInput 
+  label="Phone Number"
+  placeholder="Enter your phone number"
+  optional={true}
+/>
+```
+
+### Required Fields
+
+Required fields display a red asterisk (*) after the label.
+
+<Canvas of={TextInputStories.Required} />
+
+```jsx
+<TextInput 
+  label="Username"
+  placeholder="Enter your username"
+  required={true}
+/>
+```
+
+### Help Text
+
+Add supplementary information below the input with the `helpText` prop.
+
+<Canvas of={TextInputStories.WithHelpText} />
+
+```jsx
+<TextInput 
+  label="Email"
+  placeholder="Enter your email"
+  helpText="We will never share your email with anyone else."
+/>
+```
+
+## Validation States
+
+### Error State
+
+Display error messages when validation fails.
+
+<Canvas of={TextInputStories.WithError} />
+
+```jsx
+<TextInput 
+  label="Password"
+  placeholder="Enter your password"
+  type="password"
+  errorMessage="Password must be at least 8 characters long"
+/>
+```
+
+### Disabled State
+
+Prevent interaction with disabled inputs.
+
+<Canvas of={TextInputStories.Disabled} />
+
+```jsx
+<TextInput 
+  label="Disabled Input"
+  placeholder="You cannot edit this field"
+  disabled={true}
+/>
+```
+
+### Read-Only State
+
+Display information that cannot be edited but should remain visible.
+
+<Canvas of={TextInputStories.ReadOnly} />
+
+```jsx
+<TextInput 
+  label="Read-only Input"
+  value="This is read-only text"
+  readOnly={true}
+/>
+```
+
+## Sizes
+
+TextInput comes in three sizes to fit different UI contexts.
+
+<Canvas of={TextInputStories.AllSizes} />
+
+```jsx
+<TextInput 
+  label="Micro (20px)"
+  placeholder="Micro input"
+  size="micro"
+/>
+
+<TextInput 
+  label="Medium (32px)"
+  placeholder="Medium input"
+  size="medium"
+/>
+
+<TextInput 
+  label="Large (40px)"
+  placeholder="Large input"
+  size="large"
+/>
+```
+
+## Special Features
+
+### Prefix and Suffix
+
+Add icons or text before or after the input text.
+
+#### Icon Prefix
+
+<Canvas of={TextInputStories.EmailWithPrefix} />
+
+```jsx
+import { IconMail } from '@tabler/icons-react';
+
+<TextInput 
+  label="Email"
+  placeholder="Enter your email address"
+  prefix={<IconMail size={18} />}
+/>
+```
+
+#### Text Prefix
+
+<Canvas of={TextInputStories.TextPrefix} />
+
+```jsx
+<TextInput 
+  label="Amount"
+  placeholder="0.00"
+  prefix="$"
+/>
+```
+
+#### Suffix
+
+<Canvas of={TextInputStories.WithSuffix} />
+
+```jsx
+import { IconCurrencyDollar } from '@tabler/icons-react';
+
+<TextInput 
+  label="Amount"
+  placeholder="Enter amount"
+  suffix={<IconCurrencyDollar size={18} />}
+/>
+```
+
+#### Combined Prefix and Suffix
+
+<Canvas of={TextInputStories.WithPrefixAndSuffix} />
+
+```jsx
+import { IconMail } from '@tabler/icons-react';
+
+<TextInput 
+  label="Email"
+  placeholder="username"
+  prefix={<IconMail size={18} />}
+  suffix={<span>@example.com</span>}
+/>
+```
+
+### Clearable Input
+
+Add a clear button that appears when the input has a value.
+
+<Canvas of={TextInputStories.Clearable} />
+
+```jsx
+<TextInput 
+  label="Clearable Input"
+  placeholder="Type something to show clear button"
+  defaultValue="Clear me"
+  clearable={true}
+/>
+```
+
+### Password Input
+
+Password inputs automatically include a visibility toggle.
+
+<Canvas of={TextInputStories.Password} />
+
+```jsx
+<TextInput 
+  label="Password"
+  placeholder="Enter your password"
+  type="password"
+/>
+```
+
+## Layout Options
+
+### Standard Width
+
+By default, TextInput has a width defined by its container.
+
+<Canvas of={TextInputStories.Default} />
+
+### Full Width
+
+Set `fullWidth` to true to make the input take 100% of its container width.
+
+<Canvas of={TextInputStories.FullWidth} />
+
+```jsx
+<TextInput 
+  label="Full Width Input"
+  placeholder="This input takes full width"
+  fullWidth={true}
+/>
+```
+
+## Common Use Cases
+
+### Search Input
+
+<Canvas of={TextInputStories.SearchInput} />
+
+```jsx
+import { IconSearch } from '@tabler/icons-react';
+
+<TextInput 
+  label="Search"
+  placeholder="Search for something"
+  prefix={<IconSearch size={18} />}
+/>
+```
+
+### Email Input
+
+<Canvas of={TextInputStories.EmailInput} />
+
+```jsx
+import { IconMail } from '@tabler/icons-react';
+
+<TextInput 
+  label="Email"
+  placeholder="Enter you@example.com"
+  prefix={<IconMail size={18} />}
+/>
+```
+
+### Amount Input
+
+<Canvas of={TextInputStories.AmountInput} />
+
+```jsx
+<TextInput 
+  label="Amount"
+  placeholder="0.00"
+  prefix="$"
+/>
+```
+
+### Password Input with Visibility Toggle
+
+<Canvas of={TextInputStories.Password} />
+
+```jsx
+<TextInput 
+  label="Password"
+  placeholder="Enter your password"
+  type="password"
+/>
+```
+
+## Internationalization
+
+The TextInput component properly handles Right-to-Left (RTL) languages automatically by:
+
+1. Adjusting prefix and suffix positioning for RTL text flow
+2. Applying appropriate line height for Arabic text
+3. Correctly aligning text and help text in RTL contexts
+
+<Canvas of={TextInputStories.RTLExample} />
+
+```jsx
+<div dir="rtl">
+  <TextInput 
+    label="البحث" 
+    placeholder="ابحث هنا..." 
+    prefix={<IconSearch size={18} />}
+    clearable={true}
+  />
+</div>
+```
+
+## Accessibility
+
+- Each input has a unique ID that connects it to its label, help text, and error message
+- Required fields use both the `required` attribute and visual indication
+- Error states use `aria-invalid` and connect error messages with `aria-describedby`
+- Interactive elements (clear button, password toggle) have appropriate `aria-label` values
+- Focus states are clearly visible for keyboard navigation
+- Screen readers can access help text and error messages through proper ARIA attributes
+
+## Form Integration
+
+TextInput is built on Radix UI's Form components, making it suitable for form libraries and validation:
+
+```jsx
+import { Form } from '@radix-ui/react-form';
+
+<Form onSubmit={handleSubmit}>
+  <TextInput
+    name="email"
+    label="Email Address"
+    required={true}
+  />
+  <TextInput
+    name="password"
+    label="Password"
+    type="password"
+    required={true}
+  />
+  <button type="submit">Sign In</button>
+</Form>
+```
+
+## Implementation Details
+
+### CSS Variables
+
+The TextInput uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-space-*` | Padding and spacing |
+| `--t-font-family-primary` | Text font |
+| `--t-font-size-*` | Font sizes for different elements |
+| `--t-font-weight-*` | Font weights |
+| `--t-color-text-*` | Text colors |
+| `--t-color-border-*` | Border colors |
+| `--t-color-surface-*` | Background colors |
+| `--t-color-fill-*` | Focus and error colors |
+| `--t-color-icon-*` | Icon colors |
+| `--t-border-radius-*` | Border radius |
+| `--t-size-*` | Height dimensions |
+| `--t-duration-*` | Animation duration |
+| `--t-easing-*` | Animation timing |
+| `--t-line-height-*` | Line height for different languages |
+
+### Handling Different Input Types
+
+1. The component detects `type="password"` and renders a toggle button
+2. For other input types, standard HTML behavior applies
+3. Clearable inputs apply to all input types
+
+### Controlled vs Uncontrolled
+
+TextInput works in both controlled and uncontrolled modes:
+
+```jsx
+// Uncontrolled with default value
+<TextInput 
+  defaultValue="Initial value" 
+  name="myInput"
+/>
+
+// Controlled with state
+const [value, setValue] = useState('');
+<TextInput 
+  value={value} 
+  onChange={(e) => setValue(e.target.value)}
+/>
+```
+
+### Browser Support
+
+The TextInput component is compatible with all modern browsers and includes RTL language support.

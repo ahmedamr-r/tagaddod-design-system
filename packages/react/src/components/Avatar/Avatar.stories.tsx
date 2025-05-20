@@ -7,7 +7,11 @@ const meta: Meta<typeof Avatar> = {
   component: Avatar,
   parameters: {
     layout: 'centered',
+    docs: {
+      page: () => import('./Avatar.mdx'),
+    },
   },
+  tags: [],
   argTypes: {
     type: {
       control: 'radio',

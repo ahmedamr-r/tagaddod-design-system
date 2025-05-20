@@ -1,0 +1,289 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as AvatarStories from './Avatar.stories';
+import { Avatar } from './Avatar';
+
+<Meta of={AvatarStories} />
+
+# Avatar Component
+
+The Avatar component displays a user's profile picture, initials, or a fallback icon when no image or initial is available.
+
+## Overview
+
+The Avatar component is used to represent people in the interface, displaying either a profile image, the user's initial, or a generic user icon as a fallback. It supports multiple sizes and handles image loading states.
+
+## Import
+
+```jsx
+import { Avatar } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Avatar} />
+
+## Basic Usage
+
+### With Image
+
+<Canvas of={AvatarStories.WithImage} />
+
+```jsx
+<Avatar 
+  type="image"
+  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+  alt="User profile picture"
+/>
+```
+
+### With Initial
+
+<Canvas of={AvatarStories.WithInitial} />
+
+```jsx
+<Avatar 
+  type="initial"
+  initial="U"
+/>
+```
+
+### With Fallback Icon
+
+<Canvas of={AvatarStories.WithIcon} />
+
+```jsx
+<Avatar type="icon" />
+```
+
+## Types
+
+The Avatar component supports three types:
+
+### Image Avatar
+
+Displays a user's profile picture.
+
+<Canvas of={AvatarStories.WithImage} />
+
+```jsx
+<Avatar 
+  type="image"
+  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+  alt="User profile picture"
+/>
+```
+
+### Initial Avatar
+
+Displays the first letter of a user's name.
+
+<Canvas of={AvatarStories.WithInitial} />
+
+```jsx
+<Avatar 
+  type="initial"
+  initial="U"
+/>
+```
+
+### Icon Avatar
+
+Displays a default user icon when no image or initial is available.
+
+<Canvas of={AvatarStories.WithIcon} />
+
+```jsx
+<Avatar type="icon" />
+```
+
+## Sizes
+
+The Avatar component comes in four sizes:
+
+<Canvas of={AvatarStories.SizeVariants} />
+
+```jsx
+<Avatar size="sm" type="initial" initial="S" />
+<Avatar size="md" type="initial" initial="M" />
+<Avatar size="lg" type="initial" initial="L" />
+<Avatar size="xl" type="initial" initial="X" />
+```
+
+| Size | Dimensions | Use Case |
+|------|------------|----------|
+| `sm` | 24px | Dense UI elements, compact lists |
+| `md` | 32px | Default size, most UI contexts |
+| `lg` | 40px | Featured content, headers |
+| `xl` | 64px | Profile pages, detailed views |
+
+## Handling Image Loading and Errors
+
+The Avatar component automatically handles image loading states and errors:
+
+<Canvas of={AvatarStories.WithFallback} />
+
+```jsx
+<Avatar 
+  type="image"
+  src="https://invalid-image-url.com/not-found.jpg"
+  alt="User profile with fallback"
+  // Will show fallback icon after 600ms
+/>
+```
+
+You can customize the delay before showing the fallback with the `delayMs` prop:
+
+```jsx
+<Avatar 
+  type="image"
+  src="https://example.com/profile.jpg"
+  alt="User profile"
+  delayMs={1000} // Wait 1 second before showing fallback
+/>
+```
+
+## Internationalization
+
+The Avatar component properly handles Right-to-Left (RTL) languages automatically for initial-type avatars by:
+
+1. Applying appropriate line height for Arabic text
+2. Ensuring correct vertical alignment of initials
+
+<Canvas of={AvatarStories.WithArabicInitial} />
+
+```jsx
+<div dir="rtl">
+  <Avatar 
+    type="initial"
+    initial="أ"
+  />
+</div>
+```
+
+## Use Cases
+
+### User Profiles
+
+```jsx
+<div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+  <Avatar 
+    type="image"
+    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+    alt="User profile"
+    size="lg"
+  />
+  <div>
+    <h3>John Doe</h3>
+    <p>Product Manager</p>
+  </div>
+</div>
+```
+
+### Comment Sections
+
+```jsx
+<div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+  <Avatar 
+    type="initial"
+    initial="J"
+    size="md"
+  />
+  <div>
+    <p><strong>John Doe</strong> • 2 hours ago</p>
+    <p>This looks great! I'm excited to try it out.</p>
+  </div>
+</div>
+```
+
+### User Lists
+
+```jsx
+<ul style={{ listStyle: 'none', padding: 0 }}>
+  {users.map(user => (
+    <li key={user.id} style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
+      <Avatar 
+        type={user.avatar ? "image" : "initial"}
+        src={user.avatar}
+        initial={user.name.charAt(0)}
+        size="sm"
+      />
+      <span>{user.name}</span>
+    </li>
+  ))}
+</ul>
+```
+
+### Avatar Groups
+
+```jsx
+<div style={{ display: 'flex' }}>
+  {users.slice(0, 3).map((user, index) => (
+    <div
+      key={user.id}
+      style={{ marginLeft: index === 0 ? 0 : '-8px' }}
+    >
+      <Avatar 
+        type={user.avatar ? "image" : "initial"}
+        src={user.avatar}
+        initial={user.name.charAt(0)}
+        size="md"
+      />
+    </div>
+  ))}
+  {users.length > 3 && (
+    <div style={{ marginLeft: '-8px' }}>
+      <Avatar 
+        type="initial"
+        initial={`+${users.length - 3}`}
+        size="md"
+      />
+    </div>
+  )}
+</div>
+```
+
+## Accessibility
+
+- Include meaningful `alt` text for image avatars to describe the user
+- The component uses Radix UI's Avatar primitive, which provides accessible fallbacks
+- Initial avatars are properly labeled for screen readers through the Avatar implementation
+- Focus states are properly managed for keyboard navigation
+- Color contrast meets WCAG standards for readability of initials
+
+## Implementation Details
+
+### CSS Variables
+
+The Avatar component uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-size-*` | Dimensions for different avatar sizes |
+| `--t-border-radius-full` | Circular border radius |
+| `--t-color-fill-brand-secondary` | Background color for non-image avatars |
+| `--t-color-text-primary` | Text color for initials |
+| `--t-font-family-primary` | Font family for initial text |
+| `--t-font-weight-medium` | Font weight for initial text |
+| `--t-font-size-*` | Font sizes for different avatar sizes |
+| `--t-line-height-arabic` | Line height for Arabic text |
+| `--t-line-height-english` | Line height for English text |
+
+### Architecture
+
+The component is built on Radix UI's Avatar component which provides:
+
+1. Proper handling of image loading states
+2. Automatic fallback rendering when images fail to load
+3. Accessible implementation with proper ARIA attributes
+
+The Tagaddod implementation extends this with:
+
+1. Design system integration with tokens
+2. Support for multiple sizes
+3. Initial avatar option with proper text rendering
+4. RTL language support
+5. Consistent styling across all variants
+
+### Browser Support
+
+The Avatar component is compatible with all modern browsers and includes RTL language support.

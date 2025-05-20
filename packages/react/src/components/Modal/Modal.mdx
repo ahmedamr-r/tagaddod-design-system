@@ -1,0 +1,430 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as ModalStories from './Modal.stories';
+import { Modal } from './Modal';
+import { Button } from '../Button/Button';
+import { IconInfoCircle, IconAlertTriangle, IconCheck } from '@tabler/icons-react';
+
+<Meta of={ModalStories} />
+
+# Modal Component
+
+The Modal component is a dialog that appears on top of the main content to provide critical information or request user input.
+
+## Overview
+
+Modals are used to focus user attention on a specific task or piece of information without navigating away from the current screen. They're ideal for confirmations, alerts, and short forms.
+
+## Import
+
+```jsx
+import { Modal } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Modal} />
+
+## Basic Usage
+
+<Canvas of={ModalStories.Default} />
+
+```jsx
+import { Modal, Button } from '@tagaddod/react';
+
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  title="Modal Title"
+>
+  <div style={{ textAlign: 'center', padding: '16px' }}>
+    Modal content goes here
+  </div>
+</Modal>
+```
+
+## Modal Variants
+
+### Default Modal
+
+<Canvas of={ModalStories.Default} />
+
+```jsx
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  title="Modal Title"
+  showTitle={true}
+  showFooter={true}
+  cancelLabel="Cancel"
+  confirmLabel="Confirm"
+  onCancel={() => console.log('Cancelled')}
+  onConfirm={() => console.log('Confirmed')}
+>
+  <div style={{ padding: '16px' }}>
+    Modal content goes here
+  </div>
+</Modal>
+```
+
+### Without Title
+
+<Canvas of={ModalStories.WithoutTitle} />
+
+```jsx
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  showTitle={false}
+  showFooter={true}
+  cancelLabel="Cancel"
+  confirmLabel="Confirm"
+>
+  <div style={{ padding: '16px' }}>
+    Modal without a title bar
+  </div>
+</Modal>
+```
+
+### Without Footer
+
+<Canvas of={ModalStories.WithoutFooter} />
+
+```jsx
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  title="Modal Without Footer"
+  showTitle={true}
+  showFooter={false}
+>
+  <div style={{ padding: '16px' }}>
+    Modal without action buttons in footer
+  </div>
+</Modal>
+```
+
+### Fullscreen Modal
+
+<Canvas of={ModalStories.Fullscreen} />
+
+```jsx
+<Modal
+  trigger={<Button>Open Fullscreen Modal</Button>}
+  title="Fullscreen Modal"
+  size="fullscreen"
+>
+  <div style={{ padding: '16px' }}>
+    This modal takes up the entire screen
+  </div>
+</Modal>
+```
+
+## Footer Styles
+
+### Default Footer
+
+<Canvas of={ModalStories.Default} />
+
+```jsx
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  title="Default Footer"
+  footerStyle="default"
+  cancelLabel="Cancel"
+  confirmLabel="Confirm"
+>
+  <div style={{ padding: '16px' }}>
+    Modal with default footer style
+  </div>
+</Modal>
+```
+
+### Footer Style 1
+
+<Canvas of={ModalStories.FooterStyle1} />
+
+```jsx
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  title="Footer Style 1"
+  footerStyle="style1"
+  cancelLabel="Cancel"
+  confirmLabel="Confirm"
+>
+  <div style={{ padding: '16px' }}>
+    Modal with footer style 1 (content on left, buttons on right)
+  </div>
+</Modal>
+```
+
+### Footer Style 2
+
+<Canvas of={ModalStories.FooterStyle2} />
+
+```jsx
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  title="Footer Style 2"
+  footerStyle="style2"
+  cancelLabel="Cancel"
+  confirmLabel="Confirm"
+>
+  <div style={{ padding: '16px' }}>
+    Modal with footer style 2 (centered buttons)
+  </div>
+</Modal>
+```
+
+## Contextual Modals
+
+### Information Modal
+
+<Canvas of={ModalStories.InfoModal} />
+
+```jsx
+import { IconInfoCircle } from '@tabler/icons-react';
+
+<Modal
+  trigger={<Button prefixIcon={<IconInfoCircle />}>Open Info Modal</Button>}
+  title={
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <IconInfoCircle size={20} color="#0066ff" />
+      Information
+    </div>
+  }
+  showFooter={true}
+  cancelLabel="Close"
+  confirmLabel="Got it"
+>
+  <div style={{ padding: '16px' }}>
+    This is an informational message.
+  </div>
+</Modal>
+```
+
+### Warning Modal
+
+<Canvas of={ModalStories.WarningModal} />
+
+```jsx
+import { IconAlertTriangle } from '@tabler/icons-react';
+
+<Modal
+  trigger={<Button tone="warning" prefixIcon={<IconAlertTriangle />}>Open Warning Modal</Button>}
+  title={
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <IconAlertTriangle size={20} color="#ff9800" />
+      Warning
+    </div>
+  }
+  showFooter={true}
+  cancelLabel="Cancel"
+  confirmLabel="Proceed"
+>
+  <div style={{ padding: '16px' }}>
+    Please be careful with this action.
+  </div>
+</Modal>
+```
+
+### Success Modal
+
+<Canvas of={ModalStories.SuccessModal} />
+
+```jsx
+import { IconCheck } from '@tabler/icons-react';
+
+<Modal
+  trigger={<Button tone="success" prefixIcon={<IconCheck />}>Open Success Modal</Button>}
+  title={
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <IconCheck size={20} color="#4caf50" />
+      Success
+    </div>
+  }
+  showFooter={false}
+>
+  <div style={{ padding: '16px' }}>
+    Operation completed successfully!
+  </div>
+</Modal>
+```
+
+## Internationalization
+
+The Modal component supports Right-to-Left (RTL) languages:
+
+<Canvas of={ModalStories.RTL} />
+
+```jsx
+<Modal
+  trigger={<Button>افتح النافذة</Button>}
+  title="العنوان"
+  rtl={true}
+  cancelLabel="إلغاء"
+  confirmLabel="تأكيد"
+>
+  <div style={{ padding: '16px', textAlign: 'right' }}>
+    هذا هو محتوى النافذة المنبثقة
+  </div>
+</Modal>
+```
+
+## Use Cases
+
+### Confirmation Dialog
+
+```jsx
+<Modal
+  trigger={<Button tone="critical">Delete Item</Button>}
+  title="Confirm Deletion"
+  cancelLabel="Cancel"
+  confirmLabel="Delete"
+  onCancel={() => console.log('Cancelled deletion')}
+  onConfirm={() => handleDelete()}
+>
+  <div style={{ padding: '16px' }}>
+    Are you sure you want to delete this item? This action cannot be undone.
+  </div>
+</Modal>
+```
+
+### Form Modal
+
+```jsx
+function FormModal() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  
+  const handleSubmit = () => {
+    // Form submission logic
+    console.log({ name, email });
+  };
+  
+  return (
+    <Modal
+      trigger={<Button>Add User</Button>}
+      title="Add New User"
+      cancelLabel="Cancel"
+      confirmLabel="Save"
+      onConfirm={handleSubmit}
+    >
+      <div style={{ padding: '16px' }}>
+        <form>
+          <div style={{ marginBottom: '16px' }}>
+            <label htmlFor="name">Name</label>
+            <input 
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={{ display: 'block', width: '100%', marginTop: '4px', padding: '8px' }}
+            />
+          </div>
+          <div style={{ marginBottom: '16px' }}>
+            <label htmlFor="email">Email</label>
+            <input 
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{ display: 'block', width: '100%', marginTop: '4px', padding: '8px' }}
+            />
+          </div>
+        </form>
+      </div>
+    </Modal>
+  );
+}
+```
+
+### Information Display
+
+```jsx
+<Modal
+  trigger={<Button>View Details</Button>}
+  title="User Details"
+  showFooter={false}
+>
+  <div style={{ padding: '16px' }}>
+    <h3>John Doe</h3>
+    <div>
+      <strong>Email:</strong> john.doe@example.com
+    </div>
+    <div>
+      <strong>Role:</strong> Administrator
+    </div>
+    <div>
+      <strong>Joined:</strong> January 15, 2023
+    </div>
+    
+    <div style={{ marginTop: '24px', textAlign: 'right' }}>
+      <Button variant="secondary" onClick={() => console.log('Close')}>Close</Button>
+    </div>
+  </div>
+</Modal>
+```
+
+## Accessibility
+
+The Modal component follows accessibility best practices:
+
+- Built on Radix UI's Dialog primitive for robust accessibility
+- Properly manages focus when opened and closed
+- Traps focus within the modal
+- Supports keyboard navigation (Tab, Escape)
+- Uses proper ARIA roles and attributes
+- Correctly handles screen reader announcements
+- Supports closing with the Escape key
+- Background scroll is prevented when modal is open
+- Properly labeled close button
+
+## Implementation Details
+
+### CSS Variables
+
+The Modal component uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-color-overlay` | Background overlay color |
+| `--t-color-bg` | Modal background color |
+| `--t-color-border` | Border color for header and footer dividers |
+| `--t-color-text-primary` | Title and primary text color |
+| `--t-color-text-secondary` | Secondary text color |
+| `--t-color-bg-hover` | Hover state for close button |
+| `--t-border-radius-200` | Border radius |
+| `--t-shadow-400` | Shadow for the modal |
+| `--t-font-size-headline-sm` | Title font size |
+| `--t-font-weight-bold` | Title font weight |
+| `--t-line-height-normal` | Line height for text |
+| `--t-space-*` | Padding and spacing |
+| `--t-z-index-modal` | Z-index for the modal |
+| `--t-z-index-modal-overlay` | Z-index for the overlay |
+| `--t-modal-width` | Default modal width |
+
+### Architecture
+
+The Modal component is built on Radix UI's Dialog component, which provides:
+
+1. Focus management
+2. Keyboard interactions
+3. Focus trapping
+4. Proper ARIA attributes
+5. Animation support
+
+The Tagaddod implementation extends this with:
+
+1. Multiple footer styles
+2. Size variants (default and fullscreen)
+3. RTL support
+4. Customizable header and footer
+
+### Animations
+
+The Modal includes smooth animations for:
+
+1. Overlay fade-in and fade-out
+2. Modal scale and fade transitions
+3. RTL-specific animations
+
+These animations are disabled when the user prefers reduced motion.
+
+### Browser Support
+
+The Modal component is compatible with all modern browsers and includes RTL language support.

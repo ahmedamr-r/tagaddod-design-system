@@ -1,0 +1,409 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as PopoverStories from './Popover.stories';
+import { Popover, PopoverRoot, PopoverTrigger, PopoverContent, PopoverArrow, PopoverClose } from './Popover';
+import { Button } from '../Button/Button';
+
+<Meta of={PopoverStories} />
+
+# Popover Component
+
+The Popover component displays floating content that appears when a user interacts with a trigger element.
+
+## Overview
+
+Popovers are used to display additional information or actions related to an element on the page without navigating away from the current context. They're commonly used for tooltips, dropdowns, menus, and other contextual information displays.
+
+## Import
+
+```jsx
+import { Popover } from '@tagaddod/react';
+```
+
+For advanced usage with more control over the composition:
+
+```jsx
+import { 
+  PopoverRoot, 
+  PopoverTrigger, 
+  PopoverContent, 
+  PopoverArrow, 
+  PopoverClose 
+} from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Popover} />
+
+## Basic Usage
+
+<Canvas of={PopoverStories.Default} />
+
+```jsx
+import { Popover, Button } from '@tagaddod/react';
+
+<Popover
+  content="This is a basic popover content"
+  side="bottom"
+  align="center"
+  showArrow={true}
+>
+  <Button>Click me</Button>
+</Popover>
+```
+
+## Types
+
+### Default
+
+<Canvas of={PopoverStories.Default} />
+
+```jsx
+<Popover
+  content="This is a basic popover content"
+  type="default"
+>
+  <Button>Default Popover</Button>
+</Popover>
+```
+
+### With Scrollbar
+
+For popover content that might exceed the maximum height, use the `with-scrollbar` type to display a scrollbar.
+
+<Canvas of={PopoverStories.WithScrollbar} />
+
+```jsx
+<Popover
+  content={
+    <div>
+      <p>This popover has a lot of content that might require scrolling.</p>
+      <p>You can see how the scrollbar appears when the content exceeds the maximum height.</p>
+      <p>This is useful for displaying larger amounts of information without taking up too much screen space.</p>
+      <p>The popover will automatically handle overflow content.</p>
+      <p>This is line 5 of the content.</p>
+      <p>This is line 6 of the content.</p>
+      <p>This is line 7 of the content.</p>
+      <p>This is line 8 of the content.</p>
+    </div>
+  }
+  type="with-scrollbar"
+>
+  <Button>Scrollable Popover</Button>
+</Popover>
+```
+
+## Positions
+
+You can position the popover relative to the trigger using the `side` and `align` props.
+
+<Canvas of={PopoverStories.Different_Positions} />
+
+```jsx
+// Top position
+<Popover
+  content="This popover appears on top"
+  side="top"
+  align="center"
+>
+  <Button>Top</Button>
+</Popover>
+
+// Right position
+<Popover
+  content="This popover appears on the right"
+  side="right"
+  align="center"
+>
+  <Button>Right</Button>
+</Popover>
+
+// Bottom position
+<Popover
+  content="This popover appears on the bottom"
+  side="bottom"
+  align="center"
+>
+  <Button>Bottom</Button>
+</Popover>
+
+// Left position
+<Popover
+  content="This popover appears on the left"
+  side="left"
+  align="center"
+>
+  <Button>Left</Button>
+</Popover>
+```
+
+## Arrow
+
+You can show or hide the arrow pointing to the trigger using the `showArrow` prop.
+
+```jsx
+// With arrow
+<Popover
+  content="This popover has an arrow"
+  showArrow={true}
+>
+  <Button>With Arrow</Button>
+</Popover>
+
+// Without arrow
+<Popover
+  content="This popover has no arrow"
+  showArrow={false}
+>
+  <Button>Without Arrow</Button>
+</Popover>
+```
+
+## Animation
+
+The popover has a default animation duration of 200ms. You can customize this with the `animationDuration` prop.
+
+```jsx
+// Faster animation
+<Popover
+  content="This popover animates quickly"
+  animationDuration={100}
+>
+  <Button>Fast Animation</Button>
+</Popover>
+
+// Slower animation
+<Popover
+  content="This popover animates slowly"
+  animationDuration={400}
+>
+  <Button>Slow Animation</Button>
+</Popover>
+```
+
+## Advanced Composition
+
+For more complex scenarios, you can use the individual popover components to create custom compositions.
+
+<Canvas of={PopoverStories.Compositions} />
+
+```jsx
+import { 
+  PopoverRoot, 
+  PopoverTrigger, 
+  PopoverContent, 
+  PopoverArrow, 
+  PopoverClose, 
+  Button 
+} from '@tagaddod/react';
+
+// With buttons
+<Popover
+  content={
+    <div>
+      <h4 style={{ margin: '0 0 0.5rem' }}>Popover Title</h4>
+      <p style={{ margin: '0 0 1rem' }}>This popover contains a title and action buttons.</p>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+        <PopoverClose asChild>
+          <Button variant="secondary" size="micro">Cancel</Button>
+        </PopoverClose>
+        <PopoverClose asChild>
+          <Button size="micro">Confirm</Button>
+        </PopoverClose>
+      </div>
+    </div>
+  }
+>
+  <Button>With Buttons</Button>
+</Popover>
+
+// Custom composition
+<PopoverRoot>
+  <PopoverTrigger asChild>
+    <Button>Custom Composition</Button>
+  </PopoverTrigger>
+  <PopoverContent sideOffset={5}>
+    <div style={{ padding: '0.5rem' }}>
+      <h4>Custom Components</h4>
+      <p>Using PopoverRoot, PopoverTrigger, and PopoverContent for more control.</p>
+      <PopoverArrow />
+    </div>
+  </PopoverContent>
+</PopoverRoot>
+```
+
+## Controlled Mode
+
+You can control the open state of the popover using the `open` and `onOpenChange` props.
+
+```jsx
+import { useState } from 'react';
+
+function ControlledPopover() {
+  const [open, setOpen] = useState(false);
+  
+  return (
+    <div>
+      <Button onClick={() => setOpen(!open)}>
+        {open ? 'Close Popover' : 'Open Popover'}
+      </Button>
+      
+      <Popover
+        content="This is a controlled popover"
+        open={open}
+        onOpenChange={setOpen}
+      >
+        <Button>Trigger</Button>
+      </Popover>
+    </div>
+  );
+}
+```
+
+## Use Cases
+
+### Tooltips
+
+```jsx
+<Popover
+  content="This is additional information about the action"
+  side="top"
+  showArrow={true}
+>
+  <Button>Hover for Info</Button>
+</Popover>
+```
+
+### Dropdown Menus
+
+```jsx
+<Popover
+  content={
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <button style={{ padding: '8px', textAlign: 'left' }}>Edit</button>
+      <button style={{ padding: '8px', textAlign: 'left' }}>Duplicate</button>
+      <button style={{ padding: '8px', textAlign: 'left' }}>Delete</button>
+    </div>
+  }
+>
+  <Button>Menu</Button>
+</Popover>
+```
+
+### Information Cards
+
+```jsx
+<Popover
+  content={
+    <div>
+      <h4>Item Details</h4>
+      <p>Status: Active</p>
+      <p>Created: June 1, 2023</p>
+      <p>Owner: John Doe</p>
+    </div>
+  }
+  side="right"
+>
+  <Button>View Details</Button>
+</Popover>
+```
+
+### Color Picker
+
+```jsx
+<Popover
+  content={
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+      {['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'teal'].map(color => (
+        <div
+          key={color}
+          style={{
+            width: '24px',
+            height: '24px',
+            backgroundColor: color,
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+          onClick={() => console.log(`Selected color: ${color}`)}
+        />
+      ))}
+    </div>
+  }
+>
+  <Button>Pick a Color</Button>
+</Popover>
+```
+
+## Internationalization
+
+The Popover component properly handles Right-to-Left (RTL) languages by:
+
+1. Adjusting the layout and positioning for RTL text flow
+2. Applying appropriate line height for Arabic text
+3. Supporting RTL content alignment
+
+```jsx
+<div dir="rtl">
+  <Popover
+    content="محتوى منبثق باللغة العربية"
+    side="bottom"
+    align="start"
+  >
+    <Button>افتح المنبثقة</Button>
+  </Popover>
+</div>
+```
+
+## Accessibility
+
+The Popover component follows accessibility best practices:
+
+- Built on Radix UI's Popover primitive for robust accessibility
+- Properly manages focus when opened and closed
+- Uses appropriate ARIA attributes for screen readers
+- Supports keyboard navigation with Tab and Escape keys
+- Ensures sufficient color contrast
+- Properly positions content to avoid clipping and ensure visibility
+- Handles animations with respect for reduced motion preferences
+
+## Implementation Details
+
+### CSS Variables
+
+The Popover component uses the following token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-border-radius-300` | Border radius for the popover |
+| `--t-space-300` | Padding inside the popover |
+| `--t-color-surface-primary` | Background color |
+| `--t-shadow-popover` | Shadow for depth and elevation |
+| `--t-width-350` | Maximum width constraint |
+| `--t-height-350` | Maximum height for scrollable popovers |
+| `--t-z-index-popover` | Z-index for proper stacking |
+| `--t-color-border-subtle` | Border color |
+| `--t-color-fill-primary` | Arrow fill color |
+| `--t-line-height-arabic` | Line height for Arabic text |
+| `--t-line-height-english` | Line height for English text |
+
+### Architecture
+
+The Popover component is built on Radix UI's Popover primitive, which provides:
+
+1. Focus management
+2. Proper positioning
+3. Collision detection
+4. Keyboard navigation
+5. Animation support
+
+The Tagaddod implementation extends this with:
+
+1. Design system integration with tokens
+2. RTL language support
+3. Scrollable content option
+4. Animation customization
+5. Simplified API for common cases
+
+### Browser Support
+
+The Popover component is compatible with all modern browsers and includes RTL language support. The animation performance is optimized using CSS properties like `will-change` and `transform-origin`.
