@@ -1,8 +1,0 @@
-{
-  "name": "tagaddod-react-test",
-  "version": "1.0.0",
-  "type": "module",
-  "dependencies": {
-    "@tagaddod-design/react": "file:../dist"
-  }
-}
