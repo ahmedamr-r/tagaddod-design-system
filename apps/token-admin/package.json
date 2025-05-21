@@ -30,7 +30,7 @@
     "@types/wcag-contrast": "^3.0.3",
     "autoprefixer": "^10.4.21",
     "eslint": "^8",
-    "eslint-config-next": "15.0.3",
+    "eslint-config-next": "15.3.2",
     "postcss": "^8",
     "postcss-import": "^16.1.0",
     "tailwindcss": "3",
