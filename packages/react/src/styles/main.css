@@ -42,9 +42,17 @@ body {
 }
 
 /* 
-  REMOVED: Hardcoded locale-specific overrides
-  These are now handled by the imported token files above
+  Font family definitions using Google Fonts (loaded externally)
 */
+:root {
+  --t-font-family-primary: 'Outfit', system-ui, sans-serif;
+  --t-font-family-arabic: 'Tajawal', system-ui, sans-serif;
+}
+
+/* Apply Arabic font when direction is RTL */
+[dir="rtl"] {
+  --t-font-family-primary: 'Tajawal', system-ui, sans-serif;
+}
 
 /* Button utilities using tokens */
 .btn-base {

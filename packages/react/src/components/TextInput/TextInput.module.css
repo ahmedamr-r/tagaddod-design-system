@@ -46,7 +46,7 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .label::before {
-  margin-top: -0.25em;
+  margin-top: .09em;
 }
 
 :global([dir="rtl"]) .label::after {

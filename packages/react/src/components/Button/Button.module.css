@@ -129,8 +129,8 @@
   background-color: transparent;
   color: var(--t-color-text-link);
   border-color: transparent;
-  padding-left: var(--t-space-100);
-  padding-right: var(--t-space-100);
+  padding-left: var(--t-space-300);
+  padding-right: var(--t-space-300);
 }
 
 .variantPlain:hover:not(:disabled) {
@@ -295,12 +295,18 @@
   color: var(--t-color-text-magic);
 }
 
+
+
 .toneMagic.variantSecondary:hover:not(:disabled) {
   background-color: var(--t-color-fill-magic-secondary-hover);
+      color: var(--t-color-text-magic-hover);
+
 }
 
 .toneMagic.variantSecondary:active:not(:disabled) {
   background-color: var(--t-color-fill-magic-secondary-active);
+      color: var(--t-color-text-magic-active);
+
 }
 
 .toneMagic.variantTertiary,
@@ -308,9 +314,27 @@
   color: var(--t-color-text-magic);
   border-color: var(--t-color-border-magic);
 }
-
+.toneMagic.variantTertiary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-magic-secondary-hover);
+  border-color: var(   --t-color-border-magic-hover);
+    color: var(--t-color-text-magic-hover);
+}
+.toneMagic.variantTertiary:active:not(:disabled) {
+    background-color: var(--t-color-fill-magic-secondary-active);
+  border-color: var(   --t-color-border-magic-active);
+    color: var(--t-color-text-magic-active);
+}
 .toneMagic.variantPlain {
   border-color: transparent;
+}
+
+.toneMagic.variantPlain:hover:not(:disabled) {
+  background-color: var(--t-color-fill-magic-secondary-hover);
+    color: var(--t-color-text-magic-hover);
+}
+.toneMagic.variantPlain:active:not(:disabled) {
+    background-color: var(--t-color-fill-magic-secondary-active);
+    color: var(--t-color-text-magic-active);
 }
 
 /* Loading state */

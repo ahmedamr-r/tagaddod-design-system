@@ -1,0 +1,136 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Foundation/Typography" />
+
+# Typography
+
+The Tagaddod Design System uses Google Fonts for consistent typography across all implementations. Fonts are loaded via Google's CDN for optimal performance and global availability.
+
+## Font Families
+
+The design system uses two main font families:
+
+1. **Outfit** - Used for Latin/English (LTR) text
+   - Clean, modern sans-serif font
+   - Weights: Regular (400), Medium (500), SemiBold (600), and Bold (700)
+
+2. **Tajawal** - Used for Arabic (RTL) text
+   - Elegant Arabic typeface with excellent readability
+   - Weights: Regular (400), Medium (500), and Bold (700)
+
+## Automatic Font Selection
+
+The ThemeProvider automatically selects the appropriate font based on the current direction:
+
+- In LTR mode (English): Outfit is used as the primary font
+- In RTL mode (Arabic): Tajawal is used as the primary font
+
+## CSS Variables
+
+The font families are exposed as CSS variables:
+
+```css
+/* Default variable (changes based on direction) */
+--t-font-family-primary: 'Outfit', system-ui, sans-serif;  /* in LTR mode */
+--t-font-family-primary: 'Tajawal', system-ui, sans-serif; /* in RTL mode */
+
+/* Specific font family variables */
+--t-font-family-arabic: 'Tajawal', system-ui, sans-serif;
+```
+
+## Implementation Details
+
+### Google Fonts Loading
+
+To use the Tagaddod Design System fonts, include the Google Fonts link in your HTML:
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+```
+
+This loads both Outfit and Tajawal fonts with all the required weights.
+
+### CSS Font Definitions
+
+The CSS in the design system references these loaded fonts:
+
+```css
+/* Font family definitions using Google Fonts */
+:root {
+  --t-font-family-primary: 'Outfit', system-ui, sans-serif;
+  --t-font-family-arabic: 'Tajawal', system-ui, sans-serif;
+}
+
+/* Apply Arabic font when direction is RTL */
+[dir="rtl"] {
+  --t-font-family-primary: 'Tajawal', system-ui, sans-serif;
+}
+```
+
+## Usage in Projects
+
+### Include Google Fonts
+
+First, add the Google Fonts link to your HTML head:
+
+```html
+<head>
+  <!-- Other head elements -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+```
+
+### Import the Styles
+
+Then import the design system styles:
+
+```jsx
+// Import the design system styles
+import '@tagaddod-design/react/styles/index.css';
+
+function App() {
+  return (
+    <ThemeProvider>
+      <div>Your application content</div>
+    </ThemeProvider>
+  );
+}
+```
+
+### Switching Languages
+
+When you switch between LTR and RTL modes, the font family will automatically switch:
+
+```jsx
+// English with Outfit font
+<ThemeProvider defaultDirection="ltr">
+  <Button>Submit</Button>
+</ThemeProvider>
+
+// Arabic with Tajawal font
+<ThemeProvider defaultDirection="rtl">
+  <Button>إرسال</Button>
+</ThemeProvider>
+```
+
+## Benefits of Google Fonts
+
+Using Google Fonts provides several benefits:
+
+1. **Global CDN**: Fast loading times across different regions
+2. **Automatic Updates**: Font improvements are automatically applied
+3. **Optimal Performance**: Google's CDN uses modern compression and browser caching
+4. **Wide Browser Support**: Works across all modern browsers
+5. **Dynamic Subsetting**: Only the character sets needed are loaded
+
+## Typography Best Practices
+
+1. **Use the design system's typography tokens** rather than setting font properties directly
+2. **Let the ThemeProvider handle direction changes** rather than manually changing fonts
+3. **Test both LTR and RTL layouts** to ensure good typography in both languages
+4. **Don't override the font-family** in your application to maintain design consistency
+5. **Use the font-display: swap** attribute (already included in Google Fonts) to prevent FOUT (Flash of Unstyled Text)

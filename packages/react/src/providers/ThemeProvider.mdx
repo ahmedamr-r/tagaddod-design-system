@@ -1,0 +1,378 @@
+import { Meta, Story, Canvas, ArgTypes } from '@storybook/blocks';
+import * as ThemeProviderStories from './ThemeProvider.stories';
+import { ThemeProvider, useTheme, useThemeClasses } from './ThemeProvider';
+
+<Meta of={ThemeProviderStories} />
+
+# ThemeProvider
+
+The `ThemeProvider` is a context provider that manages theme, direction, and locale preferences throughout the application. It enables runtime switching between brands (Tagaddod/GreenPan), text directions (LTR/RTL), and locales (en/ar) without requiring a page reload.
+
+## Overview
+
+The `ThemeProvider` is a foundational component of the Tagaddod Design System that provides theming capabilities across the entire component library. It:
+
+- Applies brand-specific design tokens
+- Handles Right-to-Left (RTL) text direction
+- Manages locale settings
+- Persists user preferences in localStorage
+- Provides hooks for descendants to access and modify theme state
+
+## Import
+
+```jsx
+import { ThemeProvider, useTheme, useThemeClasses } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={ThemeProvider} />
+
+## Basic Usage
+
+Wrap your application with the `ThemeProvider` to enable theme support:
+
+<Canvas of={ThemeProviderStories.Default} />
+
+```jsx
+import { ThemeProvider } from '@tagaddod/react';
+
+function App() {
+  return (
+    <ThemeProvider>
+      <YourApplication />
+    </ThemeProvider>
+  );
+}
+```
+
+## Theme Options
+
+The `ThemeProvider` supports two brands:
+
+- **Tagaddod**: The primary brand (default)
+- **GreenPan**: Secondary brand with its own color palette
+
+<Canvas of={ThemeProviderStories.TagaddodTheme} />
+
+```jsx
+// Explicitly set Tagaddod theme (though it's the default)
+<ThemeProvider defaultTheme="tagaddod">
+  <YourApplication />
+</ThemeProvider>
+```
+
+<Canvas of={ThemeProviderStories.GreenPanTheme} />
+
+```jsx
+// Set GreenPan theme
+<ThemeProvider defaultTheme="greenpan">
+  <YourApplication />
+</ThemeProvider>
+```
+
+## Direction and Locale
+
+The `ThemeProvider` supports both Left-to-Right (LTR) and Right-to-Left (RTL) text directions, with corresponding locale settings:
+
+- **LTR**: Used for English (en) content (default)
+- **RTL**: Used for Arabic (ar) content
+
+<Canvas of={ThemeProviderStories.RtlDirection} />
+
+```jsx
+// Set RTL direction and Arabic locale
+<ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+  <YourApplication />
+</ThemeProvider>
+```
+
+## Persistent Storage
+
+Theme preferences are automatically stored in `localStorage` to persist across page reloads. You can customize the storage key:
+
+<Canvas of={ThemeProviderStories.CustomStorageKey} />
+
+```jsx
+// Use a custom localStorage key
+<ThemeProvider storageKey="my-app-theme-preferences">
+  <YourApplication />
+</ThemeProvider>
+```
+
+## Nested Providers
+
+You can nest `ThemeProvider`s to apply different themes to specific sections of your application:
+
+<Canvas of={ThemeProviderStories.NestedThemeProviders} />
+
+```jsx
+<ThemeProvider defaultTheme="tagaddod" defaultDirection="ltr">
+  {/* Outer content uses Tagaddod theme */}
+  <Header />
+  <MainContent />
+  
+  {/* A specific section uses GreenPan theme */}
+  <ThemeProvider defaultTheme="greenpan" defaultDirection="rtl">
+    <GreenPanSection />
+  </ThemeProvider>
+  
+  <Footer />
+</ThemeProvider>
+```
+
+## Hooks
+
+### useTheme
+
+The `useTheme` hook provides access to the current theme context and methods to update it:
+
+```jsx
+import { useTheme } from '@tagaddod/react';
+
+function ThemeSwitcher() {
+  const { 
+    theme,         // Current theme ('tagaddod' | 'greenpan')
+    setTheme,      // Function to update theme
+    direction,     // Current direction ('ltr' | 'rtl')
+    setDirection,  // Function to update direction
+    locale,        // Current locale ('en' | 'ar')
+    setLocale      // Function to update locale
+  } = useTheme();
+  
+  return (
+    <div>
+      <p>Current theme: {theme}</p>
+      <button onClick={() => setTheme('tagaddod')}>Tagaddod</button>
+      <button onClick={() => setTheme('greenpan')}>GreenPan</button>
+      
+      <p>Text direction: {direction}</p>
+      <button onClick={() => setDirection('ltr')}>LTR</button>
+      <button onClick={() => setDirection('rtl')}>RTL</button>
+    </div>
+  );
+}
+```
+
+### useThemeClasses
+
+The `useThemeClasses` hook returns CSS class names and other utility values for theme-based styling:
+
+<Canvas of={ThemeProviderStories.WithThemeClasses} />
+
+```jsx
+import { useThemeClasses } from '@tagaddod/react';
+
+function ThemedComponent() {
+  const { 
+    theme,         // Current theme value
+    direction,     // Current direction value
+    locale,        // Current locale value
+    isRTL,         // Boolean: true if direction is 'rtl'
+    themeClass,    // CSS class for current theme (e.g., 'theme-tagaddod')
+    dirClass,      // CSS class for direction (e.g., 'dir-ltr')
+    localeClass    // CSS class for locale (e.g., 'locale-en')
+  } = useThemeClasses();
+  
+  return (
+    <div className={`my-component ${themeClass} ${dirClass}`}>
+      {/* Component content */}
+    </div>
+  );
+}
+```
+
+## How It Works
+
+The `ThemeProvider` operates through several mechanisms:
+
+### 1. HTML Attributes
+
+When the theme, direction, or locale changes, the provider updates the following HTML attributes:
+
+```html
+<html data-theme="tagaddod" dir="ltr" data-locale="en">
+```
+
+### 2. CSS Variables
+
+Theme-specific CSS variables with the `--t-` prefix are applied via the `data-theme` attribute:
+
+```css
+/* In your CSS */
+[data-theme="tagaddod"] {
+  --t-color-primary: #25b24b;
+  /* other variables */
+}
+
+[data-theme="greenpan"] {
+  --t-color-primary: #009f4d;
+  /* other variables */
+}
+```
+
+### 3. Direction Synchronization
+
+The provider automatically sets both the `dir` attribute and the `direction` property on the document:
+
+```javascript
+document.documentElement.setAttribute('dir', direction);
+document.dir = direction;
+```
+
+### 4. Locale-Direction Coordination
+
+Changing the direction automatically updates the locale to match (RTL → Arabic, LTR → English):
+
+```javascript
+// Inside ThemeProvider
+useEffect(() => {
+  const expectedLocale = getLocaleFromDirection(direction);
+  if (locale !== expectedLocale) {
+    setLocale(expectedLocale);
+  }
+}, [direction, locale]);
+```
+
+### 5. LocalStorage Persistence
+
+Theme preferences are stored in and retrieved from `localStorage`:
+
+```javascript
+localStorage.setItem(storageKey, JSON.stringify({ theme, direction, locale }));
+```
+
+## Implementation Details
+
+### CSS Variables
+
+All components should reference CSS variables with the `--t-` prefix to enable theme switching:
+
+```css
+.Button {
+  background-color: var(--t-color-primary);
+  color: var(--t-color-text-on-primary);
+}
+```
+
+### Theme Switching Mechanism
+
+Theme switching works by changing the `data-theme` attribute, which triggers CSS variable overrides:
+
+1. The `ThemeProvider` sets `data-theme="greenpan"` on the `<html>` element
+2. CSS selectors like `[data-theme="greenpan"]` apply GreenPan-specific variables
+3. Components using `var(--t-*)` automatically reflect the new values
+
+### RTL Support Pattern
+
+The `direction` state is synchronized with the `dir` attribute, enabling:
+
+1. CSS logical properties (`margin-inline`, `padding-inline-start`, etc.)
+2. Automatic text alignment and flow
+3. Icon flipping through CSS transforms
+4. Proper scrollbar positioning
+
+## Accessibility
+
+The `ThemeProvider` ensures accessibility by:
+
+- Setting the proper document `dir` attribute for assistive technologies
+- Maintaining proper text alignment in RTL mode
+- Preserving logical key navigation in RTL contexts
+- Providing programmatic access to current theme settings
+
+## Common Use Cases
+
+### Theme Toggle Button
+
+```jsx
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  
+  return (
+    <button 
+      onClick={() => setTheme(theme === 'tagaddod' ? 'greenpan' : 'tagaddod')}
+      aria-label={`Switch to ${theme === 'tagaddod' ? 'GreenPan' : 'Tagaddod'} theme`}
+    >
+      {theme === 'tagaddod' ? 'Switch to GreenPan' : 'Switch to Tagaddod'}
+    </button>
+  );
+}
+```
+
+### Language Switcher with Direction
+
+```jsx
+function LanguageSwitcher() {
+  const { locale, setDirection } = useTheme();
+  
+  const switchLanguage = () => {
+    // Direction change will automatically update locale due to the internal effect
+    setDirection(locale === 'en' ? 'rtl' : 'ltr');
+  };
+  
+  return (
+    <button onClick={switchLanguage}>
+      {locale === 'en' ? 'العربية' : 'English'}
+    </button>
+  );
+}
+```
+
+### Theme-Aware Component
+
+```jsx
+function ThemedCard({ children }) {
+  const { theme } = useTheme();
+  
+  return (
+    <div className="card">
+      {theme === 'greenpan' && <GreenPanLogo className="card-logo" />}
+      {theme === 'tagaddod' && <TagaddodLogo className="card-logo" />}
+      <div className="card-content">
+        {children}
+      </div>
+    </div>
+  );
+}
+```
+
+## Best Practices
+
+1. **Always use the `ThemeProvider` at the root level** of your application to ensure consistent theming.
+
+2. **Reference theme values through CSS variables** rather than hardcoding colors or other visual properties.
+
+3. **Use logical CSS properties** for directional styles to support RTL languages:
+   ```css
+   /* Good - automatically flips in RTL */
+   .element {
+     margin-inline-start: 16px;
+   }
+   
+   /* Bad - doesn't change in RTL */
+   .element {
+     margin-left: 16px;
+   }
+   ```
+
+4. **Test components in both themes and directions** to ensure they adapt correctly.
+
+5. **Avoid directly manipulating `data-theme` or `dir`** attributes; use the provided context methods.
+
+6. **Consider nested providers carefully** - they can create confusing hierarchies that are hard to debug.
+
+## Browser Support
+
+The `ThemeProvider` works in all modern browsers that support:
+
+- CSS Custom Properties (Variables)
+- CSS Logical Properties
+- Context API
+- localStorage
+
+## Related
+
+- [Design Tokens](/docs/tokens-intro--documentation)
+- [Global Styles](/docs/styles-intro--documentation)
+- [Internationalization](/docs/i18n-intro--documentation)

@@ -35,7 +35,7 @@ import { Table } from '@tagaddod/react';
 
 ## Basic Usage
 
-<Canvas of={TableStories.Default} />
+<Canvas of={TableStories.Example} />
 
 ```jsx
 import { Table } from '@tagaddod/react';
@@ -117,13 +117,24 @@ const data = [
 />
 ```
 
+## Interactive Playground
+
+Try out all the Table component features in a single place:
+
+<Canvas of={TableStories.Playground} />
+
+Use the controls panel below to:
+- Toggle features on/off (search, filters, pagination, tabs, etc.)
+- Switch between different table states (normal, error, empty, etc.)
+- Change direction (LTR/RTL)
+- Configure tab behavior
+- Modify display options
+
 ## Features
 
 ### Pagination
 
 Add pagination to control the number of records displayed per page.
-
-<Canvas of={TableStories.WithPagination} />
 
 ```jsx
 import { useState } from 'react';
@@ -149,8 +160,6 @@ const [pageSize, setPageSize] = useState(5);
 ### Enhanced Search and Filters
 
 Enable search functionality and filters for more targeted data exploration.
-
-<Canvas of={TableStories.WithEnhancedSearchAndFilters} />
 
 ```jsx
 const [searchQuery, setSearchQuery] = useState('');
@@ -199,8 +208,6 @@ const [isFilterBarVisible, setIsFilterBarVisible] = useState(true);
 
 Create tabbed interfaces to organize different data sets.
 
-<Canvas of={TableStories.WithTabs} />
-
 ```jsx
 const [activeTab, setActiveTab] = useState('inventory');
 
@@ -223,8 +230,6 @@ const [activeTab, setActiveTab] = useState('inventory');
 ### Enhanced Tabs with Automatic Data Switching
 
 For more complex tabbed interfaces, use `tableTabs` to define complete configurations for each tab.
-
-<Canvas of={TableStories.WithEnhancedTabs} />
 
 ```jsx
 <Table
@@ -259,8 +264,6 @@ For more complex tabbed interfaces, use `tableTabs` to define complete configura
 
 Enable grid cells to show borders between cells for better data visualization.
 
-<Canvas of={TableStories.WithGridCells} />
-
 ```jsx
 <Table
   data={data}
@@ -277,8 +280,6 @@ Enable grid cells to show borders between cells for better data visualization.
 
 Show a message when there's no data to display.
 
-<Canvas of={TableStories.EmptyState} />
-
 ```jsx
 <Table
   data={[]}
@@ -293,8 +294,6 @@ Show a message when there's no data to display.
 
 Display a loading indicator while data is being fetched.
 
-<Canvas of={TableStories.LoadingState} />
-
 ```jsx
 <Table
   data={[]}
@@ -307,8 +306,6 @@ Display a loading indicator while data is being fetched.
 ### Error State
 
 Show an error message when data retrieval fails.
-
-<Canvas of={TableStories.ErrorState} />
 
 ```jsx
 <Table
@@ -324,8 +321,6 @@ Show an error message when data retrieval fails.
 
 Indicate when a search yields no results.
 
-<Canvas of={TableStories.NotFoundState} />
-
 ```jsx
 <Table
   data={[]}
@@ -340,8 +335,6 @@ Indicate when a search yields no results.
 ## Internationalization
 
 The Table component properly handles Right-to-Left (RTL) languages automatically.
-
-<Canvas of={TableStories.RTLExample} />
 
 ```jsx
 <div dir="rtl" style={{ width: '100%' }}>

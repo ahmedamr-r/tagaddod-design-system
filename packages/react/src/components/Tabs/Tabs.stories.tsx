@@ -73,6 +73,119 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Interactive Playground
+export const Playground: Story = {
+  name: 'Tabs Playground',
+  render: (args) => {
+    // Helper function to create tab elements based on count
+    const createTabs = (count: number, useIcons: boolean = false, withBadges: boolean = false) => {
+      const tabs = [];
+      
+      // Tab Icons
+      const icons = [
+        <IconHome size={18} />,
+        <IconUser size={18} />,
+        <IconSettings size={18} />,
+        <IconBell size={18} />,
+        <IconCalendar size={18} />,
+        <IconMessage size={18} />
+      ];
+      
+      // Labels based on direction
+      const getLabel = (index: number) => {
+        if (args.dir === 'rtl') {
+          const arabicLabels = ['الرئيسية', 'الملف الشخصي', 'الإعدادات', 'التنبيهات', 'التقويم', 'الرسائل'];
+          return arabicLabels[index] || `Tab ${index + 1}`;
+        }
+        
+        const englishLabels = ['Home', 'Profile', 'Settings', 'Notifications', 'Calendar', 'Messages'];
+        return englishLabels[index] || `Tab ${index + 1}`;
+      };
+      
+      for (let i = 0; i < count; i++) {
+        tabs.push(
+          <TabsTrigger 
+            key={`tab${i+1}`} 
+            value={`tab${i+1}`}
+            icon={useIcons ? icons[i] : undefined}
+            badge={withBadges && i === 1 ? '3' : undefined}
+            description={`Description for ${getLabel(i)}`}
+          >
+            {getLabel(i)}
+          </TabsTrigger>
+        );
+      }
+      
+      return tabs;
+    };
+    
+    // Helper function to create tab content elements based on count
+    const createTabContent = (count: number) => {
+      const contents = [];
+      
+      // Content based on direction
+      const getContent = (index: number) => {
+        if (args.dir === 'rtl') {
+          const arabicContent = ['محتوى الرئيسية', 'محتوى الملف الشخصي', 'محتوى الإعدادات', 'محتوى التنبيهات', 'محتوى التقويم', 'محتوى الرسائل'];
+          return arabicContent[index] || `محتوى التبويب ${index + 1}`;
+        }
+        
+        return `Content for tab ${index + 1}`;
+      };
+      
+      for (let i = 0; i < count; i++) {
+        contents.push(
+          <TabsContent key={`content${i+1}`} value={`tab${i+1}`}>
+            <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', minHeight: args.orientation === 'vertical' ? '200px' : 'auto' }}>
+              <h4>{getLabel(i)}</h4>
+              <p>{getContent(i)}</p>
+              <p>This tab demonstrates the {args.variant} variant with {args.orientation} orientation.</p>
+              {args.fitted && <p>These tabs are fitted to take full width.</p>}
+            </div>
+          </TabsContent>
+        );
+      }
+      
+      return contents;
+    };
+    
+    // Helper function for getting labels based on direction and index
+    const getLabel = (index: number) => {
+      if (args.dir === 'rtl') {
+        const arabicLabels = ['الرئيسية', 'الملف الشخصي', 'الإعدادات', 'التنبيهات', 'التقويم', 'الرسائل'];
+        return arabicLabels[index] || `Tab ${index + 1}`;
+      }
+      
+      const englishLabels = ['Home', 'Profile', 'Settings', 'Notifications', 'Calendar', 'Messages'];
+      return englishLabels[index] || `Tab ${index + 1}`;
+    };
+    
+    // For vertical orientation, we need a different layout
+    if (args.orientation === 'vertical') {
+      return (
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <Tabs {...args}>
+            <TabsList style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+              {createTabs(args.count, true, true)}
+            </TabsList>
+            {createTabContent(args.count)}
+          </Tabs>
+        </div>
+      );
+    }
+    
+    // Standard horizontal layout
+    return (
+      <Tabs {...args}>
+        <TabsList>
+          {createTabs(args.count, true, true)}
+        </TabsList>
+        {createTabContent(args.count)}
+      </Tabs>
+    );
+  }
+};
+
 // Basic tabs
 export const Default: Story = {
   render: (args) => (

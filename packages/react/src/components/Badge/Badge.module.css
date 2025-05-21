@@ -28,63 +28,63 @@
 
 /* Default (non-strong) tone variants */
 .tone-default {
-  background-color: var(--t-color-gray-500);
-  color: var(--t-color-text-primary);
+  background-color: var(--t-color-fill-active);
+  color: var(--t-color-text-secondary);
 }
 
 .tone-info {
-  background-color: var(--t-color-blue-500);
+  background-color: var(--t-color-fill-brand-secondary);
   color: var(--t-color-text-link);
 }
 
 .tone-success {
-  background-color: var(--t-color-green-500);
-  color: var(---t-color-text-success);
+  background-color: var(--t-color-fill-success-secondary);
+  color: var(--t-color-text-success);
 }
 
 .tone-warning {
-  background-color: var(--t-color-orange-500);
+  background-color: var(--t-color-fill-warning-secondary);
   color: var(--t-color-text-warning);
 }
 
 .tone-critical {
-  background-color: var(--t-color-red-500);
+  background-color: var(--t-color-fill-critical-secondary);
   color: var(--t-color-text-critical);
 }
 
 .tone-magic {
-  background-color: var(--t-color-purple-500);
+  background-color: var(--t-color-fill-magic-secondary);
   color: var(--t-color-text-magic);
 }
 
 /* Strong tone variants */
 .strong.tone-default {
-  background-color: var(--t-color-gray-1200);
+  background-color: var(--t-color-gray-1100);
   color: var(--t-color-text-on-fill);
 }
 
 .strong.tone-info {
-  background-color: var(--t-color-blue-1200);
+  background-color: var(--t-color-fill-brand);
   color: var(--t-color-text-on-fill);
 }
 
 .strong.tone-success {
-  background-color: var(--t-color-green-1200);
+  background-color: var(--t-color-fill-success);
   color: var(--t-color-text-on-fill);
 }
 
 .strong.tone-warning {
-  background-color: var(--t-color-orange-1200);
-  color: var(--t-color-text-on-fill);
+  background-color: var(--t-color-fill-warning);
+  color: var(--t-color-text-warning);
 }
 
 .strong.tone-critical {
-  background-color: var(--t-color-red-1200);
+  background-color: var(--t-color-fill-critical);
   color: var(--t-color-text-on-fill);
 }
 
 .strong.tone-magic {
-  background-color: var(--t-color-purple-1200);
+  background-color: var(--t-color-fill-magic);
   color: var(--t-color-text-on-fill);
 }
 
@@ -116,7 +116,7 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .label::before {
-  margin-top: 0.1em;
+  margin-top: 0.09em;
 }
 
 :global([dir="rtl"]) .label::after {
