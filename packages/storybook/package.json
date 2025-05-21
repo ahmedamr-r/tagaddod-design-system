@@ -8,7 +8,9 @@
     "watch": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "clean": "rm -rf .storybook-static",
-    "prebuild-storybook": "cd ../tokens && yarn build && cd ../react && yarn build"
+    "prebuild-storybook": "cd ../tokens && yarn build && cd ../react && yarn build",
+      "vercel-build": "yarn build-storybook"
+
   },
   "main": "index.js",
   "license": "MIT",
