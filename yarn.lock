@@ -3157,7 +3157,6 @@
     "@radix-ui/react-switch" "^1.2.4"
     "@radix-ui/react-tabs" "^1.1.11"
     "@tabler/icons-react" "^3.33.0"
-    "@tagaddod-design/tokens" "^0.2.1"
     "@tanstack/react-table" "8"
     clsx "^2.1.1"
 
@@ -3182,7 +3181,6 @@
   resolved "file:packages/storybook"
   dependencies:
     "@tagaddod-design/react" "*"
-    "@tagaddod-design/tokens" "*"
 
 "@tagaddod-design/tokens@*", "@tagaddod-design/tokens@file:/Users/me-mac/Downloads/t-design-system/tagaddod-design-system/packages/tokens":
   version "0.2.3"

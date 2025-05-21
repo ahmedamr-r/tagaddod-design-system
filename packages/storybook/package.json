@@ -13,9 +13,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@tagaddod-design/react": "*",
-    "@tagaddod-design/tokens": "*"
-  },
+    "@tagaddod-design/react": "*"
+    },
   "devDependencies": {
     "@storybook/addon-essentials": "^8.6.12",
     "@storybook/addon-interactions": "^8.6.12",
