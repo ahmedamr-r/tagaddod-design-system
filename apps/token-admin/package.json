@@ -24,7 +24,7 @@
     "zustand": "^5.0.4"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/wcag-contrast": "^3.0.3",
