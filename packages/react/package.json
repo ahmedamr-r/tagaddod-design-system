@@ -1,6 +1,27 @@
 {
   "name": "@tagaddod-design/react",
-  "version": "0.0.7",
+  "version": "0.0.9",
+  "description": "Modern, accessible React component library for building consistent UI at scale.",
+  "homepage": "https://tagaddod-design-system.vercel.app/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahmedamr-r/tagaddod-design-system"
+  },
+  "bugs": {
+    "url": "https://github.com/ahmedamr-r/tagaddod-design-system/issues"
+  },
+  "keywords": [
+    "react",
+    "ui",
+    "component-library",
+    "design-system",
+    "storybook",
+    "accessible",
+    "LLM",
+    "AI",
+    "documentation"
+  ],
+  "docs": "https://tagaddod-design-system.vercel.app/",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
