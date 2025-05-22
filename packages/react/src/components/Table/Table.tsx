@@ -354,6 +354,7 @@ export const Table = <T extends object>({
         styles.tableContainer,
         striped && styles.striped,
         gridCells && styles.gridCells,
+        isFilterBarVisible && styles.tableWithActiveFilter,
         className
       )}
     >
@@ -363,6 +364,7 @@ export const Table = <T extends object>({
             defaultValue={activeTab}
             onValueChange={handleTabChange}
             value={activeTab}
+            dir={isRTL ? "rtl" : "ltr"} // Explicitly set direction
           >
             <TabsList className={styles.tabsList}>
               {tabsForDisplay.map(tab => (

@@ -155,6 +155,12 @@
   flex-shrink: 0; /* Don't shrink actions */
 }
 
+.filterButtonActive {
+  background-color: var(--t-color-surface-active) !important;
+  box-shadow: inset 0 0 0 1px var(--t-color-border-interactive) !important;
+  color: var(--t-color-text-interactive) !important;
+}
+
 /* Search styles */
 .searchWrapper {
   width: 240px; /* Fix width */
@@ -204,6 +210,16 @@
   margin-bottom: -0.25em;
 }
 
+/* Filter items */
+@keyframes rotateIcon {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(45deg);
+  }
+}
+
 .filterItems {
   display: flex;
   align-items: center;
@@ -211,20 +227,37 @@
   flex-wrap: wrap;
 }
 
+/* Initial/unselected filter state */
 .filterItem {
   display: flex;
   align-items: center;
-  background-color: var(--t-color-surface-secondary);
-  border: 1px solid var(--t-color-border-base);
-  border-radius: var(--t-border-radius-200);
-  height: 32px;
+  height: var(--t-size-800);
   padding: 0 var(--t-space-200);
   cursor: pointer;
-  transition: background-color var(--t-duration-base) var(--t-easing-in-out);
+  transition: all 200ms ease-in;
+  position: relative;
 }
 
-.filterItem:hover {
-  background-color: var(--t-color-surface-secondary-hover);
+.filterInitial {
+  background-color: var(--t-color-bg-surface);
+  border: 1px dashed var(--t-color-border-primary);
+  border-radius: var(--t-border-radius-200);
+  color: var(--t-color-text-secondary);
+}
+
+.filterInitial:hover {
+  background-color: var(--t-color-surface-active);
+  color: var(--t-color-text-primary);
+    border: 1px dashed var(--t-color-border-primary);
+
+}
+
+/* Selected filter state */
+.filterSelected {
+  background-color: var(--t-color-surface-background);
+  border: 1px solid var(--t-color-border-tertiary);
+  border-radius: var(--t-border-radius-200);
+  box-shadow: var(--t-shadow-xs);
 }
 
 .filterItemContent {
@@ -233,11 +266,55 @@
   gap: var(--t-space-100);
 }
 
+.filterPlusIcon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 200ms ease-in-out, color 200ms ease-in-out;
+}
+
+.filterIconClickable {
+  cursor: pointer;
+  color: var(--t-color-text-interactive);
+  transition: transform 200ms ease-in-out, color 200ms ease-in-out;
+}
+
+.filterIconClickable:hover {
+  color: var(--t-color-text-critical);
+}
+
+.filterIconRotated {
+  transform: rotate(45deg);
+}
+
+.filterIconRotated:hover {
+  transform: rotate(45deg) scale(1.1); /* Slight scale on hover for emphasis */
+}
+
+.filterInitial:hover .filterChevron {
+  transform: rotate(180deg);
+}
+
+.filterSelected .filterPlusIcon {
+  transform: rotate(45deg);
+}
+
 .filterLabel {
   font-size: var(--t-font-size-300);
   font-weight: var(--t-font-weight-medium);
-  color: var(--t-color-text-primary);
+  color: inherit;
   position: relative;
+  transition: color 200ms ease-in-out;
+}
+
+.filterLabelSelected {
+  color: var(--t-color-text-secondary);
+}
+.filterPopoverActive > .filterLabel {
+    color: red;
+
 }
 
 /* Line height trim for filter label */
@@ -272,8 +349,8 @@
 }
 
 .filterSeparator {
-  color: var(--t-color-text-tertiary);
-  margin: 0 var(--t-space-100);
+  color: var(--t-color-text-disabled);
+  margin: 0 ;
 }
 
 .filterValue {
@@ -286,6 +363,7 @@
 .filterChevron {
   color: var(--t-color-text-tertiary);
   margin-left: var(--t-space-100);
+  transition: transform 200ms ease-in;
 }
 
 :global([dir="rtl"]) .filterChevron {
@@ -300,12 +378,12 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background-color: var(--t-color-surface-tertiary);
   border: none;
   cursor: pointer;
   margin-left: var(--t-space-100);
   color: var(--t-color-text-tertiary);
-  transition: all var(--t-duration-base) var(--t-easing-in-out);
+  transition: all 200ms ease-in;
+  background: transparent;
 }
 
 :global([dir="rtl"]) .filterRemoveButton {
@@ -326,6 +404,9 @@
   border-radius: var(--t-border-radius-200);
   background-color: var(--t-color-surface-background);
   border: 1px solid var(--t-color-border-base);
+  z-index: 101; /* Higher than popover to ensure dropdown is above */
+  pointer-events: auto; /* Ensure clicks on dropdown work */
+  margin-top: 8px;
 }
 
 .filterOption {
@@ -334,12 +415,12 @@
   border-radius: var(--t-border-radius-100);
   font-size: var(--t-font-size-300);
   color: var(--t-color-text-primary);
-  transition: background-color var(--t-duration-base) var(--t-easing-in-out);
+  transition: background-color 200ms ease-in;
   position: relative;
 }
 
 .filterOption:hover {
-  background-color: var(--t-color-surface-secondary);
+  background-color: var(--t-color-surface-hover);
 }
 
 .filterOptionSelected {
@@ -356,12 +437,20 @@
 .tableContent {
   overflow-x: auto;
   flex: 1;
+  position: relative;
+  z-index: 1; /* Create stacking context for table content */
+}
+
+/* Create a helper class for when filters are open */
+.tableWithActiveFilter .tableContent {
+  z-index: 0; /* Lower z-index when filters are active */
 }
 
 .table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  position: relative;
 }
 
 /* Table header */
@@ -379,7 +468,9 @@
   position: sticky;
   top: 0;
   z-index: 2;
-  background-color: var(--t-color-bg-primary);
+  background-color: var(--t-color-surface-secondary);
+  transition: background-color var(--t-duration-base) var(--t-easing-in-out),
+              box-shadow var(--t-duration-base) var(--t-easing-in-out);
 }
 
 :global([dir="rtl"]) .tableHeaderCell {
@@ -436,8 +527,17 @@
   cursor: pointer;
 }
 
+.sortable:hover {
+  background-color: var(--t-color-surface-secondary-hover);
+}
+
+.activeSorted {
+  background-color: var(--t-color-surface-selected);
+  box-shadow: inset 0 -2px 0 0 var(--t-color-border-interactive);
+}
+
 .sortIcon {
-  color: var(--t-color-text-brand);
+  color: var(--t-color-text-interactive);
 }
 
 .sortIconDefault {
@@ -469,6 +569,14 @@
   border-bottom: 1px solid var(--t-color-border-tertiary);
   line-height: 1;
   vertical-align: middle;
+  position: relative;
+  transition: background-color var(--t-duration-base) var(--t-easing-in-out);
+}
+
+.tableRow:hover .tableCell {
+  /* Make this style apply on parent row hover */
+  position: relative;
+  z-index: 2; /* Same z-index as hovered rows */
 }
 
 :global([dir="rtl"]) .tableCell {
@@ -548,6 +656,13 @@
 /* Table rows */
 .tableRow {
   transition: background-color var(--t-duration-base) var(--t-easing-in-out);
+  position: relative;
+  z-index: 1; /* Base z-index for rows */
+}
+
+.tableRow:hover {
+  z-index: 2; /* Raise z-index on hover to ensure hover states are visible */
+  position: relative;
 }
 
 .clickableRow {
@@ -673,4 +788,23 @@
     padding: var(--t-space-100) var(--t-space-300);
     white-space: nowrap;
   }
+}
+
+/* Active filter state when popover is open */
+.filterPopoverActive {
+  background-color: var(--t-color-surface-active) !important;
+  border: 1px solid var(--t-color-border-primary) !important;
+  box-shadow: var(--t-shadow-xs);
+  color: var(--t-color-text-primary) !important;
+  z-index: 101; /* Keep above other filters */
+}
+
+.filterPopoverActive.filterInitial {
+  background-color: var(--t-color-surface-active) !important;
+  color: var(--t-color-text-primary) !important;
+}
+
+.filterChevronActive {
+  transform: rotate(180deg) !important;
+  color: var(--t-color-text-interactive) !important;
 }

@@ -1,0 +1,81 @@
+/* Separator Component Styles */
+
+/* Base separator styles */
+.separator {
+  border: none;
+  margin: 0;
+  flex-shrink: 0;
+  background-color: var(--t-color-border-primary);
+  box-sizing: border-box;
+}
+
+/* Horizontal orientation (default) */
+.horizontal {
+  width: 100%;
+  height: 1px;
+  margin: var(--t-space-300) 0;
+}
+
+/* Vertical orientation */
+.vertical {
+  width: 1px;
+  height: 100%;
+  margin: 0 var(--t-space-300);
+  align-self: stretch;
+}
+
+/* RTL support - separators generally don't need RTL-specific changes,
+   but we ensure consistent spacing */
+:global([dir="rtl"]) .horizontal {
+  /* Horizontal separators remain the same in RTL */
+}
+
+:global([dir="rtl"]) .vertical {
+  /* Vertical separators remain the same in RTL */
+}
+
+/* Variants for different contexts */
+.separator.subtle {
+  background-color: var(--t-color-border-secondary);
+}
+
+.separator.bold {
+  background-color: var(--t-color-border-strong);
+}
+
+/* Size variations */
+.separator.large {
+  background-color: var(--t-color-border-primary);
+}
+
+.horizontal.large {
+  height: 2px;
+}
+
+.vertical.large {
+  width: 2px;
+}
+
+/* Interactive states for when separator is used in interactive contexts */
+.separator:hover {
+  background-color: var(--t-color-border-hover);
+}
+
+/* Ensure proper contrast in different themes */
+@media (prefers-color-scheme: dark) {
+  .separator {
+    /* Design tokens should handle dark mode, but ensuring fallback */
+    background-color: var(--t-color-border-primary, rgba(255, 255, 255, 0.1));
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .horizontal {
+    margin: var(--t-space-200) 0;
+  }
+  
+  .vertical {
+    margin: 0 var(--t-space-200);
+  }
+}

@@ -7,12 +7,13 @@ This guide provides instructions for developing new components in the Tagaddod D
 1. [Component Creation Overview](#component-creation-overview)
 2. [Project Structure](#project-structure)
 3. [Step-by-Step Component Creation](#step-by-step-component-creation)
-4. [RTL Implementation](#rtl-implementation)
-5. [Component Requirements](#component-requirements)
-6. [Styling Guidelines](#styling-guidelines)
-7. [Accessibility Considerations](#accessibility-considerations)
-8. [Component Testing](#component-testing)
-9. [Integration Checklist](#integration-checklist)
+4. [Component Documentation Standards](#component-documentation-standards)
+5. [RTL Implementation](#rtl-implementation)
+6. [Component Requirements](#component-requirements)
+7. [Styling Guidelines](#styling-guidelines)
+8. [Accessibility Considerations](#accessibility-considerations)
+9. [Component Testing](#component-testing)
+10. [Integration Checklist](#integration-checklist)
 
 ## Component Creation Overview
 
@@ -22,7 +23,7 @@ Each component in the Tagaddod Design System follows a standardized structure an
 - Support both Tagaddod and GreenPan brand themes
 - Support RTL languages (Arabic)
 - Follow accessible design patterns
-- Include comprehensive Storybook documentation
+- Include comprehensive Storybook documentation with MDX files
 - Utilize the design token system
 
 ## Project Structure
@@ -33,7 +34,8 @@ Components are located in the `packages/react/src/components` directory, with ea
 packages/react/src/components/[ComponentName]/
 ├── [ComponentName].tsx           # Component implementation
 ├── [ComponentName].module.css    # Component styles
-├── [ComponentName].stories.tsx   # Storybook documentation
+├── [ComponentName].stories.tsx   # Storybook stories
+├── [ComponentName].mdx           # Comprehensive documentation
 ├── index.ts                      # Component exports
 ```
 
@@ -158,8 +160,11 @@ const meta: Meta<typeof [ComponentName]> = {
   component: [ComponentName],
   parameters: {
     layout: 'centered',
+    docs: {
+      page: () => import('./[ComponentName].mdx'),
+    },
   },
-  tags: ['autodocs'],
+  tags: [],
   argTypes: {
     // Define argTypes for Storybook controls
   },
@@ -211,6 +216,321 @@ export type { [ComponentName]Props } from './[ComponentName]';
 cd /path/to/tagaddod-design-system-main
 yarn workspace @tagaddod/react build
 yarn workspace @tagaddod/storybook storybook --port 6011
+```
+
+## Component Documentation Standards
+
+**CRITICAL**: Every component MUST include comprehensive MDX documentation following these standards.
+
+### Documentation File Structure
+
+Create `[ComponentName].mdx` following this exact structure:
+
+#### 1. Header and Meta Information
+
+```mdx
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as [ComponentName]Stories from './[ComponentName].stories';
+import { [ComponentName] } from './[ComponentName]';
+
+<Meta of={[ComponentName]Stories} />
+
+# [ComponentName] Component
+
+Brief description of what the component does and its primary purpose.
+
+## Overview
+
+Detailed explanation of the component's role in the design system and user interfaces.
+
+## Import
+
+```jsx
+import { [ComponentName] } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={[ComponentName]} />
+```
+
+#### 2. Basic Usage Section
+
+```mdx
+## Basic Usage
+
+<Canvas of={[ComponentName]Stories.Default} />
+
+```jsx
+// Default usage
+<[ComponentName] />
+
+// With props
+<[ComponentName] prop="value" />
+```
+```
+
+#### 3. Feature Sections (Variants, States, etc.)
+
+```mdx
+## [Feature Name]
+
+Description of the feature and when to use it.
+
+<Canvas of={[ComponentName]Stories.[FeatureName]} />
+
+```jsx
+<[ComponentName] feature="value" />
+```
+
+### When to use [Feature]:
+- Specific use case 1
+- Specific use case 2
+```
+
+#### 4. Real-World Examples Section
+
+```mdx
+## Real-World Examples
+
+### [Example Name]
+
+Description of practical usage scenario.
+
+<Canvas of={[ComponentName]Stories.[ExampleName]} />
+
+```jsx
+// Copy-paste ready code example
+<div>
+  <[ComponentName] />
+  {/* Additional context */}
+</div>
+```
+```
+
+#### 5. Accessibility Section
+
+```mdx
+## Accessibility
+
+<Canvas of={[ComponentName]Stories.AccessibilityShowcase} />
+
+### Best Practices
+
+- Accessibility guideline 1
+- Accessibility guideline 2
+- When to use semantic vs decorative approaches
+
+```jsx
+// Accessible usage example
+<[ComponentName] 
+  aria-label="Descriptive label"
+  role="appropriate-role"
+/>
+```
+```
+
+#### 6. Internationalization Section
+
+```mdx
+## Internationalization
+
+<Canvas of={[ComponentName]Stories.RTLExample} />
+
+The component supports Right-to-Left (RTL) languages:
+
+```jsx
+// RTL usage
+<div dir="rtl">
+  <[ComponentName]>Arabic content</[ComponentName]>
+</div>
+```
+
+**RTL Considerations:**
+- How the component behaves in RTL mode
+- Any special considerations
+```
+
+#### 7. Styling and Customization
+
+```mdx
+## Styling and Customization
+
+### CSS Variables
+
+The component uses the following design tokens:
+
+| Variable | Purpose | Default Value |
+|----------|---------|---------------|
+| `--t-color-*` | Color properties | Theme-dependent |
+| `--t-space-*` | Spacing properties | Token values |
+
+### Custom Styling
+
+```jsx
+// Custom styling approaches
+<[ComponentName] className="custom-class" />
+```
+
+```css
+/* Custom CSS examples */
+.custom-class {
+  /* Customization examples */
+}
+```
+```
+
+#### 8. Advanced Usage Patterns
+
+```mdx
+## Advanced Usage Patterns
+
+### [Pattern Name]
+
+```jsx
+// Advanced usage example
+const [PatternName] = () => {
+  // Implementation
+  return <[ComponentName] />;
+};
+```
+```
+
+#### 9. API Reference
+
+```mdx
+## Component API Reference
+
+### [ComponentName] Props
+
+```typescript
+interface [ComponentName]Props {
+  /** Detailed prop description */
+  propName?: type;
+  
+  // All props with full TypeScript definitions
+}
+```
+
+### Constants
+
+```jsx
+import { componentConstants } from '@tagaddod/react';
+
+// Available constants explanation
+```
+```
+
+#### 10. Testing Section
+
+```mdx
+## Testing
+
+### Unit Testing Examples
+
+```jsx
+import { render, screen } from '@testing-library/react';
+import { [ComponentName] } from '@tagaddod/react';
+
+// Test examples that developers can copy
+test('renders component correctly', () => {
+  render(<[ComponentName] />);
+  // Assertions
+});
+```
+
+### Integration Testing
+
+```jsx
+// Integration test examples
+```
+```
+
+#### 11. Browser Support and Performance
+
+```mdx
+## Performance Considerations
+
+- Performance notes specific to the component
+- Optimization tips
+
+## Browser Support
+
+- **Chrome**: version+
+- **Firefox**: version+
+- **Safari**: version+
+- **Edge**: version+
+
+**Features used:**
+- List of modern web features the component uses
+```
+
+#### 12. Migration Guide
+
+```mdx
+## Migration Guide
+
+### From Other Libraries
+
+**From Material-UI:**
+```jsx
+// Material-UI approach
+<OtherComponent />
+
+// Tagaddod approach
+<[ComponentName] />
+```
+
+### Upgrading
+
+When upgrading from previous versions:
+1. Step-by-step upgrade instructions
+2. Breaking changes
+3. New features
+```
+
+### Documentation Requirements Checklist
+
+Every component documentation MUST include:
+
+- [ ] **Complete API Reference**: Every prop documented with types and descriptions
+- [ ] **Interactive Examples**: Canvas components showing all major features
+- [ ] **Copy-Paste Code**: Ready-to-use code snippets for all examples
+- [ ] **Real-World Usage**: At least 3 practical usage scenarios
+- [ ] **Accessibility Guidelines**: Proper ARIA usage and screen reader considerations
+- [ ] **RTL Support**: Examples and considerations for Arabic text
+- [ ] **Styling Guide**: CSS variables, customization options
+- [ ] **Testing Examples**: Unit and integration test patterns
+- [ ] **Performance Notes**: Browser support and optimization tips
+- [ ] **Migration Guide**: How to upgrade or migrate from other libraries
+
+### LLM-Friendly Documentation Features
+
+To ensure LLM agents can effectively use the documentation:
+
+1. **Structured Headings**: Use consistent heading hierarchy
+2. **Complete Code Examples**: Include full, runnable examples
+3. **Context Information**: Explain when and why to use features
+4. **Edge Cases**: Document error states and unusual usage
+5. **Integration Patterns**: Show how components work together
+6. **Troubleshooting**: Common issues and solutions
+
+### Documentation Integration with Stories
+
+Update the stories file to reference the documentation:
+
+```tsx
+const meta: Meta<typeof [ComponentName]> = {
+  title: 'Components/[ComponentName]',
+  component: [ComponentName],
+  parameters: {
+    layout: 'centered',
+    docs: {
+      page: () => import('./[ComponentName].mdx'), // Key line
+    },
+  },
+  // ... rest of meta
+};
 ```
 
 ## RTL Implementation
@@ -415,6 +735,9 @@ Before submitting a new component, ensure:
 - [ ] Component supports RTL layouts (tested in browser)
 - [ ] Component is accessible
 - [ ] Component includes Storybook stories
+- [ ] **Component has comprehensive MDX documentation**
+- [ ] **Documentation includes all required sections from the checklist**
+- [ ] **Stories reference the MDX documentation page**
 - [ ] Component is exported from the main index
 - [ ] Component builds without errors
 
@@ -559,6 +882,171 @@ NewComponent.displayName = 'NewComponent';
     font-size: var(--t-font-size-300);
   }
 }
+```
+
+### `NewComponent.stories.tsx` with Documentation
+
+```tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { NewComponent } from './NewComponent';
+
+const meta = {
+  title: 'Components/NewComponent',
+  component: NewComponent,
+  parameters: {
+    layout: 'centered',
+    docs: {
+      page: () => import('./NewComponent.mdx'),
+    },
+  },
+  tags: [],
+  argTypes: {
+    children: {
+      control: 'text',
+      description: 'Component content'
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Whether the component is disabled'
+    },
+    error: {
+      control: 'text',
+      description: 'Error message to display'
+    },
+    className: {
+      control: 'text',
+      description: 'Additional CSS classes'
+    }
+  },
+  args: {
+    disabled: false,
+  },
+} satisfies Meta<typeof NewComponent>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    children: 'Component content',
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    children: 'Disabled component',
+    disabled: true,
+  },
+};
+
+export const WithError: Story = {
+  args: {
+    children: 'Component with error',
+    error: 'Something went wrong',
+  },
+};
+
+export const RTLExample: Story = {
+  args: {
+    children: 'محتوى المكون',
+  },
+  parameters: {
+    globals: {
+      direction: 'rtl',
+    },
+  },
+};
+```
+
+### `NewComponent.mdx` Template
+
+```mdx
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as NewComponentStories from './NewComponent.stories';
+import { NewComponent } from './NewComponent';
+
+<Meta of={NewComponentStories} />
+
+# NewComponent Component
+
+Brief description of what the NewComponent does and its primary purpose.
+
+## Overview
+
+Detailed explanation of the component's role in the design system.
+
+## Import
+
+```jsx
+import { NewComponent } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={NewComponent} />
+
+## Basic Usage
+
+<Canvas of={NewComponentStories.Default} />
+
+```jsx
+<NewComponent>Content</NewComponent>
+```
+
+## States
+
+### Disabled
+
+<Canvas of={NewComponentStories.Disabled} />
+
+```jsx
+<NewComponent disabled>Disabled content</NewComponent>
+```
+
+### With Error
+
+<Canvas of={NewComponentStories.WithError} />
+
+```jsx
+<NewComponent error="Error message">Content</NewComponent>
+```
+
+## Internationalization
+
+<Canvas of={NewComponentStories.RTLExample} />
+
+```jsx
+<div dir="rtl">
+  <NewComponent>محتوى عربي</NewComponent>
+</div>
+```
+
+## Accessibility
+
+- Include accessibility guidelines
+- ARIA attributes usage
+- Keyboard navigation support
+
+## Styling and Customization
+
+### CSS Variables
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-color-*` | Color properties |
+| `--t-space-*` | Spacing properties |
+
+## Testing
+
+```jsx
+import { render, screen } from '@testing-library/react';
+import { NewComponent } from '@tagaddod/react';
+
+test('renders component', () => {
+  render(<NewComponent>Test</NewComponent>);
+  expect(screen.getByText('Test')).toBeInTheDocument();
+});
+```
 ```
 
 ## RTL Debugging Workflow

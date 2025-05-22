@@ -2,7 +2,7 @@
   "color": {
     "fill": {
       "brand": {
-        "$value": "{color.blue.1600}",
+        "$value": "{color.blue.1200}",
         "$type": "color"
       },
       "brand-hover": {

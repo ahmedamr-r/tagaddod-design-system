@@ -91,3 +91,8 @@ export type { ModalProps } from './Modal';
 // Export the AspectRatio component
 export { AspectRatio } from './AspectRatio';
 export type { AspectRatioProps } from './AspectRatio/AspectRatio';
+
+// Export the Separator component
+export { Separator } from './Separator';
+export type { SeparatorProps, SeparatorOrientation } from './Separator';
+export { separatorOrientations } from './Separator';

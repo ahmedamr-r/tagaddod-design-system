@@ -66,10 +66,11 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
           {showFilters && (
             <Button 
               variant="tertiary" 
-              tone={isFilterBarVisible ? "magic" : "neutral"}
+              tone={isFilterBarVisible ? "neutral" : "neutral"}
               onClick={handleFilterClick}
               prefixIcon={<IconAdjustmentsHorizontal size={16} />}
               size="medium"
+              className={isFilterBarVisible ? styles.filterButtonActive : ''}
             >
               {isRTL ? "تصفية" : "Filters"}
             </Button>

@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { IconChevronDown, IconChevronUp, IconHelp } from '@tabler/icons-react';
+import { IconArrowDown, IconArrowUp, IconHelp } from '@tabler/icons-react';
 import { Checkbox } from '../Checkbox';
 import styles from './Table.module.css';
 import { TableHeaderCellProps } from './types';
@@ -26,8 +26,9 @@ export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
   };
 
   // Handle sort click, wrapped to handle event parameter
-  const handleSort = () => {
+  const handleSort = (e: React.MouseEvent) => {
     if (isSortable && onSort) {
+      e.preventDefault();
       onSort();
     }
   };
@@ -42,17 +43,17 @@ export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
     if (!isSortable) return null;
     
     if (sortDirection === 'asc') {
-      return <IconChevronUp className={styles.sortIcon} size={16} />;
+      return <IconArrowUp className={styles.sortIcon} size={16} />;
     }
     
     if (sortDirection === 'desc') {
-      return <IconChevronDown className={styles.sortIcon} size={16} />;
+      return <IconArrowDown className={styles.sortIcon} size={16} />;
     }
     
     // Default sort icon (neutral state)
     return (
       <span className={styles.sortIconDefault}>
-        <IconChevronUp className={styles.sortIconInactive} size={16} />
+        <IconArrowUp className={styles.sortIconInactive} size={16} />
       </span>
     );
   };
@@ -62,9 +63,13 @@ export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
       className={clsx(
         styles.tableHeaderCell,
         isSortable && styles.sortable,
+        isSortable && sortDirection && styles.activeSorted,
         className
       )}
       onClick={isSortable ? handleSort : undefined}
+      role={isSortable ? "button" : undefined}
+      tabIndex={isSortable ? 0 : undefined}
+      aria-sort={sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
     >
       <div className={styles.headerCellContent}>
         {showCheckbox && (

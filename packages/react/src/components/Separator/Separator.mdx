@@ -1,0 +1,497 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as SeparatorStories from './Separator.stories';
+import { Separator } from './Separator';
+
+<Meta of={SeparatorStories} />
+
+# Separator Component
+
+The Separator component is a versatile UI element that provides visual or semantic separation between content sections. It supports both horizontal and vertical orientations and can be configured as either decorative or semantic for accessibility purposes.
+
+## Overview
+
+Separators are essential layout elements that help organize content by creating visual boundaries between different sections, menu items, or content blocks. The Tagaddod Design System provides a comprehensive Separator component that maintains consistent styling and proper accessibility attributes across different contexts.
+
+## Import
+
+```jsx
+import { Separator } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Separator} />
+
+## Basic Usage
+
+<Canvas of={SeparatorStories.Default} />
+
+```jsx
+// Default horizontal separator
+<Separator />
+
+// With custom props
+<Separator orientation="horizontal" decorative={false} />
+```
+
+## Orientations
+
+The Separator supports two orientations to accommodate different layout needs.
+
+<Canvas of={SeparatorStories.OrientationComparison} />
+
+### Horizontal (Default)
+
+Horizontal separators span the full width of their container and are ideal for separating content vertically.
+
+<Canvas of={SeparatorStories.Horizontal} />
+
+```jsx
+<div>
+  <h3>Section Title</h3>
+  <p>Content above the separator</p>
+  <Separator orientation="horizontal" />
+  <p>Content below the separator</p>
+</div>
+```
+
+### Vertical
+
+Vertical separators span the full height of their container and are perfect for separating content horizontally, such as in navigation bars or sidebars.
+
+<Canvas of={SeparatorStories.Vertical} />
+
+```jsx
+<div style={{ display: 'flex', alignItems: 'center' }}>
+  <span>Left content</span>
+  <Separator orientation="vertical" />
+  <span>Right content</span>
+</div>
+```
+
+## Accessibility Modes
+
+The Separator component provides two accessibility modes to accommodate different use cases.
+
+### Semantic Separator
+
+When `decorative={false}` (default), the separator has semantic meaning and will be announced by screen readers.
+
+<Canvas of={SeparatorStories.Semantic} />
+
+```jsx
+<div>
+  <section>Main content section</section>
+  <Separator decorative={false} />
+  <section>Secondary content section</section>
+</div>
+```
+
+**Accessibility attributes:**
+- `role="separator"`
+- `aria-orientation="horizontal"` or `aria-orientation="vertical"`
+
+### Decorative Separator
+
+When `decorative={true}`, the separator is purely visual and will be ignored by screen readers.
+
+<Canvas of={SeparatorStories.Decorative} />
+
+```jsx
+<div>
+  <div>Visually separated content</div>
+  <Separator decorative={true} />
+  <div>More visually separated content</div>
+</div>
+```
+
+**Accessibility attributes:**
+- `role="presentation"`
+
+## Real-World Examples
+
+### Navigation Menu
+
+Separators are commonly used in navigation menus to separate menu items.
+
+<Canvas of={SeparatorStories.NavigationExample} />
+
+```jsx
+<nav style={{ display: 'flex', alignItems: 'center' }}>
+  <a href="#">Home</a>
+  <Separator orientation="vertical" decorative />
+  <a href="#">About</a>
+  <Separator orientation="vertical" decorative />
+  <a href="#">Contact</a>
+</nav>
+```
+
+### Content Sections
+
+Use separators to structure article content and distinguish different sections.
+
+<Canvas of={SeparatorStories.ContentSectionExample} />
+
+```jsx
+<article>
+  <header>
+    <h2>Article Title</h2>
+    <p>Published on January 15, 2024</p>
+  </header>
+  
+  <Separator decorative={false} />
+  
+  <main>
+    <p>Article content goes here...</p>
+  </main>
+  
+  <Separator decorative={false} />
+  
+  <footer>
+    <p>Tags: React, TypeScript, Design System</p>
+  </footer>
+</article>
+```
+
+### Complex Layouts
+
+Separators work well in dashboard-style layouts to create distinct sections.
+
+<Canvas of={SeparatorStories.ComplexLayoutExample} />
+
+```jsx
+<div className="dashboard">
+  <header>
+    <h2>Dashboard</h2>
+    <p>Welcome back, User!</p>
+  </header>
+  
+  <Separator />
+  
+  <main style={{ display: 'flex' }}>
+    <aside>
+      <h3>Navigation</h3>
+      <nav>/* Navigation items */</nav>
+    </aside>
+    
+    <Separator orientation="vertical" />
+    
+    <section>
+      <h3>Recent Activity</h3>
+      <div>/* Activity content */</div>
+    </section>
+  </main>
+  
+  <Separator />
+  
+  <footer>
+    <p>Last updated: 2 hours ago</p>
+  </footer>
+</div>
+```
+
+## Accessibility Best Practices
+
+<Canvas of={SeparatorStories.AccessibilityShowcase} />
+
+### When to Use Semantic vs Decorative
+
+**Use Semantic (`decorative={false}`) when:**
+- The separator logically divides content sections
+- Screen reader users need to understand the content structure
+- The separation has meaning for navigation or content understanding
+
+**Use Decorative (`decorative={true}`) when:**
+- The separator is purely visual styling
+- Content would make sense without the separator
+- Used in navigation menus or visual lists
+
+```jsx
+// Semantic - meaningful content separation
+<div>
+  <section aria-labelledby="intro">
+    <h2 id="intro">Introduction</h2>
+    <p>Introduction content...</p>
+  </section>
+  <Separator decorative={false} />
+  <section aria-labelledby="details">
+    <h2 id="details">Details</h2>
+    <p>Detailed content...</p>
+  </section>
+</div>
+
+// Decorative - visual menu separation
+<nav>
+  <a href="#">Item 1</a>
+  <Separator orientation="vertical" decorative={true} />
+  <a href="#">Item 2</a>
+  <Separator orientation="vertical" decorative={true} />
+  <a href="#">Item 3</a>
+</nav>
+```
+
+## Internationalization
+
+The Separator component works seamlessly with Right-to-Left (RTL) languages:
+
+<Canvas of={SeparatorStories.RTLExample} />
+
+```jsx
+// The separator will maintain proper spacing in RTL mode
+<div dir="rtl">
+  <div>محتوى عربي أعلى</div>
+  <Separator />
+  <div>محتوى عربي أسفل</div>
+</div>
+```
+
+**RTL Considerations:**
+- Horizontal separators work identically in RTL mode
+- Vertical separators maintain consistent spacing
+- CSS logical properties ensure proper behavior
+
+## Styling and Customization
+
+### CSS Variables
+
+The Separator uses the following design tokens:
+
+| Variable | Purpose | Default Value |
+|----------|---------|---------------|
+| `--t-color-border-primary` | Main separator color | Theme-dependent |
+| `--t-color-border-secondary` | Subtle separator color | Theme-dependent |
+| `--t-color-border-strong` | Bold separator color | Theme-dependent |
+| `--t-color-border-hover` | Hover state color | Theme-dependent |
+| `--t-space-200` | Mobile spacing | `8px` |
+| `--t-space-300` | Default spacing | `12px` |
+
+### Custom Styling
+
+You can customize the separator appearance using CSS classes:
+
+```jsx
+// Custom class for styling
+<Separator className="custom-separator" />
+
+// Inline styles (not recommended for production)
+<Separator style={{ backgroundColor: '#custom-color' }} />
+```
+
+```css
+/* Custom separator styles */
+.custom-separator {
+  background-color: var(--t-color-brand-primary);
+  opacity: 0.5;
+}
+
+.custom-separator.horizontal {
+  height: 2px;
+  margin: var(--t-space-400) 0;
+}
+
+.custom-separator.vertical {
+  width: 2px;
+  margin: 0 var(--t-space-400);
+}
+```
+
+## Advanced Usage Patterns
+
+### Conditional Separators
+
+```jsx
+const items = ['Item 1', 'Item 2', 'Item 3'];
+
+<div style={{ display: 'flex' }}>
+  {items.map((item, index) => (
+    <React.Fragment key={item}>
+      <span>{item}</span>
+      {index < items.length - 1 && (
+        <Separator orientation="vertical" decorative />
+      )}
+    </React.Fragment>
+  ))}
+</div>
+```
+
+### Responsive Separators
+
+```jsx
+// Different orientations based on screen size
+const useResponsiveSeparator = () => {
+  const [orientation, setOrientation] = useState('horizontal');
+  
+  useEffect(() => {
+    const updateOrientation = () => {
+      setOrientation(window.innerWidth < 768 ? 'horizontal' : 'vertical');
+    };
+    
+    updateOrientation();
+    window.addEventListener('resize', updateOrientation);
+    return () => window.removeEventListener('resize', updateOrientation);
+  }, []);
+  
+  return orientation;
+};
+
+function ResponsiveSeparator() {
+  const orientation = useResponsiveSeparator();
+  return <Separator orientation={orientation} />;
+}
+```
+
+### Interactive Separators
+
+```jsx
+// Separator that responds to hover states
+<Separator 
+  className="interactive-separator"
+  onMouseEnter={() => console.log('Separator hovered')}
+  onMouseLeave={() => console.log('Separator unhovered')}
+/>
+```
+
+## Component API Reference
+
+### Separator Props
+
+```typescript
+interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** The orientation of the separator */
+  orientation?: 'horizontal' | 'vertical';
+  
+  /** Whether the separator is decorative or semantic */
+  decorative?: boolean;
+  
+  /** Additional CSS classes */
+  className?: string;
+  
+  // Inherits all standard HTML div attributes
+  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseEnter?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseLeave?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  style?: React.CSSProperties;
+  'data-testid'?: string;
+  id?: string;
+  // ... and more
+}
+```
+
+### Constants
+
+```jsx
+import { separatorOrientations } from '@tagaddod/react';
+
+// Available orientations: ['horizontal', 'vertical']
+console.log(separatorOrientations);
+```
+
+## Testing
+
+### Unit Testing Examples
+
+```jsx
+import { render, screen } from '@testing-library/react';
+import { Separator } from '@tagaddod/react';
+
+// Test semantic separator
+test('renders semantic separator with proper ARIA attributes', () => {
+  render(<Separator decorative={false} orientation="horizontal" />);
+  
+  const separator = screen.getByRole('separator');
+  expect(separator).toHaveAttribute('aria-orientation', 'horizontal');
+});
+
+// Test decorative separator
+test('renders decorative separator with presentation role', () => {
+  render(<Separator decorative={true} data-testid="decorative-sep" />);
+  
+  const separator = screen.getByTestId('decorative-sep');
+  expect(separator).toHaveAttribute('role', 'presentation');
+});
+
+// Test custom class
+test('applies custom class name', () => {
+  render(<Separator className="custom-class" data-testid="separator" />);
+  
+  const separator = screen.getByTestId('separator');
+  expect(separator).toHaveClass('custom-class');
+});
+```
+
+### Integration Testing
+
+```jsx
+// Test in navigation context
+test('separator works in navigation menu', () => {
+  render(
+    <nav>
+      <a href="#">Home</a>
+      <Separator orientation="vertical" decorative />
+      <a href="#">About</a>
+    </nav>
+  );
+  
+  const links = screen.getAllByRole('link');
+  expect(links).toHaveLength(2);
+  
+  // Decorative separator should not be announced
+  expect(screen.queryByRole('separator')).not.toBeInTheDocument();
+});
+```
+
+## Performance Considerations
+
+- The Separator component is lightweight with minimal DOM footprint
+- Uses CSS-only styling for optimal rendering performance
+- No JavaScript calculations or state management
+- Supports CSS containment for improved browser optimization
+
+## Browser Support
+
+The Separator component works in all modern browsers:
+
+- **Chrome**: 60+
+- **Firefox**: 60+
+- **Safari**: 12+
+- **Edge**: 79+
+- **Mobile browsers**: iOS Safari 12+, Chrome Mobile 60+
+
+**Features used:**
+- CSS Flexbox (for layout)
+- CSS Custom Properties (for theming)
+- ARIA attributes (for accessibility)
+
+## Migration Guide
+
+### From Other Libraries
+
+**From Material-UI Divider:**
+```jsx
+// Material-UI
+<Divider />
+<Divider orientation="vertical" />
+
+// Tagaddod Separator
+<Separator />
+<Separator orientation="vertical" />
+```
+
+**From Ant Design Divider:**
+```jsx
+// Ant Design
+<Divider />
+<Divider type="vertical" />
+
+// Tagaddod Separator
+<Separator />
+<Separator orientation="vertical" />
+```
+
+### Upgrading
+
+When upgrading from previous versions, ensure:
+1. Update import paths if changed
+2. Review accessibility settings (`decorative` prop)
+3. Check custom CSS classes for compatibility
+4. Test in RTL contexts if applicable

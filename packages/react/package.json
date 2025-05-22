@@ -1,11 +1,11 @@
 {
   "name": "@tagaddod-design/react",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Modern, accessible React component library for building consistent UI at scale.",
   "homepage": "https://tagaddod-design-system.vercel.app/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ahmedamr-r/tagaddod-design-system"
+    "url": "https://github.com/ahmedamr-r/tagaddod-design-system/tree/main/packages/react"
   },
   "bugs": {
     "url": "https://github.com/ahmedamr-r/tagaddod-design-system/issues"
@@ -91,6 +91,11 @@
       "types": "./dist/types/components/RadioButton/RadioButton.d.ts",
       "import": "./dist/esm/components/RadioButton/RadioButton.js",
       "default": "./dist/components/RadioButton/index.js"
+    },
+    "./components/Separator": {
+      "types": "./dist/types/components/Separator/Separator.d.ts",
+      "import": "./dist/esm/components/Separator/Separator.js",
+      "default": "./dist/components/Separator/index.js"
     },
     "./components/Switch": {
       "types": "./dist/types/components/Switch/Switch.d.ts",
