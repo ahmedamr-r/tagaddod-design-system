@@ -33,6 +33,7 @@ export default defineConfig({
         '@radix-ui/react-form',
         '@radix-ui/react-popover',
         '@radix-ui/react-radio-group',
+        '@radix-ui/react-select',
         '@radix-ui/react-switch',
         '@radix-ui/react-tabs',
         '@tabler/icons-react',

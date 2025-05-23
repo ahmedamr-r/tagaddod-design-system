@@ -96,3 +96,8 @@ export type { AspectRatioProps } from './AspectRatio/AspectRatio';
 export { Separator } from './Separator';
 export type { SeparatorProps, SeparatorOrientation } from './Separator';
 export { separatorOrientations } from './Separator';
+
+// Export the Select component
+export { Select } from './Select';
+export type { SelectProps, SelectOption, SelectSize } from './Select';
+export { selectSizes } from './Select';

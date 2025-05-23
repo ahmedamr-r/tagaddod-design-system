@@ -56,7 +56,17 @@ module.exports = {
       'react-dom',
       '@storybook/blocks',
       '@storybook/addon-docs',
-      '@mdx-js/react'
+      '@mdx-js/react',
+      // Add Radix UI dependencies
+      '@radix-ui/react-select',
+      '@radix-ui/react-form',
+      '@radix-ui/react-avatar',
+      '@radix-ui/react-checkbox',
+      '@radix-ui/react-popover',
+      '@radix-ui/react-radio-group',
+      '@radix-ui/react-switch',
+      '@radix-ui/react-tabs',
+      '@tabler/icons-react'
     );
     
     // Exclude problematic dependencies from optimization

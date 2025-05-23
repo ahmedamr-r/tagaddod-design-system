@@ -1,0 +1,885 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as SelectStories from './Select.stories';
+import { Select } from './Select';
+
+<Meta of={SelectStories} />
+
+# Select Component
+
+The Select component provides a dropdown interface for users to choose one option from a list. It's built on top of Radix UI's Select primitive and follows the Tagaddod Design System conventions for consistency and accessibility.
+
+## Overview
+
+The Select component is ideal when you have 4 or more options to avoid cluttering the interface with radio buttons. It supports various states (hover, focus, error, disabled), multiple sizes, flexible label positioning, and full RTL support for Arabic interfaces.
+
+**Key Features:**
+- Built with Radix UI Select primitives for accessibility
+- Support for both controlled and uncontrolled modes
+- Flexible label positioning (above field or inside field)
+- Multiple size variants (micro, medium, large)
+- Full RTL support with proper text rendering
+- Error states with validation messages
+- Help text support
+- Keyboard navigation and screen reader support
+- Theme support for both Tagaddod and GreenPan brands
+
+## Import
+
+```jsx
+import { Select } from '@tagaddod-design/react';
+```
+
+## Props
+
+<ArgTypes of={Select} />
+
+## Basic Usage
+
+<Canvas of={SelectStories.Default} />
+
+```jsx
+// Basic select with options
+const options = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'cherry', label: 'Cherry' },
+];
+
+<Select
+  label="Favorite Fruit"
+  placeholder="Select a fruit..."
+  options={options}
+/>
+```
+
+## Label Positioning
+
+The Select component supports two label positions: above the field (default) or inside the field.
+
+### Label Above Field
+
+<Canvas of={SelectStories.Default} />
+
+```jsx
+<Select
+  label="Country"
+  labelPosition="above"
+  placeholder="Select your country..."
+  options={countryOptions}
+/>
+```
+
+### Label Inside Field
+
+<Canvas of={SelectStories.InsideLabel} />
+
+```jsx
+<Select
+  label="Country"
+  labelPosition="inside"
+  placeholder="Select your country..."
+  options={countryOptions}
+/>
+```
+
+**When to use inside labels:**
+- When vertical space is limited
+- For cleaner, more modern interfaces
+- When you want to reduce visual clutter
+
+**When to use above labels:**
+- When clarity is most important
+- For better accessibility (always visible)
+- When label text is long
+
+## Sizes
+
+The Select component comes in three sizes to match different interface contexts.
+
+### Micro Size
+
+<Canvas of={SelectStories.SizeMicro} />
+
+```jsx
+<Select
+  size="micro"
+  label="Size"
+  options={options}
+/>
+```
+
+### Medium Size (Default)
+
+<Canvas of={SelectStories.SizeMedium} />
+
+```jsx
+<Select
+  size="medium"
+  label="Size"
+  options={options}
+/>
+```
+
+### Large Size
+
+<Canvas of={SelectStories.SizeLarge} />
+
+```jsx
+<Select
+  size="large"
+  label="Size"
+  options={options}
+/>
+```
+
+## States
+
+### With Default Value
+
+<Canvas of={SelectStories.WithValue} />
+
+```jsx
+<Select
+  label="Favorite Fruit"
+  defaultValue="banana"
+  options={options}
+/>
+```
+
+### With Prefix Icon
+
+<Canvas of={SelectStories.WithPrefix} />
+
+```jsx
+import { IconUser } from '@tabler/icons-react';
+
+<Select
+  label="User Type"
+  prefix={<IconUser size={18} />}
+  placeholder="Select user type..."
+  options={userTypeOptions}
+/>
+```
+
+### With Help Text
+
+<Canvas of={SelectStories.WithHelpText} />
+
+```jsx
+<Select
+  label="Country"
+  placeholder="Select your country..."
+  helpText="This helps us provide location-specific features."
+  options={countryOptions}
+/>
+```
+
+### Error State
+
+<Canvas of={SelectStories.WithError} />
+
+```jsx
+<Select
+  label="Required Field"
+  placeholder="Please select an option..."
+  errorMessage="This field is required."
+  options={options}
+/>
+```
+
+### Required Field
+
+<Canvas of={SelectStories.Required} />
+
+```jsx
+<Select
+  label="Required Selection"
+  placeholder="You must select an option..."
+  required
+  options={options}
+/>
+```
+
+### Optional Field
+
+<Canvas of={SelectStories.Optional} />
+
+```jsx
+<Select
+  label="Optional Selection"
+  placeholder="Select if you want..."
+  optional
+  options={options}
+/>
+```
+
+### Disabled State
+
+<Canvas of={SelectStories.Disabled} />
+
+```jsx
+<Select
+  label="Disabled Select"
+  placeholder="Cannot select..."
+  disabled
+  options={options}
+/>
+```
+
+## Advanced Features
+
+### Full Width
+
+<Canvas of={SelectStories.FullWidth} />
+
+```jsx
+<Select
+  label="Full Width Select"
+  placeholder="Takes full container width..."
+  fullWidth
+  options={options}
+/>
+```
+
+### Long Option Lists
+
+<Canvas of={SelectStories.LongOptionList} />
+
+```jsx
+<Select
+  label="Many Options"
+  placeholder="Select from many options..."
+  options={longOptionsList}
+/>
+```
+
+### Disabled Options
+
+<Canvas of={SelectStories.WithDisabledOptions} />
+
+```jsx
+const optionsWithDisabled = [
+  { value: 'available1', label: 'Available Option 1' },
+  { value: 'disabled1', label: 'Disabled Option 1', disabled: true },
+  { value: 'available2', label: 'Available Option 2' },
+];
+
+<Select
+  label="Select with Some Disabled Options"
+  options={optionsWithDisabled}
+/>
+```
+
+## Real-World Examples
+
+### Contact Form
+
+<Canvas of={SelectStories.ContactForm} />
+
+```jsx
+const ContactForm = () => (
+  <div style={{ maxWidth: '400px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <Select
+      label="How did you hear about us?"
+      placeholder="Select one..."
+      options={[
+        { value: 'search', label: 'Search Engine' },
+        { value: 'social', label: 'Social Media' },
+        { value: 'friend', label: 'Friend/Colleague' },
+        { value: 'advertisement', label: 'Advertisement' },
+        { value: 'other', label: 'Other' },
+      ]}
+      helpText="This helps us understand our reach better."
+    />
+    
+    <Select
+      label="Priority Level"
+      labelPosition="inside"
+      options={[
+        { value: 'low', label: 'Low' },
+        { value: 'medium', label: 'Medium' },
+        { value: 'high', label: 'High' },
+        { value: 'urgent', label: 'Urgent' },
+      ]}
+      required
+    />
+  </div>
+);
+```
+
+### User Profile Setup
+
+<Canvas of={SelectStories.UserProfile} />
+
+```jsx
+import { IconSearch } from '@tabler/icons-react';
+
+const UserProfile = () => (
+  <div style={{ maxWidth: '500px' }}>
+    <Select
+      label="Country"
+      size="large"
+      prefix={<IconSearch size={20} />}
+      placeholder="Search and select your country..."
+      options={countryOptions}
+      fullWidth
+      helpText="We'll use this to show relevant content and pricing."
+    />
+    
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '20px' }}>
+      <Select
+        label="Time Zone"
+        options={timezoneOptions}
+        optional
+      />
+      
+      <Select
+        label="Language"
+        options={languageOptions}
+        defaultValue="en"
+      />
+    </div>
+  </div>
+);
+```
+
+## Controlled vs Uncontrolled
+
+### Uncontrolled (Default Value)
+
+```jsx
+const [selectedValue, setSelectedValue] = useState();
+
+<Select
+  label="Uncontrolled"
+  defaultValue="banana"
+  options={options}
+  onValueChange={(value) => {
+    console.log('Selected:', value);
+  }}
+/>
+```
+
+### Controlled (Value Prop)
+
+```jsx
+const [selectedValue, setSelectedValue] = useState('');
+
+<Select
+  label="Controlled"
+  value={selectedValue}
+  options={options}
+  onValueChange={setSelectedValue}
+/>
+```
+
+## Accessibility
+
+<Canvas of={SelectStories.Required} />
+
+The Select component is built with accessibility in mind, using Radix UI's Select primitive which provides:
+
+### Keyboard Navigation
+
+- **Space/Enter**: Opens the select dropdown
+- **Arrow Up/Down**: Navigate through options
+- **Escape**: Closes the dropdown
+- **Tab**: Moves focus to next focusable element
+- **Shift+Tab**: Moves focus to previous focusable element
+
+### Screen Reader Support
+
+- Proper ARIA attributes are automatically applied
+- Selected values are announced correctly
+- Error states are properly communicated
+- Required fields are indicated to screen readers
+
+### Best Practices
+
+```jsx
+// Always provide clear labels
+<Select
+  label="Country of Residence"
+  options={countryOptions}
+  required
+/>
+
+// Use help text for additional context
+<Select
+  label="Preferred Contact Method"
+  helpText="How would you like us to reach you?"
+  options={contactOptions}
+/>
+
+// Provide clear error messages
+<Select
+  label="Required Field"
+  errorMessage="Please select an option to continue."
+  options={options}
+/>
+
+// Use descriptive option labels
+const options = [
+  { value: 'email', label: 'Email (Recommended)' },
+  { value: 'phone', label: 'Phone Call' },
+  { value: 'sms', label: 'Text Message' },
+];
+```
+
+### ARIA Attributes Used
+
+- `aria-invalid`: Indicates error states
+- `aria-describedby`: Links to help text and error messages
+- `aria-required`: Indicates required fields
+- `role`: Proper semantic roles for dropdown components
+
+## Internationalization
+
+<Canvas of={SelectStories.RTLExample} />
+
+The Select component fully supports Right-to-Left (RTL) languages like Arabic:
+
+### RTL Basic Usage
+
+```jsx
+<div dir="rtl">
+  <Select
+    label="اختر الفاكهة المفضلة"
+    placeholder="اختر فاكهة..."
+    options={[
+      { value: 'apple', label: 'تفاح' },
+      { value: 'banana', label: 'موز' },
+      { value: 'cherry', label: 'كرز' },
+    ]}
+  />
+</div>
+```
+
+### RTL with Inside Label
+
+<Canvas of={SelectStories.RTLInsideLabel} />
+
+```jsx
+<div dir="rtl">
+  <Select
+    label="اختر الفاكهة المفضلة"
+    labelPosition="inside"
+    placeholder="اختر فاكهة..."
+    options={arabicOptions}
+  />
+</div>
+```
+
+### RTL with Error Message
+
+<Canvas of={SelectStories.RTLWithError} />
+
+```jsx
+<div dir="rtl">
+  <Select
+    label="حقل مطلوب"
+    placeholder="يرجى اختيار خيار..."
+    errorMessage="هذا الحقل مطلوب."
+    options={arabicOptions}
+  />
+</div>
+```
+
+**RTL Considerations:**
+- Icons and chevrons automatically flip direction
+- Text alignment adjusts appropriately
+- Label positioning works correctly in both directions
+- Line height is optimized for Arabic fonts
+- Dropdown positioning adapts to RTL layout
+
+## Styling and Customization
+
+### CSS Variables
+
+The Select component uses the following design tokens:
+
+| Variable | Purpose | Default Value |
+|----------|---------|---------------|
+| `--t-color-surface-primary` | Background color | Theme-dependent |
+| `--t-color-border-secondary` | Border color | Theme-dependent |
+| `--t-color-text-primary` | Text color | Theme-dependent |
+| `--t-color-fill-brand` | Focus border color | Theme-dependent |
+| `--t-space-*` | Spacing values | Token values |
+| `--t-font-family-primary` | Font family | Token value |
+| `--t-border-radius-200` | Border radius | Token value |
+
+### Custom Styling
+
+```jsx
+// Using className for additional styling
+<Select
+  className="custom-select"
+  label="Custom Styled Select"
+  options={options}
+/>
+```
+
+```css
+/* Custom CSS */
+.custom-select {
+  /* Custom styles that work with design tokens */
+  --t-color-fill-brand: #custom-brand-color;
+}
+
+/* Target specific parts if needed */
+.custom-select [data-radix-select-trigger] {
+  /* Custom trigger styles */
+}
+```
+
+### Theme Support
+
+The component automatically adapts to both Tagaddod and GreenPan themes:
+
+```jsx
+// The component will automatically use the correct theme
+<ThemeProvider theme="tagaddod">
+  <Select label="Tagaddod Theme" options={options} />
+</ThemeProvider>
+
+<ThemeProvider theme="greenpan">
+  <Select label="GreenPan Theme" options={options} />
+</ThemeProvider>
+```
+
+## Advanced Usage Patterns
+
+### Form Integration
+
+```jsx
+import { useForm, Controller } from 'react-hook-form';
+
+const MyForm = () => {
+  const { control, handleSubmit } = useForm();
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Controller
+        name="country"
+        control={control}
+        rules={{ required: 'Please select a country' }}
+        render={({ field, fieldState }) => (
+          <Select
+            label="Country"
+            value={field.value}
+            onValueChange={field.onChange}
+            options={countryOptions}
+            errorMessage={fieldState.error?.message}
+          />
+        )}
+      />
+    </form>
+  );
+};
+```
+
+### Dynamic Options
+
+```jsx
+const [options, setOptions] = useState([]);
+const [loading, setLoading] = useState(false);
+
+const loadOptions = async () => {
+  setLoading(true);
+  const data = await fetchOptions();
+  setOptions(data);
+  setLoading(false);
+};
+
+<Select
+  label="Dynamic Options"
+  options={options}
+  disabled={loading}
+  placeholder={loading ? 'Loading...' : 'Select an option...'}
+/>
+```
+
+### Grouped Options
+
+```jsx
+// While this component doesn't support groups natively,
+// you can achieve grouping by organizing your options
+const organizedOptions = [
+  // Fruits group
+  { value: 'fruits-divider', label: '--- Fruits ---', disabled: true },
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  
+  // Vegetables group  
+  { value: 'vegetables-divider', label: '--- Vegetables ---', disabled: true },
+  { value: 'carrot', label: 'Carrot' },
+  { value: 'lettuce', label: 'Lettuce' },
+];
+```
+
+## Component API Reference
+
+### Select Props
+
+```typescript
+interface SelectProps {
+  /** Text label for the select */
+  label?: string;
+  
+  /** Position of the label */
+  labelPosition?: 'above' | 'inside';
+  
+  /** Help text displayed below the select */
+  helpText?: string;
+  
+  /** Error message displayed below the select */
+  errorMessage?: string;
+  
+  /** Size of the select field */
+  size?: 'micro' | 'medium' | 'large';
+  
+  /** Whether the select should take full width of its container */
+  fullWidth?: boolean;
+  
+  /** Whether to hide the label visually (still accessible to screen readers) */
+  hideLabel?: boolean;
+  
+  /** Mark the field as optional, displaying "(Optional)" text next to label */
+  optional?: boolean;
+  
+  /** Placeholder text when no option is selected */
+  placeholder?: string;
+  
+  /** Array of options to display in the select */
+  options: SelectOption[];
+  
+  /** Current selected value */
+  value?: string;
+  
+  /** Default selected value (uncontrolled) */
+  defaultValue?: string;
+  
+  /** Callback when selection changes */
+  onValueChange?: (value: string) => void;
+  
+  /** Whether the select is disabled */
+  disabled?: boolean;
+  
+  /** Whether the field is required */
+  required?: boolean;
+  
+  /** Content to display before the select value (icon or text) */
+  prefix?: React.ReactNode;
+  
+  /** Additional class names */
+  className?: string;
+  
+  /** ID for the select */
+  id?: string;
+  
+  /** Name attribute for form submission */
+  name?: string;
+}
+
+interface SelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
+```
+
+### Constants
+
+```jsx
+import { selectSizes, selectLabelPositions } from '@tagaddod-design/react';
+
+// Available sizes: ['micro', 'medium', 'large']
+console.log(selectSizes);
+
+// Available label positions: ['above', 'inside']
+console.log(selectLabelPositions);
+```
+
+## Testing
+
+### Unit Testing Examples
+
+```jsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Select } from '@tagaddod-design/react';
+
+const options = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+];
+
+test('renders select with label', () => {
+  render(
+    <Select
+      label="Favorite Fruit"
+      options={options}
+    />
+  );
+  
+  expect(screen.getByText('Favorite Fruit')).toBeInTheDocument();
+});
+
+test('displays placeholder when no value selected', () => {
+  render(
+    <Select
+      label="Fruit"
+      placeholder="Choose a fruit..."
+      options={options}
+    />
+  );
+  
+  expect(screen.getByText('Choose a fruit...')).toBeInTheDocument();
+});
+
+test('calls onValueChange when option is selected', async () => {
+  const handleChange = jest.fn();
+  const user = userEvent.setup();
+  
+  render(
+    <Select
+      label="Fruit"
+      options={options}
+      onValueChange={handleChange}
+    />
+  );
+  
+  // Open dropdown
+  await user.click(screen.getByRole('combobox'));
+  
+  // Select option
+  await user.click(screen.getByText('Apple'));
+  
+  expect(handleChange).toHaveBeenCalledWith('apple');
+});
+
+test('shows error message when provided', () => {
+  render(
+    <Select
+      label="Fruit"
+      options={options}
+      errorMessage="This is required"
+    />
+  );
+  
+  expect(screen.getByText('This is required')).toBeInTheDocument();
+});
+
+test('disables select when disabled prop is true', () => {
+  render(
+    <Select
+      label="Fruit"
+      options={options}
+      disabled
+    />
+  );
+  
+  expect(screen.getByRole('combobox')).toBeDisabled();
+});
+```
+
+### Integration Testing
+
+```jsx
+test('works within a form', async () => {
+  const handleSubmit = jest.fn();
+  
+  render(
+    <form onSubmit={handleSubmit}>
+      <Select
+        name="fruit"
+        label="Favorite Fruit"
+        options={options}
+        required
+      />
+      <button type="submit">Submit</button>
+    </form>
+  );
+  
+  // Submit form without selection should prevent submission
+  fireEvent.click(screen.getByText('Submit'));
+  expect(handleSubmit).not.toHaveBeenCalled();
+  
+  // Select option and submit
+  await userEvent.click(screen.getByRole('combobox'));
+  await userEvent.click(screen.getByText('Apple'));
+  fireEvent.click(screen.getByText('Submit'));
+  
+  expect(handleSubmit).toHaveBeenCalled();
+});
+```
+
+## Performance Considerations
+
+- The component uses Radix UI's Select primitive which is optimized for performance
+- Virtual scrolling is handled automatically for long option lists
+- Re-renders are minimized through proper prop checking
+- CSS-in-JS is avoided in favor of CSS modules for better performance
+
+## Browser Support
+
+- **Chrome**: 88+
+- **Firefox**: 78+
+- **Safari**: 14+
+- **Edge**: 88+
+
+**Features used:**
+- CSS Custom Properties (CSS Variables)
+- CSS Grid and Flexbox
+- Modern JavaScript (ES2020)
+- Radix UI primitives
+
+## Migration Guide
+
+### From HTML Select
+
+```jsx
+// HTML select
+<select name="fruit">
+  <option value="apple">Apple</option>
+  <option value="banana">Banana</option>
+</select>
+
+// Tagaddod Select
+<Select
+  name="fruit"
+  options={[
+    { value: 'apple', label: 'Apple' },
+    { value: 'banana', label: 'Banana' },
+  ]}
+/>
+```
+
+### From Other Libraries
+
+**From Ant Design:**
+```jsx
+// Ant Design
+<Select placeholder="Select option" onChange={handleChange}>
+  <Option value="apple">Apple</Option>
+  <Option value="banana">Banana</Option>
+</Select>
+
+// Tagaddod
+<Select
+  placeholder="Select option"
+  onValueChange={handleChange}
+  options={[
+    { value: 'apple', label: 'Apple' },
+    { value: 'banana', label: 'Banana' },
+  ]}
+/>
+```
+
+### Upgrading
+
+When upgrading from previous versions:
+1. Update import statements to use the new package name
+2. Replace any deprecated props with their new equivalents
+3. Update option data structure if using object-based options
+4. Test RTL support if supporting Arabic interfaces
