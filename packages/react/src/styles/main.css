@@ -1,117 +1,68 @@
-/* Import design tokens */
-@import '@tagaddod-design/tokens/css/tokens.css';
+/* 
+ * Main CSS file that imports all token variations
+ * Using CSS custom properties for runtime theme switching
+ */
 
-/* Import brand-specific tokens */
-@import '@tagaddod-design/tokens/tagaddod/vars.css';
-@import '@tagaddod-design/tokens/greenpan/vars.css';
+/* Base tokens - Always loaded */
+@import '@tagaddod-design/tokens/tokens.css';
 
-/* NEW: Import locale-specific tokens */
-@import '@tagaddod-design/tokens/locales/en/vars.css';
-@import '@tagaddod-design/tokens/locales/ar/vars.css';
+/* Brand-specific token overrides - CRITICAL for theme switching */
+@import '@tagaddod-design/tokens/brands/tagaddod.css';
+@import '@tagaddod-design/tokens/brands/greenpan.css';
 
-/* Optional: Import brand + locale combinations if needed */
-@import '@tagaddod-design/tokens/tagaddod/en/vars.css';
-@import '@tagaddod-design/tokens/tagaddod/ar/vars.css';
-@import '@tagaddod-design/tokens/greenpan/en/vars.css';
-@import '@tagaddod-design/tokens/greenpan/ar/vars.css';
+/* Locale-specific tokens - Critical for font switching */
+@import '@tagaddod-design/tokens/locales/en.css';
+@import '@tagaddod-design/tokens/locales/ar.css';
 
-/* Import additional token utilities */
-@import './token-utilities.css';
+/* Direction-specific tokens - Loaded based on dir attribute */
+@import '@tagaddod-design/tokens/directions/ltr.css';
+@import '@tagaddod-design/tokens/directions/rtl.css';
 
-/* Reset and base styles */
-* {
-  box-sizing: border-box;
+/* 
+ * Note: Component styles are handled via CSS modules
+ * They are imported directly in each component file
+ */
+
+/* 
+ * CSS Custom Properties for dynamic theming
+ * These can be overridden at runtime without loading different CSS files
+ */
+:root {
+  /* Default theme variables that can be overridden */
+  --theme-transition: var(--t-transition-soft);
+  
+  /* Layout direction aware properties */
+  --padding-inline-start: var(--t-padding-inline-start, var(--t-space-400));
+  --padding-inline-end: var(--t-padding-inline-end, var(--t-space-400));
+  --margin-inline-start: var(--t-margin-inline-start, var(--t-space-200));
+  --margin-inline-end: var(--t-margin-inline-end, var(--t-space-200));
+  --text-align-start: var(--t-text-align-start, left);
+  --text-align-end: var(--t-text-align-end, right);
 }
 
-/* Base styles that inherit from data attributes */
-html {
-  font-family: var(--t-font-family-primary);
-  color: var(--t-color-text-primary);
-  background-color: var(--t-color-surface-background);
-  line-height: 1.5;
+/* Theme transition for smooth switching */
+[data-theme] {
+  transition: var(--theme-transition);
+}
+
+/* Global reset styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  min-height: 100vh;
-}
-
-/* RTL Support using logical properties */
-[dir="rtl"] {
-  direction: rtl;
-}
-
-/* 
-  Font family definitions using Google Fonts (loaded externally)
-*/
-:root {
-  --t-font-family-primary: 'Outfit', system-ui, sans-serif;
-  --t-font-family-arabic: 'Tajawal', system-ui, sans-serif;
-}
-
-/* Apply Arabic font when direction is RTL */
-[dir="rtl"] {
-  --t-font-family-primary: 'Tajawal', system-ui, sans-serif;
-}
-
-/* Button utilities using tokens */
-.btn-base {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--t-border-radius-200);
-  transition: all var(--t-duration-base) var(--t-easing-in-out);
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  cursor: pointer;
   font-family: var(--t-font-family-primary);
-  text-decoration: none;
-  white-space: nowrap;
-  vertical-align: middle;
-  user-select: none;
-  appearance: none;
-  -webkit-tap-highlight-color: transparent;
+  color: var(--t-color-text-primary);
+  background-color: var(--t-color-bg-primary);
+  line-height: 1.5;
 }
 
-.btn-base:focus {
-  outline: 2px solid var(--t-color-focus);
-  outline-offset: 2px;
-}
-
-.btn-base:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Utility classes for common patterns */
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.w-full {
-  width: 100%;
-}
-
-.h-full {
-  height: 100%;
-}
-
-/* RTL-aware utilities */
-[dir="rtl"] .text-left {
-  text-align: right;
-}
-
-[dir="rtl"] .text-right {
-  text-align: left;
+/* Print styles */
+@media print {
+  [data-theme] {
+    transition: none !important;
+  }
 }

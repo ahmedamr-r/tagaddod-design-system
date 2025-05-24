@@ -1,41 +1,57 @@
-import { Meta, Story, Canvas, ArgTypes } from '@storybook/blocks';
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 import * as ThemeProviderStories from './ThemeProvider.stories';
-import { ThemeProvider, useTheme, useThemeClasses } from './ThemeProvider';
 
 <Meta of={ThemeProviderStories} />
 
 # ThemeProvider
 
-The `ThemeProvider` is a context provider that manages theme, direction, and locale preferences throughout the application. It enables runtime switching between brands (Tagaddod/GreenPan), text directions (LTR/RTL), and locales (en/ar) without requiring a page reload.
+The `ThemeProvider` is a context provider that manages theme, direction, locale, and typography preferences throughout the application. It enables runtime switching between brands (Tagaddod/GreenPan), text directions (LTR/RTL), locales (en/ar), and **automatically switches fonts** between Outfit (English) and Tajawal (Arabic) without requiring a page reload.
 
 ## Overview
 
-The `ThemeProvider` is a foundational component of the Tagaddod Design System that provides theming capabilities across the entire component library. It:
+The `ThemeProvider` is a foundational component of the Tagaddod Design System that provides comprehensive theming capabilities across the entire component library. It:
 
-- Applies brand-specific design tokens
-- Handles Right-to-Left (RTL) text direction
-- Manages locale settings
-- Persists user preferences in localStorage
-- Provides hooks for descendants to access and modify theme state
+- ✅ Applies brand-specific design tokens
+- ✅ Handles Right-to-Left (RTL) text direction
+- ✅ Manages locale settings with automatic font switching
+- ✅ **Switches between Outfit (English) and Tajawal (Arabic) fonts**
+- ✅ Persists user preferences in localStorage
+- ✅ Provides hooks for descendants to access and modify theme state
+
+## Font System Architecture
+
+The `ThemeProvider` includes an intelligent **bilingual font system** that automatically switches fonts based on language:
+
+### English (LTR)
+- **Font Family**: Outfit (sans-serif)
+- **Font Weights**: 400 (regular), 500 (medium), 600 (semibold), 700 (bold)
+- **CSS Selector**: `html[lang="en"]`
+
+### Arabic (RTL)
+- **Font Family**: Tajawal (sans-serif)
+- **Font Weights**: 500 (regular), 700 (medium/semibold/bold)
+- **CSS Selector**: `html[lang="ar"]`
+
+<Canvas of={ThemeProviderStories.FontSwitchingDemo} />
 
 ## Import
 
 ```jsx
-import { ThemeProvider, useTheme, useThemeClasses } from '@tagaddod/react';
+import { ThemeProvider, useTheme, useThemeClasses } from '@tagaddod-design/react';
 ```
 
 ## Props
 
-<ArgTypes of={ThemeProvider} />
+<ArgTypes of={ThemeProviderStories} />
 
 ## Basic Usage
 
-Wrap your application with the `ThemeProvider` to enable theme support:
+Wrap your application with the `ThemeProvider` to enable theme and font support:
 
 <Canvas of={ThemeProviderStories.Default} />
 
 ```jsx
-import { ThemeProvider } from '@tagaddod/react';
+import { ThemeProvider } from '@tagaddod-design/react';
 
 function App() {
   return (
@@ -48,7 +64,7 @@ function App() {
 
 ## Theme Options
 
-The `ThemeProvider` supports two brands:
+The `ThemeProvider` supports two brands with identical font behavior:
 
 - **Tagaddod**: The primary brand (default)
 - **GreenPan**: Secondary brand with its own color palette
@@ -65,31 +81,112 @@ The `ThemeProvider` supports two brands:
 <Canvas of={ThemeProviderStories.GreenPanTheme} />
 
 ```jsx
-// Set GreenPan theme
+// Set GreenPan theme - fonts work the same way
 <ThemeProvider defaultTheme="greenpan">
   <YourApplication />
 </ThemeProvider>
 ```
 
-## Direction and Locale
+## Direction, Locale, and Font Switching
 
-The `ThemeProvider` supports both Left-to-Right (LTR) and Right-to-Left (RTL) text directions, with corresponding locale settings:
+The `ThemeProvider` supports both Left-to-Right (LTR) and Right-to-Left (RTL) text directions, with **automatic font switching**:
 
-- **LTR**: Used for English (en) content (default)
-- **RTL**: Used for Arabic (ar) content
+### LTR Mode (English)
+- **Direction**: `ltr`
+- **Locale**: `en` 
+- **Font**: Outfit
+- **Usage**: Used for English content (default)
+
+### RTL Mode (Arabic)
+- **Direction**: `rtl`
+- **Locale**: `ar`
+- **Font**: Tajawal
+- **Usage**: Used for Arabic content
 
 <Canvas of={ThemeProviderStories.RtlDirection} />
 
 ```jsx
-// Set RTL direction and Arabic locale
+// Set RTL direction - automatically switches to Tajawal font
 <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
   <YourApplication />
 </ThemeProvider>
 ```
 
+## Typography Examples
+
+<Canvas of={ThemeProviderStories.TypographyComparison} />
+
+The font switching happens automatically when you change direction. Notice how:
+- **English text** renders with the **Outfit** font family
+- **Arabic text** renders with the **Tajawal** font family
+- Font weights are adjusted for optimal readability in each language
+
+## How Font Switching Works
+
+### 1. HTML Language Attribute
+
+The provider sets the `lang` attribute on the `<html>` element:
+
+```html
+<!-- English Mode -->
+<html lang="en" dir="ltr">
+
+<!-- Arabic Mode -->
+<html lang="ar" dir="rtl">
+```
+
+### 2. CSS Font Selectors
+
+Locale-specific CSS files contain font overrides:
+
+```css
+/* English font (en.css) */
+html[lang="en"] {
+  --t-font-family-primary: Outfit, sans-serif;
+  --t-font-weight-regular: 400;
+  --t-font-weight-medium: 500;
+  --t-font-weight-semibold: 600;
+  --t-font-weight-bold: 700;
+}
+
+/* Arabic font (ar.css) */
+html[lang="ar"] {
+  --t-font-family-primary: Tajawal, sans-serif;
+  --t-font-weight-regular: 500;
+  --t-font-weight-medium: 700;
+  --t-font-weight-semibold: 700;
+  --t-font-weight-bold: 700;
+}
+```
+
+### 3. Component Font Application
+
+All components use the CSS variable:
+
+```css
+.Button {
+  font-family: var(--t-font-family-primary);
+  font-weight: var(--t-font-weight-medium);
+}
+```
+
+### 4. Automatic Direction-Locale Sync
+
+Changing direction automatically updates locale and triggers font switching:
+
+```javascript
+// Inside ThemeProvider
+useEffect(() => {
+  const expectedLocale = getLocaleFromDirection(direction);
+  if (locale !== expectedLocale) {
+    setLocale(expectedLocale);
+  }
+}, [direction, locale]);
+```
+
 ## Persistent Storage
 
-Theme preferences are automatically stored in `localStorage` to persist across page reloads. You can customize the storage key:
+Theme preferences (including font/locale) are automatically stored in `localStorage`:
 
 <Canvas of={ThemeProviderStories.CustomStorageKey} />
 
@@ -100,21 +197,30 @@ Theme preferences are automatically stored in `localStorage` to persist across p
 </ThemeProvider>
 ```
 
+The stored preferences include:
+```json
+{
+  "theme": "tagaddod",
+  "direction": "rtl", 
+  "locale": "ar"
+}
+```
+
 ## Nested Providers
 
-You can nest `ThemeProvider`s to apply different themes to specific sections of your application:
+You can nest `ThemeProvider`s to apply different themes/fonts to specific sections:
 
 <Canvas of={ThemeProviderStories.NestedThemeProviders} />
 
 ```jsx
 <ThemeProvider defaultTheme="tagaddod" defaultDirection="ltr">
-  {/* Outer content uses Tagaddod theme */}
+  {/* Outer content uses Tagaddod theme + Outfit font */}
   <Header />
   <MainContent />
   
-  {/* A specific section uses GreenPan theme */}
+  {/* A specific section uses GreenPan theme + Tajawal font */}
   <ThemeProvider defaultTheme="greenpan" defaultDirection="rtl">
-    <GreenPanSection />
+    <GreenPanSection /> {/* This will use Arabic font */}
   </ThemeProvider>
   
   <Footer />
@@ -128,16 +234,16 @@ You can nest `ThemeProvider`s to apply different themes to specific sections of 
 The `useTheme` hook provides access to the current theme context and methods to update it:
 
 ```jsx
-import { useTheme } from '@tagaddod/react';
+import { useTheme } from '@tagaddod-design/react';
 
 function ThemeSwitcher() {
   const { 
     theme,         // Current theme ('tagaddod' | 'greenpan')
     setTheme,      // Function to update theme
     direction,     // Current direction ('ltr' | 'rtl')
-    setDirection,  // Function to update direction
+    setDirection,  // Function to update direction (triggers font switch)
     locale,        // Current locale ('en' | 'ar')
-    setLocale      // Function to update locale
+    setLocale      // Function to update locale (triggers font switch)
   } = useTheme();
   
   return (
@@ -146,9 +252,9 @@ function ThemeSwitcher() {
       <button onClick={() => setTheme('tagaddod')}>Tagaddod</button>
       <button onClick={() => setTheme('greenpan')}>GreenPan</button>
       
-      <p>Text direction: {direction}</p>
-      <button onClick={() => setDirection('ltr')}>LTR</button>
-      <button onClick={() => setDirection('rtl')}>RTL</button>
+      <p>Font: {locale === 'en' ? 'Outfit' : 'Tajawal'}</p>
+      <button onClick={() => setDirection('ltr')}>English (Outfit)</button>
+      <button onClick={() => setDirection('rtl')}>Arabic (Tajawal)</button>
     </div>
   );
 }
@@ -161,177 +267,51 @@ The `useThemeClasses` hook returns CSS class names and other utility values for 
 <Canvas of={ThemeProviderStories.WithThemeClasses} />
 
 ```jsx
-import { useThemeClasses } from '@tagaddod/react';
+import { useThemeClasses } from '@tagaddod-design/react';
 
 function ThemedComponent() {
   const { 
     theme,         // Current theme value
     direction,     // Current direction value
-    locale,        // Current locale value
+    locale,        // Current locale value ('en' = Outfit, 'ar' = Tajawal)
     isRTL,         // Boolean: true if direction is 'rtl'
     themeClass,    // CSS class for current theme (e.g., 'theme-tagaddod')
     dirClass,      // CSS class for direction (e.g., 'dir-ltr')
     localeClass    // CSS class for locale (e.g., 'locale-en')
   } = useThemeClasses();
   
+  const currentFont = locale === 'en' ? 'Outfit' : 'Tajawal';
+  
   return (
     <div className={`my-component ${themeClass} ${dirClass}`}>
+      <p>Current font: {currentFont}</p>
       {/* Component content */}
     </div>
   );
 }
 ```
 
-## How It Works
+## Language/Font Switcher Demo
 
-The `ThemeProvider` operates through several mechanisms:
-
-### 1. HTML Attributes
-
-When the theme, direction, or locale changes, the provider updates the following HTML attributes:
-
-```html
-<html data-theme="tagaddod" dir="ltr" data-locale="en">
-```
-
-### 2. CSS Variables
-
-Theme-specific CSS variables with the `--t-` prefix are applied via the `data-theme` attribute:
-
-```css
-/* In your CSS */
-[data-theme="tagaddod"] {
-  --t-color-primary: #25b24b;
-  /* other variables */
-}
-
-[data-theme="greenpan"] {
-  --t-color-primary: #009f4d;
-  /* other variables */
-}
-```
-
-### 3. Direction Synchronization
-
-The provider automatically sets both the `dir` attribute and the `direction` property on the document:
-
-```javascript
-document.documentElement.setAttribute('dir', direction);
-document.dir = direction;
-```
-
-### 4. Locale-Direction Coordination
-
-Changing the direction automatically updates the locale to match (RTL → Arabic, LTR → English):
-
-```javascript
-// Inside ThemeProvider
-useEffect(() => {
-  const expectedLocale = getLocaleFromDirection(direction);
-  if (locale !== expectedLocale) {
-    setLocale(expectedLocale);
-  }
-}, [direction, locale]);
-```
-
-### 5. LocalStorage Persistence
-
-Theme preferences are stored in and retrieved from `localStorage`:
-
-```javascript
-localStorage.setItem(storageKey, JSON.stringify({ theme, direction, locale }));
-```
-
-## Implementation Details
-
-### CSS Variables
-
-All components should reference CSS variables with the `--t-` prefix to enable theme switching:
-
-```css
-.Button {
-  background-color: var(--t-color-primary);
-  color: var(--t-color-text-on-primary);
-}
-```
-
-### Theme Switching Mechanism
-
-Theme switching works by changing the `data-theme` attribute, which triggers CSS variable overrides:
-
-1. The `ThemeProvider` sets `data-theme="greenpan"` on the `<html>` element
-2. CSS selectors like `[data-theme="greenpan"]` apply GreenPan-specific variables
-3. Components using `var(--t-*)` automatically reflect the new values
-
-### RTL Support Pattern
-
-The `direction` state is synchronized with the `dir` attribute, enabling:
-
-1. CSS logical properties (`margin-inline`, `padding-inline-start`, etc.)
-2. Automatic text alignment and flow
-3. Icon flipping through CSS transforms
-4. Proper scrollbar positioning
-
-## Accessibility
-
-The `ThemeProvider` ensures accessibility by:
-
-- Setting the proper document `dir` attribute for assistive technologies
-- Maintaining proper text alignment in RTL mode
-- Preserving logical key navigation in RTL contexts
-- Providing programmatic access to current theme settings
-
-## Common Use Cases
-
-### Theme Toggle Button
+<Canvas of={ThemeProviderStories.LanguageFontSwitcher} />
 
 ```jsx
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  
-  return (
-    <button 
-      onClick={() => setTheme(theme === 'tagaddod' ? 'greenpan' : 'tagaddod')}
-      aria-label={`Switch to ${theme === 'tagaddod' ? 'GreenPan' : 'Tagaddod'} theme`}
-    >
-      {theme === 'tagaddod' ? 'Switch to GreenPan' : 'Switch to Tagaddod'}
-    </button>
-  );
-}
-```
-
-### Language Switcher with Direction
-
-```jsx
-function LanguageSwitcher() {
-  const { locale, setDirection } = useTheme();
+function LanguageFontSwitcher() {
+  const { locale, direction, setDirection } = useTheme();
   
   const switchLanguage = () => {
-    // Direction change will automatically update locale due to the internal effect
+    // Direction change will automatically update locale and font
     setDirection(locale === 'en' ? 'rtl' : 'ltr');
   };
   
-  return (
-    <button onClick={switchLanguage}>
-      {locale === 'en' ? 'العربية' : 'English'}
-    </button>
-  );
-}
-```
-
-### Theme-Aware Component
-
-```jsx
-function ThemedCard({ children }) {
-  const { theme } = useTheme();
+  const currentFont = locale === 'en' ? 'Outfit' : 'Tajawal';
   
   return (
-    <div className="card">
-      {theme === 'greenpan' && <GreenPanLogo className="card-logo" />}
-      {theme === 'tagaddod' && <TagaddodLogo className="card-logo" />}
-      <div className="card-content">
-        {children}
-      </div>
+    <div>
+      <p>Current: {locale === 'en' ? 'English' : 'Arabic'} ({currentFont})</p>
+      <button onClick={switchLanguage}>
+        {locale === 'en' ? 'العربية (Tajawal)' : 'English (Outfit)'}
+      </button>
     </div>
   );
 }
@@ -339,40 +319,69 @@ function ThemedCard({ children }) {
 
 ## Best Practices
 
-1. **Always use the `ThemeProvider` at the root level** of your application to ensure consistent theming.
+### Typography Best Practices
 
-2. **Reference theme values through CSS variables** rather than hardcoding colors or other visual properties.
-
-3. **Use logical CSS properties** for directional styles to support RTL languages:
+1. **Always use CSS variables** for font properties to enable automatic switching:
    ```css
-   /* Good - automatically flips in RTL */
+   /* ✅ Good - automatically switches fonts */
+   .element {
+     font-family: var(--t-font-family-primary);
+     font-weight: var(--t-font-weight-medium);
+   }
+   
+   /* ❌ Bad - hardcoded font won't switch */
+   .element {
+     font-family: Outfit, sans-serif;
+   }
+   ```
+
+2. **Test typography in both languages** to ensure readability and visual balance
+
+3. **Use semantic font weight tokens** rather than numeric values
+
+### General Best Practices
+
+1. **Always use the `ThemeProvider` at the root level** of your application
+
+2. **Use logical CSS properties** for directional styles to support RTL languages:
+   ```css
+   /* ✅ Good - automatically flips in RTL */
    .element {
      margin-inline-start: 16px;
    }
    
-   /* Bad - doesn't change in RTL */
+   /* ❌ Bad - doesn't change in RTL */
    .element {
      margin-left: 16px;
    }
    ```
 
-4. **Test components in both themes and directions** to ensure they adapt correctly.
+3. **Test components in all combinations**: Both themes, directions, and fonts
 
-5. **Avoid directly manipulating `data-theme` or `dir`** attributes; use the provided context methods.
+4. **Avoid directly manipulating HTML attributes**; use the provided context methods
 
-6. **Consider nested providers carefully** - they can create confusing hierarchies that are hard to debug.
+## Troubleshooting
 
-## Browser Support
+### Font Not Switching
 
-The `ThemeProvider` works in all modern browsers that support:
+If fonts aren't switching properly:
 
-- CSS Custom Properties (Variables)
-- CSS Logical Properties
-- Context API
-- localStorage
+1. **Check HTML `lang` attribute**: Verify it's set to `en` or `ar`
+2. **Verify CSS imports**: Ensure locale-specific CSS files are imported
+3. **Check font loading**: Verify both Outfit and Tajawal are loaded in document head
+4. **Inspect CSS variables**: Use DevTools to check `--t-font-family-primary` value
+
+### RTL Layout Issues
+
+For RTL layout problems:
+
+1. **Use logical properties**: Replace `margin-left` with `margin-inline-start`
+2. **Check `dir` attribute**: Should be `rtl` for Arabic content
+3. **Test text alignment**: Use `text-align: start` instead of `text-align: left`
 
 ## Related
 
 - [Design Tokens](/docs/tokens-intro--documentation)
-- [Global Styles](/docs/styles-intro--documentation)
+- [Typography System](/docs/typography-intro--documentation)
 - [Internationalization](/docs/i18n-intro--documentation)
+- [Global Styles](/docs/styles-intro--documentation)

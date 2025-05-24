@@ -1,35 +1,28 @@
 {
   "name": "@tagaddod-design/tokens",
   "version": "0.2.3",
+  "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
-  "style": "dist/css/tokens.css",
+  "style": "dist/tokens.css",
   "files": [
     "dist",
     "!dist/**/*.map"
   ],
   "exports": {
     ".": "./dist/index.js",
-    "./css": "./dist/css/tokens.css",
-    "./scss": "./dist/scss/_tokens.scss",
+    "./tokens.css": "./dist/tokens.css",
+    "./scss": "./dist/_tokens.scss",
     "./tokens": "./dist/tokens.js",
-    "./css/tokens.css": "./dist/css/tokens.css",
-    "./tagaddod/vars.css": "./dist/tagaddod/vars.css",
-    "./greenpan/vars.css": "./dist/greenpan/vars.css",
-    "./tagaddod/ltr/vars.css": "./dist/tagaddod/ltr/vars.css",
-    "./tagaddod/rtl/vars.css": "./dist/tagaddod/rtl/vars.css",
-    "./greenpan/ltr/vars.css": "./dist/greenpan/ltr/vars.css",
-    "./greenpan/rtl/vars.css": "./dist/greenpan/rtl/vars.css",
-    "./tagaddod/en/vars.css": "./dist/tagaddod/en/vars.css",
-    "./tagaddod/ar/vars.css": "./dist/tagaddod/ar/vars.css",
-    "./greenpan/en/vars.css": "./dist/greenpan/en/vars.css",
-    "./greenpan/ar/vars.css": "./dist/greenpan/ar/vars.css",
-    "./locales/en/vars.css": "./dist/locales/en/vars.css",
-    "./locales/ar/vars.css": "./dist/locales/ar/vars.css"
+    "./brands/tagaddod.css": "./dist/brands/tagaddod.css",
+    "./brands/greenpan.css": "./dist/brands/greenpan.css",
+    "./locales/en.css": "./dist/locales/en.css",
+    "./locales/ar.css": "./dist/locales/ar.css",
+    "./directions/ltr.css": "./dist/directions/ltr.css",
+    "./directions/rtl.css": "./dist/directions/rtl.css"
   },
   "scripts": {
-    "build": "yarn clean && style-dictionary build && node sd.config.mjs",
-    "build:brands": "node sd.config.mjs",
+    "build": "yarn clean && node style-dictionary.config.js",
     "watch": "chokidar 'src/**/*.json' -c 'yarn build'",
     "clean": "rm -rf dist"
   },

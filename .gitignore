@@ -35,6 +35,10 @@ yarn-error.log*
 *.temp
 *.swp
 
+# Backup directories
+backup/
+*.backup
+
 # TypeScript
 *.tsbuildinfo
 

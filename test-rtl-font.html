@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTL Font Test</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Token CSS files in order -->
+    <link rel="stylesheet" href="packages/tokens/dist/tokens.css">
+    <link rel="stylesheet" href="packages/tokens/dist/locales/ar.css">
+    
+    <style>
+        body {
+            font-family: var(--t-font-family-primary);
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+        
+        .debug-info {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .token-value {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .test-text {
+            font-size: 2rem;
+            margin: 2rem 0;
+        }
+        
+        /* Test with increased specificity */
+        html[lang="ar"] {
+            --t-font-family-primary: Tajawal, sans-serif !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-info">
+        <h2>Debug Information</h2>
+        <p>HTML lang attribute: <span class="token-value" id="lang-attr"></span></p>
+        <p>HTML dir attribute: <span class="token-value" id="dir-attr"></span></p>
+        <p>CSS variable --t-font-family-primary: <span class="token-value" id="font-var"></span></p>
+        <p>Computed font-family on body: <span class="token-value" id="computed-font"></span></p>
+    </div>
+    
+    <div class="test-text">
+        <p>English: This is a test text in English</p>
+        <p>العربية: هذا نص تجريبي باللغة العربية</p>
+    </div>
+    
+    <button onclick="toggleLanguage()">Toggle Language</button>
+    
+    <script>
+        function updateDebugInfo() {
+            document.getElementById('lang-attr').textContent = document.documentElement.lang;
+            document.getElementById('dir-attr').textContent = document.documentElement.dir;
+            
+            const computedStyle = getComputedStyle(document.documentElement);
+            document.getElementById('font-var').textContent = computedStyle.getPropertyValue('--t-font-family-primary').trim();
+            
+            const bodyComputedStyle = getComputedStyle(document.body);
+            document.getElementById('computed-font').textContent = bodyComputedStyle.fontFamily;
+        }
+        
+        function toggleLanguage() {
+            const html = document.documentElement;
+            if (html.lang === 'ar') {
+                html.lang = 'en';
+                html.dir = 'ltr';
+            } else {
+                html.lang = 'ar';
+                html.dir = 'rtl';
+            }
+            updateDebugInfo();
+        }
+        
+        // Initial update
+        updateDebugInfo();
+    </script>
+</body>
+</html>

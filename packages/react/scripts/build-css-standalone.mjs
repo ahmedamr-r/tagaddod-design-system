@@ -45,29 +45,27 @@ async function buildCSS() {
     const result = await postcss([
       postcssImport({
         resolve: (id) => {
-          if (id.includes('@tagaddod-design/tokens') || id.includes('@tagaddod/tokens')) {
-            // Resolve token paths based on the import pattern
-            const tokensParts = id.split('/');
+          if (id.includes('@tagaddod-design/tokens')) {
+            const tokensDir = path.resolve(ROOT_DIR, '../tokens/dist');
             
-            if (id.includes('/css') || id.includes('/css/tokens.css')) {
-              return path.resolve(ROOT_DIR, '../tokens/dist/css/tokens.css');
+            // Handle different import patterns based on package.json exports
+            if (id === '@tagaddod-design/tokens/tokens.css') {
+              return path.join(tokensDir, 'tokens.css');
             }
             
-            if (tokensParts.includes('tagaddod') || tokensParts.includes('greenpan')) {
-              const brand = tokensParts.includes('tagaddod') ? 'tagaddod' : 'greenpan';
-              const locale = tokensParts.includes('en') ? 'en' : 
-                            tokensParts.includes('ar') ? 'ar' : '';
-              
-              if (locale) {
-                return path.resolve(ROOT_DIR, `../tokens/dist/${brand}/${locale}/vars.css`);
-              }
-              
-              return path.resolve(ROOT_DIR, `../tokens/dist/${brand}/vars.css`);
+            if (id.startsWith('@tagaddod-design/tokens/brands/')) {
+              const brand = id.split('/').pop().replace('.css', '');
+              return path.join(tokensDir, 'brands', `${brand}.css`);
             }
             
-            if (tokensParts.includes('locales')) {
-              const locale = tokensParts[tokensParts.indexOf('locales') + 1];
-              return path.resolve(ROOT_DIR, `../tokens/dist/locales/${locale}/vars.css`);
+            if (id.startsWith('@tagaddod-design/tokens/locales/')) {
+              const locale = id.split('/').pop().replace('.css', '');
+              return path.join(tokensDir, 'locales', `${locale}.css`);
+            }
+            
+            if (id.startsWith('@tagaddod-design/tokens/directions/')) {
+              const direction = id.split('/').pop().replace('.css', '');
+              return path.join(tokensDir, 'directions', `${direction}.css`);
             }
           }
           

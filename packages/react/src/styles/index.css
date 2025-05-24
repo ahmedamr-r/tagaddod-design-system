@@ -1,2 +1,13 @@
-/* Import all CSS modules and utilities */
+/* 
+ * Main styles entry point
+ * Import this once in your application
+ */
+
+/* Import the optimized main CSS */
 @import './main.css';
+
+/* 
+ * This file serves as the single entry point for all styles.
+ * Components will use CSS modules or styled components for component-specific styles.
+ * Global styles and tokens are imported here.
+ */

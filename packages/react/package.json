@@ -1,6 +1,6 @@
 {
   "name": "@tagaddod-design/react",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "Modern, accessible React component library for building consistent UI at scale.",
   "homepage": "https://tagaddod-design-system.vercel.app/",
   "repository": {
@@ -22,8 +22,8 @@
     "documentation"
   ],
   "docs": "https://tagaddod-design-system.vercel.app/",
-  "main": "./dist/index.js",
-  "module": "./dist/esm/index.js",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/es/index.js",
   "types": "./dist/types/index.d.ts",
   "files": [
     "dist/**/*",
@@ -32,95 +32,94 @@
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "default": "./dist/index.js"
+      "import": "./dist/es/index.js",
+      "require": "./dist/cjs/index.cjs"
     },
-    "./styles": "./dist/styles/index.css",
-    "./styles/index.css": "./dist/styles/index.css",
-    "./components/AspectRatio": {
-      "types": "./dist/types/components/AspectRatio/AspectRatio.d.ts",
-      "import": "./dist/esm/components/AspectRatio/AspectRatio.js",
-      "default": "./dist/components/AspectRatio/index.js"
+    "./styles": "./dist/styles.css",
+    "./AspectRatio": {
+      "types": "./dist/types/components/AspectRatio/index.d.ts",
+      "import": "./dist/es/components/AspectRatio/index.js",
+      "require": "./dist/cjs/components/AspectRatio/index.cjs"
     },
-    "./components/Avatar": {
-      "types": "./dist/types/components/Avatar/Avatar.d.ts",
-      "import": "./dist/esm/components/Avatar/Avatar.js",
-      "default": "./dist/components/Avatar/index.js"
+    "./Avatar": {
+      "types": "./dist/types/components/Avatar/index.d.ts",
+      "import": "./dist/es/components/Avatar/index.js",
+      "require": "./dist/cjs/components/Avatar/index.cjs"
     },
-    "./components/Badge": {
-      "types": "./dist/types/components/Badge/Badge.d.ts",
-      "import": "./dist/esm/components/Badge/Badge.js",
-      "default": "./dist/components/Badge/index.js"
+    "./Badge": {
+      "types": "./dist/types/components/Badge/index.d.ts",
+      "import": "./dist/es/components/Badge/index.js",
+      "require": "./dist/cjs/components/Badge/index.cjs"
     },
-    "./components/Button": {
-      "types": "./dist/types/components/Button/Button.d.ts",
-      "import": "./dist/esm/components/Button/Button.js",
-      "default": "./dist/components/Button/index.js"
+    "./Button": {
+      "types": "./dist/types/components/Button/index.d.ts",
+      "import": "./dist/es/components/Button/index.js",
+      "require": "./dist/cjs/components/Button/index.cjs"
     },
-    "./components/Checkbox": {
-      "types": "./dist/types/components/Checkbox/Checkbox.d.ts",
-      "import": "./dist/esm/components/Checkbox/Checkbox.js",
-      "default": "./dist/components/Checkbox/index.js"
+    "./Checkbox": {
+      "types": "./dist/types/components/Checkbox/index.d.ts",
+      "import": "./dist/es/components/Checkbox/index.js",
+      "require": "./dist/cjs/components/Checkbox/index.cjs"
     },
-    "./components/Drawer": {
-      "types": "./dist/types/components/Drawer/Drawer.d.ts",
-      "import": "./dist/esm/components/Drawer/Drawer.js",
-      "default": "./dist/components/Drawer/index.js"
+    "./Drawer": {
+      "types": "./dist/types/components/Drawer/index.d.ts",
+      "import": "./dist/es/components/Drawer/index.js",
+      "require": "./dist/cjs/components/Drawer/index.cjs"
     },
-    "./components/Listbox": {
-      "types": "./dist/types/components/Listbox/Listbox.d.ts",
-      "import": "./dist/esm/components/Listbox/Listbox.js",
-      "default": "./dist/components/Listbox/index.js"
+    "./Listbox": {
+      "types": "./dist/types/components/Listbox/index.d.ts",
+      "import": "./dist/es/components/Listbox/index.js",
+      "require": "./dist/cjs/components/Listbox/index.cjs"
     },
-    "./components/Modal": {
-      "types": "./dist/types/components/Modal/Modal.d.ts",
-      "import": "./dist/esm/components/Modal/Modal.js",
-      "default": "./dist/components/Modal/index.js"
+    "./Modal": {
+      "types": "./dist/types/components/Modal/index.d.ts",
+      "import": "./dist/es/components/Modal/index.js",
+      "require": "./dist/cjs/components/Modal/index.cjs"
     },
-    "./components/Pagination": {
-      "types": "./dist/types/components/Pagination/Pagination.d.ts",
-      "import": "./dist/esm/components/Pagination/Pagination.js",
-      "default": "./dist/components/Pagination/index.js"
+    "./Pagination": {
+      "types": "./dist/types/components/Pagination/index.d.ts",
+      "import": "./dist/es/components/Pagination/index.js",
+      "require": "./dist/cjs/components/Pagination/index.cjs"
     },
-    "./components/Popover": {
-      "types": "./dist/types/components/Popover/Popover.d.ts",
-      "import": "./dist/esm/components/Popover/Popover.js",
-      "default": "./dist/components/Popover/index.js"
+    "./Popover": {
+      "types": "./dist/types/components/Popover/index.d.ts",
+      "import": "./dist/es/components/Popover/index.js",
+      "require": "./dist/cjs/components/Popover/index.cjs"
     },
-    "./components/RadioButton": {
-      "types": "./dist/types/components/RadioButton/RadioButton.d.ts",
-      "import": "./dist/esm/components/RadioButton/RadioButton.js",
-      "default": "./dist/components/RadioButton/index.js"
+    "./RadioButton": {
+      "types": "./dist/types/components/RadioButton/index.d.ts",
+      "import": "./dist/es/components/RadioButton/index.js",
+      "require": "./dist/cjs/components/RadioButton/index.cjs"
     },
-    "./components/Select": {
-      "types": "./dist/types/components/Select/Select.d.ts",
-      "import": "./dist/esm/components/Select/Select.js",
-      "default": "./dist/components/Select/index.js"
+    "./Select": {
+      "types": "./dist/types/components/Select/index.d.ts",
+      "import": "./dist/es/components/Select/index.js",
+      "require": "./dist/cjs/components/Select/index.cjs"
     },
-    "./components/Separator": {
-      "types": "./dist/types/components/Separator/Separator.d.ts",
-      "import": "./dist/esm/components/Separator/Separator.js",
-      "default": "./dist/components/Separator/index.js"
+    "./Separator": {
+      "types": "./dist/types/components/Separator/index.d.ts",
+      "import": "./dist/es/components/Separator/index.js",
+      "require": "./dist/cjs/components/Separator/index.cjs"
     },
-    "./components/Switch": {
-      "types": "./dist/types/components/Switch/Switch.d.ts",
-      "import": "./dist/esm/components/Switch/Switch.js",
-      "default": "./dist/components/Switch/index.js"
+    "./Switch": {
+      "types": "./dist/types/components/Switch/index.d.ts",
+      "import": "./dist/es/components/Switch/index.js",
+      "require": "./dist/cjs/components/Switch/index.cjs"
     },
-    "./components/Table": {
-      "types": "./dist/types/components/Table/Table.d.ts",
-      "import": "./dist/esm/components/Table/Table.js",
-      "default": "./dist/components/Table/index.js"
+    "./Table": {
+      "types": "./dist/types/components/Table/index.d.ts",
+      "import": "./dist/es/components/Table/index.js",
+      "require": "./dist/cjs/components/Table/index.cjs"
     },
-    "./components/Tabs": {
-      "types": "./dist/types/components/Tabs/Tabs.d.ts",
-      "import": "./dist/esm/components/Tabs/Tabs.js",
-      "default": "./dist/components/Tabs/index.js"
+    "./Tabs": {
+      "types": "./dist/types/components/Tabs/index.d.ts",
+      "import": "./dist/es/components/Tabs/index.js",
+      "require": "./dist/cjs/components/Tabs/index.cjs"
     },
-    "./components/TextInput": {
-      "types": "./dist/types/components/TextInput/TextInput.d.ts",
-      "import": "./dist/esm/components/TextInput/TextInput.js",
-      "default": "./dist/components/TextInput/index.js"
+    "./TextInput": {
+      "types": "./dist/types/components/TextInput/index.d.ts",
+      "import": "./dist/es/components/TextInput/index.js",
+      "require": "./dist/cjs/components/TextInput/index.cjs"
     }
   },
   "scripts": {

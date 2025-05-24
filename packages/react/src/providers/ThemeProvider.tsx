@@ -88,11 +88,12 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     if (typeof document !== 'undefined') {
       const root = document.documentElement;
       root.setAttribute('data-theme', theme);
-      root.setAttribute('data-locale', locale);
+      root.setAttribute('lang', locale);
       root.setAttribute('dir', direction);
       
-      // Update document direction
+      // Update document direction and language
       document.dir = direction;
+      document.documentElement.lang = locale;
       
       // Store preferences
       localStorage.setItem(storageKey, JSON.stringify({ theme, direction, locale }));
