@@ -1,36 +1,30 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import path from 'path';
-import fs from 'fs';
-
-// Get all component directories dynamically
-const componentsDir = path.resolve(__dirname, 'src/components');
-const componentEntries = fs.readdirSync(componentsDir)
-  .filter(name => {
-    const fullPath = path.join(componentsDir, name);
-    return fs.statSync(fullPath).isDirectory() && 
-           fs.existsSync(path.join(fullPath, 'index.ts'));
-  })
-  .reduce((entries, name) => {
-    entries[`components/${name}/index`] = path.resolve(componentsDir, name, 'index.ts');
-    return entries;
-  }, {});
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    cssInjectedByJsPlugin({
+      topExecutionPriority: false,
+      jsAssetsFilterFunction: function customJsAssetsfilterFunction(outputChunk) {
+        // Apply CSS injection to all JS chunks
+        return outputChunk.isEntry || outputChunk.isDynamicEntry;
+      },
+    })
+  ],
   build: {
     lib: {
-      entry: {
-        index: path.resolve(__dirname, 'src/index.ts'),
-        ...componentEntries
-      },
+      entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'TagaddodReact',
-      formats: ['es', 'cjs']
+      formats: ['es', 'cjs'],
+      fileName: (format) => `index.${format === 'cjs' ? 'cjs' : 'js'}`
     },
     rollupOptions: {
       external: [
-        'react', 
-        'react-dom', 
+        'react',
+        'react-dom',
         'react/jsx-runtime',
         /@radix-ui\/.*/,
         '@tabler/icons-react',
@@ -38,34 +32,18 @@ export default defineConfig({
         '@tanstack/react-table',
         'clsx'
       ],
-      output: [
-        {
-          format: 'es',
-          dir: 'dist/es',
-          preserveModules: true,
-          preserveModulesRoot: 'src',
-          entryFileNames: '[name].js',
-          chunkFileNames: '[name]-[hash].js',
-          assetFileNames: (assetInfo) => {
-            if (assetInfo.name?.endsWith('.css')) {
-              return 'styles/[name][extname]';
-            }
-            return 'assets/[name]-[hash][extname]';
-          }
-        },
-        {
-          format: 'cjs',
-          dir: 'dist/cjs',
-          preserveModules: true,
-          preserveModulesRoot: 'src',
-          entryFileNames: '[name].cjs',
-          chunkFileNames: '[name]-[hash].cjs'
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM'
         }
-      ]
+      }
     },
-    cssCodeSplit: true, // Enable CSS code splitting for better performance
-    emptyOutDir: false,
+    // Important: Let CSS be extracted first, then injected
+    cssCodeSplit: false,
     sourcemap: true,
+    emptyOutDir: true,
+    minify: process.env.NODE_ENV === 'production' ? 'terser' : false,
     reportCompressedSize: true,
   },
   css: {
@@ -74,5 +52,9 @@ export default defineConfig({
       generateScopedName: '[name]__[local]___[hash:base64:5]'
     },
     postcss: './postcss.config.cjs'
+  },
+  server: {
+    port: 3001,
+    open: false
   }
 });

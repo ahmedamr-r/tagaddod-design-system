@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prestorybook": "cd ../react && yarn build:css",
     "storybook": "storybook dev -p 6009",
     "watch": "storybook dev -p 6006",
     "build-storybook": "storybook build",

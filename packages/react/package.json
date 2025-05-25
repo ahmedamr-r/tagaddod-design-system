@@ -22,8 +22,8 @@
     "documentation"
   ],
   "docs": "https://tagaddod-design-system.vercel.app/",
-  "main": "./dist/cjs/index.cjs",
-  "module": "./dist/es/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "files": [
     "dist/**/*",
@@ -32,109 +32,21 @@
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/es/index.js",
-      "require": "./dist/cjs/index.cjs"
-    },
-    "./styles": "./dist/styles.css",
-    "./AspectRatio": {
-      "types": "./dist/types/components/AspectRatio/index.d.ts",
-      "import": "./dist/es/components/AspectRatio/index.js",
-      "require": "./dist/cjs/components/AspectRatio/index.cjs"
-    },
-    "./Avatar": {
-      "types": "./dist/types/components/Avatar/index.d.ts",
-      "import": "./dist/es/components/Avatar/index.js",
-      "require": "./dist/cjs/components/Avatar/index.cjs"
-    },
-    "./Badge": {
-      "types": "./dist/types/components/Badge/index.d.ts",
-      "import": "./dist/es/components/Badge/index.js",
-      "require": "./dist/cjs/components/Badge/index.cjs"
-    },
-    "./Button": {
-      "types": "./dist/types/components/Button/index.d.ts",
-      "import": "./dist/es/components/Button/index.js",
-      "require": "./dist/cjs/components/Button/index.cjs"
-    },
-    "./Checkbox": {
-      "types": "./dist/types/components/Checkbox/index.d.ts",
-      "import": "./dist/es/components/Checkbox/index.js",
-      "require": "./dist/cjs/components/Checkbox/index.cjs"
-    },
-    "./Drawer": {
-      "types": "./dist/types/components/Drawer/index.d.ts",
-      "import": "./dist/es/components/Drawer/index.js",
-      "require": "./dist/cjs/components/Drawer/index.cjs"
-    },
-    "./Listbox": {
-      "types": "./dist/types/components/Listbox/index.d.ts",
-      "import": "./dist/es/components/Listbox/index.js",
-      "require": "./dist/cjs/components/Listbox/index.cjs"
-    },
-    "./Modal": {
-      "types": "./dist/types/components/Modal/index.d.ts",
-      "import": "./dist/es/components/Modal/index.js",
-      "require": "./dist/cjs/components/Modal/index.cjs"
-    },
-    "./Pagination": {
-      "types": "./dist/types/components/Pagination/index.d.ts",
-      "import": "./dist/es/components/Pagination/index.js",
-      "require": "./dist/cjs/components/Pagination/index.cjs"
-    },
-    "./Popover": {
-      "types": "./dist/types/components/Popover/index.d.ts",
-      "import": "./dist/es/components/Popover/index.js",
-      "require": "./dist/cjs/components/Popover/index.cjs"
-    },
-    "./RadioButton": {
-      "types": "./dist/types/components/RadioButton/index.d.ts",
-      "import": "./dist/es/components/RadioButton/index.js",
-      "require": "./dist/cjs/components/RadioButton/index.cjs"
-    },
-    "./Select": {
-      "types": "./dist/types/components/Select/index.d.ts",
-      "import": "./dist/es/components/Select/index.js",
-      "require": "./dist/cjs/components/Select/index.cjs"
-    },
-    "./Separator": {
-      "types": "./dist/types/components/Separator/index.d.ts",
-      "import": "./dist/es/components/Separator/index.js",
-      "require": "./dist/cjs/components/Separator/index.cjs"
-    },
-    "./Switch": {
-      "types": "./dist/types/components/Switch/index.d.ts",
-      "import": "./dist/es/components/Switch/index.js",
-      "require": "./dist/cjs/components/Switch/index.cjs"
-    },
-    "./Table": {
-      "types": "./dist/types/components/Table/index.d.ts",
-      "import": "./dist/es/components/Table/index.js",
-      "require": "./dist/cjs/components/Table/index.cjs"
-    },
-    "./Tabs": {
-      "types": "./dist/types/components/Tabs/index.d.ts",
-      "import": "./dist/es/components/Tabs/index.js",
-      "require": "./dist/cjs/components/Tabs/index.cjs"
-    },
-    "./TextInput": {
-      "types": "./dist/types/components/TextInput/index.d.ts",
-      "import": "./dist/es/components/TextInput/index.js",
-      "require": "./dist/cjs/components/TextInput/index.cjs"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "scripts": {
     "prebuild": "yarn clean",
     "build": "node scripts/build.cjs",
-    "build:css": "node scripts/build-css-standalone.mjs",
+    "test:css-injection": "node scripts/test-css-injection.cjs",
     "dev": "vite",
-    "watch": "concurrently -n 'vite,css' -c 'yellow,green' 'vite build --watch' 'node scripts/watch-css.js'",
+    "watch": "vite build --watch",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
-    "diagnose": "node scripts/diagnose-build.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:index-coverage": "jest --coverage --collectCoverageFrom='**/index.ts'",
     "prepublishOnly": "yarn build"
   },
   "dependencies": {
@@ -167,7 +79,6 @@
     "@types/react-dom": "^18.2.25",
     "@vitejs/plugin-react": "^4.4.1",
     "babel-jest": "^29.7.0",
-    "concurrently": "^9.1.2",
     "glob": "^11.0.2",
     "i18next": "^25.1.2",
     "identity-obj-proxy": "^3.0.0",
@@ -186,14 +97,11 @@
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vite-plugin-css-injected-by-js": "^3.5.2",
-    "vite-plugin-dts": "^4.5.4",
-    "vite-plugin-lib-inject-css": "^2.0.0"
+    "vite-plugin-dts": "^4.5.4"
   },
   "publishConfig": {
     "access": "public"
   },
-  "sideEffects": [
-    "**/*.css"
-  ],
+  "sideEffects": false,
   "type": "module"
 }
