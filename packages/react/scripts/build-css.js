@@ -232,6 +232,28 @@ body {
 }
 
 /**
+ * Generate RTL font overrides from Arabic locale CSS
+ * Converts html[lang="ar"] selectors to [dir="rtl"] for proper font switching
+ */
+function generateRTLFontOverrides(arabicLocaleCSS) {
+  if (!arabicLocaleCSS) {
+    console.log(`${YELLOW}⚠️ Arabic locale CSS not found, generating fallback RTL font overrides${RESET}`);
+    return `
+/* RTL Font Override (fallback) */
+[dir="rtl"] {
+  --t-font-family-primary: Tajawal, sans-serif;
+}`;
+  }
+
+  // Extract the content inside html[lang="ar"] { ... } and convert to [dir="rtl"]
+  const arabicRules = arabicLocaleCSS.replace(/html\[lang="ar"\]/g, '[dir="rtl"]');
+  
+  return `
+/* RTL Font Overrides (converted from Arabic locale tokens) */
+${arabicRules}`;
+}
+
+/**
  * Generate direction support styles
  */
 function generateDirectionStyles() {
@@ -283,6 +305,28 @@ function buildCSS() {
     'GreenPan brand CSS'
   );
   
+  // Read locale-specific tokens for font switching
+  const arabicLocaleCSS = readCSSFile(
+    path.join(TOKENS_PACKAGE_DIR, 'locales', 'ar.css'),
+    'Arabic locale CSS (Tajawal font)'
+  );
+  
+  const englishLocaleCSS = readCSSFile(
+    path.join(TOKENS_PACKAGE_DIR, 'locales', 'en.css'),
+    'English locale CSS (Outfit font)'
+  );
+  
+  // Read direction-specific tokens
+  const rtlDirectionCSS = readCSSFile(
+    path.join(TOKENS_PACKAGE_DIR, 'directions', 'rtl.css'),
+    'RTL direction CSS'
+  );
+  
+  const ltrDirectionCSS = readCSSFile(
+    path.join(TOKENS_PACKAGE_DIR, 'directions', 'ltr.css'),
+    'LTR direction CSS'
+  );
+  
   // Verify we have the essential tokens
   if (!baseTokensCSS) {
     console.error(`${RED}Error: Base tokens CSS is required but not found${RESET}`);
@@ -314,6 +358,23 @@ ${tagaddodBrandCSS}
 
 /* GreenPan brand override */
 ${greenpanBrandCSS}
+
+/* ===== LOCALE & DIRECTION SUPPORT ===== */
+
+/* English locale tokens (LTR) */
+${englishLocaleCSS || ''}
+
+/* Arabic locale tokens */
+${arabicLocaleCSS || ''}
+
+/* RTL direction-specific font switching */
+${generateRTLFontOverrides(arabicLocaleCSS)}
+
+/* LTR direction tokens */
+${ltrDirectionCSS || ''}
+
+/* RTL direction tokens */
+${rtlDirectionCSS || ''}
 
 /* ===== DIRECTION SUPPORT ===== */
 ${generateDirectionStyles()}

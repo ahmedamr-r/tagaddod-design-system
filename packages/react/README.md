@@ -64,13 +64,23 @@ npm install @tagaddod-design/react
 yarn add @tagaddod-design/react
 ```
 
-### 2. Import Styles (Required)
+### 2. Load Google Fonts (Required)
+Add these font links to your HTML `<head>` section:
+
+```html
+<!-- Google Fonts for the design system -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Tajawal:wght@400;500;600;700&display=swap" rel="stylesheet">
+```
+
+### 3. Import Styles (Required)
 ```javascript
 // In your app's entry point (App.js, main.js, or index.js)
 import '@tagaddod-design/react/styles';
 ```
 
-### 3. Import & Use Components
+### 4. Import & Use Components
 ```javascript
 import { Button, TextInput, ThemeProvider } from '@tagaddod-design/react';
 

@@ -392,6 +392,234 @@
   --t-color-fill-brand-active: #00522b;
 }
 
+/* ===== LOCALE & DIRECTION SUPPORT ===== */
+
+/* English locale tokens (LTR) */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+html[lang="en"] {
+  --t-font-family-primary: Outfit, sans-serif;
+  --t-font-weight-regular: 400;
+  --t-font-weight-medium: 500;
+  --t-font-weight-semibold: 600;
+  --t-font-weight-bold: 700;
+  --t-font-size-250: 0.625rem;
+  --t-font-size-300: 0.75rem;
+  --t-font-size-350: 0.875rem;
+  --t-font-size-400: 1rem;
+  --t-font-size-450: 1.125rem;
+  --t-font-size-500: 1.25rem;
+  --t-font-size-550: 1.375rem;
+  --t-font-size-600: 1.5rem;
+  --t-font-size-700: 1.75rem;
+  --t-font-size-800: 2rem;
+  --t-font-size-900: 2.25rem;
+  --t-font-size-1000: 2.5rem;
+  --t-font-size-1200: 3rem;
+  --t-font-size-1400: 3rem;
+  --t-font-line-height-300: 0.75rem;
+  --t-font-line-height-400: 1rem;
+  --t-font-line-height-500: 1.25rem;
+  --t-font-line-height-600: 1.5rem;
+  --t-font-line-height-800: 2rem;
+  --t-font-line-height-1000: 2.5rem;
+  --t-font-line-height-1200: 3rem;
+  --t-typography-heading-3xl: 600 3rem Outfit, sans-serif;
+  --t-typography-heading-2xl: 600 2.5rem Outfit, sans-serif;
+  --t-typography-heading-xl: 600 2.25rem Outfit, sans-serif;
+  --t-typography-heading-lg: 600 2rem Outfit, sans-serif;
+  --t-typography-heading-md: 600 1.5rem Outfit, sans-serif;
+  --t-typography-heading-sm: 600 1.25rem Outfit, sans-serif;
+  --t-typography-body-lg-default: 400 1.125rem Outfit, sans-serif;
+  --t-typography-body-lg-medium: 500 1.125rem Outfit, sans-serif;
+  --t-typography-body-lg-semibold: 600 1.125rem Outfit, sans-serif;
+  --t-typography-body-md-default: 400 1rem Outfit, sans-serif;
+  --t-typography-body-md-medium: 500 1rem Outfit, sans-serif;
+  --t-typography-body-md-semibold: 600 1rem Outfit, sans-serif;
+  --t-typography-body-sm-default: 400 0.875rem Outfit, sans-serif;
+  --t-typography-body-sm-medium: 500 0.875rem Outfit, sans-serif;
+  --t-typography-body-sm-semibold: 600 0.875rem Outfit, sans-serif;
+  --t-typography-caption-lg-default: 400 0.75rem Outfit, sans-serif;
+  --t-typography-caption-lg-medium: 500 0.75rem Outfit, sans-serif;
+  --t-typography-caption-lg-semibold: 600 0.75rem Outfit, sans-serif;
+  --t-typography-caption-sm-default: 400 0.625rem Outfit, sans-serif;
+  --t-typography-caption-sm-semibold: 600 0.625rem Outfit, sans-serif;
+  --t-spacing-inline-start: 0.25rem;
+  --t-spacing-inline-end: 0.25rem;
+  --t-spacing-block-start: 0.25rem;
+  --t-spacing-block-end: 0.25rem;
+  --t-padding-inline-start: 1rem;
+  --t-padding-inline-end: 1rem;
+  --t-margin-inline-start: 0.5rem;
+  --t-margin-inline-end: 0.5rem;
+}
+
+/* Arabic locale tokens */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+html[lang="ar"] {
+  --t-font-family-primary: Tajawal, sans-serif;
+  --t-font-weight-regular: 500;
+  --t-font-weight-medium: 700;
+  --t-font-weight-semibold: 700;
+  --t-font-weight-bold: 700;
+  --t-font-size-250: 0.625rem;
+  --t-font-size-300: 0.75rem;
+  --t-font-size-350: 0.875rem;
+  --t-font-size-400: 1rem;
+  --t-font-size-450: 1.125rem;
+  --t-font-size-500: 1.25rem;
+  --t-font-size-550: 1.375rem;
+  --t-font-size-600: 1.5rem;
+  --t-font-size-700: 1.75rem;
+  --t-font-size-800: 2rem;
+  --t-font-size-900: 2.25rem;
+  --t-font-size-1000: 2.5rem;
+  --t-font-size-1200: 3rem;
+  --t-font-size-1400: 3rem;
+  --t-font-line-height-300: 0.75rem;
+  --t-font-line-height-400: 1rem;
+  --t-font-line-height-500: 1.25rem;
+  --t-font-line-height-600: 1.5rem;
+  --t-font-line-height-800: 2rem;
+  --t-font-line-height-1000: 2.5rem;
+  --t-font-line-height-1200: 3rem;
+  --t-typography-heading-3xl: 700 3rem Tajawal, sans-serif;
+  --t-typography-heading-2xl: 700 2.5rem Tajawal, sans-serif;
+  --t-typography-heading-xl: 700 2.25rem Tajawal, sans-serif;
+  --t-typography-heading-lg: 700 2rem Tajawal, sans-serif;
+  --t-typography-heading-md: 700 1.5rem Tajawal, sans-serif;
+  --t-typography-heading-sm: 700 1.25rem Tajawal, sans-serif;
+  --t-typography-body-lg-default: 500 1.125rem Tajawal, sans-serif;
+  --t-typography-body-lg-medium: 700 1.125rem Tajawal, sans-serif;
+  --t-typography-body-lg-semibold: 700 1.125rem Tajawal, sans-serif;
+  --t-typography-body-md-default: 500 1rem Tajawal, sans-serif;
+  --t-typography-body-md-medium: 700 1rem Tajawal, sans-serif;
+  --t-typography-body-md-semibold: 700 1rem Tajawal, sans-serif;
+  --t-typography-body-sm-default: 500 0.875rem Tajawal, sans-serif;
+  --t-typography-body-sm-medium: 700 0.875rem Tajawal, sans-serif;
+  --t-typography-body-sm-semibold: 700 0.875rem Tajawal, sans-serif;
+  --t-typography-caption-lg-default: 500 0.75rem Tajawal, sans-serif;
+  --t-typography-caption-lg-medium: 700 0.75rem Tajawal, sans-serif;
+  --t-typography-caption-lg-semibold: 700 0.75rem Tajawal, sans-serif;
+  --t-typography-caption-sm-default: 500 0.625rem Tajawal, sans-serif;
+  --t-typography-caption-sm-semibold: 700 0.625rem Tajawal, sans-serif;
+  --t-spacing-inline-start: 0.25rem;
+  --t-spacing-inline-end: 0.25rem;
+  --t-spacing-block-start: 0.25rem;
+  --t-spacing-block-end: 0.25rem;
+  --t-padding-inline-start: 1rem;
+  --t-padding-inline-end: 1rem;
+  --t-margin-inline-start: 0.5rem;
+  --t-margin-inline-end: 0.5rem;
+  --t-text-align-start: start;
+  --t-text-align-end: end;
+}
+
+/* RTL direction-specific font switching */
+
+/* RTL Font Overrides (converted from Arabic locale tokens) */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[dir="rtl"] {
+  --t-font-family-primary: Tajawal, sans-serif;
+  --t-font-weight-regular: 500;
+  --t-font-weight-medium: 700;
+  --t-font-weight-semibold: 700;
+  --t-font-weight-bold: 700;
+  --t-font-size-250: 0.625rem;
+  --t-font-size-300: 0.75rem;
+  --t-font-size-350: 0.875rem;
+  --t-font-size-400: 1rem;
+  --t-font-size-450: 1.125rem;
+  --t-font-size-500: 1.25rem;
+  --t-font-size-550: 1.375rem;
+  --t-font-size-600: 1.5rem;
+  --t-font-size-700: 1.75rem;
+  --t-font-size-800: 2rem;
+  --t-font-size-900: 2.25rem;
+  --t-font-size-1000: 2.5rem;
+  --t-font-size-1200: 3rem;
+  --t-font-size-1400: 3rem;
+  --t-font-line-height-300: 0.75rem;
+  --t-font-line-height-400: 1rem;
+  --t-font-line-height-500: 1.25rem;
+  --t-font-line-height-600: 1.5rem;
+  --t-font-line-height-800: 2rem;
+  --t-font-line-height-1000: 2.5rem;
+  --t-font-line-height-1200: 3rem;
+  --t-typography-heading-3xl: 700 3rem Tajawal, sans-serif;
+  --t-typography-heading-2xl: 700 2.5rem Tajawal, sans-serif;
+  --t-typography-heading-xl: 700 2.25rem Tajawal, sans-serif;
+  --t-typography-heading-lg: 700 2rem Tajawal, sans-serif;
+  --t-typography-heading-md: 700 1.5rem Tajawal, sans-serif;
+  --t-typography-heading-sm: 700 1.25rem Tajawal, sans-serif;
+  --t-typography-body-lg-default: 500 1.125rem Tajawal, sans-serif;
+  --t-typography-body-lg-medium: 700 1.125rem Tajawal, sans-serif;
+  --t-typography-body-lg-semibold: 700 1.125rem Tajawal, sans-serif;
+  --t-typography-body-md-default: 500 1rem Tajawal, sans-serif;
+  --t-typography-body-md-medium: 700 1rem Tajawal, sans-serif;
+  --t-typography-body-md-semibold: 700 1rem Tajawal, sans-serif;
+  --t-typography-body-sm-default: 500 0.875rem Tajawal, sans-serif;
+  --t-typography-body-sm-medium: 700 0.875rem Tajawal, sans-serif;
+  --t-typography-body-sm-semibold: 700 0.875rem Tajawal, sans-serif;
+  --t-typography-caption-lg-default: 500 0.75rem Tajawal, sans-serif;
+  --t-typography-caption-lg-medium: 700 0.75rem Tajawal, sans-serif;
+  --t-typography-caption-lg-semibold: 700 0.75rem Tajawal, sans-serif;
+  --t-typography-caption-sm-default: 500 0.625rem Tajawal, sans-serif;
+  --t-typography-caption-sm-semibold: 700 0.625rem Tajawal, sans-serif;
+  --t-spacing-inline-start: 0.25rem;
+  --t-spacing-inline-end: 0.25rem;
+  --t-spacing-block-start: 0.25rem;
+  --t-spacing-block-end: 0.25rem;
+  --t-padding-inline-start: 1rem;
+  --t-padding-inline-end: 1rem;
+  --t-margin-inline-start: 0.5rem;
+  --t-margin-inline-end: 0.5rem;
+  --t-text-align-start: start;
+  --t-text-align-end: end;
+}
+
+/* LTR direction tokens */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[dir="ltr"] {
+  --t-spacing-inline-start: 0.25rem;
+  --t-spacing-inline-end: 0.25rem;
+  --t-spacing-block-start: 0.25rem;
+  --t-spacing-block-end: 0.25rem;
+  --t-padding-inline-start: 1rem;
+  --t-padding-inline-end: 1rem;
+  --t-margin-inline-start: 0.5rem;
+  --t-margin-inline-end: 0.5rem;
+}
+
+/* RTL direction tokens */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[dir="rtl"] {
+  --t-spacing-inline-start: 0.25rem;
+  --t-spacing-inline-end: 0.25rem;
+  --t-spacing-block-start: 0.25rem;
+  --t-spacing-block-end: 0.25rem;
+  --t-padding-inline-start: 1rem;
+  --t-padding-inline-end: 1rem;
+  --t-margin-inline-start: 0.5rem;
+  --t-margin-inline-end: 0.5rem;
+  --t-text-align-start: start;
+  --t-text-align-end: end;
+}
+
 /* ===== DIRECTION SUPPORT ===== */
 
 /* LTR/RTL specific styles */
