@@ -5,6 +5,7 @@ module.exports = {
     '../../react/src/**/*.mdx',
     '../../react/src/**/*.stories.@(js|jsx|ts|tsx)'
   ],
+  staticDirs: ['../public'],  // Serve public directory as static assets
   addons: [
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',

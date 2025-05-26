@@ -1,4 +1,20 @@
-# Tagaddod Design System - Optimized Architecture
+# Tagaddod Design System
+
+[![Documentation](https://img.shields.io/badge/docs-storybook-ff4785)](https://tagaddod-design-system.vercel.app/)
+[![LLM Agent Ready](https://img.shields.io/badge/LLM-ready-blue)](https://tagaddod-design-system.vercel.app/llms.txt)
+[![npm version](https://img.shields.io/npm/v/@tagaddod/react.svg)](https://www.npmjs.com/package/@tagaddod/react)
+
+> **📚 [Live Documentation & Examples](https://tagaddod-design-system.vercel.app/)**
+
+Modern, scalable design system with comprehensive token management, multi-brand theming, and AI agent integration.
+
+## 🤖 AI Agent Integration
+
+This design system includes specialized documentation for Large Language Models (GPT, Claude, etc.):
+
+**Live LLM Documentation**: [`https://tagaddod-design-system.vercel.app/llms.txt`](https://tagaddod-design-system.vercel.app/llms.txt)
+
+Provides structured information about components, props, usage patterns, and best practices for accurate AI-assisted development.
 
 ## Quick Start
 
@@ -27,21 +43,32 @@ Design tokens using Style Dictionary v4 with optimized output:
 
 ### @tagaddod-design/react
 React component library with:
-- Accessible components built on Radix UI
-- CSS modules for styling
-- Full TypeScript support
-- Tree-shakeable exports
+- **18+ accessible components** built on Radix UI
+- **Multi-brand theming** (Tagaddod & GreenPan)
+- **RTL/LTR support** with automatic font switching
+- **CSS modules** for styling
+- **Full TypeScript support**
+- **Tree-shakeable exports**
+- **LLM documentation** for AI-assisted development
 
 ### @tagaddod-design/storybook
-Component documentation and testing
+Component documentation and testing with:
+- **Interactive examples** for all components
+- **Live token editing** sandbox
+- **Multi-brand switching** in real-time
+- **Accessibility testing** with addon-a11y
+- **LLM documentation** served at `/llms.txt`
 
-## Key Improvements
+## 🚀 Key Features & Improvements
 
-1. **50-70% faster builds** with optimized configuration
-2. **40% smaller bundle size** with better tree-shaking
-3. **Runtime theme switching** without page reload
-4. **Better caching** with Turbo
-5. **Simplified architecture** for easier maintenance
+1. **🤖 AI Agent Ready** - Specialized LLM documentation for accurate AI-assisted development
+2. **🎨 Multi-Brand Theming** - Runtime switching between Tagaddod and GreenPan themes
+3. **🌍 Full RTL/LTR Support** - Bi-directional language support with automatic font switching
+4. **⚡ Performance Optimized** - 50-70% faster builds, 40% smaller bundle size
+5. **🏗️ Comprehensive Token System** - W3C compliant design tokens with live editing
+6. **♿ Accessibility First** - WCAG 2.1 AA compliant components
+7. **📦 Tree-Shakeable** - Import only what you need
+8. **🔧 Developer Experience** - TypeScript, Storybook, and comprehensive documentation
 
 ## Usage
 

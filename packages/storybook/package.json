@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prestorybook": "cp ../react/llms.txt public/llms.txt",
     "storybook": "storybook dev -p 6009",
+    "prewatch": "cp ../react/llms.txt public/llms.txt",
     "watch": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "clean": "rm -rf .storybook-static",
-    "prebuild-storybook": "cd ../tokens && yarn build && cd ../react && yarn build",
+    "prebuild-storybook": "cd ../tokens && yarn build && cd ../react && yarn build && cp llms.txt ../storybook/public/llms.txt",
     "vercel-build": "yarn build-storybook"
   },
   "main": "index.js",
