@@ -4,11 +4,10 @@
  * React Component Library Build Script
  * 
  * Features:
- * - Automatic CSS injection using vite-plugin-css-injected-by-js
- * - Dynamic component discovery (no hardcoding)
- * - TypeScript declarations generation
- * - Comprehensive build validation
- * - Industry best practices
+ * - Builds JavaScript bundles with Vite
+ * - Generates single consolidated CSS file
+ * - Creates TypeScript declarations
+ * - Validates build outputs
  */
 
 const fs = require('fs');
@@ -74,49 +73,180 @@ function runCommand(command, description, { continueOnError = false } = {}) {
 }
 
 /**
- * Fix TypeScript declaration file paths
+ * Build CSS files
  */
-function fixTypeScriptPaths() {
-  console.log(`${YELLOW}Organizing TypeScript declarations...${RESET}`);
+function buildCSS() {
+  console.log(`${YELLOW}Building CSS files...${RESET}`);
+  
+  // First ensure tokens package is built
+  const tokensDir = path.resolve(ROOT_DIR, '../tokens');
+  if (fs.existsSync(tokensDir)) {
+    const tokensDistDir = path.join(tokensDir, 'dist');
+    if (!fs.existsSync(tokensDistDir) || !fs.existsSync(path.join(tokensDistDir, 'tokens.css'))) {
+      console.log(`${YELLOW}Tokens package not built, building it first...${RESET}`);
+      runCommand('yarn workspace @tagaddod/tokens build', 'Building tokens package');
+    }
+  }
+  
+  // Run the CSS build script
+  return runCommand('node scripts/build-css.js', 'Generating consolidated CSS');
+}
+
+/**
+ * Combine CSS files after Vite build
+ */
+function combineCSS(savedConsolidatedCSS = '') {
+  console.log(`${YELLOW}Combining CSS files...${RESET}`);
   
   try {
-    const typesDir = path.join(DIST_DIR, 'types');
+    const stylesDir = path.join(DIST_DIR, 'styles');
     
-    // Create types directory if it doesn't exist
-    if (!fs.existsSync(typesDir)) {
-      fs.mkdirSync(typesDir, { recursive: true });
+    // Use the saved consolidated CSS (tokens + utilities) or try to read from file
+    let consolidatedCSS = savedConsolidatedCSS;
+    
+    if (!consolidatedCSS) {
+      const consolidatedCSSPath = path.join(stylesDir, 'styles.css');
+      if (fs.existsSync(consolidatedCSSPath)) {
+        consolidatedCSS = fs.readFileSync(consolidatedCSSPath, 'utf-8');
+        console.log(`${GREEN}✓${RESET} Read consolidated CSS with tokens (${(consolidatedCSS.length / 1024).toFixed(1)}KB)`);
+      } else {
+        console.log(`${YELLOW}⚠️ Consolidated CSS not found at ${consolidatedCSSPath}${RESET}`);
+      }
+    } else {
+      console.log(`${GREEN}✓${RESET} Using saved consolidated CSS with tokens (${(consolidatedCSS.length / 1024).toFixed(1)}KB)`);
     }
     
-    // Check if index.d.ts exists in root dist and move it
-    const rootIndexDts = path.join(DIST_DIR, 'index.d.ts');
-    const typesIndexDts = path.join(typesDir, 'index.d.ts');
+    // Read the CSS that Vite generated (component CSS modules)
+    const viteGeneratedCSSPath = path.join(stylesDir, 'index.css');
+    let viteCSS = '';
     
-    if (fs.existsSync(rootIndexDts) && !fs.existsSync(typesIndexDts)) {
-      fs.renameSync(rootIndexDts, typesIndexDts);
-      console.log(`${GREEN}✓${RESET} Moved index.d.ts to types directory`);
+    if (fs.existsSync(viteGeneratedCSSPath)) {
+      viteCSS = fs.readFileSync(viteGeneratedCSSPath, 'utf-8');
+      console.log(`${GREEN}✓${RESET} Read Vite-generated CSS modules (${(viteCSS.length / 1024).toFixed(1)}KB)`);
+    } else {
+      console.log(`${YELLOW}⚠️ Vite-generated CSS not found at ${viteGeneratedCSSPath}${RESET}`);
     }
     
-    // Check if we have TypeScript declarations
-    if (!fs.existsSync(typesIndexDts)) {
-      console.log(`${YELLOW}⚠️ No TypeScript declarations found, generating minimal ones...${RESET}`);
-      
-      // Create a minimal type declaration as fallback
-      const minimalTypes = `export * from './components';
-export * from './providers';
+    // Combine both: consolidated CSS (tokens + utilities) + Vite CSS (component modules)
+    let finalCSS = '';
+    
+    if (consolidatedCSS && viteCSS) {
+      // Check if consolidated CSS already contains component styles
+      if (consolidatedCSS.includes('Button-module__') || consolidatedCSS.length > viteCSS.length) {
+        // Consolidated CSS already has everything, use it as-is
+        finalCSS = consolidatedCSS;
+        console.log(`${GREEN}✓${RESET} Using consolidated CSS (already contains component styles)`);
+      } else {
+        // Combine: tokens/utilities + component modules
+        finalCSS = `${consolidatedCSS}\n\n/* Component CSS Modules from Vite */\n${viteCSS}`;
+        console.log(`${GREEN}✓${RESET} Combined consolidated CSS + Vite CSS modules`);
+      }
+    } else if (consolidatedCSS) {
+      finalCSS = consolidatedCSS;
+      console.log(`${GREEN}✓${RESET} Using consolidated CSS only`);
+    } else if (viteCSS) {
+      finalCSS = viteCSS;
+      console.log(`${GREEN}✓${RESET} Using Vite CSS only`);
+    } else {
+      finalCSS = '/* No CSS files found during build */\n';
+      console.log(`${YELLOW}⚠️ No CSS files found, creating placeholder${RESET}`);
+    }
+    
+    // Write the final combined CSS to styles.css (the main export file)
+    const finalCSSPath = path.join(stylesDir, 'styles.css');
+    fs.writeFileSync(finalCSSPath, finalCSS);
+    console.log(`${GREEN}✓${RESET} Final combined CSS written to styles.css (${(finalCSS.length / 1024).toFixed(1)}KB)`);
+    
+    // Create compatibility redirect files that point to styles.css
+    const compatibilityRedirect = `/* Redirects to main styles file for backwards compatibility */
+@import './styles.css';
 `;
-      fs.writeFileSync(typesIndexDts, minimalTypes);
-    }
     
-    console.log(`${GREEN}✓${RESET} TypeScript declarations organized`);
+    // Update index.css to redirect to styles.css for consistency
+    const indexCSSPath = path.join(stylesDir, 'index.css');
+    fs.writeFileSync(indexCSSPath, compatibilityRedirect);
+    console.log(`${GREEN}✓${RESET} Created index.css redirect to styles.css`);
+    
+    // Create other compatibility files
+    fs.writeFileSync(path.join(stylesDir, 'tokens.css'), compatibilityRedirect);
+    fs.writeFileSync(path.join(stylesDir, 'utilities.css'), compatibilityRedirect);
+    console.log(`${GREEN}✓${RESET} Created compatibility redirect files`);
+    
     return true;
   } catch (error) {
-    console.error(`${RED}Error organizing TypeScript paths:${RESET}`, error);
+    console.error(`${RED}Error combining CSS files:${RESET}`, error);
     return false;
   }
 }
 
 /**
- * Update package.json with dynamic exports
+ * Fix TypeScript declaration file paths
+ */
+function fixTypeScriptPaths() {
+  console.log(`${YELLOW}Fixing TypeScript declarations...${RESET}`);
+  
+  try {
+    const typesDir = path.join(DIST_DIR, 'types');
+    const typesIndexDts = path.join(typesDir, 'index.d.ts');
+    
+    // Ensure types directory exists
+    if (!fs.existsSync(typesDir)) {
+      fs.mkdirSync(typesDir, { recursive: true });
+    }
+    
+    // Check what declaration files actually exist
+    const componentsIndexExists = fs.existsSync(path.join(DIST_DIR, 'components', 'index.d.ts'));
+    const providersIndexExists = fs.existsSync(path.join(DIST_DIR, 'providers', 'index.d.ts'));
+    
+    console.log(`${BLUE}Declaration files found:${RESET}`);
+    console.log(`  Components: ${componentsIndexExists ? '✓' : '✗'}`);
+    console.log(`  Providers: ${providersIndexExists ? '✓' : '✗'}`);
+    
+      // Generate the main types index file with correct paths
+  // NOTE: We deliberately DO NOT include CSS imports in TypeScript declarations
+  // CSS should be imported separately by consumers via package exports
+  let typesContent = `// Tagaddod Design System React Components
+// 
+// To use this library:
+// 1. Import styles: import '@tagaddod-design/react/styles'
+// 2. Import components: import { Button } from '@tagaddod-design/react'
+//
+// CSS is deliberately separated from TypeScript declarations to avoid
+// bundler issues and follow component library best practices.
+
+`;
+  
+  if (componentsIndexExists) {
+    typesContent += "export * from '../components';\n";
+  }
+  
+  if (providersIndexExists) {
+    typesContent += "export * from '../providers';\n";
+  }
+  
+  // Fallback if no declarations found
+  if (!typesContent.includes('export')) {
+    console.log(`${YELLOW}⚠️ No declaration files found, generating fallback exports...${RESET}`);
+    typesContent += `// Fallback exports - declarations may not be available
+export * from '../components';
+export * from '../providers';
+`;
+  }
+    
+    // Write the corrected index.d.ts
+    fs.writeFileSync(typesIndexDts, typesContent);
+    console.log(`${GREEN}✓${RESET} Generated ${typesIndexDts} with correct import paths`);
+    
+    console.log(`${GREEN}✓${RESET} TypeScript declarations properly configured`);
+    return true;
+  } catch (error) {
+    console.error(`${RED}Error generating TypeScript declarations:${RESET}`, error);
+    return false;
+  }
+}
+
+/**
+ * Update package.json with exports
  */
 function updatePackageExports(components) {
   console.log(`${YELLOW}Updating package.json exports...${RESET}`);
@@ -125,27 +255,61 @@ function updatePackageExports(components) {
     const packageJsonPath = path.join(ROOT_DIR, 'package.json');
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
     
-    // Base exports (main entry point)
+    // Base exports (main entry point) - ensure no absolute paths
     const baseExports = {
       ".": {
         "types": "./dist/types/index.d.ts",
         "import": "./dist/index.js",
-        "require": "./dist/index.cjs"
-      }
+        "require": "./dist/index.cjs",
+        "default": "./dist/index.js"
+      },
+      // Main CSS exports - use object format for better resolution
+      "./styles": {
+        "default": "./dist/styles/styles.css"
+      },
+      "./styles.css": {
+        "default": "./dist/styles/styles.css"
+      },
+      // Allow importing specific style files
+      "./styles/*": {
+        "default": "./dist/styles/*"
+      },
+      // Allow access to package.json for tooling
+      "./package.json": "./package.json"
     };
 
     packageJson.exports = baseExports;
     
-    // Update main fields
+    // Update main fields - ensure relative paths only
     packageJson.main = "./dist/index.cjs";
     packageJson.module = "./dist/index.js";
     packageJson.types = "./dist/types/index.d.ts";
+    packageJson.style = "./dist/styles/styles.css";
     
-    // CSS is now injected, so no side effects from separate CSS files
+    // CSS is separate, so no side effects from JS
     packageJson.sideEffects = false;
     
-    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-    console.log(`${GREEN}✓${RESET} Package.json exports updated`);
+    // Add files to include in npm package
+    if (!packageJson.files) {
+      packageJson.files = [];
+    }
+    packageJson.files = [
+      "dist",
+      "!dist/**/*.map",
+      "!dist/**/*.tsbuildinfo",
+      "README.md",
+      "CHANGELOG.md"
+    ];
+    
+    // Ensure no absolute paths in any field
+    const stringifiedPackage = JSON.stringify(packageJson, null, 2);
+    if (stringifiedPackage.includes(ROOT_DIR) || stringifiedPackage.includes(__dirname)) {
+      console.error(`${RED}Error: Absolute paths detected in package.json!${RESET}`);
+      return false;
+    }
+    
+    fs.writeFileSync(packageJsonPath, stringifiedPackage);
+    console.log(`${GREEN}✓${RESET} Package.json exports updated with relative paths only`);
     return true;
   } catch (error) {
     console.error(`${RED}Error updating package.json:${RESET}`, error);
@@ -154,15 +318,16 @@ function updatePackageExports(components) {
 }
 
 /**
- * Validate the built outputs and CSS injection
+ * Validate the built outputs
  */
 function validateBuild() {
   console.log(`${YELLOW}Validating build outputs...${RESET}`);
   
   const requiredFiles = [
-    'dist/index.js',         // ES module
-    'dist/index.cjs',        // CommonJS module
-    'dist/types/index.d.ts'  // TypeScript declarations
+    'dist/index.js',                    // ES module
+    'dist/index.cjs',                   // CommonJS module
+    'dist/types/index.d.ts',            // TypeScript declarations
+    'dist/styles/styles.css',           // Main consolidated CSS
   ];
   
   const missingFiles = requiredFiles.filter(file => 
@@ -175,36 +340,35 @@ function validateBuild() {
   }
   
   // Check bundle sizes
-  const bundleStats = requiredFiles.slice(0, 2).map(file => {
+  const bundleStats = requiredFiles.map(file => {
     const filePath = path.join(ROOT_DIR, file);
-    const stats = fs.statSync(filePath);
-    const sizeKB = (stats.size / 1024).toFixed(2);
-    return `${path.basename(file)}: ${sizeKB} KB`;
+    if (fs.existsSync(filePath)) {
+      const stats = fs.statSync(filePath);
+      const sizeKB = (stats.size / 1024).toFixed(2);
+      return `${path.basename(file)}: ${sizeKB} KB`;
+    }
+    return `${path.basename(file)}: missing`;
   });
   
   console.log(`${BLUE}Bundle sizes:${RESET}`);
   bundleStats.forEach(stat => console.log(`  ${stat}`));
   
-  // CSS injection validation
-  const esModulePath = path.join(ROOT_DIR, 'dist/index.js');
-  const esContent = fs.readFileSync(esModulePath, 'utf-8');
-  const hasCSSInjection = esContent.includes('createElement("style")') && 
-                         (esContent.includes('textContent') || esContent.includes('innerHTML'));
+  // Verify CSS includes tokens and components
+  const cssPath = path.join(ROOT_DIR, 'dist/styles/styles.css');
+  const cssContent = fs.readFileSync(cssPath, 'utf-8');
+  const hasTokens = cssContent.includes('--t-') && cssContent.includes(':root');
+  const hasGreenPan = cssContent.includes('[data-theme="greenpan"]');
+  const hasComponentStyles = cssContent.includes('.button') || cssContent.includes('Component styles');
   
-  if (hasCSSInjection) {
-    console.log(`${GREEN}✓${RESET} CSS injection confirmed in bundles`);
+  console.log(`${BLUE}CSS validation:${RESET}`);
+  console.log(`  Tokens: ${hasTokens ? '✓' : '✗'}`);
+  console.log(`  Theme overrides: ${hasGreenPan ? '✓' : '✗'}`);
+  console.log(`  Component styles: ${hasComponentStyles ? '✓' : '✗'}`);
+  
+  if (hasTokens && hasComponentStyles) {
+    console.log(`${GREEN}✓${RESET} CSS includes tokens and component styles`);
   } else {
-    console.log(`${YELLOW}⚠️ CSS injection verification failed${RESET}`);
-  }
-  
-  // Confirm no separate CSS files (good for injected CSS)
-  const distFiles = fs.readdirSync(DIST_DIR);
-  const cssFiles = distFiles.filter(file => file.endsWith('.css'));
-  
-  if (cssFiles.length === 0) {
-    console.log(`${GREEN}✓${RESET} No separate CSS files (CSS properly injected)`);
-  } else {
-    console.log(`${YELLOW}ℹ️ Found CSS files: ${cssFiles.join(', ')} (will be ignored)${RESET}`);
+    console.log(`${YELLOW}⚠️ CSS may be missing tokens or component styles${RESET}`);
   }
   
   console.log(`${GREEN}✓${RESET} Build validation passed`);
@@ -225,25 +389,44 @@ async function runBuild() {
     process.exit(1);
   }
   
-  // Step 3: Build with Vite (includes CSS injection)
-  if (!runCommand('vite build', 'Building with Vite (CSS injection enabled)')) {
+  // Step 3: Build CSS first (creates src/styles/index.css for Vite)
+  if (!buildCSS()) {
     process.exit(1);
   }
   
-  // Step 4: Generate TypeScript declarations (continue on error)
+  // Step 4: Save the consolidated CSS before Vite overwrites it
+  const stylesDir = path.join(DIST_DIR, 'styles');
+  const consolidatedCSSPath = path.join(stylesDir, 'styles.css');
+  let savedConsolidatedCSS = '';
+  if (fs.existsSync(consolidatedCSSPath)) {
+    savedConsolidatedCSS = fs.readFileSync(consolidatedCSSPath, 'utf-8');
+    console.log(`${GREEN}✓${RESET} Saved consolidated CSS (${(savedConsolidatedCSS.length / 1024).toFixed(1)}KB) before Vite build`);
+  }
+  
+  // Step 5: Build with Vite (this will extract component CSS modules)
+  if (!runCommand('vite build', 'Building with Vite')) {
+    process.exit(1);
+  }
+  
+  // Step 6: Restore and combine CSS files (tokens + utilities + component styles)
+  if (!combineCSS(savedConsolidatedCSS)) {
+    process.exit(1);
+  }
+  
+  // Step 7: Generate TypeScript declarations
   runCommand('tsc --project tsconfig.build.json', 'Generating TypeScript declarations', { continueOnError: true });
   
-  // Step 5: Fix TypeScript paths
+  // Step 8: Fix TypeScript paths
   if (!fixTypeScriptPaths()) {
     process.exit(1);
   }
   
-  // Step 6: Update package.json exports
+  // Step 9: Update package.json exports
   if (!updatePackageExports(components)) {
     process.exit(1);
   }
   
-  // Step 7: Validate build
+  // Step 10: Validate build
   if (!validateBuild()) {
     process.exit(1);
   }
@@ -252,22 +435,24 @@ async function runBuild() {
   
   console.log(`\n${GREEN}==============================================${RESET}`);
   console.log(`${GREEN}= ✅ BUILD SUCCESSFUL =${RESET}`);
-  console.log(`${GREEN}= 🎨 CSS: Injected into JS (no separate files) =${RESET}`);
-  console.log(`${GREEN}= 📦 Components: ${components.length} discovered dynamically =${RESET}`);
+  console.log(`${GREEN}= 🎨 CSS: Tokens + Components combined =${RESET}`);
+  console.log(`${GREEN}= 📦 Components: ${components.length} discovered =${RESET}`);
   console.log(`${GREEN}= 🔧 TypeScript: Declarations generated =${RESET}`);
   console.log(`${GREEN}= 📤 Package: Ready for npm publishing =${RESET}`);
   console.log(`${GREEN}==============================================${RESET}`);
   
-  console.log(`\n${BLUE}✨ Success! Your component library now has:${RESET}`);
-  console.log(`   • Automatic CSS injection (no separate imports needed)`);
-  console.log(`   • Dynamic component discovery (no hardcoding)`);  
-  console.log(`   • Proper TypeScript support`);
-  console.log(`   • Industry best practices`);
+  console.log(`\n${BLUE}✨ Your component library includes:${RESET}`);
+  console.log(`   • Single CSS file with tokens, themes, and component styles`);
+  console.log(`   • Automatic theme switching (Tagaddod/GreenPan)`);
+  console.log(`   • Full RTL/LTR support`);
+  console.log(`   • Utility classes from design tokens`);
+  console.log(`   • TypeScript support`);
   
-  console.log(`\n${BLUE}Next steps:${RESET}`);
-  console.log(`1. Test: ${YELLOW}yarn test:css-injection${RESET}`);
-  console.log(`2. Test in consumer app: import components, verify styles work automatically`);
-  console.log(`3. Publish: ${YELLOW}yarn publish${RESET}`);
+  console.log(`\n${BLUE}Consumer usage:${RESET}`);
+  console.log(`1. Install: ${YELLOW}npm install @tagaddod-design/react${RESET}`);
+  console.log(`2. Import CSS: ${YELLOW}import '@tagaddod-design/react/styles'${RESET}`);
+  console.log(`3. Import components: ${YELLOW}import { Button } from '@tagaddod-design/react'${RESET}`);
+  console.log(`4. Set theme: ${YELLOW}<div data-theme="greenpan">...</div>${RESET}`);
 }
 
 runBuild();

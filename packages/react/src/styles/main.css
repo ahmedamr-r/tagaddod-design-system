@@ -1,49 +1,13 @@
 /* 
- * Main CSS file that imports all token variations
- * Using CSS custom properties for runtime theme switching
- */
-
-/* Base tokens - Always loaded */
-@import '@tagaddod-design/tokens/tokens.css';
-
-/* Brand-specific token overrides - CRITICAL for theme switching */
-@import '@tagaddod-design/tokens/brands/tagaddod.css';
-@import '@tagaddod-design/tokens/brands/greenpan.css';
-
-/* Locale-specific tokens - Critical for font switching */
-@import '@tagaddod-design/tokens/locales/en.css';
-@import '@tagaddod-design/tokens/locales/ar.css';
-
-/* Direction-specific tokens - Loaded based on dir attribute */
-@import '@tagaddod-design/tokens/directions/ltr.css';
-@import '@tagaddod-design/tokens/directions/rtl.css';
-
-/* 
- * Note: Component styles are handled via CSS modules
- * They are imported directly in each component file
+ * Main CSS file - Design system integration
+ * This file uses CSS variables that will be provided by @tagaddod/tokens
  */
 
 /* 
- * CSS Custom Properties for dynamic theming
- * These can be overridden at runtime without loading different CSS files
+ * IMPORTANT: CSS Custom Properties for theming
+ * These variables are defined in the generated dist/styles/tokens.css
+ * Components will use these variables to support theme switching
  */
-:root {
-  /* Default theme variables that can be overridden */
-  --theme-transition: var(--t-transition-soft);
-  
-  /* Layout direction aware properties */
-  --padding-inline-start: var(--t-padding-inline-start, var(--t-space-400));
-  --padding-inline-end: var(--t-padding-inline-end, var(--t-space-400));
-  --margin-inline-start: var(--t-margin-inline-start, var(--t-space-200));
-  --margin-inline-end: var(--t-margin-inline-end, var(--t-space-200));
-  --text-align-start: var(--t-text-align-start, left);
-  --text-align-end: var(--t-text-align-end, right);
-}
-
-/* Theme transition for smooth switching */
-[data-theme] {
-  transition: var(--theme-transition);
-}
 
 /* Global reset styles */
 *,
@@ -54,10 +18,19 @@
 
 body {
   margin: 0;
-  font-family: var(--t-font-family-primary);
-  color: var(--t-color-text-primary);
-  background-color: var(--t-color-bg-primary);
-  line-height: 1.5;
+  font-family: var(--t-font-family-primary, "Outfit", sans-serif);
+  font-size: var(--t-font-size-400, 1rem);
+  line-height: var(--t-font-line-height-500, 1.25);
+  color: var(--t-color-text-primary, #16161d);
+  background-color: var(--t-color-bg-primary, #f7f7f8);
+  
+  /* Smooth transitions when theme changes */
+  transition: color 300ms ease, background-color 300ms ease;
+}
+
+/* Theme transition for smooth switching */
+[data-theme] {
+  transition: var(--t-transition-soft, 300ms cubic-bezier(0.4, 0, 0.2, 1));
 }
 
 /* Print styles */
@@ -66,3 +39,22 @@ body {
     transition: none !important;
   }
 }
+
+/* Direction-aware properties for RTL support */
+:root {
+  --text-align-start: left;
+  --text-align-end: right;
+}
+
+[dir="rtl"] {
+  --text-align-start: right;
+  --text-align-end: left;
+}
+
+/* 
+ * Integration Notes:
+ * - This file imports CSS variables from the generated tokens
+ * - Theme switching works via [data-theme] attributes
+ * - Components use CSS modules with token variables
+ * - Generated tokens provide fallback values for all variables
+ */

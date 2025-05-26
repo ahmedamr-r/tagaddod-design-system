@@ -15,7 +15,7 @@ import { Tabs, TabsList, TabsTrigger } from '../Tabs';
 
 // Extend ColumnMeta to include custom properties
 declare module '@tanstack/react-table' {
-  interface ColumnMeta<TData extends object, TValue> {
+  interface ColumnMeta<TData, TValue> {
     headerClassName?: string;
     cellClassName?: string;
     width?: string;
@@ -299,7 +299,7 @@ export const Table = <T extends object>({
                   key={header.id}
                   isSortable={header.column.getCanSort()}
                   sortDirection={header.column.getIsSorted() as any}
-                  onSort={() => header.column.getToggleSortingHandler()?.()}
+                  onSort={() => header.column.toggleSorting()}
                   className={header.column.columnDef.meta?.headerClassName}
                 >
                   {header.isPlaceholder ? null : (

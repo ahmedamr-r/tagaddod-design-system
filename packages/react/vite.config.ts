@@ -1,18 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import path from 'path';
 
 export default defineConfig({
   plugins: [
     react(),
-    cssInjectedByJsPlugin({
-      topExecutionPriority: false,
-      jsAssetsFilterFunction: function customJsAssetsfilterFunction(outputChunk) {
-        // Apply CSS injection to all JS chunks
-        return outputChunk.isEntry || outputChunk.isDynamicEntry;
-      },
-    })
   ],
   build: {
     lib: {
@@ -28,7 +20,6 @@ export default defineConfig({
         'react/jsx-runtime',
         /@radix-ui\/.*/,
         '@tabler/icons-react',
-        '@tagaddod-design/tokens',
         '@tanstack/react-table',
         'clsx'
       ],
@@ -36,11 +27,18 @@ export default defineConfig({
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM'
+        },
+        // Extract CSS to separate files
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name?.endsWith('.css')) {
+            return 'styles/[name][extname]';
+          }
+          return 'assets/[name][extname]';
         }
       }
     },
-    // Important: Let CSS be extracted first, then injected
-    cssCodeSplit: false,
+    // Enable CSS code splitting to extract component styles
+    cssCodeSplit: true,
     sourcemap: true,
     emptyOutDir: true,
     minify: process.env.NODE_ENV === 'production' ? 'terser' : false,

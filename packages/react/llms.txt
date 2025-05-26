@@ -1,0 +1,452 @@
+# Tagaddod Design System - React Components Library
+
+A comprehensive React component library for building modern, accessible user interfaces with support for RTL languages and multiple brand themes.
+
+## Installation
+
+```bash
+npm install @tagaddod/react
+# or
+yarn add @tagaddod/react
+```
+
+## Setup
+
+```jsx
+import '@tagaddod/react/styles.css';
+import { ThemeProvider } from '@tagaddod/react';
+
+function App() {
+  return (
+    <ThemeProvider theme="tagaddod" direction="ltr">
+      {/* Your app content */}
+    </ThemeProvider>
+  );
+}
+```
+
+## Key Features
+
+- **Accessibility First**: WCAG 2.1 AA compliant with keyboard navigation and screen reader support
+- **RTL Support**: Full right-to-left language support for Arabic interfaces
+- **Multi-Brand Theming**: Support for Tagaddod and GreenPan brand themes
+- **TypeScript Ready**: Comprehensive type definitions included
+- **Modern React**: Built for React 18+ with hooks and concurrent features
+
+## Components
+
+### AspectRatio
+The AspectRatio component is useful for maintaining consistent proportions for content like images, videos, maps, or embedded content. It ensures that content maintains its shape as its container resi
+
+**Import:** `import { AspectRatio } from '@tagaddod/react'`
+
+**Features:** Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+<AspectRatio ratio={1}>
+  <div style={{
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'var(--t-color-fill-brand)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'var(--t-color-text-on-fill)',
+  }}>
+    1:1
+  </div>
+</AspectRatio>
+```
+
+### Avatar
+The Avatar component is used to represent people in the interface, displaying either a profile image, the user's initial, or a generic user icon as a fallback. It supports multiple sizes and handles i
+
+**Import:** `import { Avatar } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+<Avatar 
+  type="image"
+  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+  alt="User profile picture"
+/>
+```
+
+### Badge
+Badges help users quickly identify status, category, or other metadata about items. They're compact, high-contrast elements that stand out visually from surrounding content.
+
+**Import:** `import { Badge } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+<Badge>Badge</Badge>
+```
+
+### Button
+Buttons are primary interactive elements in user interfaces, allowing users to trigger actions, submit forms, navigate, or make selections. The Tagaddod Design System provides a comprehensive Button c
+
+**Import:** `import { Button } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+// Default button (primary variant)
+<Button>Button</Button>
+
+// With callback
+<Button onClick={() => console.log('Button clicked')}>
+  Click Me
+</Button>
+```
+
+### Checkbox
+Checkboxes are form controls that let users make binary choices (checked or unchecked) and can also represent an indeterminate state. They're commonly used in forms, settings, and lists where multiple
+
+**Import:** `import { Checkbox } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+<Checkbox label="Label" />
+```
+
+### Drawer
+Drawers are used to display supplementary content, forms, or detailed information while keeping the main context visible. They can appear from the right or left side of the screen and come in differen
+
+**Import:** `import { Drawer } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Medium Drawer"
+  size="medium"
+>
+  {/* Content */}
+</Drawer>
+```
+
+### Listbox
+Listboxes are used to present a list of options for users to select from. They're commonly used in dropdowns, menus, and selection contexts. The Listbox component supports rich features like icons, he
+
+**Import:** `import { Listbox } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+<Listbox
+  options={[
+    { label: 'Option 1', value: 'option1' },
+    { label: 'Option 2', value: 'option2' },
+    { label: 'Option 3', value: 'option3' },
+    { label: 'Option 4', value: 'option4' },
+  ]}
+  selectedValue="option1"
+  onSelect={(value) => console.log('Selected:', value)}
+/>
+```
+
+### Modal
+Modals are used to focus user attention on a specific task or piece of information without navigating away from the current screen. They're ideal for confirmations, alerts, and short forms.
+
+**Import:** `import { Modal } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  title="Modal Title"
+  showTitle={true}
+  showFooter={true}
+  cancelLabel="Cancel"
+  confirmLabel="Confirm"
+  onCancel={() => console.log('Cancelled')}
+  onConfirm={() => console.log('Confirmed')}
+>
+  <div style={{ padding: '16px' }}>
+    Modal content goes here
+  </div>
+</Modal>
+```
+
+### Popover
+Popovers are used to display additional information or actions related to an element on the page without navigating away from the current context. They're commonly used for tooltips, dropdowns, menus,
+
+**Import:** `import { Popover } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+<Popover
+  content="This is a basic popover content"
+  type="default"
+>
+  <Button>Default Popover</Button>
+</Popover>
+```
+
+### RadioButton
+RadioButtons are used when users need to select exactly one option from a list of related options. They're organized in groups where only one option can be selected at a time. When a user selects a ne
+
+**Import:** `import { RadioGroup, RadioButtonItem } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+<RadioGroup defaultValue="option1">
+  <RadioButtonItem 
+    value="option1" 
+    id="radio1" 
+    label="Radio option" 
+    helpText="This is help text for the radio button"
+  />
+</RadioGroup>
+```
+
+### Select
+The Select component is ideal when you have 4 or more options to avoid cluttering the interface with radio buttons. It supports various states (hover, focus, error, disabled), multiple sizes, flexible
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+// Basic select with options
+const options = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'cherry', label: 'Cherry' },
+];
+
+<Select
+  label="Favorite Fruit"
+  placeholder="Select a fruit..."
+  options={options}
+/>
+```
+
+### Separator
+Separators are essential layout elements that help organize content by creating visual boundaries between different sections, menu items, or content blocks. The Tagaddod Design System provides a compr
+
+**Import:** `import { Separator } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+// Default horizontal separator
+<Separator />
+
+// With custom props
+<Separator orientation="horizontal" decorative={false} />
+```
+
+### Table
+The Tagaddod Table component provides an intuitive way to display structured data with advanced features such as:
+
+**Import:** `import { Table } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+const [searchQuery, setSearchQuery] = useState('');
+const [filters, setFilters] = useState({
+  status: 'active',
+});
+const [isFilterBarVisible, setIsFilterBarVisible] = useState(true);
+
+<Table
+  data={data}
+  columns={columns}
+  title="Inventory Stock"
+  showSearch={true}
+  showFilters={true}
+  showFilterBar={isFilterBarVisible}
+  showExport={true}
+  searchQuery={searchQuery}
+  onSearchChange={setSearchQuery}
+  activeFilters={filters}
+  onFilterChange={setFilters}
+  onFilterClick={() => setIsFilterBarVisible(!isFilterBarVisible)}
+  onExport={() => alert('Export clicked')}
+  filterOptions={{
+    status: {
+      label: 'Status',
+      options: [
+        { label: 'All', value: 'all' },
+        { label: 'Active', value: 'active' },
+        { label: 'Inactive', value: 'inactive' },
+      ],
+    },
+    category: {
+      label: 'Category',
+      options: [
+        { label: 'All', value: 'all' },
+        { label: 'Food', value: 'food' },
+        { label: 'Cleaning', value: 'cleaning' },
+        { label: 'Drinks', value: 'drinks' },
+      ],
+    },
+  }}
+/>
+```
+
+### Tabs
+Tabs are a fundamental navigation pattern that organizes content into separate views that users can switch between without changing the page. The Tagaddod Tabs component is built on Radix UI primitive
+
+**Import:** `import { Tabs, TabsList, TabsTrigger, TabsContent } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+<Tabs variant="primary" defaultValue="tab1" ariaLabel="Primary tabs example">
+  <TabsList>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+    <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+  </TabsList>
+  <TabsContent value="tab1">
+    <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+      Primary variant - Tab one content
+    </div>
+  </TabsContent>
+  {/* Other tab contents */}
+</Tabs>
+```
+
+### TextInput
+TextInput is a fundamental component for forms and data collection, offering a rich set of features including various states (error, disabled, read-only), prefix and suffix elements, password visibili
+
+**Import:** `import { TextInput } from '@tagaddod/react'`
+
+**Features:** RTL support, Fully accessible, 3 usage examples
+
+**Example:**
+```jsx
+<TextInput 
+  label="Name"
+  placeholder="Enter your name"
+/>
+```
+
+## Common Usage Patterns
+
+### Form Components
+```jsx
+import { TextInput, Checkbox, Select, Button } from '@tagaddod/react';
+
+<form onSubmit={handleSubmit}>
+  <TextInput label="Name" required />
+  <Select label="Country" options={countryOptions} />
+  <Checkbox label="I agree to terms" required />
+  <Button type="submit" variant="primary">Submit</Button>
+</form>
+```
+
+### Dashboard Layout
+```jsx
+import { Table, Tabs, TabsList, TabsTrigger, TabsContent, Badge } from '@tagaddod/react';
+
+<Tabs defaultValue="overview">
+  <TabsList>
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="users" badge="5">Users</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">
+    <Table data={dashboardData} columns={columns} />
+  </TabsContent>
+</Tabs>
+```
+
+### Modal Interactions
+```jsx
+import { Modal, Button } from '@tagaddod/react';
+
+<Modal
+  trigger={<Button>Open Dialog</Button>}
+  title="Confirm Action"
+  cancelLabel="Cancel"
+  confirmLabel="Confirm"
+  onConfirm={handleConfirm}
+>
+  Are you sure you want to continue?
+</Modal>
+```
+
+## Theming
+
+### Theme Provider Setup
+```jsx
+<ThemeProvider theme="tagaddod" direction="ltr">
+  <App />
+</ThemeProvider>
+```
+
+### Available Themes
+- `tagaddod` - Default Tagaddod brand (primary colors: purple/green)
+- `greenpan` - GreenPan brand (primary colors: green variants)
+
+### Direction Support
+- `ltr` - Left-to-right (English, default)
+- `rtl` - Right-to-left (Arabic)
+
+## Accessibility Features
+
+All components follow WCAG 2.1 AA guidelines:
+- Semantic HTML structure
+- Keyboard navigation support
+- Focus management and visible focus indicators
+- Screen reader compatibility with ARIA labels
+- Color contrast compliance
+- Reduced motion support
+
+## Browser Support
+
+- Chrome (latest 2 versions)
+- Firefox (latest 2 versions)
+- Safari (latest 2 versions)
+- Edge (latest 2 versions)
+- Mobile: iOS Safari, Android Chrome
+
+## TypeScript Support
+
+Full TypeScript definitions are included:
+
+```tsx
+import { ButtonProps, SelectOption, TableColumn } from '@tagaddod/react';
+
+interface MyComponentProps {
+  variant: ButtonProps['variant'];
+  options: SelectOption[];
+}
+```
+
+## Performance
+
+- Tree-shakable ES modules
+- CSS-in-JS free (uses CSS modules)
+- Minimal runtime overhead
+- Optimized for modern bundlers
+- Lazy loading support for large components
+
+---
+
+*This documentation was automatically generated from component MDX files.*
+*Generated: 2025-05-25T13:06:11.159Z*
+*Components documented: 15*

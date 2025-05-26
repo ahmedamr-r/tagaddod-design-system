@@ -1,13 +1,562 @@
-/* 
- * Main styles entry point
- * Import this once in your application
+/**
+ * Tagaddod Design System - Complete Styles
+ * Auto-generated during build - DO NOT EDIT MANUALLY
+ * 
+ * This is the main entry point for all design system styles.
+ * Import this single file to get everything:
+ * 
+ * import '@tagaddod-design/react/styles'
+ * // or
+ * import '@tagaddod-design/react/styles.css'
  */
 
-/* Import the optimized main CSS */
-@import './main.css';
+/* ===== DESIGN TOKENS ===== */
 
-/* 
- * This file serves as the single entry point for all styles.
- * Components will use CSS modules or styled components for component-specific styles.
- * Global styles and tokens are imported here.
+/* Base tokens from @tagaddod/tokens */
+/**
+ * Do not edit directly, this file was auto-generated.
  */
+
+:root {
+  --t-color-green-100: #effff4;
+  --t-color-green-200: #e8ffee;
+  --t-color-green-300: #d7ffe3;
+  --t-color-green-400: #ceffdd;
+  --t-color-green-500: #b1ffcb;
+  --t-color-green-600: #a0ffc1;
+  --t-color-green-700: #8dffb7;
+  --t-color-green-800: #29fe94;
+  --t-color-green-900: #00f68b;
+  --t-color-green-1000: #00e380;
+  --t-color-green-1100: #00ae61;
+  --t-color-green-1200: #007d44;
+  --t-color-green-1300: #00703c;
+  --t-color-green-1400: #00522b;
+  --t-color-green-1500: #003a1d;
+  --t-color-green-1600: #00200d;
+  --t-color-fill-brand: #16161d;
+  --t-color-fill-brand-hover: #2a2c37;
+  --t-color-fill-brand-active: #16161d;
+  --t-color-fill-brand-secondary: #f1f1f3;
+  --t-color-fill-brand-secondary-hover: #eaeaed;
+  --t-color-fill-brand-secondary-active: #e0e2e6;
+  --t-color-fill-primary: #ffffff;
+  --t-color-fill-hover: #f9f9fa;
+  --t-color-fill-active: #f1f1f3;
+  --t-color-fill-disabled: #c7c8d1;
+  --t-color-fill-warning: #feba2f;
+  --t-color-fill-warning-hover: #c78e00;
+  --t-color-fill-warning-active: #8f6500;
+  --t-color-fill-warning-secondary: #fef0e1;
+  --t-color-fill-warning-secondary-hover: #fee7cf;
+  --t-color-fill-warning-secondary-active: #fee3c5;
+  --t-color-fill-magic: #8c34ff;
+  --t-color-fill-magic-hover: #7b18fd;
+  --t-color-fill-magic-active: #5b12bc;
+  --t-color-fill-magic-secondary: #f6efff;
+  --t-color-fill-magic-secondary-hover: #f2e7ff;
+  --t-color-fill-magic-secondary-active: #e9d7ff;
+  --t-color-fill-success: #00ae61;
+  --t-color-fill-success-hover: #007d44;
+  --t-color-fill-success-active: #00703c;
+  --t-color-fill-success-secondary: #e8ffee;
+  --t-color-fill-success-secondary-hover: #d7ffe3;
+  --t-color-fill-success-secondary-active: #b1ffcb;
+  --t-color-fill-critical: #d51e25;
+  --t-color-fill-critical-hover: #bf1b21;
+  --t-color-fill-critical-active: #8d1419;
+  --t-color-fill-critical-secondary: #fdf0f1;
+  --t-color-fill-critical-secondary-hover: #fce6e6;
+  --t-color-fill-critical-secondary-active: #fad7d8;
+  --t-color-text-primary: #16161d;
+  --t-color-text-secondary: #686c83;
+  --t-color-text-disabled: #adafbd;
+  --t-color-text-on-fill: #ffffff;
+  --t-color-text-on-fill-hover: #f9f9fa;
+  --t-color-text-on-fill-active: #f1f1f3;
+  --t-color-text-on-fill-disabled: #ffffff;
+  --t-color-text-link: #16161d;
+  --t-color-text-link-hover: #2a2c37;
+  --t-color-text-link-active: #16161d;
+  --t-color-text-magic: #8c34ff;
+  --t-color-text-magic-hover: #7b18fd;
+  --t-color-text-magic-active: #5b12bc;
+  --t-color-text-magic-secondary: #7b18fd;
+  --t-color-text-success: #00ae61;
+  --t-color-text-success-hover: #007d44;
+  --t-color-text-success-active: #00703c;
+  --t-color-text-success-secondary: #007d44;
+  --t-color-text-critical: #d51e25;
+  --t-color-text-critical-hover: #bf1b21;
+  --t-color-text-critical-active: #8d1419;
+  --t-color-text-critical-secondary: #bf1b21;
+  --t-color-text-warning: #8f6500;
+  --t-color-text-warning-secondary: #c78e00;
+  --t-color-border-brand: #16161d;
+  --t-color-border-brand-hover: #2a2c37;
+  --t-color-border-brand-active: #16161d;
+  --t-color-border-primary: #c7c8d1;
+  --t-color-border-secondary: #e0e2e6;
+  --t-color-border-tertiary: #f1f1f3;
+  --t-color-border-hover: #7d8096;
+  --t-color-border-active: #55596c;
+  --t-color-border-disabled: #cfd1d8;
+  --t-color-border-success: #00ae61;
+  --t-color-border-success-hover: #007d44;
+  --t-color-border-success-active: #00703c;
+  --t-color-border-critical: #d51e25;
+  --t-color-border-critical-hover: #bf1b21;
+  --t-color-border-critical-active: #8d1419;
+  --t-color-border-warning: #feba2f;
+  --t-color-border-magic: #8c34ff;
+  --t-color-border-magic-hover: #7b18fd;
+  --t-color-border-magic-active: #5b12bc;
+  --t-color-blue-100: #fafaff;
+  --t-color-blue-200: #f8f8ff;
+  --t-color-blue-300: #f4f4ff;
+  --t-color-blue-400: #f1f2ff;
+  --t-color-blue-500: #ebecff;
+  --t-color-blue-600: #e9eaff;
+  --t-color-blue-700: #e4e6ff;
+  --t-color-blue-800: #d9dcfe;
+  --t-color-blue-900: #d0d4fe;
+  --t-color-blue-1000: #bcc2fe;
+  --t-color-blue-1100: #828efe;
+  --t-color-blue-1200: #3959fe;
+  --t-color-blue-1300: #0b48fe;
+  --t-color-blue-1400: #0033c2;
+  --t-color-blue-1500: #00238f;
+  --t-color-blue-1600: #001157;
+  --t-color-red-100: #fef9f9;
+  --t-color-red-200: #fef6f6;
+  --t-color-red-300: #fdf3f3;
+  --t-color-red-400: #fdf0f1;
+  --t-color-red-500: #fceaeb;
+  --t-color-red-600: #fce6e6;
+  --t-color-red-700: #fbe1e2;
+  --t-color-red-800: #fad7d8;
+  --t-color-red-900: #f8ccce;
+  --t-color-red-1000: #f5b6b8;
+  --t-color-red-1100: #ec7378;
+  --t-color-red-1200: #d51e25;
+  --t-color-red-1300: #bf1b21;
+  --t-color-red-1400: #8d1419;
+  --t-color-red-1500: #660e12;
+  --t-color-red-1600: #3a080a;
+  --t-color-orange-100: #fefaf6;
+  --t-color-orange-200: #fef8f2;
+  --t-color-orange-300: #fef4ea;
+  --t-color-orange-400: #fef0e1;
+  --t-color-orange-500: #feebd8;
+  --t-color-orange-600: #fee7cf;
+  --t-color-orange-700: #fee3c5;
+  --t-color-orange-800: #fed8ab;
+  --t-color-orange-900: #fecf90;
+  --t-color-orange-1000: #feba2f;
+  --t-color-orange-1100: #c78e00;
+  --t-color-orange-1200: #8f6500;
+  --t-color-orange-1300: #805a00;
+  --t-color-orange-1400: #5e4200;
+  --t-color-orange-1500: #442e00;
+  --t-color-orange-1600: #261800;
+  --t-color-gray-100: #ffffff;
+  --t-color-gray-200: #fcfcfd;
+  --t-color-gray-300: #f9f9fa;
+  --t-color-gray-400: #f7f7f8;
+  --t-color-gray-500: #f1f1f3;
+  --t-color-gray-600: #eaeaed;
+  --t-color-gray-700: #e0e2e6;
+  --t-color-gray-800: #cfd1d8;
+  --t-color-gray-900: #c7c8d1;
+  --t-color-gray-1000: #adafbd;
+  --t-color-gray-1100: #7d8096;
+  --t-color-gray-1200: #686c83;
+  --t-color-gray-1300: #55596c;
+  --t-color-gray-1400: #414353;
+  --t-color-gray-1500: #2a2c37;
+  --t-color-gray-1600: #16161d;
+  --t-color-purple-100: #fcfaff;
+  --t-color-purple-200: #fbf7ff;
+  --t-color-purple-300: #f9f4ff;
+  --t-color-purple-400: #f6efff;
+  --t-color-purple-500: #f3eaff;
+  --t-color-purple-600: #f2e7ff;
+  --t-color-purple-700: #efe2ff;
+  --t-color-purple-800: #e9d7ff;
+  --t-color-purple-900: #e3cdff;
+  --t-color-purple-1000: #d7b8ff;
+  --t-color-purple-1100: #b57cff;
+  --t-color-purple-1200: #8c34ff;
+  --t-color-purple-1300: #7b18fd;
+  --t-color-purple-1400: #5b12bc;
+  --t-color-purple-1500: #410d87;
+  --t-color-purple-1600: #25074d;
+  --t-color-bg-primary: #f7f7f8;
+  --t-color-bg-light: #f9f9fa;
+  --t-color-surface-primary: #ffffff;
+  --t-color-surface-hover: #f9f9fa;
+  --t-color-surface-active: #f1f1f3;
+  --t-color-surface-secondary: #f1f1f3;
+  --t-color-surface-secondary-hover: #eaeaed;
+  --t-color-surface-secondary-active: #e0e2e6;
+  --t-color-surface-disabled: #e0e2e6;
+  --t-color-overlay-light-20: rgba(255, 255, 255, 0.2);
+  --t-color-overlay-dark-12: rgba(22, 22, 29, 0.12);
+  --t-color-overlay-dark-60: rgba(22, 22, 29, 0.6);
+  --t-color-overlay-dark-70: rgba(22, 22, 29, 0.7);
+  --t-color-overlay-dark-85: rgba(22, 22, 29, 0.85);
+  --t-color-overlay-brand-12: rgba(22, 22, 29, 0.12);
+  --t-color-icon-primary: #16161d;
+  --t-color-icon-secondary: #7d8096;
+  --t-color-icon-disabled: #adafbd;
+  --t-color-icon-on-fill: #ffffff;
+  --t-color-icon-on-fill-hover: #f9f9fa;
+  --t-color-icon-on-fill-active: #f1f1f3;
+  --t-color-icon-on-fill-disabled: #ffffff;
+  --t-color-icon-link: #16161d;
+  --t-color-icon-link-hover: #2a2c37;
+  --t-color-icon-link-active: #16161d;
+  --t-color-icon-success: #00ae61;
+  --t-color-icon-success-hover: #007d44;
+  --t-color-icon-success-active: #00703c;
+  --t-color-icon-warning: #c78e00;
+  --t-color-icon-warning-dark: #8f6500;
+  --t-color-icon-critical: #d51e25;
+  --t-color-icon-critical-hover: #bf1b21;
+  --t-color-icon-critical-active: #8d1419;
+  --t-color-icon-magic: #8c34ff;
+  --t-color-icon-magic-hover: #7b18fd;
+  --t-color-icon-magic-active: #5b12bc;
+  --t-border-radius-0: 0;
+  --t-border-radius-50: 0.125rem;
+  --t-border-radius-100: 0.25rem;
+  --t-border-radius-200: 0.5rem;
+  --t-border-radius-300: 0.75rem;
+  --t-border-radius-600: 1.5rem;
+  --t-border-radius-800: 2rem;
+  --t-border-radius-full: 624.994rem;
+  --t-border-width-25: 0.0625rem;
+  --t-border-width-50: 0.125rem;
+  --t-border-width-100: 0.25rem;
+  --t-border-width-icon: 1.5px;
+  --t-size-0: 0;
+  --t-size-25: 0.0625rem;
+  --t-size-50: 0.125rem;
+  --t-size-100: 0.25rem;
+  --t-size-150: 0.375rem;
+  --t-size-200: 0.5rem;
+  --t-size-250: 0.625rem;
+  --t-size-300: 0.75rem;
+  --t-size-350: 0.875rem;
+  --t-size-400: 1rem;
+  --t-size-450: 1.125rem;
+  --t-size-500: 1.25rem;
+  --t-size-550: 1.375rem;
+  --t-size-600: 1.5rem;
+  --t-size-700: 1.75rem;
+  --t-size-800: 2rem;
+  --t-size-900: 2.25rem;
+  --t-size-1000: 2.5rem;
+  --t-size-1200: 3rem;
+  --t-size-1400: 3.5rem;
+  --t-size-1600: 4rem;
+  --t-size-2000: 5rem;
+  --t-size-2400: 6rem;
+  --t-size-2800: 7rem;
+  --t-size-3200: 8rem;
+  --t-space-0: 0;
+  --t-space-25: 0.0625rem;
+  --t-space-50: 0.125rem;
+  --t-space-100: 0.25rem;
+  --t-space-150: 0.375rem;
+  --t-space-200: 0.5rem;
+  --t-space-250: 0.625rem;
+  --t-space-300: 0.75rem;
+  --t-space-400: 1rem;
+  --t-space-500: 1.25rem;
+  --t-space-600: 1.5rem;
+  --t-space-800: 2rem;
+  --t-space-1000: 2.5rem;
+  --t-space-1200: 3rem;
+  --t-space-1600: 4rem;
+  --t-space-2000: 5rem;
+  --t-space-2400: 6rem;
+  --t-space-3200: 8rem;
+  --t-duration-fast: 150ms;
+  --t-duration-base: 300ms;
+  --t-easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --t-transition-soft: 300ms cubic-bezier(0.4, 0, 0.2, 1) undefined;
+  --t-shadow-1: 0 0.0625rem 0.1875rem 0 rgba(0, 0, 0, 0.1);
+  --t-shadow-2: 0 0.25rem 0.375rem -0.0625rem rgba(0, 0, 0, 0.15);
+  --t-shadow-popover: 0 4px 6px -2px rgba(26, 26, 26, 0.2);
+  --t-z-base: 0;
+  --t-z-dropdown: 10;
+  --t-z-modal: 100;
+  --t-z-toast: 1000;
+  --t-font-family-primary: Outfit, sans-serif;
+  --t-font-weight-regular: 400;
+  --t-font-weight-medium: 500;
+  --t-font-weight-semibold: 600;
+  --t-font-weight-bold: 700;
+  --t-font-size-250: 0.625rem;
+  --t-font-size-300: 0.75rem;
+  --t-font-size-350: 0.875rem;
+  --t-font-size-400: 1rem;
+  --t-font-size-450: 1.125rem;
+  --t-font-size-500: 1.25rem;
+  --t-font-size-550: 1.375rem;
+  --t-font-size-600: 1.5rem;
+  --t-font-size-700: 1.75rem;
+  --t-font-size-800: 2rem;
+  --t-font-size-900: 2.25rem;
+  --t-font-size-1000: 2.5rem;
+  --t-font-size-1200: 3rem;
+  --t-font-size-1400: 3rem;
+  --t-font-line-height-300: 0.75rem;
+  --t-font-line-height-400: 1rem;
+  --t-font-line-height-500: 1.25rem;
+  --t-font-line-height-600: 1.5rem;
+  --t-font-line-height-800: 2rem;
+  --t-font-line-height-1000: 2.5rem;
+  --t-font-line-height-1200: 3rem;
+  --t-typography-heading-3xl: 600 3rem Outfit, sans-serif;
+  --t-typography-heading-2xl: 600 2.5rem Outfit, sans-serif;
+  --t-typography-heading-xl: 600 2.25rem Outfit, sans-serif;
+  --t-typography-heading-lg: 600 2rem Outfit, sans-serif;
+  --t-typography-heading-md: 600 1.5rem Outfit, sans-serif;
+  --t-typography-heading-sm: 600 1.25rem Outfit, sans-serif;
+  --t-typography-body-lg-default: 400 1.125rem Outfit, sans-serif;
+  --t-typography-body-lg-medium: 500 1.125rem Outfit, sans-serif;
+  --t-typography-body-lg-semibold: 600 1.125rem Outfit, sans-serif;
+  --t-typography-body-md-default: 400 1rem Outfit, sans-serif;
+  --t-typography-body-md-medium: 500 1rem Outfit, sans-serif;
+  --t-typography-body-md-semibold: 600 1rem Outfit, sans-serif;
+  --t-typography-body-sm-default: 400 0.875rem Outfit, sans-serif;
+  --t-typography-body-sm-medium: 500 0.875rem Outfit, sans-serif;
+  --t-typography-body-sm-semibold: 600 0.875rem Outfit, sans-serif;
+  --t-typography-caption-lg-default: 400 0.75rem Outfit, sans-serif;
+  --t-typography-caption-lg-medium: 500 0.75rem Outfit, sans-serif;
+  --t-typography-caption-lg-semibold: 600 0.75rem Outfit, sans-serif;
+  --t-typography-caption-sm-default: 400 0.625rem Outfit, sans-serif;
+  --t-typography-caption-sm-semibold: 600 0.625rem Outfit, sans-serif;
+  --t-spacing-inline-start: 0.25rem;
+  --t-spacing-inline-end: 0.25rem;
+  --t-spacing-block-start: 0.25rem;
+  --t-spacing-block-end: 0.25rem;
+  --t-padding-inline-start: 1rem;
+  --t-padding-inline-end: 1rem;
+  --t-margin-inline-start: 0.5rem;
+  --t-margin-inline-end: 0.5rem;
+  --t-text-align-start: start;
+  --t-text-align-end: end;
+}
+
+/* ===== BRAND OVERRIDES ===== */
+
+/* Tagaddod brand (default) */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-theme="tagaddod"] {
+  --t-color-border-brand: #3959fe;
+  --t-color-border-brand-hover: #0b48fe;
+  --t-color-border-brand-active: #0033c2;
+  --t-color-fill-brand: #3959fe;
+  --t-color-fill-brand-hover: #0b48fe;
+  --t-color-fill-brand-active: #0033c2;
+  --t-color-fill-brand-secondary: #f1f2ff;
+  --t-color-fill-brand-secondary-hover: #e9eaff;
+  --t-color-fill-brand-secondary-active: #e4e6ff;
+  --t-color-text-primary: #16161d;
+  --t-color-text-secondary: #686c83;
+  --t-color-text-disabled: #adafbd;
+  --t-color-text-on-fill: #ffffff;
+  --t-color-text-on-fill-hover: #f9f9fa;
+  --t-color-text-on-fill-active: #f1f1f3;
+  --t-color-text-on-fill-disabled: #ffffff;
+  --t-color-text-link: #3959fe;
+  --t-color-text-link-hover: #0b48fe;
+  --t-color-text-link-active: #0033c2;
+}
+
+/* GreenPan brand override */
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+[data-theme="greenpan"] {
+  --t-color-green-1200: #009f4d;
+  --t-color-fill-brand: #009f4d;
+  --t-color-fill-brand-hover: #00703c;
+  --t-color-fill-brand-active: #00522b;
+}
+
+/* ===== DIRECTION SUPPORT ===== */
+
+/* LTR/RTL specific styles */
+[dir="ltr"] {
+  --t-text-align-start: left;
+  --t-text-align-end: right;
+}
+
+[dir="rtl"] {
+  --t-text-align-start: right;
+  --t-text-align-end: left;
+}
+
+
+/* ===== BASE STYLES ===== */
+
+/* Reset and base styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--t-font-family-primary);
+  font-size: var(--t-font-size-400);
+  line-height: var(--t-font-line-height-500);
+  color: var(--t-color-text-primary);
+  background-color: var(--t-color-bg-primary);
+  margin: 0;
+  padding: 0;
+}
+
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Typography utilities */
+.t-heading-3xl { font: var(--t-typography-heading-3xl); }
+.t-heading-2xl { font: var(--t-typography-heading-2xl); }
+.t-heading-xl { font: var(--t-typography-heading-xl); }
+.t-heading-lg { font: var(--t-typography-heading-lg); }
+.t-heading-md { font: var(--t-typography-heading-md); }
+.t-heading-sm { font: var(--t-typography-heading-sm); }
+
+.t-body-lg-default { font: var(--t-typography-body-lg-default); }
+.t-body-lg-medium { font: var(--t-typography-body-lg-medium); }
+.t-body-lg-semibold { font: var(--t-typography-body-lg-semibold); }
+
+.t-body-md-default { font: var(--t-typography-body-md-default); }
+.t-body-md-medium { font: var(--t-typography-body-md-medium); }
+.t-body-md-semibold { font: var(--t-typography-body-md-semibold); }
+
+.t-body-sm-default { font: var(--t-typography-body-sm-default); }
+.t-body-sm-medium { font: var(--t-typography-body-sm-medium); }
+.t-body-sm-semibold { font: var(--t-typography-body-sm-semibold); }
+
+.t-caption-lg-default { font: var(--t-typography-caption-lg-default); }
+.t-caption-lg-medium { font: var(--t-typography-caption-lg-medium); }
+.t-caption-lg-semibold { font: var(--t-typography-caption-lg-semibold); }
+
+.t-caption-sm-default { font: var(--t-typography-caption-sm-default); }
+.t-caption-sm-semibold { font: var(--t-typography-caption-sm-semibold); }
+
+/* Text color utilities */
+.t-text-primary { color: var(--t-color-text-primary); }
+.t-text-secondary { color: var(--t-color-text-secondary); }
+.t-text-disabled { color: var(--t-color-text-disabled); }
+.t-text-on-fill { color: var(--t-color-text-on-fill); }
+.t-text-link { color: var(--t-color-text-link); }
+.t-text-success { color: var(--t-color-text-success); }
+.t-text-warning { color: var(--t-color-text-warning); }
+.t-text-critical { color: var(--t-color-text-critical); }
+.t-text-magic { color: var(--t-color-text-magic); }
+
+/* Background utilities */
+.t-bg-primary { background-color: var(--t-color-bg-primary); }
+.t-bg-light { background-color: var(--t-color-bg-light); }
+.t-surface-primary { background-color: var(--t-color-surface-primary); }
+.t-surface-secondary { background-color: var(--t-color-surface-secondary); }
+
+/* Spacing utilities - using logical properties for RTL support */
+.t-p-0 { padding: var(--t-space-0); }
+.t-p-100 { padding: var(--t-space-100); }
+.t-p-200 { padding: var(--t-space-200); }
+.t-p-300 { padding: var(--t-space-300); }
+.t-p-400 { padding: var(--t-space-400); }
+.t-p-500 { padding: var(--t-space-500); }
+.t-p-600 { padding: var(--t-space-600); }
+.t-p-800 { padding: var(--t-space-800); }
+
+.t-px-100 { padding-inline: var(--t-space-100); }
+.t-px-200 { padding-inline: var(--t-space-200); }
+.t-px-300 { padding-inline: var(--t-space-300); }
+.t-px-400 { padding-inline: var(--t-space-400); }
+.t-px-500 { padding-inline: var(--t-space-500); }
+.t-px-600 { padding-inline: var(--t-space-600); }
+
+.t-py-100 { padding-block: var(--t-space-100); }
+.t-py-200 { padding-block: var(--t-space-200); }
+.t-py-300 { padding-block: var(--t-space-300); }
+.t-py-400 { padding-block: var(--t-space-400); }
+.t-py-500 { padding-block: var(--t-space-500); }
+
+.t-m-0 { margin: var(--t-space-0); }
+.t-m-100 { margin: var(--t-space-100); }
+.t-m-200 { margin: var(--t-space-200); }
+.t-m-300 { margin: var(--t-space-300); }
+.t-m-400 { margin: var(--t-space-400); }
+
+.t-mx-100 { margin-inline: var(--t-space-100); }
+.t-mx-200 { margin-inline: var(--t-space-200); }
+.t-mx-300 { margin-inline: var(--t-space-300); }
+.t-mx-400 { margin-inline: var(--t-space-400); }
+
+.t-my-100 { margin-block: var(--t-space-100); }
+.t-my-200 { margin-block: var(--t-space-200); }
+.t-my-300 { margin-block: var(--t-space-300); }
+
+/* Border radius utilities */
+.t-rounded-0 { border-radius: var(--t-border-radius-0); }
+.t-rounded-50 { border-radius: var(--t-border-radius-50); }
+.t-rounded-100 { border-radius: var(--t-border-radius-100); }
+.t-rounded-200 { border-radius: var(--t-border-radius-200); }
+.t-rounded-300 { border-radius: var(--t-border-radius-300); }
+.t-rounded-600 { border-radius: var(--t-border-radius-600); }
+.t-rounded-800 { border-radius: var(--t-border-radius-800); }
+.t-rounded-full { border-radius: var(--t-border-radius-full); }
+
+/* Shadow utilities */
+.t-shadow-1 { box-shadow: var(--t-shadow-1); }
+.t-shadow-2 { box-shadow: var(--t-shadow-2); }
+.t-shadow-popover { box-shadow: var(--t-shadow-popover); }
+
+/* Transition utilities */
+.t-transition-soft { transition: var(--t-transition-soft); }
+
+/* Z-index utilities */
+.t-z-base { z-index: var(--t-z-base); }
+.t-z-dropdown { z-index: var(--t-z-dropdown); }
+.t-z-modal { z-index: var(--t-z-modal); }
+.t-z-toast { z-index: var(--t-z-toast); }
+
+/* Accessibility utilities */
+.t-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus utilities */
+.t-focus-outline:focus-visible {
+  outline: 2px solid var(--t-color-border-brand);
+  outline-offset: 2px;
+}
+
+/* Interactive state utilities */
+.t-hover-lift:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--t-shadow-2);
+  transition: var(--t-transition-soft);
+}
+

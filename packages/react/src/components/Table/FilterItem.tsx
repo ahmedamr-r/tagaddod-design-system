@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { IconX, IconChevronDown, IconPlus } from '@tabler/icons-react';
+import { IconChevronDown, IconPlus } from '@tabler/icons-react';
 import { Popover } from '../Popover';
 import styles from './Table.module.css';
 import { FilterItemProps } from './types';
@@ -30,18 +30,13 @@ export const FilterItem: React.FC<FilterItemProps> = ({
   
   // Determine if the filter is selected
   const isSelected = value !== undefined;
-
-  const handleRemove = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent dropdown from opening
-    onRemove?.(name);
-  };
   
   // Handle clicking on the plus/X icon
   const handleIconClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent dropdown from opening
     
-    if (isSelected && onRemove) {
-      // If selected and removable, call remove handler
+    if (isSelected && onRemove && removable) {
+      // If selected, removable, and onRemove handler exists, call remove handler
       onRemove(name);
     } else {
       // If not selected, open the dropdown

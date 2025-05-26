@@ -9,10 +9,9 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@tagaddod-design/react": "*",
-    "@tagaddod-design/tokens": "*",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@tagaddod-design/react": "^0.1.11",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",

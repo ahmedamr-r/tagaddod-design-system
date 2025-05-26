@@ -33,9 +33,9 @@ export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
     }
   };
 
-  // Handle checkbox click to prevent propagation
-  const handleCheckboxClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent cell click when clicking checkbox
+  // Handle checkbox change to prevent propagation
+  const handleCheckboxChange = (checked: boolean | 'indeterminate') => {
+    onCheckboxChange?.(checked === true);
   };
 
   // Helper to render sort icons
@@ -76,9 +76,7 @@ export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
           <div className={styles.headerCheckbox}>
             <Checkbox
               checked={isChecked}
-              onCheckedChange={(checked) => onCheckboxChange?.(checked === true)}
-              // Use the typesafe event handler
-              onClick={handleCheckboxClick}
+              onCheckedChange={handleCheckboxChange}
             />
           </div>
         )}

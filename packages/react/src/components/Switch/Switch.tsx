@@ -64,14 +64,6 @@ export const Switch = React.forwardRef<
     }
   };
 
-  // Detect if we need to apply RTL text fixes
-  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
-  
-  // Style for proper text rendering based on text direction
-  const lineHeightStyle = {
-    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
-  };
-
   return (
     <SwitchPrimitive.Root
       ref={ref}
