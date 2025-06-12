@@ -1,0 +1,75 @@
+import { Meta, Canvas, Story, Controls } from '@storybook/blocks';
+import * as LogoStories from './Logo.stories';
+
+<Meta of={LogoStories} />
+
+# Logo
+
+The Logo component displays the Tagaddod brand logo with various size and color options. It supports both static display and clickable functionality.
+
+## Features
+
+- **Multiple sizes**: Small, medium, and large variants
+- **Color variants**: Primary, white, and inherit options
+- **Clickable**: Can be rendered as a button with onClick handler
+- **Accessibility**: Proper ARIA labels and keyboard navigation
+- **RTL Support**: Works correctly in right-to-left layouts
+- **Responsive**: Scales appropriately across different screen sizes
+
+## Usage
+
+```tsx
+import { Logo } from '@tagaddod-design/react';
+
+// Basic usage
+<Logo />
+
+// With custom size and color
+<Logo size="large" color="white" />
+
+// Clickable logo
+<Logo clickable onClick={() => console.log('Logo clicked!')} />
+```
+
+## Examples
+
+### Default Logo
+
+<Canvas of={LogoStories.Default} />
+
+### Size Variants
+
+<Canvas of={LogoStories.AllSizes} />
+
+### Color Variants
+
+<Canvas of={LogoStories.ColorVariants} />
+
+### Clickable Logo
+
+<Canvas of={LogoStories.Clickable} />
+
+## Props
+
+<Controls of={LogoStories.Default} />
+
+## Accessibility
+
+- Uses proper ARIA labels for screen readers
+- Supports keyboard navigation when clickable
+- Maintains sufficient color contrast in all variants
+- Compatible with high contrast mode
+
+## Design Guidelines
+
+- Use the primary color variant for most applications
+- Use the white variant on dark backgrounds
+- The medium size is recommended for most use cases
+- Ensure adequate spacing around the logo for visual clarity
+
+## Technical Notes
+
+- The logo is implemented as an inline SVG for optimal scalability
+- Uses CSS custom properties (design tokens) for theming
+- Supports RTL layouts with appropriate line-height adjustments
+- Optimized for both light and dark themes

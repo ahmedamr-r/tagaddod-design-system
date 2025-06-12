@@ -1,26 +1,36 @@
 import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
 import * as DrawerStories from './Drawer.stories';
-import { Drawer } from './Drawer';
+import { Drawer, useDrawerContext } from './Drawer';
 
 <Meta of={DrawerStories} />
 
 # Drawer Component
 
-The Drawer component is a side panel that slides in from the edge of the screen, providing additional content or actions without navigating away from the current page.
+The Drawer component is a side panel that slides in from the edge of the screen, providing additional content or actions without navigating away from the current page. It features proper z-index management to ensure it appears above all other content, including complex table layouts.
 
 ## Overview
 
-Drawers are used to display supplementary content, forms, or detailed information while keeping the main context visible. They can appear from the right or left side of the screen and come in different sizes.
+Drawers are used to display supplementary content, forms, or detailed information while keeping the main context visible. They can appear from the right or left side of the screen and come in different sizes. The component automatically handles z-index stacking issues and provides context for nested modal components.
 
 ## Import
 
 ```jsx
-import { Drawer } from '@tagaddod/react';
+import { Drawer, useDrawerContext } from '@tagaddod/react';
 ```
 
 ## Props
 
 <ArgTypes of={Drawer} />
+
+## Z-Index Management
+
+The Drawer component uses a sophisticated z-index hierarchy to ensure proper layering:
+
+- **Drawer Overlay**: `z-index: 140` - Above all content but below drawer content
+- **Drawer Content**: `z-index: 150` - Above overlay and all page content (including tables)
+- **Modals from Drawer**: `z-index: 200` - For modal components opened from within the drawer
+
+This hierarchy ensures the drawer always appears above table content, sticky headers, and other high z-index elements.
 
 ## Basic Usage
 
@@ -221,6 +231,86 @@ The Drawer can appear from either side of the screen:
 </Drawer>
 ```
 
+## Modal Components Within Drawer
+
+When you need to open modal components (like dialogs, popovers, or dropdowns) from within a drawer, use the `useDrawerContext` hook to ensure proper z-index layering:
+
+```jsx
+import { useState } from 'react';
+import { Drawer, useDrawerContext, Modal, Button } from '@tagaddod/react';
+
+function DrawerWithModal() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  
+  return (
+    <>
+      <Button onClick={() => setDrawerOpen(true)}>
+        Open Drawer
+      </Button>
+      
+      <Drawer
+        open={drawerOpen}
+        onOpenChange={setDrawerOpen}
+        title="Drawer with Modal"
+      >
+        <div style={{ padding: '16px 0' }}>
+          <p>This drawer contains a modal that will appear above it.</p>
+          
+          <Button onClick={() => setModalOpen(true)}>
+            Open Modal
+          </Button>
+          
+          <ModalFromDrawer 
+            open={modalOpen} 
+            onOpenChange={setModalOpen} 
+          />
+        </div>
+      </Drawer>
+    </>
+  );
+}
+
+function ModalFromDrawer({ open, onOpenChange }) {
+  const { isInsideDrawer, drawerZIndex } = useDrawerContext();
+  
+  return (
+    <Modal
+      open={open}
+      onOpenChange={onOpenChange}
+      title="Modal from Drawer"
+      // Use drawerZIndex to ensure modal appears above drawer
+      style={{ zIndex: isInsideDrawer ? drawerZIndex : undefined }}
+    >
+      <p>This modal appears above the drawer!</p>
+    </Modal>
+  );
+}
+```
+
+### useDrawerContext Hook
+
+The `useDrawerContext` hook provides information about the drawer context:
+
+```jsx
+import { useDrawerContext } from '@tagaddod/react';
+
+function ComponentInDrawer() {
+  const { isInsideDrawer, drawerZIndex } = useDrawerContext();
+  
+  if (isInsideDrawer) {
+    // Component is inside a drawer
+    // Use drawerZIndex for proper z-index layering
+  }
+  
+  return <div>Component content</div>;
+}
+```
+
+**Returns:**
+- `isInsideDrawer: boolean` - Whether the component is rendered inside a drawer
+- `drawerZIndex: number` - The z-index value to use for modals opened from the drawer (200)
+
 ## Visual Customization
 
 ### Custom Overlay
@@ -330,7 +420,7 @@ The Drawer component properly handles Right-to-Left (RTL) languages automaticall
 </Drawer>
 ```
 
-### Object Details
+### Object Details with Table Data
 
 ```jsx
 <Drawer
@@ -349,6 +439,11 @@ The Drawer component properly handles Right-to-Left (RTL) languages automaticall
 >
   <div>
     {/* Order details */}
+    <Table 
+      data={orderItems} 
+      columns={columns}
+      // Table content will appear below the drawer
+    />
   </div>
 </Drawer>
 ```
@@ -411,6 +506,25 @@ The Drawer component follows accessibility best practices:
 
 ## Implementation Details
 
+### Z-Index Architecture
+
+The Drawer component implements a sophisticated z-index management system:
+
+```css
+/* Z-Index Hierarchy */
+:root {
+  --t-z-drawer-overlay: calc(var(--t-z-modal) + 40);  /* 140 */
+  --t-z-drawer-content: calc(var(--t-z-modal) + 50);  /* 150 */
+  --t-z-drawer-modal: calc(var(--t-z-modal) + 100);   /* 200 */
+}
+```
+
+This ensures the drawer always appears above:
+- Normal content (`z-index: 0`)
+- Dropdowns and selects (`z-index: 10`)
+- Standard modals (`z-index: 100`)
+- Table sticky headers and content (`z-index: 101`)
+
 ### CSS Variables
 
 The Drawer component uses the following token CSS variables:
@@ -427,7 +541,8 @@ The Drawer component uses the following token CSS variables:
 | `--t-font-weight-*` | Font weights |
 | `--t-border-radius-*` | Border radius values |
 | `--t-shadow-200` | Shadow for the drawer |
-| `--t-z-index-overlay` | Z-index for drawer and overlay |
+| `--t-z-modal` | Base z-index for modal components |
+| `--t-z-drawer-*` | Custom z-index hierarchy for drawers |
 | `--t-duration-base` | Animation duration |
 | `--t-easing-in-out` | Animation timing function |
 | `--t-line-height-arabic` | Line height for Arabic text |
@@ -448,6 +563,8 @@ The Tagaddod implementation extends this with:
 3. Header and footer configurations
 4. RTL language support
 5. Responsive behavior for mobile devices
+6. **Z-index management for complex layouts**
+7. **Context provider for nested components**
 
 ### Browser Support
 
@@ -460,3 +577,50 @@ On smaller screens (below 640px):
 - It slides up from the bottom instead of from the side
 - It has a maximum height of 80% of the viewport
 - It uses rounded corners at the top
+
+## Troubleshooting
+
+### Drawer Appears Behind Other Content
+
+If the drawer appears behind other content (like tables or sticky elements):
+
+1. **Check z-index conflicts**: The drawer uses `z-index: 150` by default
+2. **Verify CSS custom properties**: Ensure `--t-z-modal` is properly defined
+3. **Use utility classes**: Apply `.drawer-modal` class to elements that should appear above the drawer
+
+### Modal Components Not Appearing Above Drawer
+
+When opening modals from within a drawer:
+
+1. **Use useDrawerContext**: Apply the hook to get the correct z-index
+2. **Apply drawerZIndex**: Use the returned `drawerZIndex` value for your modal
+3. **Check CSS specificity**: Ensure your modal's z-index style has sufficient specificity
+
+### Performance Issues
+
+For large content within drawers:
+
+1. **Use lazy loading**: Load drawer content only when needed
+2. **Optimize animations**: Use `prefers-reduced-motion` media query
+3. **Limit DOM depth**: Keep drawer content structure simple
+
+## Breaking Changes from Previous Versions
+
+### Z-Index Management
+- **Before**: Used undefined `--t-z-index-overlay` token
+- **After**: Uses proper token hierarchy with `--t-z-modal` base
+- **Migration**: No code changes needed - automatically resolved
+
+### Context Provider
+- **Before**: No context provided
+- **After**: Provides `DrawerContext` for nested components
+- **Migration**: Optional - use `useDrawerContext` for enhanced modal handling
+
+## Best Practices
+
+1. **Use appropriate sizes**: Choose drawer size based on content complexity
+2. **Handle modal z-index**: Use `useDrawerContext` when opening modals from drawers
+3. **Provide clear actions**: Use footer buttons for primary/secondary actions
+4. **Support RTL**: Test drawer behavior in both LTR and RTL languages
+5. **Consider mobile**: Design drawer content for smaller screens
+6. **Accessibility first**: Ensure keyboard navigation and screen reader compatibility

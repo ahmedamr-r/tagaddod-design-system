@@ -101,3 +101,15 @@ export { separatorOrientations } from './Separator';
 export { Select } from './Select';
 export type { SelectProps, SelectOption, SelectSize } from './Select';
 export { selectSizes } from './Select';
+
+// Export the TopBar component
+export { TopBar, topBarSizes } from './TopBar';
+export type { TopBarProps, TopBarSize } from './TopBar';
+
+// Export the Logo component
+export { Logo } from './Logo';
+export type { LogoProps } from './Logo';
+
+// Export the Sidebar component
+export { Sidebar, sidebarSizes, sidebarPositions } from './Sidebar';
+export type { SidebarProps, SidebarMenuItem, SidebarSize, SidebarPosition } from './Sidebar';

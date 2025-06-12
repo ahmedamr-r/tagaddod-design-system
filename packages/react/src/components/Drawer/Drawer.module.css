@@ -1,5 +1,21 @@
 /* Drawer Component Styles */
 
+/* Z-Index Hierarchy:
+ * --t-z-base: 0        (normal content)
+ * --t-z-dropdown: 10   (dropdowns, select options)
+ * --t-z-modal: 100     (modals, overlays)
+ * Drawer overlay: 140  (drawer overlay - above all content)
+ * Drawer content: 150  (drawer content - above overlay)
+ * Modal from drawer: 200+ (modals opened from within drawer)
+ */
+
+/* CSS Custom Properties for dynamic z-index management */
+:root {
+  --t-z-drawer-overlay: calc(var(--t-z-modal) + 40);
+  --t-z-drawer-content: calc(var(--t-z-modal) + 50);
+  --t-z-drawer-modal: calc(var(--t-z-modal) + 100);
+}
+
 /* Base styles */
 .drawer {
   position: fixed;
@@ -15,7 +31,7 @@
   overscroll-behavior: contain;
   touch-action: none;
   transition: transform var(--t-duration-base) var(--t-easing-in-out);
-  z-index: calc(var(--t-z-index-overlay) + 10); /* Ensure drawer is above overlay */
+  z-index: var(--t-z-drawer-content); /* Ensure drawer is above all content */
 }
 
 /* Sizes */
@@ -57,7 +73,7 @@
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.7); /* Darker overlay for better visibility */
-  z-index: var(--t-z-index-overlay);
+  z-index: var(--t-z-drawer-overlay); /* Overlay should be below drawer but above all other content */
   backdrop-filter: blur(2px); /* Slight blur effect for better contrast */
 }
 
@@ -430,4 +446,21 @@
   [data-direction="right"] {
     animation: none;
   }
+}
+
+/* Utility classes for z-index management */
+.drawerModal {
+  z-index: var(--t-z-drawer-modal) !important;
+}
+
+/* Global utility for modal components opened from drawer */
+:global(.drawer-modal) {
+  z-index: var(--t-z-drawer-modal) !important;
+}
+
+/* Ensure proper stacking when drawer contains modal-like components */
+.drawer :global(.modal),
+.drawer :global(.popover),
+.drawer :global(.dropdown) {
+  z-index: var(--t-z-drawer-modal);
 }

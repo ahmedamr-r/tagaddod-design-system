@@ -1,7 +1,7 @@
 import React from 'react';
 import { ThemeProvider } from '@tagaddod-design/react';
 
-// Import styles using correct package names
+// Import styles using correct package names based on actual file structure
 import '@tagaddod-design/tokens/tokens.css';
 import '@tagaddod-design/react/styles/index.css';
 

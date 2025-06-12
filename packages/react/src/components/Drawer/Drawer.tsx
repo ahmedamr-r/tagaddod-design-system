@@ -1,9 +1,23 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useState, createContext, useContext } from 'react';
 import clsx from 'clsx';
 import { Drawer as VaulDrawer } from 'vaul';
 import { IconX, IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import { Button } from '../Button/Button';
 import styles from './Drawer.module.css';
+
+// Context to help modal components know they're inside a drawer
+const DrawerContext = createContext<{
+  isInsideDrawer: boolean;
+  drawerZIndex: number;
+}>({
+  isInsideDrawer: false,
+  drawerZIndex: 150, // Default z-index for drawer content
+});
+
+// Hook to use drawer context
+export const useDrawerContext = () => {
+  return useContext(DrawerContext);
+};
 
 export type DrawerSize = 'small' | 'medium' | 'large';
 export type DrawerPosition = 'right' | 'left';
@@ -234,91 +248,98 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
           style={drawerStyle}
           {...props}
         >
-          {/* Header */}
-          <div className={styles.header}>
-            <div className={styles.headerContent}>
-              {showBackButton && (
+          <DrawerContext.Provider 
+            value={{ 
+              isInsideDrawer: true, 
+              drawerZIndex: 200 // Z-index for modals opened from drawer
+            }}
+          >
+            {/* Header */}
+            <div className={styles.header}>
+              <div className={styles.headerContent}>
+                {showBackButton && (
+                  <Button 
+                    variant="plain" 
+                    onClick={handleBackClick}
+                    aria-label={isRTL ? 'التالي' : 'Back'}
+                    className={styles.backButton}
+                    prefixIcon={<BackArrowIcon size={20} />}
+                  />
+                )}
+                
+                {headerPrefix && (
+                  <div className={styles.headerPrefix}>
+                    {headerPrefix}
+                  </div>
+                )}
+                
+                {showTitle && title && (
+                  <h2 className={styles.title} style={lineHeightStyle}>
+                    {title}
+                  </h2>
+                )}
+                
+                {headerSuffix && (
+                  <div className={styles.headerSuffix}>
+                    {headerSuffix}
+                  </div>
+                )}
+              </div>
+              
+              {showClose && (
                 <Button 
                   variant="plain" 
-                  onClick={handleBackClick}
-                  aria-label={isRTL ? 'التالي' : 'Back'}
-                  className={styles.backButton}
-                  prefixIcon={<BackArrowIcon size={20} />}
+                  onClick={() => onOpenChange(false)}
+                  aria-label={isRTL ? 'إغلاق' : 'Close'}
+                  className={styles.closeButton}
+                  prefixIcon={<IconX size={20} />}
                 />
-              )}
-              
-              {headerPrefix && (
-                <div className={styles.headerPrefix}>
-                  {headerPrefix}
-                </div>
-              )}
-              
-              {showTitle && title && (
-                <h2 className={styles.title} style={lineHeightStyle}>
-                  {title}
-                </h2>
-              )}
-              
-              {headerSuffix && (
-                <div className={styles.headerSuffix}>
-                  {headerSuffix}
-                </div>
               )}
             </div>
             
-            {showClose && (
-              <Button 
-                variant="plain" 
-                onClick={() => onOpenChange(false)}
-                aria-label={isRTL ? 'إغلاق' : 'Close'}
-                className={styles.closeButton}
-                prefixIcon={<IconX size={20} />}
-              />
-            )}
-          </div>
-          
-          {/* Content */}
-          <div className={styles.content}>
-            {children}
-          </div>
-          
-          {/* Footer */}
-          {showFooter && (
-            <div className={styles.footer}>
-              {footerContent && (
-                <div className={styles.footerContent}>
-                  {footerContent}
-                </div>
-              )}
-              
-              <div className={styles.actions}>
-                {secondaryAction && (
-                  <Button 
-                    variant={secondaryAction.variant || 'secondary'}
-                    tone={secondaryAction.tone || 'default'}
-                    onClick={secondaryAction.onClick}
-                    disabled={secondaryAction.disabled}
-                    className={styles.footerButton}
-                  >
-                    {secondaryAction.label}
-                  </Button>
+            {/* Content */}
+            <div className={styles.content}>
+              {children}
+            </div>
+            
+            {/* Footer */}
+            {showFooter && (
+              <div className={styles.footer}>
+                {footerContent && (
+                  <div className={styles.footerContent}>
+                    {footerContent}
+                  </div>
                 )}
                 
-                {primaryAction && (
-                  <Button 
-                    variant={primaryAction.variant || 'primary'}
-                    tone={primaryAction.tone || 'default'}
-                    onClick={primaryAction.onClick}
-                    disabled={primaryAction.disabled}
-                    loading={primaryAction.loading}
-                    className={styles.footerButton}
-                  >
-                    {primaryAction.label}
-                  </Button>
-                )}
+                <div className={styles.actions}>
+                  {secondaryAction && (
+                    <Button 
+                      variant={secondaryAction.variant || 'secondary'}
+                      tone={secondaryAction.tone || 'default'}
+                      onClick={secondaryAction.onClick}
+                      disabled={secondaryAction.disabled}
+                      className={styles.footerButton}
+                    >
+                      {secondaryAction.label}
+                    </Button>
+                  )}
+                  
+                  {primaryAction && (
+                    <Button 
+                      variant={primaryAction.variant || 'primary'}
+                      tone={primaryAction.tone || 'default'}
+                      onClick={primaryAction.onClick}
+                      disabled={primaryAction.disabled}
+                      loading={primaryAction.loading}
+                      className={styles.footerButton}
+                    >
+                      {primaryAction.label}
+                    </Button>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </DrawerContext.Provider>
         </VaulDrawer.Content>
       </VaulDrawer.Portal>
     </VaulDrawer.Root>

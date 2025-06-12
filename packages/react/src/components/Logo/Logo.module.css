@@ -1,0 +1,81 @@
+/* Logo Component Styles */
+
+.container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.clickable {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  transition: opacity var(--t-transition-duration-200, 0.2s) var(--t-transition-timing-ease, ease);
+}
+
+.clickable:hover {
+  opacity: 0.8;
+}
+
+.clickable:focus {
+  outline: 2px solid var(--t-color-focus-ring, #007bff);
+  outline-offset: 2px;
+  border-radius: var(--t-border-radius-100, 0.25rem);
+}
+
+/* SVG Styles */
+.svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Size variants */
+.small {
+  height: var(--t-size-400, 1rem);
+  width: auto;
+}
+
+.medium {
+  height: var(--t-size-500, 1.25rem);
+  width: auto;
+}
+
+.large {
+  height: var(--t-size-700, 1.75rem);
+  width: auto;
+}
+
+/* Color variants */
+.primary {
+  color: var(--t-color-text-primary, #231f20);
+}
+
+.white {
+  color: var(--t-color-text-inverse, #ffffff);
+}
+
+.inherit {
+  color: inherit;
+}
+
+/* RTL Support */
+[dir="rtl"] .container {
+  /* Adjust positioning for RTL if needed */
+}
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+  .svg {
+    forced-color-adjust: auto;
+  }
+}
+
+/* Print styles */
+@media print {
+  .svg {
+    color: black !important;
+  }
+}

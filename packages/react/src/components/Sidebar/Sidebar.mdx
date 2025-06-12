@@ -1,0 +1,519 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as SidebarStories from './Sidebar.stories';
+import { Sidebar } from './Sidebar';
+
+<Meta of={SidebarStories} />
+
+# Sidebar Component
+
+The Sidebar component provides expandable navigation for applications with hierarchical menu structures, RTL support, and flexible layout integration. It supports hover-to-expand behavior, multi-level navigation, and proper content pushing instead of overlaying.
+
+## Overview
+
+The Sidebar is a primary navigation component that organizes menu items into logical groups with support for parent-child relationships. It integrates naturally with page layouts using flexbox, automatically adjusting content when expanded or collapsed.
+
+## Import
+
+```jsx
+import { Sidebar } from '@tagaddod-design/react';
+```
+
+## Props
+
+<ArgTypes of={Sidebar} />
+
+## Basic Usage
+
+<Canvas of={SidebarStories.Default} />
+
+```jsx
+// Basic sidebar with default menu items
+<div style={{ display: 'flex', height: '100vh' }}>
+  <Sidebar 
+    selectedItem="analytics"
+    onItemChange={setSelectedItem}
+  />
+  <main style={{ flex: 1, padding: '24px' }}>
+    Your main content here
+  </main>
+</div>
+```
+
+## Layout Integration
+
+The Sidebar component is designed to work with flexbox layouts, pushing content instead of overlaying it.
+
+### Recommended Layout Pattern
+
+```jsx
+function AppLayout() {
+  const [selectedItem, setSelectedItem] = useState('dashboard');
+  
+  return (
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <Sidebar 
+        selectedItem={selectedItem}
+        onItemChange={setSelectedItem}
+      />
+      <main style={{ 
+        flex: 1, 
+        padding: '24px',
+        overflow: 'auto'
+      }}>
+        <AppContent />
+      </main>
+    </div>
+  );
+}
+```
+
+### Right Position
+
+<Canvas of={SidebarStories.RightPosition} />
+
+```jsx
+// For right-positioned sidebar, use flex-direction: row-reverse
+<div style={{ 
+  display: 'flex', 
+  height: '100vh',
+  flexDirection: 'row-reverse' 
+}}>
+  <Sidebar 
+    position="right"
+    selectedItem="users"
+    onItemChange={setSelectedItem}
+  />
+  <main style={{ flex: 1 }}>Content</main>
+</div>
+```
+
+## Expansion Behavior
+
+### Hover Expand (Default)
+
+The sidebar automatically expands when hovered and collapses when the mouse leaves.
+
+<Canvas of={SidebarStories.Default} />
+
+```jsx
+<Sidebar 
+  hoverExpand={true} // Default behavior
+  selectedItem="electronics"
+  onItemChange={setSelectedItem}
+/>
+```
+
+### Always Expanded
+
+<Canvas of={SidebarStories.AlwaysExpanded} />
+
+```jsx
+<Sidebar 
+  defaultExpanded={true}
+  hoverExpand={false}
+  selectedItem="users"
+  onItemChange={setSelectedItem}
+/>
+```
+
+### Controlled Expansion
+
+<Canvas of={SidebarStories.ControlledExpansion} />
+
+```jsx
+function ControlledSidebar() {
+  const [expanded, setExpanded] = useState(false);
+  
+  return (
+    <Sidebar
+      expanded={expanded}
+      onExpandedChange={setExpanded}
+      hoverExpand={false}
+    />
+  );
+}
+```
+
+## Menu Configuration
+
+### Custom Menu Items
+
+<Canvas of={SidebarStories.CustomMenus} />
+
+```jsx
+const menuItems = [
+  {
+    id: 'products',
+    icon: IconPackage,
+    label: 'Products',
+    hasChildren: true,
+    children: [
+      { id: 'add-product', label: 'Add Product' },
+      { id: 'manage-products', label: 'Manage Products' },
+      { id: 'categories', label: 'Categories' }
+    ]
+  },
+  {
+    id: 'sales',
+    icon: IconChartBar,
+    label: 'Sales'
+  }
+];
+
+const secondaryItems = [
+  {
+    id: 'customers',
+    icon: IconUsers,
+    label: 'Customers'
+  },
+  {
+    id: 'support',
+    icon: IconBell,
+    label: 'Support',
+    disabled: true // Disabled item example
+  }
+];
+
+<Sidebar
+  menuItems={menuItems}
+  secondaryItems={secondaryItems}
+  bottomItems={[
+    {
+      id: 'help',
+      icon: IconSettings,
+      label: 'Help & Support'
+    }
+  ]}
+/>
+```
+
+### Menu Item Structure
+
+```typescript
+interface SidebarMenuItem {
+  id: string;                    // Unique identifier
+  icon?: React.ComponentType;    // Icon component (optional)
+  label: string;                 // Display text
+  labelEn?: string;             // English label for i18n
+  labelAr?: string;             // Arabic label for i18n
+  hasChildren?: boolean;        // Has sub-items
+  children?: SidebarMenuItem[]; // Sub-menu items
+  disabled?: boolean;           // Disabled state
+}
+```
+
+## Menu Sections
+
+The sidebar organizes menu items into three logical sections:
+
+### Main Navigation (`menuItems`)
+
+Primary navigation items with optional hierarchical children.
+
+```jsx
+const mainItems = [
+  {
+    id: 'dashboard',
+    icon: IconHome,
+    label: 'Dashboard',
+    hasChildren: true,
+    children: [
+      { id: 'overview', label: 'Overview' },
+      { id: 'analytics', label: 'Analytics' }
+    ]
+  }
+];
+```
+
+### Secondary Navigation (`secondaryItems`)
+
+Additional navigation items separated by a divider.
+
+```jsx
+const secondaryItems = [
+  {
+    id: 'settings',
+    icon: IconSettings,
+    label: 'Settings'
+  }
+];
+```
+
+### Bottom Navigation (`bottomItems`)
+
+Items displayed at the bottom, typically for settings and logout.
+
+```jsx
+const bottomItems = [
+  {
+    id: 'logout',
+    icon: IconLogout,
+    label: 'Logout'
+  }
+];
+```
+
+## States and Styling
+
+### Active State
+
+```jsx
+<Sidebar 
+  selectedItem="analytics" // Sets active state
+  onItemChange={setSelectedItem}
+/>
+```
+
+### Disabled Items
+
+```jsx
+const menuItems = [
+  {
+    id: 'disabled-feature',
+    icon: IconUsers,
+    label: 'Coming Soon',
+    disabled: true // Item appears disabled
+  }
+];
+```
+
+### Parent Active State
+
+When a child item is selected, its parent automatically shows an active state.
+
+```jsx
+// If selectedItem is "electronics", the "dashboard" parent will show active state
+<Sidebar selectedItem="electronics" />
+```
+
+## Internationalization & RTL Support
+
+The Sidebar component fully supports Right-to-Left (RTL) languages with automatic adjustments:
+
+### RTL Features
+
+1. **Automatic Border Positioning**: Border switches from right to left in RTL mode
+2. **Text Alignment**: Menu labels align to the right for Arabic text
+3. **Font Family Switching**: Automatically uses Arabic font family (`Tajawal`) in RTL mode
+4. **Line Height Adjustments**: Proper line-height for Arabic text rendering
+5. **Icon Positioning**: Icons maintain proper spacing in RTL layouts
+
+### RTL Usage
+
+```jsx
+// The component automatically detects RTL from document direction
+// No additional props needed
+<Sidebar 
+  selectedItem="analytics"
+  onItemChange={setSelectedItem}
+  // RTL behavior is automatic based on document.dir or html[dir]
+/>
+```
+
+### Bilingual Menu Items
+
+```jsx
+const bilingualItems = [
+  {
+    id: 'dashboard',
+    icon: IconHome,
+    label: isRTL ? 'لوحة التحكم' : 'Dashboard',
+    labelEn: 'Dashboard',
+    labelAr: 'لوحة التحكم'
+  }
+];
+```
+
+## Accessibility
+
+The Sidebar component includes comprehensive accessibility features:
+
+- **Keyboard Navigation**: Full support for Tab, Arrow keys, Enter, and Escape
+- **ARIA Labels**: Proper `aria-label` attributes for screen readers
+- **Focus Management**: Clear focus indicators and logical tab order
+- **Screen Reader Support**: Semantic HTML structure with proper roles
+- **High Contrast**: Support for `prefers-contrast: high`
+- **Reduced Motion**: Respects `prefers-reduced-motion: reduce`
+
+### Accessibility Best Practices
+
+```jsx
+<Sidebar 
+  selectedItem="dashboard"
+  onItemChange={setSelectedItem}
+  // Component automatically provides:
+  // - aria-label for menu items
+  // - proper button roles
+  // - keyboard navigation
+  // - focus management
+/>
+```
+
+## Sizing and Dimensions
+
+```jsx
+// Default sizes (customizable via CSS variables)
+const sizes = {
+  collapsed: '64px',      // 4rem
+  expanded: '240px',      // 15rem
+  height: '100vh'         // Full viewport height
+};
+
+// CSS variable customization
+<Sidebar 
+  style={{
+    '--sidebar-width-collapsed': '80px',
+    '--sidebar-width-expanded': '280px'
+  }}
+/>
+```
+
+## Styling Customization
+
+### CSS Variables
+
+The Sidebar uses design tokens for consistent styling:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-color-surface-primary` | Background color |
+| `--t-color-border-secondary` | Border color |
+| `--t-color-text-primary` | Inactive text color |
+| `--t-color-text-link` | Active text color |
+| `--t-color-fill-brand-secondary` | Active background |
+| `--t-space-200/300/400/1000` | Padding and spacing |
+| `--t-font-family-primary` | English font family |
+| `--t-font-family-arabic` | Arabic font family |
+| `--t-border-radius-200` | Border radius |
+| `--t-duration-300` | Animation duration |
+
+### Custom Styling
+
+```jsx
+<Sidebar 
+  className="custom-sidebar"
+  style={{
+    '--sidebar-width-expanded': '320px',
+    '--custom-shadow': '0 4px 12px rgba(0,0,0,0.1)'
+  }}
+/>
+```
+
+## Common Use Cases
+
+### Admin Dashboard
+
+```jsx
+function AdminLayout() {
+  const [selectedItem, setSelectedItem] = useState('overview');
+  
+  const adminMenuItems = [
+    {
+      id: 'dashboard',
+      icon: IconHome,
+      label: 'Dashboard',
+      hasChildren: true,
+      children: [
+        { id: 'overview', label: 'Overview' },
+        { id: 'analytics', label: 'Analytics' },
+        { id: 'reports', label: 'Reports' }
+      ]
+    },
+    {
+      id: 'users',
+      icon: IconUsers,
+      label: 'User Management'
+    }
+  ];
+  
+  return (
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <Sidebar
+        selectedItem={selectedItem}
+        onItemChange={setSelectedItem}
+        menuItems={adminMenuItems}
+        bottomItems={[
+          { id: 'settings', icon: IconSettings, label: 'Settings' },
+          { id: 'logout', icon: IconLogout, label: 'Logout' }
+        ]}
+      />
+      <main style={{ flex: 1, overflow: 'auto' }}>
+        <AdminContent selectedTab={selectedItem} />
+      </main>
+    </div>
+  );
+}
+```
+
+### E-commerce Navigation
+
+```jsx
+const ecommerceMenu = [
+  {
+    id: 'products',
+    icon: IconPackage,
+    label: 'Products',
+    hasChildren: true,
+    children: [
+      { id: 'all-products', label: 'All Products' },
+      { id: 'add-product', label: 'Add Product' },
+      { id: 'categories', label: 'Categories' },
+      { id: 'inventory', label: 'Inventory' }
+    ]
+  },
+  {
+    id: 'orders',
+    icon: IconShoppingCart,
+    label: 'Orders',
+    hasChildren: true,
+    children: [
+      { id: 'all-orders', label: 'All Orders' },
+      { id: 'pending', label: 'Pending' },
+      { id: 'shipped', label: 'Shipped' }
+    ]
+  }
+];
+```
+
+## Implementation Details
+
+### Component Architecture
+
+1. **Menu Rendering**: Recursive rendering for hierarchical items
+2. **State Management**: Internal state for expansion and group toggles
+3. **RTL Detection**: Automatic detection from document properties
+4. **Layout Integration**: Flexbox-based for natural content flow
+
+### Performance
+
+- **Efficient Re-renders**: Optimized with proper React patterns
+- **CSS Transitions**: Smooth animations for expansion/collapse
+- **Minimal Bundle**: Tree-shakeable with other components
+
+### Browser Support
+
+Compatible with all modern browsers including:
+- Chrome/Chromium 88+
+- Firefox 85+
+- Safari 14+
+- Edge 88+
+
+Full RTL support in all supported browsers.
+
+## Migration from Fixed Layout
+
+If upgrading from a fixed-position sidebar:
+
+```jsx
+// Old: Fixed overlay pattern
+<div>
+  <Sidebar /> {/* Fixed positioned */}
+  <div style={{ marginLeft: '240px' }}>Content</div>
+</div>
+
+// New: Flexible layout pattern
+<div style={{ display: 'flex' }}>
+  <Sidebar /> {/* Flexible positioned */}
+  <div style={{ flex: 1 }}>Content</div>
+</div>
+```

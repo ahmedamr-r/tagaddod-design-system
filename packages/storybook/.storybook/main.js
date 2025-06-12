@@ -9,7 +9,6 @@ module.exports = {
   addons: [
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
-    '@storybook/addon-a11y',
     {
       name: '@storybook/addon-docs',
       options: {
@@ -67,12 +66,16 @@ module.exports = {
       '@radix-ui/react-radio-group',
       '@radix-ui/react-switch',
       '@radix-ui/react-tabs',
+      '@radix-ui/react-navigation-menu',
       '@tabler/icons-react'
     );
     
-    // Exclude problematic dependencies from optimization
+    // Exclude problematic dependencies from optimization to avoid module resolution issues
     if (!config.optimizeDeps.exclude) config.optimizeDeps.exclude = [];
-    config.optimizeDeps.exclude.push('@storybook/global');
+    config.optimizeDeps.exclude.push(
+      '@storybook/global',
+      '@storybook/preview-api'
+    );
     
     // Force clean deps
     config.optimizeDeps.force = true;

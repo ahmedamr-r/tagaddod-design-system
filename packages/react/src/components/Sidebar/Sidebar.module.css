@@ -1,0 +1,281 @@
+/* Sidebar Container */
+.sidebar {
+  width: var(--sidebar-width-collapsed, 64px);
+  height: 100vh;
+  background: var(--t-color-surface-primary);
+  border-right: 1px solid var(--t-color-border-secondary);
+  transition: width var(--t-duration-300, 0.3s) ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--t-space-400) var(--t-space-200);
+  box-shadow: var(--t-shadow-300);
+  direction: ltr;
+  flex-shrink: 0;
+}
+
+.sidebarExpanded {
+  width: var(--sidebar-width-expanded, 15rem); /* 240px */
+}
+
+.sidebarRight {
+  border-right: none;
+  border-left: 1px solid var(--t-color-border-secondary);
+}
+
+.sidebarRTL {
+  direction: rtl;
+}
+
+.sidebarRTL:not(.sidebarRight) {
+  border-right: none;
+  border-left: 1px solid var(--t-color-border-secondary);
+}
+
+.sidebarRTL.sidebarRight {
+  border-left: none;
+  border-right: 1px solid var(--t-color-border-secondary);
+}
+
+
+/* Navigation */
+.navigation {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.navigationSection {
+  width: 100%;
+  margin-bottom: var(--t-space-500);
+}
+
+.separator {
+  margin: var(--t-space-400) 0;
+}
+
+/* Menu Items */
+.menuItemContainer {
+  width: 100%;
+  margin-bottom: var(--t-space-100);
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--t-space-300) var(--t-space-200);
+  margin: 0;
+  border: none;
+  border-radius: var(--t-border-radius-200);
+  cursor: pointer;
+  transition: all var(--t-duration-200, 0.2s) ease;
+  background-color: transparent;
+  color: var(--t-color-text-primary);
+  min-height: 44px;
+  position: relative;
+  overflow: hidden;
+  gap: var(--t-space-200);
+  align-self: stretch;
+  font-family: var(--t-font-family-primary, Outfit);
+  font-size: var(--t-font-size-400);
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  text-align: left;
+}
+
+.menuItem:hover:not(.menuItemDisabled) {
+  background-color: var(--t-color-surface-secondary);
+}
+
+.menuItem:focus {
+  outline: 2px solid var(--t-color-border-focus);
+  outline-offset: 2px;
+}
+
+.menuItemActive {
+  background-color: var(--t-color-fill-brand-secondary);
+  color: var(--t-color-text-link);
+}
+
+.menuItemActive:hover {
+  background-color: var(--t-color-fill-brand-hover);
+}
+
+.menuItemParentActive {
+  background-color: var(--t-color-surface-brand-subtle);
+  color: var(--t-color-text-brand);
+}
+
+.menuItemChild {
+  display: flex;
+  width: 100%;
+  padding: var(--t-space-300) var(--t-space-200) var(--t-space-300) var(--t-space-1000);
+  min-height: 36px;
+  align-items: center;
+  gap: var(--t-space-200);
+  color: var(--t-color-text);
+  font-family: var(--t-font-family-primary, Outfit);
+  font-size: var(--t-font-size-400);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  border-radius: var(--t-border-radius-200);
+  transition: all var(--t-duration-200, 0.2s) ease;
+  text-align: left;
+}
+
+.sidebarRTL .menuItemChild {
+  padding: var(--t-space-300) var(--t-space-1000) var(--t-space-300) var(--t-space-200);
+}
+
+.menuItemDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.menuItemContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--t-space-300);
+}
+
+.menuItemContentCollapsed {
+  justify-content: center;
+}
+
+.menuItemIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.icon {
+  color: inherit;
+}
+
+.menuItemLabel {
+  flex: 1;
+  white-space: nowrap;
+  opacity: 1;
+  transition: opacity var(--t-duration-200, 0.2s) ease;
+  font-family: var(--t-font-family-primary);
+  text-align: left;
+  color: inherit;
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for English text */
+.menuItemLabel::before,
+.menuItemLabel::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.menuItemLabel::before {
+  margin-top: -0.15em;
+}
+
+.menuItemLabel::after {
+  margin-bottom: -0.15em;
+}
+
+/* RTL-specific line height adjustments for Arabic */
+:global([dir="rtl"]) .menuItemLabel::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .menuItemLabel::after {
+  margin-bottom: -0.25em;
+}
+
+.menuItemLabelRTL {
+  text-align: right;
+  font-family: var(--t-font-family-arabic);
+}
+
+.menuItemChevron {
+  display: flex;
+  align-items: center;
+  color: inherit;
+  opacity: 0.7;
+}
+
+.menuItemChildren {
+  margin-top: var(--t-space-100);
+  margin-bottom: var(--t-space-200);
+}
+
+/* Bottom Section */
+.bottomSection {
+  width: 100%;
+  border-top: 1px solid var(--t-color-border-secondary);
+  padding-top: var(--t-space-400);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: var(--sidebar-width-collapsed, 64px);
+  }
+  
+  .sidebarExpanded {
+    width: var(--sidebar-width-expanded, 15rem);
+  }
+}
+
+/* RTL Support */
+
+.sidebarRTL .menuItemContent {
+  direction: rtl;
+}
+
+.sidebarRTL .menuItemLabel {
+  text-align: right;
+  font-family: var(--t-font-family-arabic);
+}
+
+/* Enhanced RTL support with proper text direction */
+:global([dir="rtl"]) .sidebar {
+  border-left: 1px solid var(--t-color-border-secondary);
+  border-right: none;
+}
+
+:global([dir="rtl"]) .menuItemContent {
+  direction: rtl;
+}
+
+:global([dir="rtl"]) .menuItemLabel {
+  text-align: right;
+  font-family: var(--t-font-family-arabic);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .sidebar {
+    border-width: 2px;
+  }
+  
+  .menuItem:focus {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .menuItem,
+  .menuItemLabel {
+    transition: none;
+  }
+}
