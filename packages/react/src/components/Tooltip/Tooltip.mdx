@@ -1,0 +1,156 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as TooltipStories from './Tooltip.stories';
+
+<Meta of={TooltipStories} />
+
+# Tooltip
+
+A tooltip is a popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.
+
+<Canvas of={TooltipStories.Default} />
+
+## Usage
+
+Tooltips are used to provide additional context or helpful information about UI elements without cluttering the interface. They should be concise and appear quickly when users need them.
+
+**Automatic Positioning**: By default, tooltips automatically position themselves based on available viewport space. You can optionally specify a preferred side if needed.
+
+### When to use tooltips
+
+- To explain the purpose of icon-only buttons
+- To provide additional context for form fields
+- To clarify abbreviated text or technical terms
+- To show the full text when content is truncated
+
+### When not to use tooltips
+
+- For critical information that users must see
+- On mobile devices where hover interactions don't exist
+- When the tooltip content is longer than a few sentences
+
+## Examples
+
+### Basic Usage
+
+<Canvas of={TooltipStories.Default} />
+
+### Automatic Positioning
+
+<Canvas of={TooltipStories.AutoPositioning} />
+
+### Positioning
+
+Tooltips can be positioned on any side of the trigger element:
+
+<Canvas of={TooltipStories.Top} />
+<Canvas of={TooltipStories.Right} />
+<Canvas of={TooltipStories.Bottom} />
+<Canvas of={TooltipStories.Left} />
+
+### Alignment
+
+Control how the tooltip aligns relative to its trigger:
+
+<Canvas of={TooltipStories.AlignStart} />
+<Canvas of={TooltipStories.AlignCenter} />
+<Canvas of={TooltipStories.AlignEnd} />
+
+### With Icons
+
+Tooltips work well with icon buttons and informational elements:
+
+<Canvas of={TooltipStories.WithIcon} />
+<Canvas of={TooltipStories.IconOnlyTrigger} />
+
+### Long Content
+
+Tooltips automatically wrap longer content:
+
+<Canvas of={TooltipStories.LongContent} />
+
+### Multiple Tooltips
+
+<Canvas of={TooltipStories.MultipleTooltips} />
+
+### All Positions
+
+<Canvas of={TooltipStories.AllPositions} />
+
+## RTL Support
+
+The tooltip component fully supports RTL (right-to-left) layouts with proper text alignment and positioning:
+
+<Canvas of={TooltipStories.RtlContent} />
+
+## Implementation
+
+### TooltipProvider
+
+Wrap your application or tooltip group with `TooltipProvider` to enable tooltip functionality:
+
+```tsx
+import { TooltipProvider, Tooltip } from '@tagaddod-design/react';
+
+function App() {
+  return (
+    <TooltipProvider>
+      <Tooltip content="Helpful information">
+        <button>Hover me</button>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+```
+
+### Basic Tooltip (Auto-positioning)
+
+```tsx
+<Tooltip content="This explains what the button does">
+  <Button>Action</Button>
+</Tooltip>
+```
+
+### Custom Positioning
+
+```tsx
+<Tooltip
+  content="Tooltip content"
+  side="right"
+  align="start"
+  sideOffset={12}
+>
+  <Button>Positioned tooltip</Button>
+</Tooltip>
+```
+
+### Disabled State
+
+```tsx
+<Tooltip content="This won't show" disabled>
+  <Button>Disabled tooltip</Button>
+</Tooltip>
+```
+
+## Accessibility
+
+- Tooltips are announced by screen readers when the trigger receives focus
+- Use `aria-label` on trigger elements when the tooltip provides essential information
+- Ensure tooltip content is concise and meaningful
+- Tooltips automatically hide when focus leaves the trigger element
+
+## Props
+
+<ArgTypes of={TooltipStories} />
+
+## Design Tokens
+
+The tooltip component uses the following design tokens:
+
+- `--color-bg-overlay-20`: Background color (semi-transparent dark)
+- `--color-text-on-bg-fill`: Text color (white)
+- `--t-font-family-primary`: Font family for LTR text
+- `--t-font-family-arabic`: Font family for RTL text
+- `--space-300`: Internal padding (12px)
+- `--border-radius-200`: Border radius (8px)
+- `--t-line-height-english`: Line height for English text (1.5)
+- `--t-line-height-arabic`: Line height for Arabic text (1.2)

@@ -83,7 +83,7 @@ const preview = {
           'div',
           {
             style: {
-              minHeight: '100vh',
+              minHeight: '65vh',
               backgroundColor: 'var(--t-color-bg-primary, #f7f7f8)',
               padding: 'var(--t-space-600, 1.5rem)',
               display: 'flex',

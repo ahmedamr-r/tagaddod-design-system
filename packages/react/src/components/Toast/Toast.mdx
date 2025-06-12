@@ -1,0 +1,174 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as ToastStories from './Toast.stories';
+
+<Meta of={ToastStories} />
+
+# Toast
+
+A toast is a non-disruptive message that appears at the bottom of the interface to provide quick, at-a-glance feedback on the outcome of an action.
+
+<Canvas of={ToastStories.Default} />
+
+## Usage
+
+Toasts provide brief feedback about application processes through messages that appear temporarily and disappear automatically or when dismissed by the user.
+
+### When to use toasts
+
+- To confirm successful completion of an action
+- To alert users of errors or issues
+- To provide informational updates
+- To notify users of background processes
+
+### When not to use toasts
+
+- For critical errors that require immediate attention (use modals instead)
+- For complex messages that need more than a few seconds to read
+- When the message requires user interaction beyond dismissal
+
+## Examples
+
+### Basic Usage
+
+<Canvas of={ToastStories.Default} />
+
+### Toast Types
+
+Toasts come in three types with appropriate icons and styling:
+
+<Canvas of={ToastStories.Default} />
+<Canvas of={ToastStories.Success} />
+<Canvas of={ToastStories.Error} />
+
+### Property Variations
+
+<Canvas of={ToastStories.WithoutDescription} />
+<Canvas of={ToastStories.WithoutCloseButton} />
+<Canvas of={ToastStories.WithoutIcon} />
+
+### All Types
+
+<Canvas of={ToastStories.AllTypes} />
+
+### Property Combinations
+
+<Canvas of={ToastStories.PropertyCombinations} />
+
+### Interactive Demo
+
+<Canvas of={ToastStories.InteractiveDemo} />
+
+## RTL Support
+
+The toast component fully supports RTL (right-to-left) layouts with proper text alignment and animations:
+
+<Canvas of={ToastStories.RtlContent} />
+
+## Implementation
+
+### ToastProvider Setup
+
+Wrap your application with `ToastProvider` and include `ToastViewport` to enable toast functionality:
+
+```tsx
+import { ToastProvider, ToastViewport } from '@tagaddod-design/react';
+
+function App() {
+  return (
+    <ToastProvider>
+      <YourAppContent />
+      <ToastViewport />
+    </ToastProvider>
+  );
+}
+```
+
+### Basic Toast
+
+```tsx
+<Toast
+  title="Success!"
+  description="Your changes have been saved"
+  type="success"
+  open={isOpen}
+  onOpenChange={setIsOpen}
+/>
+```
+
+### Controlled Toast
+
+```tsx
+const [isOpen, setIsOpen] = useState(false);
+
+const showToast = () => setIsOpen(true);
+
+return (
+  <>
+    <Button onClick={showToast}>Show Toast</Button>
+    <Toast
+      title="Notification"
+      description="This is a controlled toast"
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      duration={3000}
+    />
+  </>
+);
+```
+
+### Custom Toast
+
+```tsx
+<Toast
+  title="Custom Toast"
+  description="With custom settings"
+  type="error"
+  showDescription={true}
+  showClose={true}
+  showIcon={true}
+  duration={0} // No auto-close
+  onOpenChange={handleClose}
+/>
+```
+
+## Height Constraints
+
+The toast component has built-in height constraints using design tokens:
+- **Minimum height**: 48px (3rem)
+- **Maximum height**: 64px (4rem)
+
+This ensures consistent sizing while allowing for single or double-line content.
+
+## Accessibility
+
+- Toasts use proper ARIA roles for screen reader announcements
+- Close buttons have appropriate labels
+- Toasts can be dismissed via keyboard interaction
+- Auto-dismiss timing follows accessibility guidelines (minimum 5 seconds for complex content)
+
+## Animation
+
+Toasts include smooth slide-in/slide-out animations:
+- Slide in from the right (LTR) or left (RTL)
+- Support for swipe-to-dismiss gestures
+- Smooth transitions for all state changes
+
+## Props
+
+<ArgTypes of={ToastStories} />
+
+## Design Tokens
+
+The toast component uses the following design tokens:
+
+- `--t-color-surface-primary`: Background color
+- `--t-color-border-secondary`: Border color
+- `--t-color-border-success`: Success accent border
+- `--t-color-border-critical`: Error accent border  
+- `--t-color-border-brand`: Default accent border
+- `--t-border-radius-200`: Border radius
+- `--t-space-200`, `--t-space-300`: Spacing
+- `--t-shadow-md`: Drop shadow
+- `--t-font-family-primary`: Font family for LTR text
+- `--t-font-family-arabic`: Font family for RTL text
+- Height tokens: `3rem` (min-height), `4rem` (max-height)

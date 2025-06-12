@@ -113,3 +113,13 @@ export type { LogoProps } from './Logo';
 // Export the Sidebar component
 export { Sidebar, sidebarSizes, sidebarPositions } from './Sidebar';
 export type { SidebarProps, SidebarMenuItem, SidebarSize, SidebarPosition } from './Sidebar';
+
+// Export the Tooltip component
+export { Tooltip, TooltipProvider } from './Tooltip';
+export type { TooltipProps, TooltipSide, TooltipAlign } from './Tooltip';
+export { tooltipSides, tooltipAligns } from './Tooltip';
+
+// Export the Toast component
+export { Toast, ToastProvider, ToastViewport } from './Toast';
+export type { ToastProps, ToastType, ToastPosition, ToastViewportProps } from './Toast';
+export { toastTypes, toastPositions } from './Toast';
