@@ -1,199 +1,269 @@
+'use client';
+
 import React from 'react';
-import { Toaster, toast } from 'sonner';
-import { IconX, IconCheck, IconAlertTriangle, IconInfoCircle } from '@tabler/icons-react';
+import { toast as sonnerToast, Toaster } from 'sonner';
+import { IconCheck, IconX, IconAlertTriangle, IconLoader } from '@tabler/icons-react';
 import clsx from 'clsx';
 import styles from './Sonner.module.css';
 
-export type SonnerType = 'default' | 'success' | 'error';
-export type SonnerPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
-
-export interface SonnerProps {
-  /** Position of the toaster */
-  position?: SonnerPosition;
-  /** Whether to use rich colors */
-  richColors?: boolean;
-  /** Maximum number of toasts to show */
-  visibleToasts?: number;
-  /** Whether toasts are closable */
-  closeButton?: boolean;
-  /** Additional CSS class name */
-  className?: string;
-  /** Whether to expand toasts */
-  expand?: boolean;
-  /** Duration in milliseconds before auto-close (0 = no auto-close) */
-  duration?: number;
-  /** Theme for the toaster */
-  theme?: 'light' | 'dark' | 'system';
-  /** Text direction */
-  dir?: 'ltr' | 'rtl' | 'auto';
-}
+// Export types
+export type SonnerType = 'success' | 'error' | 'warning' | 'info' | 'loading' | 'custom';
+export type SonnerPosition = 
+  | 'top-left' 
+  | 'top-center' 
+  | 'top-right' 
+  | 'bottom-left' 
+  | 'bottom-center' 
+  | 'bottom-right';
 
 export interface SonnerToastOptions {
-  /** The type of toast that affects styling and icon */
-  type?: SonnerType;
-  /** The main title of the toast */
-  title: string;
-  /** Optional description text */
+  id?: string | number;
+  title?: string;
   description?: string;
-  /** Whether to show the description */
-  showDescription?: boolean;
-  /** Whether to show the close button */
-  showClose?: boolean;
-  /** Whether to show an icon */
-  showIcon?: boolean;
-  /** Whether the icon has a background container */
-  iconWithBackground?: boolean;
-  /** Duration in milliseconds before auto-close (0 = no auto-close) */
   duration?: number;
-  /** Additional CSS class name */
-  className?: string;
-  /** Callback when toast is dismissed */
-  onDismiss?: () => void;
-  /** Action button configuration */
+  dismissible?: boolean;
+  icon?: React.ReactNode;
+  iconBackground?: boolean;
   action?: {
+    label: string;
+    onClick: () => void;
+  };
+  cancel?: {
+    label: string;
+    onClick: () => void;
+  };
+  onDismiss?: () => void;
+  onAutoClose?: () => void;
+}
+
+export interface SonnerProps {
+  position?: SonnerPosition;
+  hotkey?: string[];
+  richColors?: boolean;
+  expand?: boolean;
+  duration?: number;
+  visibleToasts?: number;
+  closeButton?: boolean;
+  toastOptions?: SonnerToastOptions;
+  className?: string;
+  style?: React.CSSProperties;
+  offset?: string | number;
+  theme?: 'light' | 'dark' | 'system';
+  gap?: number;
+  loadingIcon?: React.ReactNode;
+  icons?: {
+    success?: React.ReactNode;
+    info?: React.ReactNode;
+    warning?: React.ReactNode;
+    error?: React.ReactNode;
+    loading?: React.ReactNode;
+  };
+}
+
+// Toast Props Interface
+interface ToastProps {
+  id: string | number;
+  title?: string;
+  description?: string;
+  type?: SonnerType;
+  icon?: React.ReactNode;
+  iconBackground?: boolean;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
+  cancel?: {
     label: string;
     onClick: () => void;
   };
 }
 
-export const sonnerTypes: SonnerType[] = ['default', 'success', 'error'];
-export const sonnerPositions: SonnerPosition[] = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+/** A fully custom toast that maintains animations and interactions. */
+function Toast(props: ToastProps) {
+  const { 
+    id, 
+    title, 
+    description, 
+    type = 'info',
+    icon,
+    iconBackground = true,
+    action,
+    cancel
+  } = props;
 
-const getIcon = (type: SonnerType) => {
-  switch (type) {
-    case 'success':
-      return <IconCheck size={20} />;
-    case 'error':
-      return <IconAlertTriangle size={20} />;
-    case 'default':
-    default:
-      return <IconInfoCircle size={20} />;
-  }
+  // Detect RTL for line-height adjustments
+  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+  
+  // Apply line height style based on text direction
+  const lineHeightStyle = {
+    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+  };
+
+  // Get default icon based on type
+  const getTypeIcon = () => {
+    if (icon) return icon;
+    
+    switch (type) {
+      case 'success':
+        return <IconCheck className={styles.icon} />;
+      case 'error':
+        return <IconX className={styles.icon} />;
+      case 'warning':
+        return <IconAlertTriangle className={styles.icon} />;
+      case 'loading':
+        return <IconLoader className={clsx(styles.icon, styles.spinning)} />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className={clsx(styles.toast, styles[type])}>
+      <div className={styles.mainContent}>
+        {getTypeIcon() && (
+          <div className={clsx(
+            styles.iconContainer,
+            iconBackground && styles.iconWithBackground
+          )}>
+            {getTypeIcon()}
+          </div>
+        )}
+        
+        <div className={styles.textContent}>
+          {title && (
+            <div className={styles.title} style={lineHeightStyle}>
+              {title}
+            </div>
+          )}
+          {description && (
+            <div className={styles.description} style={lineHeightStyle}>
+              {description}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className={styles.actions}>
+        {action && (
+          <button
+            className={clsx(styles.button, styles.actionButton)}
+            onClick={() => {
+              action.onClick();
+              sonnerToast.dismiss(id);
+            }}
+            style={lineHeightStyle}
+          >
+            {action.label}
+          </button>
+        )}
+        
+        {/* Close button */}
+        <button
+          className={styles.closeButton}
+          onClick={() => sonnerToast.dismiss(id)}
+          aria-label="Close toast"
+        >
+          <IconX className={styles.closeIcon} />
+        </button>
+      </div>
+
+      {cancel && (
+        <div className={styles.bottomActions}>
+          <button
+            className={clsx(styles.button, styles.cancelButton)}
+            onClick={() => {
+              cancel.onClick();
+              sonnerToast.dismiss(id);
+            }}
+            style={lineHeightStyle}
+          >
+            {cancel.label}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** I recommend abstracting the toast function so that you can call it without having to use toast.custom everytime. */
+function toast(toastOptions: Omit<ToastProps, 'id'>) {
+  return sonnerToast.custom((id) => (
+    <Toast
+      id={id}
+      title={toastOptions.title}
+      description={toastOptions.description}
+      type={toastOptions.type}
+      icon={toastOptions.icon}
+      iconBackground={toastOptions.iconBackground}
+      action={toastOptions.action}
+      cancel={toastOptions.cancel}
+    />
+  ));
+}
+
+// Convenience methods
+export const showSonner = {
+  success: (options: SonnerToastOptions) => toast({ ...options, type: 'success' }),
+  error: (options: SonnerToastOptions) => toast({ ...options, type: 'error' }),
+  warning: (options: SonnerToastOptions) => toast({ ...options, type: 'warning' }),
+  info: (options: SonnerToastOptions) => toast({ ...options, type: 'info' }),
+  loading: (options: SonnerToastOptions) => toast({ ...options, type: 'loading' }),
+  custom: (options: SonnerToastOptions) => toast({ ...options, type: 'custom' }),
+  dismiss: (id?: string | number) => sonnerToast.dismiss(id),
+  dismissAll: () => sonnerToast.dismiss(),
 };
 
-// Main Toaster component following official Sonner patterns
+// Main Sonner Toaster Component
 export const Sonner: React.FC<SonnerProps> = ({
   position = 'bottom-right',
-  richColors = false,
-  visibleToasts = 5,
-  closeButton = true,
+  theme = 'system',
   className,
-  expand = true,
+  richColors = true,
+  expand = false,
   duration = 4000,
-  theme = 'light',
-  dir = 'auto',
+  visibleToasts = 3,
+  closeButton = false,
+  gap = 14,
+  offset,
+  icons,
   ...props
 }) => {
   return (
     <Toaster
       position={position}
       richColors={richColors}
-      visibleToasts={visibleToasts}
-      closeButton={closeButton}
       expand={expand}
       duration={duration}
+      visibleToasts={visibleToasts}
+      closeButton={closeButton}
       theme={theme}
-      dir={dir}
       className={clsx(styles.toaster, className)}
-      toastOptions={{
-        className: styles.toast,
-        classNames: {
-          toast: styles.toast,
-          title: styles.title,
-          description: styles.description,
-          closeButton: styles.closeButton,
-          success: styles.success,
-          error: styles.error,
-          info: styles.default,
-          warning: styles.default,
-        },
+      gap={gap}
+      offset={offset}
+      dir="auto" // Support RTL/LTR automatically
+      icons={{
+        success: icons?.success || <IconCheck />,
+        info: icons?.info,
+        warning: icons?.warning || <IconAlertTriangle />,
+        error: icons?.error || <IconX />,
+        loading: icons?.loading || <IconLoader className={styles.spinning} />,
       }}
       {...props}
     />
   );
 };
 
-// Function to show toast with custom content following Toast component patterns
-export const showSonner = (options: SonnerToastOptions): string | number => {
-  const {
-    type = 'default',
-    title,
-    description,
-    showDescription = true,
-    showClose = true,
-    showIcon = true,
-    iconWithBackground = true,
-    duration = 4000,
-    className,
-    onDismiss,
-    action,
-  } = options;
-
-  // Detect RTL direction for line height adjustments
-  const isRTL = typeof document !== 'undefined' && 
-    (document.dir === 'rtl' || document.documentElement.dir === 'rtl');
-
-  // Apply line height style based on text direction
-  const lineHeightStyle = {
-    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
-  };
-
-  // Create custom toast content with same structure as Toast component
-  const ToastContent = () => (
-    <div className={clsx(styles.content, styles[type])}>
-      {showIcon && (
-        <div className={clsx(styles.icon, iconWithBackground && styles.iconWithBackground)}>
-          {getIcon(type)}
-        </div>
-      )}
-      
-      <div className={styles.text}>
-        <div className={styles.customTitle} style={lineHeightStyle}>
-          {title}
-        </div>
-        
-        {description && showDescription && (
-          <div className={styles.customDescription} style={lineHeightStyle}>
-            {description}
-          </div>
-        )}
-      </div>
-      
-      {showClose && (
-        <button className={styles.customClose} aria-label="Close toast">
-          <IconX size={20} />
-        </button>
-      )}
-    </div>
-  );
-
-  // Toast options
-  const toastOptions = {
-    duration: duration === 0 ? Infinity : duration,
-    onDismiss,
-    className: clsx(styles.customToast, className),
-    ...(action && {
-      action: {
-        label: action.label,
-        onClick: action.onClick,
-      },
-    }),
-  };
-
-  // Use appropriate Sonner method based on type
-  switch (type) {
-    case 'success':
-      return toast.success(<ToastContent />, toastOptions);
-    case 'error':
-      return toast.error(<ToastContent />, toastOptions);
-    case 'default':
-    default:
-      return toast(<ToastContent />, toastOptions);
-  }
-};
-
-// Alternative export names for flexibility
+// Alternative exports
 export const ToasterSonner = Sonner;
 export const SonnerToaster = Sonner;
 
-Sonner.displayName = 'Sonner';
+// Export constants for external use
+export const sonnerTypes: SonnerType[] = ['success', 'error', 'warning', 'info', 'loading', 'custom'];
+export const sonnerPositions: SonnerPosition[] = [
+  'top-left', 
+  'top-center', 
+  'top-right', 
+  'bottom-left', 
+  'bottom-center', 
+  'bottom-right'
+]; 

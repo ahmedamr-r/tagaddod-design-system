@@ -1,28 +1,35 @@
-import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import { Meta, Canvas, Story, ArgTypes, Source } from '@storybook/blocks';
+import { Sonner, showSonner } from './Sonner';
 import * as SonnerStories from './Sonner.stories';
 
 <Meta of={SonnerStories} />
 
 # Sonner
 
-An opinionated toast component for React built on top of the Sonner library, following shadcn/ui patterns. Provides better performance and UX compared to traditional toast implementations.
+The Sonner component is a modern toast notification system that follows our Figma design specifications exactly. It provides three distinct toast types (Error, Success, Default) with consistent typography, spacing, and comprehensive RTL/LTR support.
 
-## Features
+## Overview
 
-- **Multiple Types**: Default, success, error notifications
-- **Flexible Positioning**: Four corner positions (top/bottom + left/right)
-- **Rich Customization**: Show/hide icons, descriptions, close buttons
-- **RTL Support**: Full Arabic language support with proper line-height adjustments
-- **Icon Backgrounds**: Toggle between icon with or without background containers
-- **Performance Optimized**: Built on Sonner for better performance than traditional toast libraries
-- **Design System Integration**: Uses design tokens for consistent styling
+Sonner offers a powerful toast notification system with:
 
-## Basic Usage
+- **Design System Aligned**: Matches Figma specifications with exact colors, typography, and spacing
+- **Three Toast Types**: Error (red #d51e25), Success (green #00ae61), and Default (white) variants
+- **Icon Background Options**: Icons can be displayed with or without background containers
+- **Built-in Close Button**: Always-visible close button with proper RTL/LTR positioning
+- **RTL/LTR Support**: Complete layout mirroring and text alignment for different directions
+- **Outfit Typography**: Uses Outfit font family with proper weights (Medium 500, Regular 400)
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Stacking Behavior**: Proper toast stacking with Sonner 2.0+ features
 
-```tsx
-import { Sonner, showSonner } from '@tagaddod-design/react';
+## Installation & Setup
 
-// Add the Sonner component to your app root
+First, add the Sonner component to your application root:
+
+<Source
+  language="tsx"
+  code={`
+import { Sonner } from '@tagaddod-design/react';
+
 function App() {
   return (
     <div>
@@ -31,40 +38,161 @@ function App() {
     </div>
   );
 }
+`}
+/>
 
-// Trigger toasts from anywhere in your app
-showSonner({
-  type: 'success',
-  title: 'Success!',
-  description: 'Your action was completed successfully.'
+Then use the toast functions anywhere in your application:
+
+<Source
+  language="tsx"
+  code={`
+import { showSonner } from '@tagaddod-design/react';
+
+function MyComponent() {
+  const handleSuccess = () => {
+    showSonner.success({
+      title: 'Success!',
+      description: 'Your action was completed successfully.'
+    });
+  };
+
+  return <button onClick={handleSuccess}>Show Success Toast</button>;
+}
+`}
+/>
+
+## Basic Usage
+
+<Canvas of={SonnerStories.Default} />
+
+## Toast Types
+
+Our design system includes three main toast types based on the Figma specifications:
+
+<Canvas of={SonnerStories.ToastTypes} />
+
+### Available Types
+
+- **Error**: Red background (#d51e25) with white text - for error messages and failures
+- **Success**: Green background (#00ae61) with white text - for completed actions and positive feedback  
+- **Default**: White background (#ffffff) with dark text - for general information and neutral messages
+
+### Icon Background Options
+
+Icons can be displayed with or without background containers:
+
+<Canvas of={SonnerStories.IconBackgroundVariants} />
+
+- **With Background**: Icons get a rounded background container (20% white opacity for colored toasts, #f9f9fa for default)
+- **Without Background**: Icons are displayed directly without any background container
+
+## Toast with Actions
+
+Add interactive buttons to your toasts for better user engagement:
+
+<Canvas of={SonnerStories.WithActions} />
+
+<Source
+  language="tsx"
+  code={`
+// Toast with single action
+showSonner.info({
+  title: 'New Message',
+  description: 'You have a new message from John.',
+  action: {
+    label: 'View',
+    onClick: () => console.log('Viewing message')
+  }
 });
-```
 
-## Interactive Demo
+// Toast with action and cancel
+showSonner.warning({
+  title: 'Unsaved Changes',
+  description: 'You have unsaved changes.',
+  action: {
+    label: 'Save',
+    onClick: () => console.log('Saving')
+  },
+  cancel: {
+    label: 'Discard',
+    onClick: () => console.log('Discarding')
+  }
+});
+`}
+/>
 
-<Canvas of={SonnerStories.InteractiveDemo} />
+## RTL/LTR Support
 
-## Position Demo
+The toast component automatically adapts to different text directions as specified in the Figma design:
 
-Sonner supports four positioning options: top-left, top-right, bottom-left, and bottom-right.
+<Canvas of={SonnerStories.RTLSupport} />
 
-<Canvas of={SonnerStories.PositionDemo} />
+In RTL mode:
+- Icon and close button positions are mirrored
+- Text alignment changes to right-aligned
+- Layout flows from right to left
+- Proper Arabic text rendering with Outfit font
 
-## RTL/Arabic Support
+## Custom Icons
 
-The component includes full RTL support with Arabic font family and proper line-height adjustments.
+Replace the default type icons with your own custom icons:
 
-<Canvas of={SonnerStories.RtlDemo} />
+<Canvas of={SonnerStories.CustomIcon} />
 
-## Feature Combinations
+<Source
+  language="tsx"
+  code={`
+import { IconHeart } from '@tabler/icons-react';
 
-Like the Toast component, Sonner supports various feature combinations:
+showSonner.info({
+  title: 'Liked!',
+  description: 'You liked this post.',
+  icon: <IconHeart size={16} style={{ color: '#e74c3c' }} />,
+  iconBackground: true // or false to show without background
+});
+`}
+/>
 
-<Canvas of={SonnerStories.FeatureDemo} />
+## Long Content
 
-## Component Properties
+Sonner handles long content gracefully with proper text wrapping:
 
-<Controls />
+<Canvas of={SonnerStories.LongContent} />
+
+## Multiple Toasts
+
+Show multiple toasts and manage them collectively:
+
+<Canvas of={SonnerStories.MultipleToasts} />
+
+<Source
+  language="tsx"
+  code={`
+// Show multiple toasts
+showSonner.success({ title: 'First', description: 'First toast' });
+showSonner.info({ title: 'Second', description: 'Second toast' });
+showSonner.warning({ title: 'Third', description: 'Third toast' });
+
+// Dismiss all toasts
+showSonner.dismissAll();
+
+// Dismiss specific toast
+const toastId = showSonner.info({ title: 'Toast', description: 'Message' });
+showSonner.dismiss(toastId);
+`}
+/>
+
+## Different Positions
+
+Position toasts in different areas of the screen:
+
+<Canvas of={SonnerStories.DifferentPositions} />
+
+## Close Button
+
+Enable a close button for manual dismissal:
+
+<Canvas of={SonnerStories.WithCloseButton} />
 
 ## API Reference
 
@@ -72,124 +200,60 @@ Like the Toast component, Sonner supports various feature combinations:
 
 <ArgTypes of={SonnerStories} />
 
-### showSonner Function Options
+### showSonner Methods
 
-The `showSonner` function accepts these options:
+| Method | Description | Parameters |
+|--------|-------------|------------|
+| `showSonner.success(options)` | Show success toast | `SonnerToastOptions` |
+| `showSonner.error(options)` | Show error toast | `SonnerToastOptions` |
+| `showSonner.warning(options)` | Show warning toast | `SonnerToastOptions` |
+| `showSonner.info(options)` | Show info toast | `SonnerToastOptions` |
+| `showSonner.loading(options)` | Show loading toast | `SonnerToastOptions` |
+| `showSonner.custom(options)` | Show custom toast | `SonnerToastOptions` |
+| `showSonner.dismiss(id?)` | Dismiss specific toast | `string \| number` (optional) |
+| `showSonner.dismissAll()` | Dismiss all toasts | - |
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `type` | `'default' \| 'success' \| 'error'` | `'default'` | The type of toast |
-| `title` | `string` | - | The main title (required) |
-| `description` | `string` | - | Optional description text |
-| `showDescription` | `boolean` | `true` | Whether to show description |
-| `showClose` | `boolean` | `true` | Whether to show close button |
-| `showIcon` | `boolean` | `true` | Whether to show icon |
-| `iconWithBackground` | `boolean` | `true` | Whether icon has background |
-| `duration` | `number` | `4000` | Auto-close duration (0 = no auto-close) |
-| `onDismiss` | `() => void` | - | Callback when dismissed |
-| `action` | `{label: string, onClick: () => void}` | - | Action button config |
+### SonnerToastOptions
 
-## Usage Patterns
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `id` | `string \| number` | - | Unique identifier for the toast |
+| `title` | `string` | - | The main title text of the toast |
+| `description` | `string` | - | The description text below the title |
+| `duration` | `number` | `4000` | How long the toast should be visible (in milliseconds) |
+| `icon` | `React.ReactNode` | - | Custom icon to display (overrides default type icon) |
+| `iconBackground` | `boolean` | `true` | Whether to show a background container around the icon |
+| `action` | `{ label: string; onClick: () => void }` | - | Primary action button |
+| `cancel` | `{ label: string; onClick: () => void }` | - | Secondary cancel button |
+| `onDismiss` | `() => void` | - | Callback when toast is manually dismissed |
+| `onAutoClose` | `() => void` | - | Callback when toast auto-closes |
 
-### Simple Notifications
+## Design Specifications
 
-```tsx
-// Success notification
-showSonner({
-  type: 'success',
-  title: 'Saved!',
-  description: 'Your changes have been saved.'
-});
+Based on the Figma design, the component uses these exact specifications:
 
-// Error notification
-showSonner({
-  type: 'error',
-  title: 'Failed to save',
-  description: 'Please check your connection and try again.'
-});
+### Colors
+- **Error Background**: #d51e25
+- **Success Background**: #00ae61  
+- **Default Background**: #ffffff
+- **Icon Background (colored toasts)**: rgba(255, 255, 255, 0.2)
+- **Icon Background (default toast)**: #f9f9fa
+- **Text on colored backgrounds**: #ffffff
+- **Primary text (default)**: #16161d
+- **Secondary text (default)**: #7d8096
 
-// Default notification
-showSonner({
-  type: 'default',
-  title: 'New message',
-  description: 'You have received a new message.'
-});
-```
+### Typography
+- **Title**: Outfit Medium, 16px, line-height 1.5
+- **Description**: Outfit Regular, 14px, line-height 1.5
 
-### Custom Configurations
+### Spacing
+- **Toast padding**: 12px
+- **Gap between content and close button**: 8px
+- **Gap between icon and text**: 3px
+- **Gap between title and description**: 2px
+- **Icon size**: 20px
+- **Icon background padding**: 12px
 
-```tsx
-// Minimal toast (no icon, description, or close button)
-showSonner({
-  title: 'Quick notification',
-  showIcon: false,
-  showDescription: false,
-  showClose: false,
-  duration: 2000
-});
-
-// Icon without background
-showSonner({
-  type: 'success',
-  title: 'Complete!',
-  iconWithBackground: false
-});
-
-// Persistent toast
-showSonner({
-  title: 'Important notice',
-  description: 'This will stay until manually closed',
-  duration: 0 // No auto-close
-});
-```
-
-### Arabic/RTL Usage
-
-```tsx
-// Arabic content with RTL support
-showSonner({
-  type: 'success',
-  title: 'تم الحفظ!',
-  description: 'تم حفظ التغييرات بنجاح'
-});
-```
-
-## Comparison with Toast Component
-
-| Feature | Toast (Radix UI) | Sonner |
-|---------|------------------|---------|
-| Performance | Good | Excellent |
-| Positioning | Manual viewport management | Built-in positioning |
-| Stacking | Basic | Advanced with hover effects |
-| API | Component-based | Function-based |
-| Bundle Size | Larger | Smaller |
-| Customization | Full control | Opinionated but flexible |
-
-## Design Tokens Used
-
-The component uses these design tokens for consistent styling:
-
-- `--t-font-family-primary`, `--t-font-family-arabic` - Typography
-- `--color-bg-surface`, `--color-bg-fill-success`, `--color-bg-fill-critical` - Backgrounds
-- `--color-text`, `--color-text-secondary`, `--color-text-on-bg-fill` - Text colors
-- `--border-radius-200`, `--border-radius-100` - Border radius
-- `--space-300`, `--space-050` - Spacing
-- `--t-line-height-arabic`, `--t-line-height-english` - Line heights
-
-## Best Practices
-
-1. **Use appropriate types**: Success for confirmations, error for failures, default for general info
-2. **Keep titles concise**: Aim for 1-3 words when possible
-3. **Provide helpful descriptions**: Give users context about what happened
-4. **Consider auto-close timing**: 4-5 seconds for success, longer for errors
-5. **Use actions sparingly**: Only when users need to take immediate follow-up action
-6. **Test in RTL mode**: Ensure Arabic content displays properly
-7. **Limit simultaneous toasts**: Use `visibleToasts` prop to prevent overwhelming users
-
-## Accessibility
-
-- Uses proper ARIA labels for close buttons
-- Supports keyboard navigation
-- Provides semantic meaning through toast types
-- Includes focus management for action buttons
-- Screen reader compatible with proper announcements
+### Effects
+- **Shadow**: 0px 8px 16px -4px rgba(26, 26, 26, 0.22)
+- **Border radius**: 8px (toast), 4px (icon background) 

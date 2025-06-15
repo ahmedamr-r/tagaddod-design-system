@@ -17,11 +17,10 @@
   "dependencies": {
     "@radix-ui/react-navigation-menu": "^1.2.2",
     "@radix-ui/react-select": "^2.2.5",
-    "@radix-ui/react-toast": "^1.2.4",
     "@radix-ui/react-tooltip": "^1.2.1",
     "@tabler/icons-react": "^3.33.0",
     "@tagaddod-design/react": "*",
-    "sonner": "^1.7.1"
+    "sonner": "^2.0.5"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^8.6.12",

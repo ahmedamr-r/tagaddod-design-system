@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import React, { useState } from 'react';
-import { Sonner, showSonner, sonnerTypes, sonnerPositions } from './Sonner';
-import { Button } from '../Button/Button';
+import React from 'react';
+import { Sonner, showSonner, SonnerProps } from './Sonner';
+import { IconHeart, IconStar, IconBell } from '@tabler/icons-react';
 
 const meta = {
   title: 'Components/Sonner',
@@ -15,382 +15,524 @@ const meta = {
   tags: [],
   argTypes: {
     position: {
-      control: 'select',
-      options: sonnerPositions,
-      description: 'The position of the toaster on screen'
-    },
-    richColors: {
-      control: 'boolean',
-      description: 'Whether to use rich colors for different toast types'
-    },
-    visibleToasts: {
-      control: 'number',
-      description: 'Maximum number of toasts to show at once'
-    },
-    closeButton: {
-      control: 'boolean',
-      description: 'Whether to show close buttons on toasts'
-    },
-    expand: {
-      control: 'boolean',
-      description: 'Whether toasts should expand on hover'
-    },
-    duration: {
-      control: 'number',
-      description: 'Default duration in milliseconds before auto-close'
+      control: { type: 'select' },
+      options: ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'],
+      description: 'Position of the toast notifications',
     },
     theme: {
-      control: 'select',
+      control: { type: 'select' },
       options: ['light', 'dark', 'system'],
-      description: 'Theme for the toaster'
+      description: 'Theme for the toasts',
+    },
+    duration: {
+      control: { type: 'number' },
+      description: 'Default duration for toasts in milliseconds',
+    },
+    visibleToasts: {
+      control: { type: 'number' },
+      description: 'Maximum number of visible toasts',
+    },
+    closeButton: {
+      control: { type: 'boolean' },
+      description: 'Show close button on toasts',
+    },
+    richColors: {
+      control: { type: 'boolean' },
+      description: 'Enable rich colors for different toast types',
+    },
+    expand: {
+      control: { type: 'boolean' },
+      description: 'Expand toasts on hover',
     },
   },
   args: {
     position: 'bottom-right',
-    richColors: false,
-    visibleToasts: 5,
-    closeButton: true,
-    expand: true,
+    theme: 'system',
     duration: 4000,
-    theme: 'light',
+    visibleToasts: 3,
+    closeButton: false,
+    richColors: true,
+    expand: false,
   },
-  decorators: [
-    (Story, context) => {
-      // For demos that use showSonner, add the Sonner provider
-      if (context.name === 'InteractiveDemo' || 
-          context.name === 'PositionDemo' || 
-          context.name === 'RtlDemo' ||
-          context.name === 'FeatureDemo') {
-        return (
-          <div style={{ padding: '20px', position: 'relative', minHeight: '400px' }}>
-            <Sonner position="bottom-right" />
-            <Story />
-          </div>
-        );
-      }
-      
-      return (
-        <div style={{ padding: '20px', position: 'relative', minHeight: '200px' }}>
-          <Story />
-        </div>
-      );
-    },
-  ],
 } satisfies Meta<typeof Sonner>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Basic Sonner component showcase
+// Helper component for demo buttons
+const ToastDemo: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', minWidth: '300px' }}>
+    {children}
+    <Sonner position="bottom-right" expand={false} />
+  </div>
+);
+
+const DemoButton: React.FC<{ 
+  onClick: () => void; 
+  children: React.ReactNode;
+  variant?: 'primary' | 'secondary';
+}> = ({ onClick, children, variant = 'primary' }) => (
+  <button
+    onClick={onClick}
+    style={{
+      padding: '8px 16px',
+      borderRadius: '6px',
+      border: variant === 'primary' ? 'none' : '1px solid #ccc',
+      backgroundColor: variant === 'primary' ? '#007bff' : 'white',
+      color: variant === 'primary' ? 'white' : '#333',
+      cursor: 'pointer',
+      fontSize: '14px',
+      fontWeight: '500',
+    }}
+  >
+    {children}
+  </button>
+);
+
 export const Default: Story = {
-  args: {
-    position: 'bottom-right',
-  },
+  render: (args: SonnerProps) => (
+    <ToastDemo>
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Default Toast',
+          description: 'This is a default information toast.'
+        })}
+      >
+        Show Default Toast
+      </DemoButton>
+      <Sonner {...args} />
+    </ToastDemo>
+  ),
 };
 
-// Interactive demo showing different toast types
-export const InteractiveDemo: Story = {
-  render: () => {
-    const triggerToast = (type: 'default' | 'success' | 'error') => {
-      showSonner({
-        type,
-        title: type === 'default' ? 'Notification' : type === 'success' ? 'Success!' : 'Error!',
-        description: type === 'default' ? 'This is a default notification' : 
-                    type === 'success' ? 'Operation completed successfully' : 
-                    'Something went wrong',
-        showDescription: true,
-        showClose: true,
-        showIcon: true,
-        iconWithBackground: true,
-        duration: 4000,
-      });
-    };
-
-    return (
-      <div style={{ display: 'flex', gap: '12px', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <Button onClick={() => triggerToast('default')}>Show Default</Button>
-          <Button onClick={() => triggerToast('success')} tone="success">Show Success</Button>
-          <Button onClick={() => triggerToast('error')} tone="critical">Show Error</Button>
-        </div>
-        
-        <p style={{ textAlign: 'center', fontSize: '14px', color: '#666', marginTop: '20px' }}>
-          Click the buttons above to see Sonner toasts in action!
-        </p>
-      </div>
-    );
-  },
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      description: {
-        story: 'Interactive demo showing how to trigger different types of toasts using showSonner function',
-      },
-    },
-  },
-};
-
-// Position showcase
-export const PositionDemo: Story = {
-  render: () => {
-    const [currentPosition, setCurrentPosition] = useState<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'>('bottom-right');
-    const [toasterKey, setToasterKey] = useState(0);
-
-    const triggerPositionToast = (position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => {
-      setCurrentPosition(position);
-      setToasterKey(prev => prev + 1); // Force re-render of Toaster
+export const ToastTypes: Story = {
+  render: () => (
+    <ToastDemo>
+      <DemoButton 
+        onClick={() => showSonner.success({
+          title: 'Title',
+          description: 'Description',
+          iconBackground: true
+        })}
+      >
+        Success (With Icon Background)
+      </DemoButton>
       
-      setTimeout(() => {
-        showSonner({
-          title: 'Position Demo',
-          description: `This toast appears in ${position}`,
-          type: 'default',
-          duration: 3000,
-        });
-      }, 100);
-    };
-
-    return (
-      <>
-        <div style={{ display: 'flex', gap: '12px', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            <Button onClick={() => triggerPositionToast('top-left')}>Top Left</Button>
-            <Button onClick={() => triggerPositionToast('top-right')}>Top Right</Button>
-            <Button onClick={() => triggerPositionToast('bottom-left')}>Bottom Left</Button>
-            <Button onClick={() => triggerPositionToast('bottom-right')}>Bottom Right (Default)</Button>
-          </div>
-          <div style={{ textAlign: 'center', fontSize: '14px', color: '#666', padding: '10px', background: '#f5f5f5', borderRadius: '4px' }}>
-            Current position: <strong>{currentPosition}</strong>
-          </div>
-        </div>
-        
-        <Sonner key={toasterKey} position={currentPosition} />
-      </>
-    );
-  },
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      description: {
-        story: 'Demo showing toast positioning options with Sonner. Default is bottom-right. Click buttons to see toasts in different positions.',
-      },
-    },
-  },
-};
-
-// RTL/Arabic support demo
-export const RtlDemo: Story = {
-  render: () => {
-    const triggerRtlToast = () => {
-      showSonner({
-        title: 'إشعار',
-        description: 'هذا إشعار باللغة العربية مع دعم كامل للـ RTL',
-        type: 'success',
-        duration: 5000,
-      });
-    };
-
-    const triggerEnglishToast = () => {
-      showSonner({
-        title: 'Notification',
-        description: 'This is an English notification with proper LTR support',
-        type: 'default',
-        duration: 5000,
-      });
-    };
-
-    return (
-      <div style={{ display: 'flex', gap: '12px', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <Button onClick={triggerEnglishToast}>Show English Toast</Button>
-          <Button onClick={triggerRtlToast} tone="success">إظهار Toast عربي</Button>
-        </div>
-        
-        <p style={{ textAlign: 'center', fontSize: '14px', color: '#666', marginTop: '20px' }}>
-          Switch to RTL mode in the toolbar to see proper Arabic text alignment and font rendering.
-        </p>
-      </div>
-    );
-  },
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      description: {
-        story: 'Demo showing RTL support with Arabic content. Switch to RTL mode to see proper text alignment and Arabic font family application.',
-      },
-    },
-  },
-};
-
-// Feature showcase (icons, descriptions, close buttons)
-export const FeatureDemo: Story = {
-  render: () => {
-    const showFeatureToast = (options: any) => {
-      showSonner({
-        title: 'Feature Demo',
-        description: 'This toast demonstrates various feature combinations',
-        type: 'success',
-        duration: 6000,
-        ...options,
-      });
-    };
-
-    return (
-      <div style={{ display: 'flex', gap: '12px', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-          <Button onClick={() => showFeatureToast({ showIcon: true, iconWithBackground: true })}>
-            With Icon Background
-          </Button>
-          <Button onClick={() => showFeatureToast({ showIcon: true, iconWithBackground: false })}>
-            Icon No Background
-          </Button>
-          <Button onClick={() => showFeatureToast({ showIcon: false })}>
-            No Icon
-          </Button>
-          <Button onClick={() => showFeatureToast({ showDescription: false })}>
-            No Description
-          </Button>
-          <Button onClick={() => showFeatureToast({ showClose: false })}>
-            No Close Button
-          </Button>
-          <Button onClick={() => showFeatureToast({ 
-            showIcon: false, 
-            showDescription: false, 
-            showClose: false 
-          })}>
-            Minimal Toast
-          </Button>
-        </div>
-        
-        <p style={{ textAlign: 'center', fontSize: '14px', color: '#666', marginTop: '20px' }}>
-          Click buttons to see different feature combinations (same as Toast component)
-        </p>
-      </div>
-    );
-  },
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      description: {
-        story: 'Demo showing various feature combinations including icon backgrounds, descriptions, and close buttons.',
-      },
-    },
-  },
-};
-
-// All types showcase
-export const AllTypes: Story = {
-  render: (props) => {
-    // Get direction from globals (Storybook RTL toolbar)
-    const direction = props.globals?.direction || 'ltr';
-    const isRTL = direction === 'rtl';
-
-    const showAllTypes = () => {
-      sonnerTypes.forEach((type, index) => {
-        setTimeout(() => {
-          showSonner({
-            type,
-            title: isRTL ? 'عنوان' : 'Title',
-            description: isRTL ? 'وصف' : 'Description',
-            duration: 0, // Don't auto-close for demo
-          });
-        }, index * 200);
-      });
-    };
-
-    return (
-      <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        gap: '16px',
-        alignItems: 'center',
-        direction: direction
-      }}>
-        <Button onClick={showAllTypes}>
-          {isRTL ? 'إظهار جميع الأنواع' : 'Show All Types'}
-        </Button>
-        
-        <p style={{ textAlign: 'center', fontSize: '14px', color: '#666' }}>
-          {isRTL ? 'انقر لرؤية جميع أنواع التوست' : 'Click to see all toast types with RTL support'}
-        </p>
-      </div>
-    );
-  },
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      description: {
-        story: 'All toast types with RTL support. Try switching between LTR and RTL modes.',
-      },
-    },
-  },
-};
-
-// Simple usage examples
-export const SimpleSuccess: Story = {
-  render: () => (
-    <Button 
-      onClick={() => showSonner({
-        type: 'success',
-        title: 'Success!',
-        description: 'Your action was completed successfully.',
-      })}
-      tone="success"
-    >
-      Show Success Toast
-    </Button>
+      <DemoButton 
+        onClick={() => showSonner.success({
+          title: 'Title',
+          description: 'Description',
+          iconBackground: false
+        })}
+      >
+        Success (No Icon Background)
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.error({
+          title: 'Title',
+          description: 'Description',
+          iconBackground: true
+        })}
+      >
+        Error (With Icon Background)
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.error({
+          title: 'Title',
+          description: 'Description',
+          iconBackground: false
+        })}
+      >
+        Error (No Icon Background)
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Title',
+          description: 'Description',
+          iconBackground: true
+        })}
+      >
+        Default (With Icon Background)
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Title',
+          description: 'Description',
+          iconBackground: false
+        })}
+      >
+        Default (No Icon Background)
+      </DemoButton>
+    </ToastDemo>
   ),
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      description: {
-        story: 'Simple success toast example',
-      },
-    },
-  },
 };
 
-export const SimpleError: Story = {
+export const WithActions: Story = {
   render: () => (
-    <Button 
-      onClick={() => showSonner({
-        type: 'error',
-        title: 'Error!',
-        description: 'Something went wrong. Please try again.',
-      })}
-      tone="critical"
-    >
-      Show Error Toast
-    </Button>
+    <ToastDemo>
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'This is a headless toast',
+          description: 'You have full control of styles and jsx, while still having the animations.',
+          action: {
+            label: 'Reply',
+            onClick: () => alert('Reply clicked!')
+          }
+        })}
+      >
+        Headless Toast (Like Screenshot)
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'New Message',
+          description: 'You have received a new message from John Doe.',
+          action: {
+            label: 'View',
+            onClick: () => alert('Viewing message!')
+          }
+        })}
+      >
+        Toast with Action
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.warning({
+          title: 'Unsaved Changes',
+          description: 'You have unsaved changes. Do you want to save them?',
+          action: {
+            label: 'Save',
+            onClick: () => alert('Saving changes!')
+          },
+          cancel: {
+            label: 'Discard',
+            onClick: () => alert('Discarding changes!')
+          }
+        })}
+      >
+        Toast with Action & Cancel
+      </DemoButton>
+    </ToastDemo>
   ),
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      description: {
-        story: 'Simple error toast example',
-      },
-    },
-  },
 };
 
-export const SimpleDefault: Story = {
+export const RTLSupport: Story = {
   render: () => (
-    <Button 
-      onClick={() => showSonner({
-        type: 'default',
-        title: 'Notification',
-        description: 'This is a general notification.',
-      })}
-    >
-      Show Default Toast
-    </Button>
+    <div>
+      <div style={{ marginBottom: '20px' }}>
+        <h3 style={{ margin: '0 0 10px 0', fontFamily: 'Outfit, sans-serif' }}>LTR Direction (Default)</h3>
+        <ToastDemo>
+          <DemoButton 
+            onClick={() => showSonner.error({
+              title: 'Title',
+              description: 'Description',
+              iconBackground: true
+            })}
+          >
+            Error (LTR)
+          </DemoButton>
+          
+          <DemoButton 
+            onClick={() => showSonner.success({
+              title: 'Title',
+              description: 'Description',
+              iconBackground: true
+            })}
+          >
+            Success (LTR)
+          </DemoButton>
+          
+          <DemoButton 
+            onClick={() => showSonner.info({
+              title: 'Title',
+              description: 'Description',
+              iconBackground: true
+            })}
+          >
+            Default (LTR)
+          </DemoButton>
+        </ToastDemo>
+      </div>
+      
+      <div dir="rtl">
+        <h3 style={{ margin: '0 0 10px 0', fontFamily: 'Outfit, sans-serif', textAlign: 'right' }}>RTL Direction (Arabic)</h3>
+        <ToastDemo>
+          <DemoButton 
+            onClick={() => showSonner.error({
+              title: 'العنوان',
+              description: 'الوصف',
+              iconBackground: true
+            })}
+          >
+            خطأ (RTL)
+          </DemoButton>
+          
+          <DemoButton 
+            onClick={() => showSonner.success({
+              title: 'العنوان',
+              description: 'الوصف',
+              iconBackground: true
+            })}
+          >
+            نجح (RTL)
+          </DemoButton>
+          
+          <DemoButton 
+            onClick={() => showSonner.info({
+              title: 'العنوان',
+              description: 'الوصف',
+              iconBackground: true
+            })}
+          >
+            افتراضي (RTL)
+          </DemoButton>
+        </ToastDemo>
+      </div>
+    </div>
   ),
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      description: {
-        story: 'Simple default toast example',
-      },
-    },
-  },
 };
+
+export const IconBackgroundVariants: Story = {
+  render: () => (
+    <ToastDemo>
+      <div style={{ marginBottom: '20px' }}>
+        <h4 style={{ margin: '0 0 10px 0', fontFamily: 'Outfit, sans-serif' }}>Icons with Background</h4>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <DemoButton 
+            onClick={() => showSonner.error({
+              title: 'Title',
+              description: 'Description',
+              iconBackground: true
+            })}
+          >
+            Error (Background)
+          </DemoButton>
+          
+          <DemoButton 
+            onClick={() => showSonner.success({
+              title: 'Title',
+              description: 'Description',
+              iconBackground: true
+            })}
+          >
+            Success (Background)
+          </DemoButton>
+          
+          <DemoButton 
+            onClick={() => showSonner.info({
+              title: 'Title',
+              description: 'Description',
+              iconBackground: true
+            })}
+          >
+            Default (Background)
+          </DemoButton>
+        </div>
+      </div>
+      
+      <div>
+        <h4 style={{ margin: '0 0 10px 0', fontFamily: 'Outfit, sans-serif' }}>Icons without Background</h4>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <DemoButton 
+            onClick={() => showSonner.error({
+              title: 'Title',
+              description: 'Description',
+              iconBackground: false
+            })}
+          >
+            Error (No Background)
+          </DemoButton>
+          
+          <DemoButton 
+            onClick={() => showSonner.success({
+              title: 'Title',
+              description: 'Description',
+              iconBackground: false
+            })}
+          >
+            Success (No Background)
+          </DemoButton>
+          
+          <DemoButton 
+            onClick={() => showSonner.info({
+              title: 'Title',
+              description: 'Description',
+              iconBackground: false
+            })}
+          >
+            Default (No Background)
+          </DemoButton>
+        </div>
+      </div>
+    </ToastDemo>
+  ),
+};
+
+export const CustomIcon: Story = {
+  render: () => (
+    <ToastDemo>
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Liked!',
+          description: 'You liked this post.',
+          icon: <IconHeart size={16} style={{ color: '#e74c3c' }} />,
+          iconBackground: true
+        })}
+      >
+        Custom Heart Icon
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.success({
+          title: 'Starred',
+          description: 'Added to your favorites.',
+          icon: <IconStar size={16} style={{ color: '#f39c12' }} />,
+          iconBackground: true
+        })}
+      >
+        Custom Star Icon
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Notification',
+          description: 'You have new notifications.',
+          icon: <IconBell size={16} style={{ color: '#3498db' }} />,
+          iconBackground: false
+        })}
+      >
+        Custom Bell Icon (No Background)
+      </DemoButton>
+    </ToastDemo>
+  ),
+};
+
+export const LongContent: Story = {
+  render: () => (
+    <ToastDemo>
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Very Long Toast Title That Might Wrap to Multiple Lines',
+          description: 'This is a very long description that demonstrates how the toast component handles longer content. It should wrap properly and maintain good readability while not breaking the layout. The text should be properly contained and the toast should expand to accommodate the content.'
+        })}
+      >
+        Long Content Toast
+      </DemoButton>
+    </ToastDemo>
+  ),
+};
+
+export const MultipleToasts: Story = {
+  render: () => (
+    <ToastDemo>
+      <DemoButton 
+        onClick={() => {
+          showSonner.success({ title: 'First toast', description: 'This is the first toast' });
+          setTimeout(() => showSonner.info({ title: 'Second toast', description: 'This is the second toast' }), 500);
+          setTimeout(() => showSonner.warning({ title: 'Third toast', description: 'This is the third toast' }), 1000);
+        }}
+      >
+        Show Multiple Toasts
+      </DemoButton>
+      
+      <DemoButton 
+        variant="secondary"
+        onClick={() => showSonner.dismissAll()}
+      >
+        Dismiss All
+      </DemoButton>
+    </ToastDemo>
+  ),
+};
+
+export const DifferentPositions: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', minWidth: '600px' }}>
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Top Left',
+          description: 'Toast positioned at top-left'
+        })}
+      >
+        Top Left
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Top Center', 
+          description: 'Toast positioned at top-center'
+        })}
+      >
+        Top Center
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Top Right',
+          description: 'Toast positioned at top-right'
+        })}
+      >
+        Top Right
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Bottom Left',
+          description: 'Toast positioned at bottom-left'
+        })}
+      >
+        Bottom Left
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Bottom Center',
+          description: 'Toast positioned at bottom-center'
+        })}
+      >
+        Bottom Center
+      </DemoButton>
+      
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Bottom Right',
+          description: 'Toast positioned at bottom-right'
+        })}
+      >
+        Bottom Right
+      </DemoButton>
+      
+      {/* Multiple Sonner components for different positions */}
+      <Sonner position="top-left" expand={false} />
+      <Sonner position="top-center" expand={false} />
+      <Sonner position="top-right" expand={false} />
+      <Sonner position="bottom-left" expand={false} />
+      <Sonner position="bottom-center" expand={false} />
+      <Sonner position="bottom-right" expand={false} />
+    </div>
+  ),
+};
+
+export const WithCloseButton: Story = {
+  args: {
+    closeButton: true,
+    expand: false,
+  },
+  render: (args: SonnerProps) => (
+    <ToastDemo>
+      <DemoButton 
+        onClick={() => showSonner.info({
+          title: 'Closable Toast',
+          description: 'This toast has a close button.'
+        })}
+      >
+        Show Closable Toast
+      </DemoButton>
+      <Sonner {...args} />
+    </ToastDemo>
+  ),
+}; 

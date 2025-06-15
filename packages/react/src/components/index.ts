@@ -119,12 +119,9 @@ export { Tooltip, TooltipProvider } from './Tooltip';
 export type { TooltipProps, TooltipSide, TooltipAlign } from './Tooltip';
 export { tooltipSides, tooltipAligns } from './Tooltip';
 
-// Export the Toast component
-export { Toast, ToastProvider, ToastViewport } from './Toast';
-export type { ToastProps, ToastType, ToastPosition, ToastViewportProps } from './Toast';
-export { toastTypes, toastPositions } from './Toast';
-
-// Export the Sonner component (wraps the official Toaster)
+// Export the Sonner component (headless toast implementation)
 export { Sonner, showSonner, ToasterSonner, SonnerToaster } from './Sonner';
 export type { SonnerProps, SonnerToastOptions, SonnerType, SonnerPosition } from './Sonner';
 export { sonnerTypes, sonnerPositions } from './Sonner';
+
+
