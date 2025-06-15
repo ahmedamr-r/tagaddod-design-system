@@ -66,7 +66,8 @@ const meta = {
     count: 3,
     orientation: 'horizontal',
     defaultValue: 'tab1',
-    ariaLabel: 'Content tabs'
+    ariaLabel: 'Content tabs',
+    children: <div>Tabs content</div>,
   },
 } satisfies Meta<typeof Tabs>;
 
@@ -165,10 +166,10 @@ export const Playground: Story = {
       return (
         <div style={{ display: 'flex', gap: '20px' }}>
           <Tabs {...args}>
-            <TabsList style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-              {createTabs(args.count, true, true)}
+            <TabsList>
+              {createTabs(args.count || 3, true, true)}
             </TabsList>
-            {createTabContent(args.count)}
+            {createTabContent(args.count || 3)}
           </Tabs>
         </div>
       );
@@ -178,9 +179,9 @@ export const Playground: Story = {
     return (
       <Tabs {...args}>
         <TabsList>
-          {createTabs(args.count, true, true)}
+          {createTabs(args.count || 3, true, true)}
         </TabsList>
-        {createTabContent(args.count)}
+        {createTabContent(args.count || 3)}
       </Tabs>
     );
   }
@@ -218,6 +219,7 @@ export const Default: Story = {
 export const Primary: Story = {
   args: {
     variant: 'primary',
+    children: <div>Primary tabs content</div>,
   },
   render: (args) => (
     <Tabs {...args}>
@@ -647,7 +649,7 @@ export const Count6: Story = {
 
 // Animation Showcase
 export const AnimationShowcase: Story = {
-  render: (args) => (
+  render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
       <div>
         <h3>Primary Tab Animation</h3>
@@ -1002,7 +1004,7 @@ export const CommonUseCases: Story = {
         <h3>Settings Panel with Vertical Tabs</h3>
         <Tabs defaultValue="account" variant="secondary" orientation="vertical" ariaLabel="Settings navigation">
           <div style={{ display: 'flex', gap: '20px' }}>
-            <TabsList style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+            <TabsList>
               <TabsTrigger value="account" icon={<IconUser size={18} />} description="Manage account settings">Account</TabsTrigger>
               <TabsTrigger value="security" icon={<IconSettings size={18} />} description="Adjust security options">Security</TabsTrigger>
               <TabsTrigger value="notifications" icon={<IconBell size={18} />} badge="2" description="Configure notifications">Notifications</TabsTrigger>

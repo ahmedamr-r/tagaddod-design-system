@@ -11,6 +11,11 @@ interface ThemeContextType {
   setDirection: (direction: Direction) => void;
   locale: Locale;
   setLocale: (locale: Locale) => void;
+  // Additional computed properties for convenience
+  isRTL: boolean;
+  themeClass: string;
+  dirClass: string;
+  localeClass: string;
 }
 
 export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -114,7 +119,12 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     direction,
     setDirection,
     locale,
-    setLocale
+    setLocale,
+    // Additional computed properties for convenience
+    isRTL: direction === 'rtl',
+    themeClass: `theme-${theme}`,
+    dirClass: `dir-${direction}`,
+    localeClass: `locale-${locale}`
   };
 
   return (

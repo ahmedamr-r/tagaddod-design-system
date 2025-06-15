@@ -1,4 +1,3 @@
-import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { Popover, PopoverProps, PopoverRoot, PopoverTrigger, PopoverContent, PopoverArrow, PopoverClose } from './Popover';
 import { Button } from '../Button/Button';
@@ -126,10 +125,10 @@ export const Compositions: Story = {
             <p style={{ margin: '0 0 1rem' }}>This popover contains a title and action buttons.</p>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
               <PopoverClose asChild>
-                <Button variant="secondary" size="sm">Cancel</Button>
+                <Button variant="secondary" size="micro">Cancel</Button>
               </PopoverClose>
               <PopoverClose asChild>
-                <Button size="sm">Confirm</Button>
+                <Button size="micro">Confirm</Button>
               </PopoverClose>
             </div>
           </div>
@@ -142,7 +141,7 @@ export const Compositions: Story = {
         <PopoverTrigger asChild>
           <Button>Custom Composition</Button>
         </PopoverTrigger>
-        <PopoverContent className={meta.component.name} sideOffset={5}>
+        <PopoverContent sideOffset={5}>
           <div style={{ padding: '0.5rem' }}>
             <h4>Custom Components</h4>
             <p>Using PopoverRoot, PopoverTrigger, and PopoverContent for more control.</p>

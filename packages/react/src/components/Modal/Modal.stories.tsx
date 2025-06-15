@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Modal } from './Modal';
 import { Button } from '../Button/Button';
@@ -132,7 +131,7 @@ export const WarningModal: Story = {
       </div>
     ),
     children: <div style={{ padding: '16px' }}>Please be careful with this action.</div>,
-    trigger: <Button tone="warning" prefixIcon={<IconAlertTriangle />}>Open Warning Modal</Button>,
+    trigger: <Button tone="neutral" prefixIcon={<IconAlertTriangle />}>Open Warning Modal</Button>,
   },
 };
 

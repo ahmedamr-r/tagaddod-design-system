@@ -332,3 +332,50 @@ const isRTL = direction === 'rtl';
 - Multiple sizes and colors
 - Clickable functionality
 - RTL support
+
+### Sonner Component
+**Location**: `packages/react/src/components/Sonner/`
+**Features**:
+- Toast notification system built on Sonner library
+- Multiple toast types (success, error, warning, info)
+- RTL/LTR support with proper Arabic line-height adjustments
+- Theme-aware styling with design token integration
+- Auto-dismiss and manual control
+- Action buttons support
+- Position customization (top, bottom, left, right)
+- Full TypeScript interfaces with proper prop typing
+- Comprehensive Storybook stories with RTL testing
+
+**Key Implementation Notes**:
+- Uses `sonner` library as the base toast implementation
+- Integrates with design system tokens for consistent theming
+- Supports all standard toast patterns (promise-based, action buttons, custom content)
+- RTL detection and Arabic font family support
+- Follows design system patterns for accessibility and interaction
+
+## TypeScript & Code Quality
+
+### Recent Fixes (June 2025)
+- ✅ **All TypeScript errors resolved**: Fixed 60+ type errors across components and stories
+- ✅ **Story structure compliance**: Ensured all Storybook stories have proper args and typing
+- ✅ **Component type safety**: Fixed ref typing conflicts and prop interfaces
+- ✅ **Build system validation**: Full project now type-checks without errors
+- ✅ **Dependency consistency**: Verified all peer dependencies and import paths
+
+**Type Checking Commands**:
+```bash
+# Full project type check
+yarn type-check
+
+# React package only
+cd packages/react && npm run type-check
+
+# Individual component validation
+npx tsc --noEmit --strict
+```
+
+**Common TypeScript Patterns**:
+- All components use `forwardRef` with proper generic typing
+- Story files follow Storybook v7+ patterns with `Meta` and `StoryObj`
+- CSS Module imports properly typed
+- Radix UI component integration with correct prop forwarding

@@ -5,7 +5,7 @@ import { Button } from '../components/Button/Button';
 
 // Component to display and change theme state with font information
 const ThemeDemo = () => {
-  const { theme, setTheme, direction, setDirection, locale, setLocale } = useTheme();
+  const { theme, setTheme, direction, setDirection, locale } = useTheme();
   const currentFont = locale === 'en' ? 'Outfit' : 'Tajawal';
   
   return (
@@ -206,8 +206,8 @@ const TypographyComparisonComponent = () => {
             </p>
             
             <div style={{ display: 'flex', gap: '8px' }}>
-              <Button variant="primary" size="sm">Primary</Button>
-              <Button variant="secondary" size="sm">Secondary</Button>
+              <Button variant="primary" size="micro">Primary</Button>
+              <Button variant="secondary" size="micro">Secondary</Button>
             </div>
           </div>
         </div>
@@ -252,8 +252,8 @@ const TypographyComparisonComponent = () => {
             </p>
             
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-              <Button variant="secondary" size="sm">ثانوي</Button>
-              <Button variant="primary" size="sm">أساسي</Button>
+              <Button variant="secondary" size="micro">ثانوي</Button>
+              <Button variant="primary" size="micro">أساسي</Button>
             </div>
           </div>
         </div>
@@ -399,6 +399,7 @@ const meta = {
     defaultDirection: 'ltr',
     defaultLocale: 'en',
     storageKey: 'tagaddod-theme',
+    children: <div>Theme Provider Content</div>,
   },
 } satisfies Meta<typeof ThemeProvider>;
 
@@ -415,6 +416,9 @@ export const Default: Story = {
 
 export const FontSwitchingDemo: Story = {
   name: '🎨 Font Switching Demo',
+  args: {
+    children: <FontSwitchingDemoComponent />,
+  },
   render: () => (
     <ThemeProvider>
       <FontSwitchingDemoComponent />
@@ -424,6 +428,9 @@ export const FontSwitchingDemo: Story = {
 
 export const TypographyComparison: Story = {
   name: '📝 Typography Comparison',
+  args: {
+    children: <TypographyComparisonComponent />,
+  },
   parameters: {
     layout: 'fullscreen',
   },
@@ -436,6 +443,9 @@ export const TypographyComparison: Story = {
 
 export const LanguageFontSwitcher: Story = {
   name: '🌐 Language & Font Switcher',
+  args: {
+    children: <LanguageFontSwitcherComponent />,
+  },
   render: () => (
     <ThemeProvider>
       <LanguageFontSwitcherComponent />
@@ -446,6 +456,7 @@ export const LanguageFontSwitcher: Story = {
 export const TagaddodTheme: Story = {
   args: {
     defaultTheme: 'tagaddod',
+    children: <ThemeDemo />,
   },
   render: (args) => (
     <ThemeProvider {...args}>
@@ -457,6 +468,7 @@ export const TagaddodTheme: Story = {
 export const GreenPanTheme: Story = {
   args: {
     defaultTheme: 'greenpan',
+    children: <ThemeDemo />,
   },
   render: (args) => (
     <ThemeProvider {...args}>
@@ -470,6 +482,7 @@ export const RtlDirection: Story = {
   args: {
     defaultDirection: 'rtl',
     defaultLocale: 'ar',
+    children: <ThemeDemo />,
   },
   render: (args) => (
     <ThemeProvider {...args}>
@@ -481,6 +494,7 @@ export const RtlDirection: Story = {
 export const CustomStorageKey: Story = {
   args: {
     storageKey: 'custom-theme-storage-key',
+    children: <ThemeDemo />,
   },
   render: (args) => (
     <ThemeProvider {...args}>
@@ -492,6 +506,9 @@ export const CustomStorageKey: Story = {
 // Demonstrates nesting theme providers with different fonts
 export const NestedThemeProviders: Story = {
   name: 'Nested Providers (Mixed Fonts)',
+  args: {
+    children: <div>Nested content</div>,
+  },
   render: () => (
     <ThemeProvider defaultTheme="tagaddod" defaultDirection="ltr">
       <div style={{ 
@@ -554,6 +571,9 @@ export const NestedThemeProviders: Story = {
 // Example with useThemeClasses hook for CSS class usage
 export const WithThemeClasses: Story = {
   name: 'useThemeClasses Hook',
+  args: {
+    children: <div>Theme classes content</div>,
+  },
   render: () => {
     const ThemeClassesDemo = () => {
       const { theme, setTheme, themeClass, dirClass, localeClass, isRTL, locale } = useTheme();

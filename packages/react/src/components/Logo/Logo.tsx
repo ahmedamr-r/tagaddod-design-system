@@ -79,26 +79,28 @@ export const Logo = forwardRef<HTMLDivElement, LogoProps>(
     );
 
     if (clickable) {
+      const { style, ...buttonProps } = props;
       return (
         <button
           ref={ref as React.Ref<HTMLButtonElement>}
           className={clsx(styles.container, styles.clickable, className)}
           onClick={onClick}
-          style={lineHeightStyle}
+          style={{...lineHeightStyle, ...style}}
           aria-label={ariaLabel}
-          {...props}
+          {...(buttonProps as React.ButtonHTMLAttributes<HTMLButtonElement>)}
         >
           <LogoContent />
         </button>
       );
     }
 
+    const { style, ...divProps } = props;
     return (
       <div
         ref={ref}
         className={clsx(styles.container, className)}
-        style={lineHeightStyle}
-        {...props}
+        style={{...lineHeightStyle, ...style}}
+        {...divProps}
       >
         <LogoContent />
       </div>

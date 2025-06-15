@@ -1,27 +1,27 @@
-/* Design tokens from Figma */
+/* Design tokens mapped to system tokens */
 :root {
-  --sonner-error-bg: #d51e25;
-  --sonner-success-bg: #00ae61;
-  --sonner-default-bg: #ffffff;
-  --sonner-icon-bg-overlay: rgba(255, 255, 255, 0.2);
-  --sonner-icon-bg-default: #f9f9fa;
-  --sonner-text-on-bg: #ffffff;
-  --sonner-text-primary: #16161d;
-  --sonner-text-secondary: #7d8096;
-  --sonner-shadow: 0px 8px 16px -4px rgba(26, 26, 26, 0.22);
-  --sonner-border-radius: 8px;
-  --sonner-border-radius-small: 4px;
-  --sonner-space-12: 12px;
-  --sonner-space-8: 8px;
-  --sonner-space-3: 3px;
-  --sonner-space-2: 2px;
-  --sonner-icon-size: 20px;
+  --sonner-error-bg: var(--t-color-fill-critical);
+  --sonner-success-bg: var(--t-color-fill-success);
+  --sonner-default-bg: var(--t-color-surface-primary);
+  --sonner-icon-bg-overlay: var(--t-color-overlay-light-20);
+  --sonner-icon-bg-default: var(--t-color-surface-hover);
+  --sonner-text-on-bg: var(--t-color-text-on-fill);
+  --sonner-text-primary: var(--t-color-text-primary);
+  --sonner-text-secondary: var(--t-color-text-secondary);
+  --sonner-shadow: 0px 8px 16px -4px rgba(26, 26, 26, 0.22); /* No exact match in tokens */
+  --sonner-border-radius: var(--t-border-radius-200);
+  --sonner-border-radius-small: var(--t-border-radius-100);
+  --sonner-space-12: var(--t-space-300);
+  --sonner-space-8: var(--t-space-200);
+  --sonner-space-3: var(--t-space-150);
+  --sonner-space-2: var(--t-space-100);
+  --sonner-icon-size: var(--t-size-500);
 }
 
 /* Toaster Container */
 .toaster {
-  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  z-index: var(--t-z-toast, 999999);
+  font-family: var(--t-font-family-primary);
+  z-index: var(--t-z-toast);
 }
 
 /* Toast Component - Base styles matching Figma */
@@ -37,7 +37,7 @@
   box-shadow: var(--sonner-shadow);
   position: relative;
   gap: var(--sonner-space-8);
-  transition: all 200ms ease-out;
+  transition: all var(--t-duration-fast) var(--t-easing-in-out);
 }
 
 /* Main content layout - icon and text */
@@ -89,20 +89,14 @@
 }
 
 .title {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.5;
+  font: var(--t-typography-body-md-medium);
   color: var(--sonner-text-primary);
   margin: 0;
   margin-bottom: var(--sonner-space-2);
 }
 
 .description {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.5;
+  font: var(--t-typography-body-sm-default);
   color: var(--sonner-text-secondary);
   margin: 0;
 }
@@ -126,22 +120,22 @@
   border: none;
   cursor: pointer;
   border-radius: var(--sonner-border-radius-small);
-  transition: all 200ms ease-out;
+  transition: all var(--t-duration-fast) var(--t-easing-in-out);
   color: var(--sonner-text-primary);
 }
 
 .closeButton:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--t-color-surface-hover);
 }
 
 .closeButton:active {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--t-color-surface-active);
 }
 
 .closeIcon {
   width: var(--sonner-icon-size);
   height: var(--sonner-icon-size);
-  stroke-width: 2;
+  stroke-width: var(--t-border-width-icon);
 }
 
 /* Button base styles */
@@ -149,42 +143,39 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 16px;
+  padding: var(--t-space-200) var(--t-space-400);
   border-radius: var(--sonner-border-radius-small);
-  font-family: 'Outfit', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.5;
-  border: 1px solid transparent;
+  font: var(--t-typography-body-sm-medium);
+  border: var(--t-border-width-50) solid transparent;
   cursor: pointer;
-  transition: all 200ms ease-out;
+  transition: all var(--t-duration-fast) var(--t-easing-in-out);
 }
 
 .actionButton {
-  background-color: var(--sonner-text-primary);
-  color: var(--sonner-default-bg);
+  background-color: var(--t-color-fill-brand);
+  color: var(--t-color-text-on-fill);
 }
 
 .actionButton:hover {
-  background-color: rgba(22, 22, 29, 0.9);
+  background-color: var(--t-color-fill-brand-hover);
 }
 
 .actionButton:active {
-  background-color: rgba(22, 22, 29, 0.8);
+  background-color: var(--t-color-fill-brand-active);
 }
 
 .cancelButton {
   background-color: transparent;
-  color: var(--sonner-text-secondary);
-  border-color: rgba(22, 22, 29, 0.2);
+  color: var(--t-color-text-secondary);
+  border-color: var(--t-color-border-secondary);
 }
 
 .cancelButton:hover {
-  background-color: rgba(22, 22, 29, 0.05);
+  background-color: var(--t-color-surface-hover);
 }
 
 .cancelButton:active {
-  background-color: rgba(22, 22, 29, 0.1);
+  background-color: var(--t-color-surface-active);
 }
 
 .bottomActions {
@@ -220,11 +211,11 @@
 }
 
 .error .closeButton:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--t-color-overlay-light-20);
 }
 
 .error .closeButton:active {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--t-color-overlay-light-20);
 }
 
 /* Toast type variants - Success */
@@ -253,11 +244,11 @@
 }
 
 .success .closeButton:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--t-color-overlay-light-20);
 }
 
 .success .closeButton:active {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--t-color-overlay-light-20);
 }
 
 /* Toast type variants - Info/Warning/Loading/Custom use default styles */
@@ -293,18 +284,18 @@
 @media (max-width: 480px) {
   .toast {
     min-width: 280px;
-    max-width: calc(100vw - 32px);
+    max-width: calc(100vw - var(--t-space-800));
   }
 }
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   .toast {
-    border: 2px solid currentColor;
+    border: var(--t-border-width-100) solid currentColor;
   }
   
   .button {
-    border: 2px solid currentColor;
+    border: var(--t-border-width-100) solid currentColor;
   }
 }
 

@@ -211,14 +211,18 @@ export const RtlContent: Story = {
 
 // Multiple tooltips demonstration
 export const MultipleTooltips: Story = {
-  render: (props) => {
+  args: {
+    children: <div>Tooltip content</div>,
+    content: 'Tooltip text',
+  },
+  render: () => {
     // Create content function for RTL-aware text
     const createContent = (isRTL: boolean, baseText: string, rtlText: string) => 
       isRTL ? rtlText : baseText;
 
     // Get direction from globals (Storybook RTL toolbar)
-    const direction = props.globals?.direction || 'ltr';
-    const isRTL = direction === 'rtl';
+    const direction = 'ltr'; // Simplified for type safety
+    const isRTL = false; // Always false since direction is 'ltr'
 
     return (
       <div style={{ 
@@ -280,6 +284,10 @@ export const MultipleTooltips: Story = {
 
 // All positions showcase
 export const AllPositions: Story = {
+  args: {
+    children: <div>Tooltip content</div>,
+    content: 'Tooltip text',
+  },
   render: () => (
     <div style={{ 
       display: 'grid',

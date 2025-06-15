@@ -13,8 +13,6 @@ export interface TooltipProps {
   children: React.ReactNode;
   /** How long to delay opening the tooltip in ms */
   delayDuration?: number;
-  /** Whether to skip the delay when moving between tooltip triggers */
-  skipDelayDuration?: number;
   /** The preferred side of the trigger to render against. If not specified, Radix will automatically position the tooltip based on available space */
   side?: TooltipSide;
   /** The alignment relative to the trigger */
@@ -38,7 +36,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
   content,
   children,
   delayDuration = 200,
-  skipDelayDuration = 300,
   side,
   align = 'center',
   sideOffset = 8,
@@ -62,7 +59,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
   return (
     <TooltipPrimitive.Root 
       delayDuration={delayDuration}
-      skipDelayDuration={skipDelayDuration}
     >
       <TooltipPrimitive.Trigger asChild>
         {children}

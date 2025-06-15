@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Listbox, ListboxOption } from './';
-import { Popover, PopoverContent, PopoverTrigger, PopoverRoot } from '../Popover';
-import { Button } from '../Button';
-import buttonStyles from '../Button/Button.module.css';
+import { Listbox } from './';
+import { PopoverContent, PopoverTrigger, PopoverRoot } from '../Popover';
 import { IconSquareCheck, IconSquare, IconCheck, IconTag, IconStar, IconChevronDown } from '@tabler/icons-react';
 
 const meta = {
@@ -117,6 +115,10 @@ export const WithHelpText: Story = {
 
 // Interactive story with multiple selection
 export const MultiSelect: Story = {
+  args: {
+    options: [],
+    inPopover: false,
+  },
   render: () => {
     const [selected, setSelected] = useState<string[]>(['option1', 'option3']);
     
@@ -147,7 +149,7 @@ export const MultiSelect: Story = {
           ]}
           selectedValue={selected}
           multiple={true}
-          onMultiSelect={setSelected}
+          onMultiSelect={(values) => setSelected(values as string[])}
           inPopover={false}
         />
       </div>
@@ -225,6 +227,10 @@ export const WithDividers: Story = {
 
 // In Popover - Interactive example
 export const InPopover: Story = {
+  args: {
+    options: [],
+    inPopover: true,
+  },
   render: () => {
     const [selectedOption, setSelectedOption] = useState('filter1');
     const [open, setOpen] = useState(false);

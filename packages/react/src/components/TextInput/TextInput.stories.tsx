@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { TextInput } from './TextInput';
-import { IconSearch, IconMail, IconUser, IconLock, IconCurrencyDollar } from '@tabler/icons-react';
+import { IconSearch, IconMail, IconUser, IconCurrencyDollar } from '@tabler/icons-react';
 
 const meta = {
   title: 'Components/TextInput',
