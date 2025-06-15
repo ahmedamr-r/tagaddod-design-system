@@ -1,0 +1,301 @@
+/* Sonner Toaster Container */
+.toaster {
+  --sonner-font-family: var(--t-font-family-primary);
+  --sonner-text-size: var(--t-font-size-400);
+  font-family: var(--sonner-font-family);
+  font-size: var(--sonner-text-size);
+}
+
+/* Sonner Toast Base Styling - matching Toast component design */
+.toast {
+  /* Height constraints using design tokens */
+  min-height: 3rem; /* 48px equivalent */
+  max-height: 4rem; /* 64px equivalent */
+  
+  /* Base styling matching Figma */
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg-surface, #ffffff);
+  border-radius: var(--border-radius-200, 8px);
+  padding: var(--space-300, 12px);
+  box-shadow: 0px 8px 16px -4px rgba(26, 26, 26, 0.22);
+  width: 360px;
+  border: none;
+  
+  /* Font and text */
+  font-family: var(--t-font-family-primary);
+  color: var(--color-text, #16161d);
+}
+
+/* Toast type variants - background colors matching Toast component */
+.success {
+  background-color: var(--color-bg-fill-success, #00ae61);
+}
+
+.error {
+  background-color: var(--color-bg-fill-critical, #d51e25);
+}
+
+.default {
+  background-color: var(--color-bg-surface, #ffffff);
+}
+
+/* Sonner built-in title and description styling */
+.title {
+  font-family: var(--t-font-family-primary);
+  font-size: 16px; /* body-md size */
+  font-weight: 500; /* medium weight */
+  line-height: 1.5;
+  margin: 0;
+  color: var(--color-text, #16161d);
+}
+
+.description {
+  font-family: var(--t-font-family-primary);
+  font-size: 14px; /* body-sm size */
+  font-weight: 400; /* default/regular weight */
+  line-height: 1.5;
+  margin: 0;
+  color: var(--color-text-secondary, #7d8096);
+}
+
+.closeButton {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-secondary, #7d8096);
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* Custom toast content styling - same as Toast component */
+.customToast {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.content {
+  /* Height constraints using design tokens */
+  min-height: 3rem; /* 48px equivalent */
+  max-height: 4rem; /* 64px equivalent */
+  
+  /* Base styling matching Figma */
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg-surface, #ffffff);
+  border-radius: var(--border-radius-200, 8px);
+  padding: var(--space-300, 12px);
+  box-shadow: 0px 8px 16px -4px rgba(26, 26, 26, 0.22);
+  width: 360px;
+  position: relative;
+  
+  /* Animation */
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+/* Content layout */
+.content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-300, 12px);
+  width: 100%;
+  min-height: 0;
+}
+
+/* Icon styling - same as Toast component */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-icon, #16161d);
+}
+
+/* Icon with background container */
+.iconWithBackground {
+  background-color: var(--color-bg, #f9f9fa);
+  border-radius: var(--border-radius-100, 4px);
+  padding: var(--space-300, 12px);
+  width: 44px;
+  height: 44px;
+}
+
+/* Icon background for success and error types */
+.success .iconWithBackground,
+.error .iconWithBackground {
+  background-color: var(--color-overlay-light-20, #f7f7f8);
+}
+
+/* Icon without background - smaller size */
+.icon:not(.iconWithBackground) {
+  width: 20px;
+  height: 20px;
+}
+
+/* Icon colors for types when no background */
+.success .icon:not(.iconWithBackground) {
+  color: var(--color-text-on-bg-fill, #ffffff);
+}
+
+.error .icon:not(.iconWithBackground) {
+  color: var(--color-text-on-bg-fill, #ffffff);
+}
+
+.default .icon:not(.iconWithBackground) {
+  color: var(--color-icon, #16161d);
+}
+
+/* Text content */
+.text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--t-space-050, 2px);
+}
+
+/* Custom title styling - body-md-medium equivalent */
+.customTitle {
+  font-family: var(--t-font-family-primary);
+  font-size: 16px; /* body-md size */
+  font-weight: 500; /* medium weight */
+  line-height: 1.5;
+  margin: 0;
+  
+  /* Text overflow handling */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Custom title colors based on type */
+.default .customTitle {
+  color: var(--color-text, #16161d);
+}
+
+.success .customTitle,
+.error .customTitle {
+  color: var(--color-text-on-bg-fill, #ffffff);
+}
+
+/* Custom description styling - body-sm-default equivalent */
+.customDescription {
+  font-family: var(--t-font-family-primary);
+  font-size: 14px; /* body-sm size */
+  font-weight: 400; /* default/regular weight */
+  line-height: 1.5;
+  margin: 0;
+  
+  /* Multi-line text overflow handling */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Custom description colors based on type */
+.default .customDescription {
+  color: var(--color-text-secondary, #7d8096);
+}
+
+.success .customDescription,
+.error .customDescription {
+  color: var(--color-text-on-bg-fill, #ffffff);
+}
+
+/* Custom close button */
+.customClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: var(--border-radius-050, 2px);
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
+}
+
+/* Force the SVG icon to be 20px */
+.customClose svg {
+  width: 20px !important;
+  height: 20px !important;
+  stroke-width: 1.5;
+}
+
+/* Custom close button colors based on type */
+.default .customClose {
+  color: var(--color-text-secondary, #7d8096);
+}
+
+.success .customClose,
+.error .customClose {
+  color: var(--color-text-on-bg-fill, #ffffff);
+}
+
+.customClose:hover {
+  opacity: 0.8;
+}
+
+.customClose:focus {
+  outline: 2px solid var(--t-color-border-focus);
+  outline-offset: 1px;
+}
+
+/* Line height trim for English text */
+.customTitle::before,
+.customTitle::after,
+.customDescription::before,
+.customDescription::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.customTitle::before,
+.customDescription::before {
+  margin-top: -0.15em;
+}
+
+.customTitle::after,
+.customDescription::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic text adjustment (larger trim) */
+:global([dir="rtl"]) .customTitle::before,
+:global([dir="rtl"]) .customDescription::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .customTitle::after,
+:global([dir="rtl"]) .customDescription::after {
+  margin-bottom: -0.25em;
+}
+
+/* RTL adjustments */
+:global([dir="rtl"]) .customTitle,
+:global([dir="rtl"]) .customDescription {
+  font-family: var(--t-font-family-arabic, var(--t-font-family-primary));
+  text-align: right;
+}
+
+/* Toast type background for content container */
+.content.success {
+  background-color: var(--color-bg-fill-success, #00ae61);
+}
+
+.content.error {
+  background-color: var(--color-bg-fill-critical, #d51e25);
+}
+
+.content.default {
+  background-color: var(--color-bg-surface, #ffffff);
+}
