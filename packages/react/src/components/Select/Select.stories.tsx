@@ -122,6 +122,15 @@ export const WithValue: Story = {
   },
 };
 
+export const InsideLabel: Story = {
+  args: {
+    label: 'Country',
+    placeholder: 'Select your country...',
+    options: countryOptions,
+    defaultValue: 'us',
+  },
+};
+
 export const WithPrefix: Story = {
   args: {
     label: 'User Type',

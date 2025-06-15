@@ -52,45 +52,36 @@ const options = [
 />
 ```
 
-## Label Positioning
+## Label and Selection Display
 
-The Select component supports two label positions: above the field (default) or inside the field.
+The Select component displays the label above the field and shows the currently selected value when an option is chosen.
 
-### Label Above Field
+### Basic Usage with Label
 
 <Canvas of={SelectStories.Default} />
 
 ```jsx
 <Select
   label="Country"
-  labelPosition="above"
   placeholder="Select your country..."
   options={countryOptions}
 />
 ```
 
-### Label Inside Field
+### With Selected Value Display
 
 <Canvas of={SelectStories.InsideLabel} />
 
 ```jsx
 <Select
   label="Country"
-  labelPosition="inside"
   placeholder="Select your country..."
+  defaultValue="us"
   options={countryOptions}
 />
 ```
 
-**When to use inside labels:**
-- When vertical space is limited
-- For cleaner, more modern interfaces
-- When you want to reduce visual clutter
-
-**When to use above labels:**
-- When clarity is most important
-- For better accessibility (always visible)
-- When label text is long
+The component automatically displays the selected option's label, making it clear what has been chosen while keeping the original label visible for context.
 
 ## Sizes
 
@@ -294,7 +285,6 @@ const ContactForm = () => (
     
     <Select
       label="Priority Level"
-      labelPosition="inside"
       options={[
         { value: 'low', label: 'Low' },
         { value: 'medium', label: 'Medium' },
@@ -463,8 +453,8 @@ The Select component fully supports Right-to-Left (RTL) languages like Arabic:
 <div dir="rtl">
   <Select
     label="اختر الفاكهة المفضلة"
-    labelPosition="inside"
     placeholder="اختر فاكهة..."
+    defaultValue="banana"
     options={arabicOptions}
   />
 </div>
@@ -626,8 +616,7 @@ interface SelectProps {
   /** Text label for the select */
   label?: string;
   
-  /** Position of the label */
-  labelPosition?: 'above' | 'inside';
+
   
   /** Help text displayed below the select */
   helpText?: string;
@@ -691,13 +680,10 @@ interface SelectOption {
 ### Constants
 
 ```jsx
-import { selectSizes, selectLabelPositions } from '@tagaddod-design/react';
+import { selectSizes } from '@tagaddod-design/react';
 
 // Available sizes: ['micro', 'medium', 'large']
 console.log(selectSizes);
-
-// Available label positions: ['above', 'inside']
-console.log(selectLabelPositions);
 ```
 
 ## Testing
