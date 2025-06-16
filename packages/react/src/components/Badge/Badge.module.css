@@ -9,19 +9,19 @@
 
 /* Size variants */
 .size-medium {
-  height: 1.5rem; /* 24px */
+  height:  var(--t-size-600)	; /* 24px */
   padding-inline: var(--t-space-200); /* 8px */
   font: var(--t-typography-caption-lg-medium); /* Typography Caption Large Medium */
 }
 
 .size-large {
-  height: 1.75rem; /* 28px */
+  height: var(--t-size-700); /* 28px */
   padding-inline: var(--t-space-200); /* 8px */
   font: var(--t-typography-caption-lg-medium); /* Typography Caption Large Medium */
 }
 
 .size-xlarge {
-  height: 2.25rem; /* 36px */
+  height: var(--t-size-900); /* 36px */
   padding-inline: var(--t-space-300); /* 12px */
   font: var(--t-typography-body-sm-medium); /* Typography Body Small Medium */
 }
@@ -116,7 +116,7 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .label::before {
-  margin-top: 0.09em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .label::after {

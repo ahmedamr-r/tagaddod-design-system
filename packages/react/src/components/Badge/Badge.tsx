@@ -55,6 +55,27 @@ export const Badge: React.FC<BadgeProps> = ({
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
 
+  // Clone icon with proper size based on badge size
+  const renderIcon = () => {
+    if (!icon) return null;
+    
+    // Determine icon size based on badge size using design tokens
+    const iconSize = size === 'xlarge' ? 'var(--t-size-500)' : 'var(--t-size-400)'; // 20px for xlarge, 16px for medium/large
+    
+    // Clone the icon element and apply size
+    if (React.isValidElement(icon)) {
+      return React.cloneElement(icon as React.ReactElement<any>, {
+        style: {
+          width: iconSize,
+          height: iconSize,
+          ...((icon as React.ReactElement<any>).props?.style || {})
+        }
+      });
+    }
+    
+    return icon;
+  };
+
   return (
     <span 
       className={clsx(
@@ -67,7 +88,7 @@ export const Badge: React.FC<BadgeProps> = ({
       style={lineHeightStyle}
       {...props}
     >
-      {icon && <span className={styles.icon}>{icon}</span>}
+      {icon && <span className={styles.icon}>{renderIcon()}</span>}
       <span className={styles.label} style={lineHeightStyle}>{children}</span>
     </span>
   );

@@ -72,15 +72,15 @@
 }
 
 .checkbox[data-disabled] {
-  opacity: 0.5;
+  opacity: 1;
   cursor: not-allowed;
   background-color: var(--t-color-surface-disabled);
-  border-color: var(--t-color-border-disabled);
+border: 0;
 }
 
 .checkbox[data-disabled]:hover {
   background-color: var(--t-color-surface-disabled);
-  border-color: var(--t-color-border-disabled);
+  /* border-color: var(--t-color-border-disabled); */
 }
 
 .indicator {
@@ -273,9 +273,3 @@ font: var(--t-typography-body-sm-default);
   display: block;
 }
 
-/* Responsive adjustments */
-@media (max-width: 640px) {
-  .label {
-    font-size: var(--t-font-size-300);
-  }
-}

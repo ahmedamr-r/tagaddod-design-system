@@ -1,4 +1,4 @@
-/* Avatar Component Styles */
+ /* Avatar Component Styles */
 
 .avatar {
   display: inline-flex;
@@ -6,7 +6,7 @@
   justify-content: center;
   overflow: hidden;
   border-radius: var(--t-border-radius-full);
-  background-color: var(--t-color-fill-brand-secondary);
+  background-color: var(--t-color-fill-brand);
   position: relative;
   /* This will ensure the avatar maintains aspect ratio */
   aspect-ratio: 1 / 1;
@@ -48,13 +48,13 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-color: var(--t-color-fill-brand-secondary);
-  color: var(--t-color-text-primary);
+  background-color: var(--t-color-fill-brand);
+  color: var(--t-color-text-on-fill);
 }
 
 /* Icon style - base */
 .icon {
-  color: var(--t-color-text-primary);
+  color: var(--t-color-icon-on-fill);
 }
 
 /* Icon size variants */
@@ -82,7 +82,7 @@
 .initial {
   font-family: var(--t-font-family-primary);
   font-weight: var(--t-font-weight-medium);
-  color: var(--t-color-text-primary);
+  color: var(--t-color-text-on-fill);
   position: relative;
   text-align: center;
   line-height: 1;
@@ -90,19 +90,19 @@
 
 /* Initial text size variants */
 .sizeSm .initial {
-  font-size: var(--t-font-size-300);  /* 0.75rem */
+  font: var(--t-typography-caption-lg-default);
 }
 
 .sizeMd .initial {
-  font-size: var(--t-font-size-350);  /* 0.875rem */
+  font: var(--t-typography-body-sm-default);
 }
 
 .sizeLg .initial {
-  font-size: var(--t-font-size-400);  /* 1rem */
+  font: var(--t-typography-body-md-default);
 }
 
 .sizeXl .initial {
-  font-size: var(--t-font-size-600);  /* 1.5rem */
+  font: var(--t-typography-heading-sm);
 }
 
 /* Line height trim for all languages */
