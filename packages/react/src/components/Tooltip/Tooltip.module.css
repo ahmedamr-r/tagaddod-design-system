@@ -1,13 +1,11 @@
 .content {
-  background-color: var(--color-bg-overlay-20, #16161dd9);
+  background-color: var(--t-color-overlay-dark-85);
   color: var(--color-text-on-bg-fill, #ffffff);
-  font-family: var(--t-font-family-primary);
-  font-size: 14px;
-  font-weight: 400;
+ font: var(--t-typography-body-sm-default);
   line-height: 1.5;
-  padding: var(--space-300, 12px);
-  border-radius: var(--border-radius-200, 8px);
-  max-width: 200px;
+  padding: var(--t-space-200);
+  border-radius: var( --t-border-radius-200);
+  max-width: 12.5rem;
   word-wrap: break-word;
   z-index: 50;
   position: relative;
@@ -45,7 +43,7 @@
 }
 
 .arrow {
-  fill: var(--color-bg-overlay-20, #16161dd9);
+  fill: var(--t-color-overlay-dark-85);
   width: 8px;
   height: 4px;
 }
