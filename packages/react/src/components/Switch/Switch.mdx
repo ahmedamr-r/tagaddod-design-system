@@ -1,0 +1,336 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as SwitchStories from './Switch.stories';
+import { Switch } from './Switch';
+
+<Meta of={SwitchStories} />
+
+# Switch Component
+
+The Switch component allows users to toggle between two states, typically "on" and "off". It provides a clear visual indication of the current state and smooth transitions between states.
+
+## Overview
+
+Switches are ideal for settings and preferences where users need to enable or disable features instantly. Unlike checkboxes, switches immediately apply the change and typically don't require form submission.
+
+## Import
+
+```jsx
+import { Switch } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={Switch} />
+
+## Basic Usage
+
+<Canvas of={SwitchStories.Default} />
+
+```jsx
+<Switch />
+```
+
+## States
+
+### Default (Off)
+
+The switch starts in the "off" position by default.
+
+<Canvas of={SwitchStories.Default} />
+
+```jsx
+<Switch defaultPressed={false} />
+```
+
+### Pressed (On)
+
+The switch can start in the "on" position.
+
+<Canvas of={SwitchStories.Pressed} />
+
+```jsx
+<Switch defaultPressed={true} />
+```
+
+### Disabled
+
+Disabled switches cannot be interacted with.
+
+<Canvas of={SwitchStories.Disabled} />
+
+```jsx
+<Switch disabled={true} />
+```
+
+### Disabled and Pressed
+
+Disabled switches retain their visual state.
+
+<Canvas of={SwitchStories.DisabledPressed} />
+
+```jsx
+<Switch 
+  disabled={true} 
+  defaultPressed={true} 
+/>
+```
+
+## Sizes
+
+The Switch component comes in two sizes to fit different use cases.
+
+### Small
+
+Use the small size (20px height) for compact interfaces or when space is limited.
+
+<Canvas of={SwitchStories.Small} />
+
+```jsx
+<Switch size="sm" />
+```
+
+### Medium (Default)
+
+The medium size (24px height) is the default and works well for most interfaces.
+
+```jsx
+<Switch size="md" />
+```
+
+## Interactive Example
+
+<Canvas of={SwitchStories.Interactive} />
+
+```jsx
+function ToggleExample() {
+  const [isPressed, setIsPressed] = useState(false);
+  
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <Switch 
+        pressed={isPressed} 
+        onPressedChange={setIsPressed} 
+      />
+      <span>Switch is {isPressed ? 'on' : 'off'}</span>
+    </div>
+  );
+}
+```
+
+## Internationalization
+
+The Switch component automatically handles Right-to-Left (RTL) languages by:
+
+1. Reversing the thumb animation direction
+2. Maintaining proper visual hierarchy in RTL contexts
+3. Ensuring accessible interaction patterns work in all directions
+
+<Canvas of={SwitchStories.RTLSupport} />
+
+```jsx
+<div dir="rtl">
+  <Switch />
+</div>
+```
+
+## All Variants
+
+<Canvas of={SwitchStories.AllVariants} />
+
+## Controlled Usage
+
+You can control the switch state and handle changes:
+
+```jsx
+import { useState } from 'react';
+
+function ControlledSwitch() {
+  const [isPressed, setIsPressed] = useState(false);
+  
+  return (
+    <Switch 
+      pressed={isPressed}
+      onPressedChange={setIsPressed}
+    />
+  );
+}
+```
+
+## Uncontrolled Usage
+
+For simple cases, you can use the switch in uncontrolled mode:
+
+```jsx
+function UncontrolledSwitch() {
+  return (
+    <Switch 
+      defaultPressed={false}
+      onPressedChange={(pressed) => console.log('Switch is:', pressed ? 'on' : 'off')}
+    />
+  );
+}
+```
+
+## Form Integration
+
+Switch is built on Radix UI's Switch component, making it compatible with forms:
+
+```jsx
+<form onSubmit={handleSubmit}>
+  <label htmlFor="notifications">
+    Enable notifications
+    <Switch 
+      id="notifications"
+      name="notifications" 
+      defaultPressed={true}
+    />
+  </label>
+  <button type="submit">Save Settings</button>
+</form>
+```
+
+## Accessibility
+
+- The switch is keyboard accessible (Space or Enter to toggle)
+- Clear focus indicators for keyboard navigation
+- Proper ARIA attributes for screen readers
+- Visual state changes are also communicated to assistive technologies
+- Disabled state is properly announced to screen readers
+- Follows WCAG guidelines for interactive elements
+
+## Common Use Cases
+
+### Settings Toggle
+
+```jsx
+<div>
+  <label>
+    Dark mode
+    <Switch defaultPressed={false} />
+  </label>
+</div>
+```
+
+### Feature Enablement
+
+```jsx
+<div>
+  <Switch 
+    pressed={feature.enabled}
+    onPressedChange={(enabled) => updateFeature({ enabled })}
+  />
+  <span>Advanced features</span>
+</div>
+```
+
+### Notification Preferences
+
+```jsx
+<div>
+  <Switch 
+    pressed={settings.emailNotifications}
+    onPressedChange={(enabled) => 
+      updateSettings({ emailNotifications: enabled })
+    }
+  />
+  <span>Email notifications</span>
+</div>
+```
+
+### Multiple Settings
+
+```jsx
+function NotificationSettings() {
+  const [settings, setSettings] = useState({
+    email: true,
+    push: false,
+    sms: false
+  });
+
+  const updateSetting = (key, value) => {
+    setSettings(prev => ({ ...prev, [key]: value }));
+  };
+
+  return (
+    <div>
+      <div>
+        <Switch 
+          pressed={settings.email}
+          onPressedChange={(value) => updateSetting('email', value)}
+        />
+        <span>Email notifications</span>
+      </div>
+      <div>
+        <Switch 
+          pressed={settings.push}
+          onPressedChange={(value) => updateSetting('push', value)}
+        />
+        <span>Push notifications</span>
+      </div>
+      <div>
+        <Switch 
+          pressed={settings.sms}
+          onPressedChange={(value) => updateSetting('sms', value)}
+        />
+        <span>SMS notifications</span>
+      </div>
+    </div>
+  );
+}
+```
+
+## Implementation Details
+
+### CSS Variables
+
+The Switch uses the following design token CSS variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-border-radius-full` | Rounded corners for switch track and thumb |
+| `--t-color-fill-brand-secondary` | Default track background |
+| `--t-color-fill-brand-secondary-hover` | Hover state background |
+| `--t-color-blue-1300` | Pressed state background |
+| `--t-color-blue-1200` | Pressed hover state background |
+| `--t-color-gray-700` | Disabled state background |
+| `--t-color-gray-100` | Thumb background color |
+| `--t-shadow-popover` | Thumb shadow |
+| `--t-border-width-50` | Focus outline width |
+| `--t-size-100` | Focus outline offset |
+
+### Animation
+
+The switch includes smooth transitions that match the design specifications:
+
+- **Background color transition**: 100ms ease-in-out for state changes
+- **Hover transitions**: 200ms linear for interactive feedback
+- **Thumb movement**: 100ms ease-in-out for position changes
+- **Enhanced hover effects**: Subtle shadow changes on thumb
+
+### Architecture
+
+The component is built on Radix UI's Switch component, which provides:
+
+1. Accessibility features and keyboard navigation
+2. State management for controlled and uncontrolled modes
+3. Proper ARIA attributes and roles
+4. Cross-browser compatibility
+
+The custom implementation adds:
+
+1. Design system styling through CSS modules
+2. RTL support with proper directional animations
+3. Size variants (small and medium)
+4. Hover and focus states
+5. Smooth transitions and animations
+
+### Browser Support
+
+The Switch component is compatible with all modern browsers and includes proper RTL support for international applications.
+
+### Performance
+
+- Uses CSS transforms for smooth animations
+- Minimal re-renders through proper state management
+- Optimized for both controlled and uncontrolled usage patterns
+- Lightweight implementation with no unnecessary dependencies

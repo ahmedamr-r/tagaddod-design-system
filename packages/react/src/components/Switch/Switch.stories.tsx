@@ -8,9 +8,7 @@ const meta = {
   parameters: {
     layout: 'centered',
     docs: {
-      description: {
-        component: 'A switch component that allows users to toggle between checked and not checked states.',
-      },
+      page: () => import('./Switch.mdx'),
     },
   },
   argTypes: {

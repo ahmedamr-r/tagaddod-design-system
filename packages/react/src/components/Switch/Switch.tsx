@@ -81,8 +81,7 @@ export const Switch = React.forwardRef<
       <SwitchPrimitive.Thumb 
         className={clsx(
           styles.thumb,
-          size === 'sm' ? styles.thumbSm : styles.thumbMd,
-          isPressed && styles.thumbPressed
+          size === 'sm' ? styles.thumbSm : styles.thumbMd
         )}
       />
     </SwitchPrimitive.Root>

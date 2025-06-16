@@ -9,22 +9,31 @@
   font-family: var(--t-font-family-primary);
 }
 
-/* TabsList styles */
+/* Base TabsList styles - shared properties only */
 .tabsList {
   display: flex;
   position: relative;
-  border-bottom: 1px solid var(--t-color-border-secondary);
   align-items: normal; /* Center align items properly */
 }
 
-/* Vertical orientation */
+/* Vertical orientation - base styles */
 .tabsRoot[data-orientation="vertical"] .tabsList {
   flex-direction: column;
   align-items: flex-start;
-  border-bottom: none;
-  border-right: 1px solid var(--t-color-border-secondary);
   margin-right: var(--t-space-400);
   padding-right: var(--t-space-200);
+}
+
+/* Vertical orientation - Primary variant */
+.tabsRoot[data-orientation="vertical"] .variantPrimary .tabsList {
+  border-bottom: none;
+  border-right: 1px solid var(--t-color-border-secondary);
+}
+
+/* Vertical orientation - Secondary variant */
+.tabsRoot[data-orientation="vertical"] .variantSecondary .tabsList {
+  border-bottom: none;
+  border-right: none;
 }
 
 /* Fitted styles */
@@ -36,21 +45,15 @@
   flex: 1;
 }
 
-/* TabsTrigger styles */
+/* Base TabsTrigger styles - shared properties only */
 .tabsTrigger {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--t-space-100);
-  padding: var(--t-space-200) var(--t-space-300);
   margin: 0;
   background: transparent;
   border: none;
   cursor: pointer;
-    font-family: var(--t-font-family-primary);
-  font-size: var(--t-font-size-350);
-  font-weight: var(--t-font-weight-medium);
-  color: var(--t-color-text-secondary);
   transition: all var(--t-duration-base) var(--t-easing-in-out);
   position: relative;
   outline: none;
@@ -58,33 +61,10 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Create a before element for hover effect - this gives the proper padding around the tab content */
-.tabsTrigger::before {
-  content: '';
-  position: absolute;
-  top: 4px;  /* Adjusted to give slight padding */
-  left: 4px;  /* Adjusted to give slight padding */
-  right: 4px;  /* Adjusted to give slight padding */
-  bottom: 4px;  /* Adjusted to give slight padding */
-  border-radius: var(--t-border-radius-200);
-  transition: all var(--t-duration-base) var(--t-easing-in-out);
-  z-index: 0;
-}
-
 /* Ensure tab content is above the hover background */
 .tabsLabel, .tabsIcon, .tabsBadge {
-    font-family: var(--t-font-family-primary);
-
   position: relative;
   z-index: 1;
-}
-
-.tabsTrigger:hover {
-  color: var(--t-color-text-primary);
-}
-
-.tabsTrigger:hover::before {
-  background-color: var(--t-color-fill-hover);
 }
 
 .tabsTrigger:focus-visible {
@@ -92,25 +72,62 @@
   border-radius: var(--t-border-radius-100);
 }
 
-.tabsTrigger[data-state="active"] {
-  color: var(--t-color-text-link);
-  font-weight: var(--t-font-weight-semibold);
+/* ========================================
+   VARIANT: PRIMARY (Underlined tabs)
+   Height: 56px (3.5rem)
+   ======================================== */
+
+.variantPrimary .tabsList {
+  background-color: var(--t-color-surface-primary); /* White background for primary */
+  border-bottom: 1px solid var(--t-color-border-secondary);
 }
 
-.tabsTrigger[data-state="active"]::before {
-  background-color: transparent; /* No background for active tab */
-}
-
-/* Variant: Primary (Underlined tabs) */
 .variantPrimary .tabsTrigger {
-  padding-bottom: var(--t-space-300);
+  
+  gap: var(--t-space-100);
+  padding: var(--t-space-300) var(--t-space-400);
+  height: var(--t-size-1400); /* 56px - Fixed height for primary tabs */
+  font: var(--t-typography-body-sm-medium);
+  color: var(--t-color-text-secondary);
   margin-bottom: -1px; /* To overlap the bottom border */
 }
 
-/* Specific styling for hover state in primary variant */
+/* Create a before element for hover effect in primary variant */
+.variantPrimary .tabsTrigger::before {
+  content: '';
+  position: absolute;
+  top: 11px;  /* Adjusted to give slight padding */
+  left: 4px;  /* Adjusted to give slight padding */
+  right: 4px;  /* Adjusted to give slight padding */
+  bottom: 11px;  /* Adjusted to not overlap with the underline */
+  border-radius: var(--t-border-radius-200);
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
+  z-index: 0;
+}
+
+.variantPrimary .tabsTrigger:hover {
+  color: var(--t-color-text-primary);
+}
+
 .variantPrimary .tabsTrigger:hover::before,
 .variantPrimary .tabsTriggerHover::before {
-  bottom: 2px; /* Adjust to not overlap with the underline */
+  background-color: var(--t-color-fill-hover);
+}
+
+.variantPrimary .tabsTrigger[data-state="active"] {
+  color: var(--t-color-text-link);
+  font: var(--t-typography-body-sm-semibold);
+}
+
+.variantPrimary .tabsTrigger[data-state="active"]::before {
+  background-color: transparent; /* No background for active tab */
+}
+
+/* Typography for primary variant */
+.variantPrimary .tabsLabel, 
+.variantPrimary .tabsIcon, 
+.variantPrimary .tabsBadge {
+  font: var(--t-typography-body-sm-medium);
 }
 
 .variantPrimary .tabsTrigger[data-state="active"]::after {
@@ -135,31 +152,56 @@
   }
 }
 
-/* Style for RTL */
-:global([dir="rtl"]) .variantPrimary .tabsTrigger[data-state="active"]::after {
-  transform-origin: right;
-}
+/* Style for RTL - removed duplicate rule, will be handled at the end of file */
 
-/* Variant: Secondary (Box tabs) */
+/* ========================================
+   VARIANT: SECONDARY (Box tabs)
+   Height: 28px (1.75rem)
+   ======================================== */
+
 .variantSecondary .tabsList {
-  gap: var(--t-space-200);
+  background-color: transparent; /* Transparent background for secondary */
   border-bottom: none;
-  margin-bottom: var(--t-space-200);
+  gap: var(--t-space-200);
 }
 
 .variantSecondary .tabsTrigger {
+  gap: var(--t-space-100);
   border-radius: var(--t-border-radius-200);
-  border: 1px solid transparent;
+  border: 1px solid var(--t-color-border-primary);
   padding: var(--t-space-100) var(--t-space-300);
+  height: var(--t-size-700); /* 28px - Fixed height for secondary tabs */
+  font: var(--t-typography-body-sm-medium);
+  color: var(--t-color-text-secondary);
   transition: all var(--t-duration-base) var(--t-easing-in-out);
+}
+
+/* Create a before element for hover effect in secondary variant */
+.variantSecondary .tabsTrigger::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--t-border-radius-200);
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
+  z-index: 0;
+}
+
+.variantSecondary .tabsTrigger:hover {
+  color: var(--t-color-text-primary);
 }
 
 .variantSecondary .tabsTrigger:hover::before,
 .variantSecondary .tabsTriggerHover::before {
-  background-color: var(--t-color-fill-brand-secondary-hover);
+  background-color: var( --t-color-fill-hover);
+  border-color: var( --t-color-border-hover);
 }
 
 .variantSecondary .tabsTrigger[data-state="active"] {
+  color: var(--t-color-text-link);
+  font: var(--t-typography-body-sm-semibold);
   background-color: var(--t-color-fill-brand-secondary);
   border-color: var(--t-color-border-subtle);
   animation: scaleIn 250ms var(--t-easing-in-out) forwards;
@@ -167,11 +209,13 @@
 
 .variantSecondary .tabsTrigger[data-state="active"]::before {
   background-color: transparent; /* No hover background on active secondary tabs */
-  /* Set to match whole tab for secondary */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+}
+
+/* Typography for secondary variant */
+.variantSecondary .tabsLabel, 
+.variantSecondary .tabsIcon, 
+.variantSecondary .tabsBadge {
+  font: var(--t-typography-body-sm-medium);
 }
 
 @keyframes scaleIn {
@@ -226,7 +270,7 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .tabsLabel::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .tabsLabel::after {
@@ -262,8 +306,14 @@
 
 :global([dir="rtl"]) .tabsBadge {
   margin-left: 0;
-  margin-right: var(--t-space-200); /* Increased from space-100 to match Figma */
+  margin-right: var(--t-space-100); 
+  padding-top: 0.4rem;
+  /* Increased from space-100 to match Figma */
 }
+
+
+
+
 
 /* Badge in default (rest) state */
 .tabsTrigger .tabsBadge {
@@ -373,8 +423,6 @@ background-color: var(--t-color-background-primary); /* light grey in disabled s
 /* RTL handling for primary variant */
 :global([dir="rtl"]) .variantPrimary .tabsTrigger[data-state="active"]::after {
   transform-origin: right;
-  left: auto;
-  right: 0;
 }
 
 /* Vertical orientation for primary variant */
