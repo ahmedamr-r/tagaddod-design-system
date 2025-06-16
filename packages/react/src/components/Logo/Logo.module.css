@@ -48,6 +48,13 @@
   width: auto;
 }
 
+/* Custom size - dimensions are set via inline styles */
+.custom {
+  /* Custom dimensions are applied via style prop */
+  width: auto;
+  height: auto;
+}
+
 /* Color variants */
 .primary {
   color: var(--t-color-text-primary, #231f20);

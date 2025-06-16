@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import clsx from 'clsx';
+import { AspectRatio } from '../AspectRatio';
 import styles from './Logo.module.css';
 
 export interface LogoProps extends React.ComponentPropsWithoutRef<'div'> {
@@ -11,7 +12,17 @@ export interface LogoProps extends React.ComponentPropsWithoutRef<'div'> {
    * Size variant for the logo
    * @default 'medium'
    */
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'custom';
+  /**
+   * Custom width for the logo (only used when size is 'custom')
+   * Can be a number (px) or string with units
+   */
+  width?: number | string;
+  /**
+   * Custom height for the logo (only used when size is 'custom')
+   * Can be a number (px) or string with units
+   */
+  height?: number | string;
   /**
    * Color variant for the logo
    * @default 'primary'
@@ -37,6 +48,8 @@ export const Logo = forwardRef<HTMLDivElement, LogoProps>(
   ({ 
     className, 
     size = 'medium', 
+    width,
+    height,
     color = 'primary', 
     clickable = false, 
     onClick, 
@@ -51,9 +64,31 @@ export const Logo = forwardRef<HTMLDivElement, LogoProps>(
       lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
     };
 
-    const LogoContent = () => (
+    // Calculate custom size styles
+    const getCustomSizeStyle = () => {
+      if (size !== 'custom') return {};
+      
+      const style: React.CSSProperties = {};
+      
+      if (width !== undefined) {
+        style.width = typeof width === 'number' ? `${width}px` : width;
+      }
+      
+      if (height !== undefined) {
+        style.height = typeof height === 'number' ? `${height}px` : height;
+      }
+      
+      return style;
+    };
+
+    const LogoSVG = () => (
       <svg 
-        className={clsx(styles.svg, styles[size], styles[color])}
+        className={clsx(
+          styles.svg, 
+          size !== 'custom' && styles[size], 
+          styles[color]
+        )}
+        style={size === 'custom' ? getCustomSizeStyle() : undefined}
         viewBox="0 0 161 20" 
         fill="none" 
         xmlns="http://www.w3.org/2000/svg"
@@ -77,6 +112,22 @@ export const Logo = forwardRef<HTMLDivElement, LogoProps>(
         </defs>
       </svg>
     );
+
+    // For custom size with only width or height specified, use AspectRatio to maintain proportions
+    const LogoContent = () => {
+      if (size === 'custom' && (width || height) && !(width && height)) {
+        // Logo's original aspect ratio is 161:20 = 8.05
+        const logoAspectRatio = 161 / 20;
+        
+        return (
+          <AspectRatio ratio={logoAspectRatio}>
+            <LogoSVG />
+          </AspectRatio>
+        );
+      }
+      
+      return <LogoSVG />;
+    };
 
     if (clickable) {
       const { style, ...buttonProps } = props;

@@ -9,12 +9,14 @@ The Logo component displays the Tagaddod brand logo with various size and color 
 
 ## Features
 
-- **Multiple sizes**: Small, medium, and large variants
+- **Multiple sizes**: Small, medium, large, and custom variants
+- **Custom dimensions**: Specify exact width and/or height with automatic aspect ratio preservation
 - **Color variants**: Primary, white, and inherit options
 - **Clickable**: Can be rendered as a button with onClick handler
 - **Accessibility**: Proper ARIA labels and keyboard navigation
 - **RTL Support**: Works correctly in right-to-left layouts
 - **Responsive**: Scales appropriately across different screen sizes
+- **Aspect ratio preservation**: Automatically maintains logo proportions when using custom sizes
 
 ## Usage
 
@@ -24,8 +26,20 @@ import { Logo } from '@tagaddod-design/react';
 // Basic usage
 <Logo />
 
-// With custom size and color
+// With predefined size and color
 <Logo size="large" color="white" />
+
+// Custom size with both dimensions
+<Logo size="custom" width={200} height={50} />
+
+// Custom size with only width (height auto-calculated)
+<Logo size="custom" width={300} />
+
+// Custom size with only height (width auto-calculated)
+<Logo size="custom" height={60} />
+
+// Custom size with string units
+<Logo size="custom" width="15rem" height="3rem" />
 
 // Clickable logo
 <Logo clickable onClick={() => console.log('Logo clicked!')} />
@@ -41,6 +55,20 @@ import { Logo } from '@tagaddod-design/react';
 
 <Canvas of={LogoStories.AllSizes} />
 
+### Custom Size Examples
+
+#### Custom Size with Both Dimensions
+
+<Canvas of={LogoStories.CustomSize} />
+
+#### Custom Width Only (Auto Height)
+
+<Canvas of={LogoStories.CustomWidthOnly} />
+
+#### Custom Height Only (Auto Width)
+
+<Canvas of={LogoStories.CustomHeightOnly} />
+
 ### Color Variants
 
 <Canvas of={LogoStories.ColorVariants} />
@@ -49,9 +77,97 @@ import { Logo } from '@tagaddod-design/react';
 
 <Canvas of={LogoStories.Clickable} />
 
+## Custom Size Feature
+
+The custom size feature allows you to specify exact dimensions for the logo while maintaining its aspect ratio:
+
+### Both Width and Height
+When both `width` and `height` are specified, the logo uses the exact dimensions provided.
+
+### Single Dimension
+When only `width` or `height` is specified, the component automatically calculates the other dimension to maintain the logo's original aspect ratio (161:20 = 8.05) using the AspectRatio component.
+
+### Supported Units
+- **Numbers**: Treated as pixels (e.g., `width={200}` = 200px)
+- **Strings**: Any valid CSS unit (e.g., `width="15rem"`, `height="3em"`, `width="50%"`)
+
 ## Props
 
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'small' | 'medium' | 'large' | 'custom'</code></td>
+      <td><code>'medium'</code></td>
+      <td>Size variant for the logo. Use 'custom' to specify exact dimensions.</td>
+    </tr>
+    <tr>
+      <td><code>width</code></td>
+      <td><code>number | string</code></td>
+      <td><code>undefined</code></td>
+      <td>Custom width for the logo. Only used when <code>size</code> is 'custom'. Numbers are treated as pixels, strings can use any CSS unit.</td>
+    </tr>
+    <tr>
+      <td><code>height</code></td>
+      <td><code>number | string</code></td>
+      <td><code>undefined</code></td>
+      <td>Custom height for the logo. Only used when <code>size</code> is 'custom'. Numbers are treated as pixels, strings can use any CSS unit.</td>
+    </tr>
+    <tr>
+      <td><code>color</code></td>
+      <td><code>'primary' | 'white' | 'inherit'</code></td>
+      <td><code>'primary'</code></td>
+      <td>Color variant for the logo.</td>
+    </tr>
+    <tr>
+      <td><code>clickable</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Whether the logo should be clickable (renders as button).</td>
+    </tr>
+    <tr>
+      <td><code>onClick</code></td>
+      <td><code>() => void</code></td>
+      <td><code>undefined</code></td>
+      <td>Callback when the logo is clicked. Only used when <code>clickable</code> is true.</td>
+    </tr>
+    <tr>
+      <td><code>aria-label</code></td>
+      <td><code>string</code></td>
+      <td><code>'Tagaddod'</code></td>
+      <td>Accessible label for the logo.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td><code>undefined</code></td>
+      <td>Custom class name for the logo container.</td>
+    </tr>
+  </tbody>
+</table>
+
+### Interactive Controls
+
 <Controls of={LogoStories.Default} />
+
+## AspectRatio Component Integration
+
+The Logo component internally uses the **AspectRatio component** to maintain proper proportions when using custom sizes with only one dimension specified:
+
+- **When both `width` and `height` are provided**: The logo uses exact dimensions without AspectRatio
+- **When only `width` is provided**: AspectRatio automatically calculates the height based on the logo's original ratio (8.05:1)
+- **When only `height` is provided**: AspectRatio automatically calculates the width based on the logo's original ratio (8.05:1)
+- **When neither is provided with custom size**: The logo falls back to auto sizing
+
+This ensures the logo always maintains its visual integrity and proportions, regardless of how you specify the custom dimensions.
 
 ## Accessibility
 
@@ -65,6 +181,7 @@ import { Logo } from '@tagaddod-design/react';
 - Use the primary color variant for most applications
 - Use the white variant on dark backgrounds
 - The medium size is recommended for most use cases
+- For custom sizes, maintain reasonable proportions for readability
 - Ensure adequate spacing around the logo for visual clarity
 
 ## Technical Notes
@@ -73,3 +190,5 @@ import { Logo } from '@tagaddod-design/react';
 - Uses CSS custom properties (design tokens) for theming
 - Supports RTL layouts with appropriate line-height adjustments
 - Optimized for both light and dark themes
+- Custom sizes leverage the AspectRatio component for automatic proportion maintenance
+- Original logo aspect ratio: 161:20 (8.05:1)

@@ -14,8 +14,18 @@ const meta: Meta<typeof Logo> = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['small', 'medium', 'large'],
+      options: ['small', 'medium', 'large', 'custom'],
       description: 'Size variant for the logo',
+    },
+    width: {
+      control: 'text',
+      description: 'Custom width (only used when size is "custom")',
+      if: { arg: 'size', eq: 'custom' },
+    },
+    height: {
+      control: 'text',
+      description: 'Custom height (only used when size is "custom")',
+      if: { arg: 'size', eq: 'custom' },
     },
     color: {
       control: 'select',
@@ -64,6 +74,55 @@ export const Large: Story = {
   },
 };
 
+export const CustomSize: Story = {
+  args: {
+    size: 'custom',
+    width: 200,
+    height: 50,
+    color: 'primary',
+    clickable: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Custom size logo with specific width and height dimensions.',
+      },
+    },
+  },
+};
+
+export const CustomWidthOnly: Story = {
+  args: {
+    size: 'custom',
+    width: 300,
+    color: 'primary',
+    clickable: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Custom size logo with only width specified. Height is automatically calculated to maintain aspect ratio using AspectRatio component.',
+      },
+    },
+  },
+};
+
+export const CustomHeightOnly: Story = {
+  args: {
+    size: 'custom',
+    height: 60,
+    color: 'primary',
+    clickable: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Custom size logo with only height specified. Width is automatically calculated to maintain aspect ratio using AspectRatio component.',
+      },
+    },
+  },
+};
+
 export const Clickable: Story = {
   args: {
     size: 'medium',
@@ -87,7 +146,7 @@ export const White: Story = {
 
 export const AllSizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
         <Logo size="small" />
         <span style={{ fontSize: '0.75rem', color: 'var(--t-color-text-secondary)' }}>Small</span>
@@ -100,12 +159,20 @@ export const AllSizes: Story = {
         <Logo size="large" />
         <span style={{ fontSize: '0.75rem', color: 'var(--t-color-text-secondary)' }}>Large</span>
       </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+        <Logo size="custom" width={150} height={40} />
+        <span style={{ fontSize: '0.75rem', color: 'var(--t-color-text-secondary)' }}>Custom (150x40)</span>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+        <Logo size="custom" width={250} />
+        <span style={{ fontSize: '0.75rem', color: 'var(--t-color-text-secondary)' }}>Custom (250px width)</span>
+      </div>
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'Different size variants of the logo component.',
+        story: 'Different size variants of the logo component, including custom sizes.',
       },
     },
   },
