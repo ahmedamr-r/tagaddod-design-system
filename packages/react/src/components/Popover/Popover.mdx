@@ -232,6 +232,289 @@ import {
 </PopoverRoot>
 ```
 
+## Listbox Integration
+
+The Popover component now includes powerful listbox integration for creating dropdown menus with rich customization options.
+
+### Basic Listbox
+
+<Canvas of={PopoverStories.WithListbox} />
+
+```jsx
+<Popover
+  useListbox
+  listboxOptions={[
+    { label: 'Option 1', value: '1' },
+    { label: 'Option 2', value: '2' },
+    { label: 'Option 3', value: '3' },
+    { label: 'Option 4', value: '4' },
+    { label: 'Option 5', value: '5' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Select Option</Button>
+</Popover>
+```
+
+### Listbox with Icons
+
+<Canvas of={PopoverStories.WithListboxIcons} />
+
+```jsx
+<Popover
+  useListbox
+  listboxShowIcons
+  listboxDefaultIcon="📄"
+  listboxOptions={[
+    { label: 'Documents', value: 'docs' },
+    { label: 'Images', value: 'images', icon: '🖼️' },
+    { label: 'Videos', value: 'videos', icon: '🎥' },
+    { label: 'Music', value: 'music', icon: '🎵' },
+    { label: 'Downloads', value: 'downloads' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>File Types</Button>
+</Popover>
+```
+
+### Mixed Icon Configuration
+
+<Canvas of={PopoverStories.WithMixedIcons} />
+
+```jsx
+<Popover
+  useListbox
+  listboxShowIcons={false} // Global setting is off
+  listboxOptions={[
+    { label: 'Home', value: 'home', showIcon: true, icon: '🏠' },
+    { label: 'Profile', value: 'profile' }, // No icon
+    { label: 'Settings', value: 'settings', showIcon: true, icon: '⚙️' },
+    { label: 'Help', value: 'help' }, // No icon
+    { label: 'Logout', value: 'logout', showIcon: true, icon: '🚪' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Navigation</Button>
+</Popover>
+```
+
+### Scrollable Listbox
+
+<Canvas of={PopoverStories.WithScrollableListbox} />
+
+```jsx
+<Popover
+  useListbox
+  type="with-scrollbar"
+  listboxOptions={Array.from({ length: 15 }, (_, i) => ({
+    label: `Option ${i + 1}`,
+    value: `option-${i + 1}`,
+    helpText: i % 3 === 0 ? `This is help text for option ${i + 1}` : undefined,
+  }))}
+  listboxMaxItems={6}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Long List</Button>
+</Popover>
+```
+
+### Enhanced Scrollable Dropdown
+
+<Canvas of={PopoverStories.EnhancedScrollableDropdown} />
+
+```jsx
+<Popover
+  useListbox
+  type="with-scrollbar"
+  listboxShowIcons
+  listboxMaxItems={8}
+  margin="small"
+  listboxOptions={[
+    // Recent Files Section
+    { label: 'Document.pdf', value: 'doc1', icon: '📄', helpText: 'Modified 2 hours ago' },
+    { label: 'Presentation.pptx', value: 'pres1', icon: '📊', helpText: 'Modified 1 day ago' },
+    { label: 'Spreadsheet.xlsx', value: 'sheet1', icon: '📈', helpText: 'Modified 3 days ago' },
+    
+    // Favorites Section  
+    { label: 'Project Plans', value: 'fav1', icon: '⭐', divider: true },
+    { label: 'Team Photos', value: 'fav2', icon: '⭐' },
+    { label: 'Budget 2024', value: 'fav3', icon: '⭐' },
+    
+    // Applications Section
+    { label: 'Calculator', value: 'app1', icon: '🧮', divider: true },
+    { label: 'Calendar', value: 'app2', icon: '📅' },
+    { label: 'Notes', value: 'app3', icon: '📝' },
+    // ... more options
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Application Launcher</Button>
+</Popover>
+```
+
+### Multiple Selection
+
+<Canvas of={PopoverStories.WithMultipleSelection} />
+
+```jsx
+<Popover
+  useListbox
+  listboxMultiple
+  listboxSelectedValue={['1', '3']}
+  listboxOptions={[
+    { label: 'Option 1', value: '1' },
+    { label: 'Option 2', value: '2' },
+    { label: 'Option 3', value: '3' },
+    { label: 'Option 4', value: '4' },
+    { label: 'Option 5', value: '5' },
+  ]}
+  onListboxMultiSelect={(values) => console.log('Selected values:', values)}
+>
+  <Button>Multi-Select</Button>
+</Popover>
+```
+
+## Margin Customization
+
+You can customize the spacing inside the popover using the `margin` prop.
+
+<Canvas of={PopoverStories.CustomMargins} />
+
+```jsx
+// No margin
+<Popover
+  content="No margin"
+  margin="none"
+>
+  <Button>No Margin</Button>
+</Popover>
+
+// Predefined margins
+<Popover
+  content="Small margin"
+  margin="small"
+>
+  <Button>Small</Button>
+</Popover>
+
+<Popover
+  content="Medium margin (default)"
+  margin="medium"
+>
+  <Button>Medium</Button>
+</Popover>
+
+<Popover
+  content="Large margin"
+  margin="large"
+>
+  <Button>Large</Button>
+</Popover>
+
+// Custom pixel value
+<Popover
+  content="Custom 20px margin"
+  margin={20}
+>
+  <Button>Custom (20px)</Button>
+</Popover>
+```
+
+### Listbox with Custom Margins
+
+<Canvas of={PopoverStories.ListboxWithCustomMargins} />
+
+```jsx
+<Popover
+  useListbox
+  margin="none"
+  listboxOptions={[
+    { label: 'Compact Option 1', value: '1' },
+    { label: 'Compact Option 2', value: '2' },
+    { label: 'Compact Option 3', value: '3' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>No Margin Listbox</Button>
+</Popover>
+```
+
+## Listbox Item Padding Customization
+
+You can customize the padding of individual listbox items using the `listboxItemPaddingVertical` and `listboxItemPaddingHorizontal` props.
+
+<Canvas of={PopoverStories.ListboxWithCustomPadding} />
+
+```jsx
+// Compact padding
+<Popover
+  useListbox
+  listboxItemPaddingVertical={8}
+  listboxItemPaddingHorizontal={12}
+  listboxOptions={[
+    { label: 'Compact Item 1', value: '1' },
+    { label: 'Compact Item 2', value: '2' },
+    { label: 'Compact Item 3', value: '3' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Compact Padding</Button>
+</Popover>
+
+// Spacious padding
+<Popover
+  useListbox
+  listboxItemPaddingVertical={20}
+  listboxItemPaddingHorizontal={24}
+  listboxShowIcons
+  listboxDefaultIcon="📄"
+  listboxOptions={[
+    { label: 'Spacious Item 1', value: '1' },
+    { label: 'Spacious Item 2', value: '2' },
+    { label: 'Spacious Item 3', value: '3' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Spacious Padding</Button>
+</Popover>
+
+// Custom shape (narrow height, wide sides)
+<Popover
+  useListbox
+  listboxItemPaddingVertical={4}
+  listboxItemPaddingHorizontal={32}
+  listboxShowIcons
+  listboxOptions={[
+    { label: 'Narrow Height', value: '1', icon: '🔥' },
+    { label: 'Wide Sides', value: '2', icon: '⚡' },
+    { label: 'Custom Shape', value: '3', icon: '🎯' },
+  ]}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Custom Shape</Button>
+</Popover>
+
+// Scrollable list with custom padding
+<Popover
+  useListbox
+  type="with-scrollbar"
+  listboxItemPaddingVertical={16}
+  listboxItemPaddingHorizontal={20}
+  listboxMaxItems={5}
+  listboxShowIcons
+  listboxOptions={Array.from({ length: 12 }, (_, i) => ({
+    label: `Padded Option ${i + 1}`,
+    value: `option-${i + 1}`,
+    icon: i % 3 === 0 ? '📁' : i % 3 === 1 ? '📄' : '🖼️',
+    helpText: i % 4 === 0 ? `Help text for option ${i + 1}` : undefined,
+  }))}
+  onListboxSelect={(value) => console.log('Selected:', value)}
+>
+  <Button>Scrollable Custom Padding</Button>
+</Popover>
+```
+
 ## Controlled Mode
 
 You can control the open state of the popover using the `open` and `onOpenChange` props.
@@ -277,6 +560,7 @@ function ControlledPopover() {
 ### Dropdown Menus
 
 ```jsx
+// Traditional content approach
 <Popover
   content={
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -287,6 +571,20 @@ function ControlledPopover() {
   }
 >
   <Button>Menu</Button>
+</Popover>
+
+// Using listbox for better accessibility and features
+<Popover
+  useListbox
+  listboxShowIcons
+  listboxOptions={[
+    { label: 'Edit', value: 'edit', icon: '✏️' },
+    { label: 'Duplicate', value: 'duplicate', icon: '📋' },
+    { label: 'Delete', value: 'delete', icon: '🗑️' },
+  ]}
+  onListboxSelect={(value) => console.log('Action:', value)}
+>
+  <Button>Actions</Button>
 </Popover>
 ```
 
@@ -331,6 +629,75 @@ function ControlledPopover() {
   }
 >
   <Button>Pick a Color</Button>
+</Popover>
+```
+
+### File Manager Dropdown
+
+```jsx
+<Popover
+  useListbox
+  type="with-scrollbar"
+  listboxShowIcons
+  listboxMaxItems={8}
+  listboxOptions={[
+    { label: 'New Folder', value: 'new-folder', icon: '📁' },
+    { label: 'New Document', value: 'new-doc', icon: '📄', divider: true },
+    { label: 'Upload Files', value: 'upload', icon: '📤' },
+    { label: 'Download Selected', value: 'download', icon: '📥', divider: true },
+    { label: 'Copy', value: 'copy', icon: '📋' },
+    { label: 'Cut', value: 'cut', icon: '✂️' },
+    { label: 'Paste', value: 'paste', icon: '📌', divider: true },
+    { label: 'Properties', value: 'properties', icon: 'ℹ️' },
+  ]}
+  onListboxSelect={(value) => console.log('File action:', value)}
+>
+  <Button>File Options</Button>
+</Popover>
+```
+
+### User Profile Menu
+
+```jsx
+<Popover
+  useListbox
+  listboxShowIcons
+  listboxOptions={[
+    { label: 'John Doe', value: 'profile', icon: '👤', helpText: 'john.doe@company.com' },
+    { label: 'Account Settings', value: 'settings', icon: '⚙️', divider: true },
+    { label: 'Billing', value: 'billing', icon: '💳' },
+    { label: 'Help & Support', value: 'help', icon: '❓', divider: true },
+    { label: 'Sign Out', value: 'signout', icon: '🚪' },
+  ]}
+  onListboxSelect={(value) => console.log('Profile action:', value)}
+  side="bottom"
+  align="end"
+>
+  <Button>Profile</Button>
+</Popover>
+```
+
+### Language Selector
+
+```jsx
+<Popover
+  useListbox
+  type="with-scrollbar"
+  listboxMaxItems={6}
+  listboxSelectedValue="en"
+  listboxOptions={[
+    { label: 'English', value: 'en', icon: '🇺🇸' },
+    { label: 'العربية', value: 'ar', icon: '🇸🇦' },
+    { label: 'Français', value: 'fr', icon: '🇫🇷' },
+    { label: 'Español', value: 'es', icon: '🇪🇸' },
+    { label: 'Deutsch', value: 'de', icon: '🇩🇪' },
+    { label: '中文', value: 'zh', icon: '🇨🇳' },
+    { label: '日本語', value: 'ja', icon: '🇯🇵' },
+    { label: '한국어', value: 'ko', icon: '🇰🇷' },
+  ]}
+  onListboxSelect={(value) => console.log('Language:', value)}
+>
+  <Button>Language</Button>
 </Popover>
 ```
 

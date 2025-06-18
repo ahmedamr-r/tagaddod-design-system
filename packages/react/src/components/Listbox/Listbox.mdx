@@ -106,13 +106,13 @@ The Listbox supports adding descriptive help text to options.
 
 ## Multiple Selection
 
-The Listbox can be configured to allow multiple selections.
+The Listbox can be configured to allow multiple selections. This example uses the Checkbox component for a more accessible and consistent experience.
 
 <Canvas of={ListboxStories.MultiSelect} />
 
 ```jsx
 import { useState } from 'react';
-import { IconSquareCheck, IconSquare } from '@tabler/icons-react';
+import { Checkbox } from '@tagaddod/react';
 
 function MultiSelectExample() {
   const [selected, setSelected] = useState(['option1', 'option3']);
@@ -123,23 +123,38 @@ function MultiSelectExample() {
         { 
           label: 'Option 1', 
           value: 'option1',
-          prefix: selected.includes('option1') ? <IconSquareCheck size={16} /> : <IconSquare size={16} />
+          prefix: (
+            <Checkbox
+              checked={selected.includes('option1')}
+              onCheckedChange={(checked) => {
+                if (checked) {
+                  setSelected([...selected, 'option1']);
+                } else {
+                  setSelected(selected.filter(v => v !== 'option1'));
+                }
+              }}
+              hideLabel={true}
+            />
+          )
         },
         { 
           label: 'Option 2', 
           value: 'option2',
-          prefix: selected.includes('option2') ? <IconSquareCheck size={16} /> : <IconSquare size={16} />
+          prefix: (
+            <Checkbox
+              checked={selected.includes('option2')}
+              onCheckedChange={(checked) => {
+                if (checked) {
+                  setSelected([...selected, 'option2']);
+                } else {
+                  setSelected(selected.filter(v => v !== 'option2'));
+                }
+              }}
+              hideLabel={true}
+            />
+          )
         },
-        { 
-          label: 'Option 3', 
-          value: 'option3',
-          prefix: selected.includes('option3') ? <IconSquareCheck size={16} /> : <IconSquare size={16} />
-        },
-        { 
-          label: 'Option 4', 
-          value: 'option4',
-          prefix: selected.includes('option4') ? <IconSquareCheck size={16} /> : <IconSquare size={16} />
-        },
+        // ... other options
       ]}
       selectedValue={selected}
       multiple={true}
@@ -170,16 +185,30 @@ Individual options can be disabled.
 
 ## With Dividers
 
-Add dividers to visually separate groups of options.
+Add dividers to visually separate groups of options using the Separator component. Use `spacing="none"` to prevent excessive vertical spacing in list contexts.
 
 <Canvas of={ListboxStories.WithDividers} />
 
 ```jsx
+import { Separator } from '@tagaddod/react';
+
 <Listbox
   options={[
-    { label: 'Recent', value: 'recent', divider: true },
+    { label: 'Recent', value: 'recent' },
+    { 
+      label: '', 
+      value: 'separator1', 
+      disabled: true,
+      customContent: <Separator decorative={true} spacing="none" />
+    },
     { label: 'Yesterday', value: 'yesterday' },
-    { label: 'Last Week', value: 'lastWeek', divider: true },
+    { label: 'Last Week', value: 'lastWeek' },
+    { 
+      label: '', 
+      value: 'separator2', 
+      disabled: true,
+      customContent: <Separator decorative={true} spacing="none" />
+    },
     { label: 'Last Month', value: 'lastMonth' },
     { label: 'Older', value: 'older' },
   ]}
@@ -187,6 +216,52 @@ Add dividers to visually separate groups of options.
   onSelect={(value) => console.log('Selected:', value)}
 />
 ```
+
+### Separator Spacing Options
+
+The Separator component supports different spacing options when used in lists:
+
+<Canvas of={ListboxStories.SeparatorSpacingComparison} />
+
+```jsx
+// No spacing - perfect for tight lists
+<Separator decorative={true} spacing="none" />
+
+// Compact spacing - reduced margins
+<Separator decorative={true} spacing="compact" />
+
+// Custom spacing - specify pixels
+<Separator decorative={true} spacing={8} />
+
+// Default spacing - standard margins (same as not providing spacing prop)
+<Separator decorative={true} spacing="default" />
+```
+
+## Custom Padding
+
+The Listbox supports custom padding for list items, allowing you to control vertical and horizontal spacing.
+
+<Canvas of={ListboxStories.WithCustomPadding} />
+
+```jsx
+<Listbox
+  options={[
+    { label: 'Compact Item 1', value: '1' },
+    { label: 'Compact Item 2', value: '2' },
+    { label: 'Compact Item 3', value: '3' },
+  ]}
+  itemPaddingVertical={8}
+  itemPaddingHorizontal={12}
+  selectedValue="1"
+  onSelect={(value) => console.log('Selected:', value)}
+/>
+```
+
+The padding props accept pixel values:
+- `itemPaddingVertical`: Controls top and bottom padding
+- `itemPaddingHorizontal`: Controls left and right padding
+
+This is useful for creating compact lists, spacious interfaces, or custom layouts that match your design requirements.
 
 ## In Popover
 

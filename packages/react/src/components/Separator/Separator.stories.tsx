@@ -286,6 +286,56 @@ export const ComplexLayoutExample: Story = {
   },
 };
 
+// Spacing options showcase
+export const SpacingOptions: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+      <div style={{ width: '200px' }}>
+        <h4 style={{ margin: '0 0 1rem', fontSize: '14px', fontWeight: 600 }}>Default Spacing</h4>
+        <div style={{ border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px', padding: '16px' }}>
+          <div>Content above</div>
+          <Separator spacing="default" />
+          <div>Content below</div>
+        </div>
+      </div>
+      
+      <div style={{ width: '200px' }}>
+        <h4 style={{ margin: '0 0 1rem', fontSize: '14px', fontWeight: 600 }}>Compact Spacing</h4>
+        <div style={{ border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px', padding: '16px' }}>
+          <div>Content above</div>
+          <Separator spacing="compact" />
+          <div>Content below</div>
+        </div>
+      </div>
+      
+      <div style={{ width: '200px' }}>
+        <h4 style={{ margin: '0 0 1rem', fontSize: '14px', fontWeight: 600 }}>No Spacing</h4>
+        <div style={{ border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px', padding: '16px' }}>
+          <div>Content above</div>
+          <Separator spacing="none" />
+          <div>Content below</div>
+        </div>
+      </div>
+      
+      <div style={{ width: '200px' }}>
+        <h4 style={{ margin: '0 0 1rem', fontSize: '14px', fontWeight: 600 }}>Custom Spacing (8px)</h4>
+        <div style={{ border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px', padding: '16px' }}>
+          <div>Content above</div>
+          <Separator spacing={8} />
+          <div>Content below</div>
+        </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Demonstrates different spacing options for the Separator component.',
+      },
+    },
+  },
+};
+
 // Accessibility showcase
 export const AccessibilityShowcase: Story = {
   render: () => (

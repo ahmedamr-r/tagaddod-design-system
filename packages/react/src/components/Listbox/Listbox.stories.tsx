@@ -2,7 +2,9 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Listbox } from './';
 import { PopoverContent, PopoverTrigger, PopoverRoot } from '../Popover';
-import { IconSquareCheck, IconSquare, IconCheck, IconTag, IconStar, IconChevronDown } from '@tabler/icons-react';
+import { Checkbox } from '../Checkbox/Checkbox';
+import { Separator } from '../Separator/Separator';
+import { IconCheck, IconTag, IconStar, IconChevronDown } from '@tabler/icons-react';
 
 const meta = {
   title: 'Components/Listbox',
@@ -20,6 +22,14 @@ const meta = {
     maxVisibleOptions: { control: 'number' },
     multiple: { control: 'boolean' },
     inPopover: { control: 'boolean' },
+    itemPaddingVertical: {
+      control: 'number',
+      description: 'Custom vertical padding (top and bottom) for listbox items in pixels',
+    },
+    itemPaddingHorizontal: {
+      control: 'number',
+      description: 'Custom horizontal padding (left and right) for listbox items in pixels',
+    },
   },
 } satisfies Meta<typeof Listbox>;
 
@@ -113,7 +123,7 @@ export const WithHelpText: Story = {
   ],
 };
 
-// Interactive story with multiple selection
+// Interactive story with multiple selection using Checkbox component
 export const MultiSelect: Story = {
   args: {
     options: [],
@@ -129,22 +139,70 @@ export const MultiSelect: Story = {
             { 
               label: 'Option 1', 
               value: 'option1',
-              prefix: selected.includes('option1') ? <IconSquareCheck size={16} /> : <IconSquare size={16} />
+              prefix: (
+                <Checkbox
+                  checked={selected.includes('option1')}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setSelected([...selected, 'option1']);
+                    } else {
+                      setSelected(selected.filter(v => v !== 'option1'));
+                    }
+                  }}
+                  hideLabel={true}
+                />
+              )
             },
             { 
               label: 'Option 2', 
               value: 'option2',
-              prefix: selected.includes('option2') ? <IconSquareCheck size={16} /> : <IconSquare size={16} />
+              prefix: (
+                <Checkbox
+                  checked={selected.includes('option2')}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setSelected([...selected, 'option2']);
+                    } else {
+                      setSelected(selected.filter(v => v !== 'option2'));
+                    }
+                  }}
+                  hideLabel={true}
+                />
+              )
             },
             { 
               label: 'Option 3', 
               value: 'option3',
-              prefix: selected.includes('option3') ? <IconSquareCheck size={16} /> : <IconSquare size={16} />
+              prefix: (
+                <Checkbox
+                  checked={selected.includes('option3')}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setSelected([...selected, 'option3']);
+                    } else {
+                      setSelected(selected.filter(v => v !== 'option3'));
+                    }
+                  }}
+                  hideLabel={true}
+                />
+              )
             },
             { 
               label: 'Option 4', 
               value: 'option4',
-              prefix: selected.includes('option4') ? <IconSquareCheck size={16} /> : <IconSquare size={16} />
+              prefix: (
+                <Checkbox
+                  checked={selected.includes('option4')}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setSelected([...selected, 'option4']);
+                    } else {
+                      setSelected(selected.filter(v => v !== 'option4'));
+                    }
+                  }}
+                  hideLabel={true}
+                />
+              )
             },
           ]}
           selectedValue={selected}
@@ -155,6 +213,68 @@ export const MultiSelect: Story = {
       </div>
     );
   }
+};
+
+// Custom padding story
+export const WithCustomPadding: Story = {
+  args: {
+    options: [],
+    inPopover: false,
+  },
+  render: () => (
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <div>
+        <h4 style={{ margin: '0 0 0.5rem', fontSize: '14px', fontWeight: 600 }}>Compact Padding (8px/12px)</h4>
+        <div style={{ width: '200px', border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px' }}>
+          <Listbox
+            options={[
+              { label: 'Compact Item 1', value: '1' },
+              { label: 'Compact Item 2', value: '2' },
+              { label: 'Compact Item 3', value: '3' },
+            ]}
+            itemPaddingVertical={8}
+            itemPaddingHorizontal={12}
+            selectedValue="1"
+            inPopover={false}
+          />
+        </div>
+      </div>
+      
+      <div>
+        <h4 style={{ margin: '0 0 0.5rem', fontSize: '14px', fontWeight: 600 }}>Spacious Padding (20px/24px)</h4>
+        <div style={{ width: '200px', border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px' }}>
+          <Listbox
+            options={[
+              { label: 'Spacious Item 1', value: '1', prefix: <IconStar size={16} /> },
+              { label: 'Spacious Item 2', value: '2', prefix: <IconTag size={16} /> },
+              { label: 'Spacious Item 3', value: '3', prefix: <IconCheck size={16} /> },
+            ]}
+            itemPaddingVertical={20}
+            itemPaddingHorizontal={24}
+            selectedValue="2"
+            inPopover={false}
+          />
+        </div>
+      </div>
+      
+      <div>
+        <h4 style={{ margin: '0 0 0.5rem', fontSize: '14px', fontWeight: 600 }}>Custom Shape (4px/32px)</h4>
+        <div style={{ width: '200px', border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px' }}>
+          <Listbox
+            options={[
+              { label: 'Narrow Height', value: '1', prefix: <IconStar size={16} /> },
+              { label: 'Wide Sides', value: '2', prefix: <IconTag size={16} /> },
+              { label: 'Custom Shape', value: '3', prefix: <IconCheck size={16} /> },
+            ]}
+            itemPaddingVertical={4}
+            itemPaddingHorizontal={32}
+            selectedValue="3"
+            inPopover={false}
+          />
+        </div>
+      </div>
+    </div>
+  ),
 };
 
 // Arabic (RTL) example
@@ -203,26 +323,110 @@ export const WithDisabledOptions: Story = {
   ],
 };
 
-// With dividers
+// With separators using Separator component
 export const WithDividers: Story = {
   args: {
-    options: [
-      { label: 'Recent', value: 'recent', divider: true },
-      { label: 'Yesterday', value: 'yesterday' },
-      { label: 'Last Week', value: 'lastWeek', divider: true },
-      { label: 'Last Month', value: 'lastMonth' },
-      { label: 'Older', value: 'older' },
-    ],
-    selectedValue: 'yesterday',
+    options: [],
     inPopover: false,
   },
-  decorators: [
-    (Story) => (
-      <div style={{ width: '240px', border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px' }}>
-        <Story />
+  render: () => (
+    <div style={{ width: '240px', border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px' }}>
+      <Listbox
+        options={[
+          { label: 'Recent', value: 'recent' },
+          { 
+            label: '', 
+            value: 'separator1', 
+            disabled: true,
+            customContent: <Separator decorative={true} spacing="none" />
+          },
+          { label: 'Yesterday', value: 'yesterday' },
+          { label: 'Last Week', value: 'lastWeek' },
+          { 
+            label: '', 
+            value: 'separator2', 
+            disabled: true,
+            customContent: <Separator decorative={true} spacing="none" />
+          },
+          { label: 'Last Month', value: 'lastMonth' },
+          { label: 'Older', value: 'older' },
+        ]}
+        selectedValue="yesterday"
+        inPopover={false}
+      />
+    </div>
+  ),
+};
+
+// Separator spacing comparison
+export const SeparatorSpacingComparison: Story = {
+  args: {
+    options: [],
+    inPopover: false,
+  },
+  render: () => (
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <div>
+        <h4 style={{ margin: '0 0 0.5rem', fontSize: '14px', fontWeight: 600 }}>No Spacing</h4>
+        <div style={{ width: '200px', border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px' }}>
+          <Listbox
+            options={[
+              { label: 'Item 1', value: '1' },
+              { 
+                label: '', 
+                value: 'sep1', 
+                disabled: true,
+                customContent: <Separator decorative={true} spacing="none" />
+              },
+              { label: 'Item 2', value: '2' },
+            ]}
+            selectedValue="1"
+            inPopover={false}
+          />
+        </div>
       </div>
-    ),
-  ],
+      
+      <div>
+        <h4 style={{ margin: '0 0 0.5rem', fontSize: '14px', fontWeight: 600 }}>Compact Spacing</h4>
+        <div style={{ width: '200px', border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px' }}>
+          <Listbox
+            options={[
+              { label: 'Item 1', value: '1' },
+              { 
+                label: '', 
+                value: 'sep1', 
+                disabled: true,
+                customContent: <Separator decorative={true} spacing="compact" />
+              },
+              { label: 'Item 2', value: '2' },
+            ]}
+            selectedValue="1"
+            inPopover={false}
+          />
+        </div>
+      </div>
+      
+      <div>
+        <h4 style={{ margin: '0 0 0.5rem', fontSize: '14px', fontWeight: 600 }}>Custom Spacing (8px)</h4>
+        <div style={{ width: '200px', border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px' }}>
+          <Listbox
+            options={[
+              { label: 'Item 1', value: '1' },
+              { 
+                label: '', 
+                value: 'sep1', 
+                disabled: true,
+                customContent: <Separator decorative={true} spacing={8} />
+              },
+              { label: 'Item 2', value: '2' },
+            ]}
+            selectedValue="1"
+            inPopover={false}
+          />
+        </div>
+      </div>
+    </div>
+  ),
 };
 
 // In Popover - Interactive example

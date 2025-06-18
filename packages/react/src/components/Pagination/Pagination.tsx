@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import clsx from 'clsx';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { IconChevronLeft, IconChevronRight, IconChevronDown } from '@tabler/icons-react';
 import styles from './Pagination.module.css';
 import { Button } from '../Button/Button';
+import { Popover } from '../Popover/Popover';
 import { PaginationProps } from './types';
 
 // Define a constant for the ellipsis
@@ -111,6 +112,8 @@ export const Pagination: React.FC<PaginationProps> = ({
   const [currentPage, setCurrentPage] = useState<number>(current);
   // State to track page size internally
   const [currentPageSize, setCurrentPageSize] = useState<number>(pageSize);
+  // State to control the rows per page popover
+  const [isRowsPopoverOpen, setIsRowsPopoverOpen] = useState<boolean>(false);
   
   // Update internal state when props change
   useEffect(() => {
@@ -151,13 +154,14 @@ export const Pagination: React.FC<PaginationProps> = ({
   };
   
   // Handler for page size change
-  const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newPageSize = Number(e.target.value);
+  const handlePageSizeChange = (newPageSize: number) => {
     setCurrentPageSize(newPageSize);
     // Reset to page 1 when changing page size
     setCurrentPage(1);
     onChange?.(1, newPageSize);
     onPageSizeChange?.(newPageSize);
+    // Close the popover after selection
+    setIsRowsPopoverOpen(false);
   };
   
   // Calculate "Showing X to Y of Z entries" text
@@ -202,7 +206,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           {/* Previous button */}
           <Button
             size="micro"
-            variant="secondary"
+            variant="tertiary"
             tone="neutral"
             onClick={handlePrev}
             disabled={currentPage === 1}
@@ -223,7 +227,7 @@ export const Pagination: React.FC<PaginationProps> = ({
               <Button
                 key={`page-${page}`}
                 size="micro"
-                variant={isCurrentPage ? "primary" : "secondary"}
+                variant="tertiary"
                 tone={isCurrentPage ? "default" : "neutral"}
                 onClick={() => handlePageChange(page)}
                 aria-current={isCurrentPage ? 'page' : undefined}
@@ -236,7 +240,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           {/* Next button */}
           <Button
             size="micro"
-            variant="secondary"
+            variant="tertiary"
             tone="neutral"
             onClick={handleNext}
             disabled={currentPage === totalPages}
@@ -247,28 +251,43 @@ export const Pagination: React.FC<PaginationProps> = ({
         
         {showRowsInPage && (
           <div className={styles.rowsPerPage}>
-            <span className={styles.rowsLabel} style={lineHeightStyle}>
-              {isRTL ? 'عدد الصفوف' : 'Rows in Page'}
-            </span>
-            <div className={styles.selectWrapper}>
-              <select 
-                className={styles.select}
-                value={currentPageSize}
-                onChange={handlePageSizeChange}
+            <Popover
+              open={isRowsPopoverOpen}
+              onOpenChange={setIsRowsPopoverOpen}
+              side="bottom"
+              align="end"
+              content={
+                <div className={styles.popoverContent}>
+                  {pageSizeOptions.map(size => (
+                    <button
+                      key={size}
+                      className={clsx(
+                        styles.popoverOption,
+                        size === currentPageSize && styles.popoverOptionSelected
+                      )}
+                      onClick={() => handlePageSizeChange(size)}
+                      style={lineHeightStyle}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              }
+            >
+              <button 
+                className={styles.rowsButton} 
                 aria-label={isRTL ? 'عدد الصفوف' : 'Rows in Page'}
+                data-state={isRowsPopoverOpen ? 'open' : 'closed'}
               >
-                {pageSizeOptions.map(size => (
-                  <option key={size} value={size} className={styles.selectValue} style={lineHeightStyle}>
-                    {size}
-                  </option>
-                ))}
-              </select>
-              <span className={styles.selectArrow}>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </span>
-            </div>
+                <span className={styles.rowsLabel} style={lineHeightStyle}>
+                  {isRTL ? 'عدد الصفوف' : 'Rows in Page'}
+                </span>
+                <span className={styles.rowsValue} style={lineHeightStyle}>
+                  {currentPageSize}
+                </span>
+                <IconChevronDown size={16} className={styles.chevron} />
+              </button>
+            </Popover>
           </div>
         )}
       </div>

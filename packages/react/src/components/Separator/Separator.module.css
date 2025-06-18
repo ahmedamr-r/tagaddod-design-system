@@ -24,6 +24,15 @@
   align-self: stretch;
 }
 
+/* Custom spacing override - inline styles will override default margin */
+.customSpacing.horizontal {
+  /* Margin will be set via inline styles */
+}
+
+.customSpacing.vertical {
+  /* Margin will be set via inline styles */
+}
+
 /* RTL support - separators generally don't need RTL-specific changes,
    but we ensure consistent spacing */
 :global([dir="rtl"]) .horizontal {

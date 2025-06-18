@@ -18,7 +18,7 @@
 .option {
   display: flex;
   align-items: center;
-  padding: var(--t-space-300);
+  padding: var(--item-padding-vertical, var(--t-space-300)) var(--item-padding-horizontal, var(--t-space-300));
   cursor: pointer;
   outline: none;
   position: relative;
@@ -41,6 +41,16 @@
 .disabled {
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+/* Special styling for separator items - remove padding to avoid double spacing */
+.separator {
+  padding: 0;
+  cursor: default;
+}
+
+.separator:hover {
+  background-color: transparent;
 }
 
 .divider {
@@ -144,7 +154,7 @@
 
 /* "More options" indicator */
 .moreOptions {
-  padding: var(--t-space-300);
+  padding: var(--item-padding-vertical, var(--t-space-300)) var(--item-padding-horizontal, var(--t-space-300));
   color: var(--t-color-text-subtle);
   font-size: var(--t-font-size-body-sm);
   text-align: center;

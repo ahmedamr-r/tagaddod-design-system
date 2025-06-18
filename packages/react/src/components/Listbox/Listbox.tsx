@@ -48,6 +48,14 @@ export interface ListboxProps {
    * Pass true if this is rendered inside a Popover
    */
   inPopover?: boolean;
+  /**
+   * Custom vertical padding (top and bottom) for listbox items in pixels
+   */
+  itemPaddingVertical?: number;
+  /**
+   * Custom horizontal padding (left and right) for listbox items in pixels
+   */
+  itemPaddingHorizontal?: number;
 }
 
 export const Listbox: React.FC<ListboxProps> = ({
@@ -62,6 +70,8 @@ export const Listbox: React.FC<ListboxProps> = ({
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledby,
   inPopover = true,
+  itemPaddingVertical,
+  itemPaddingHorizontal,
   ...props
 }) => {
   // If selectedValue is an array but multiple is false, take the first value
@@ -101,6 +111,14 @@ export const Listbox: React.FC<ListboxProps> = ({
         className
       )}
       tabIndex={-1}
+      style={{
+        ...(itemPaddingVertical !== undefined && {
+          ['--item-padding-vertical' as any]: `${itemPaddingVertical}px`
+        }),
+        ...(itemPaddingHorizontal !== undefined && {
+          ['--item-padding-horizontal' as any]: `${itemPaddingHorizontal}px`
+        })
+      } as React.CSSProperties}
       {...props}
     >
       {limitedOptions.map((option) => {

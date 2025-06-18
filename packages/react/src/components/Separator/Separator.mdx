@@ -108,6 +108,34 @@ When `decorative={true}`, the separator is purely visual and will be ignored by 
 **Accessibility attributes:**
 - `role="presentation"`
 
+## Spacing Control
+
+The Separator component supports custom spacing control to accommodate different layout needs, especially useful in constrained spaces like lists or menus.
+
+<Canvas of={SeparatorStories.SpacingOptions} />
+
+### Spacing Options
+
+```jsx
+// Default spacing - standard margins (12px top/bottom)
+<Separator spacing="default" />
+
+// Compact spacing - reduced margins (8px top/bottom)
+<Separator spacing="compact" />
+
+// No spacing - perfect for tight layouts
+<Separator spacing="none" />
+
+// Custom spacing - specify exact pixels
+<Separator spacing={16} />
+```
+
+**Use Cases:**
+- `spacing="none"`: Perfect for list items, menus, or tight layouts
+- `spacing="compact"`: Good for dense content areas
+- `spacing="default"`: Standard content sections (default behavior)
+- `spacing={number}`: Custom spacing for specific design requirements
+
 ## Real-World Examples
 
 ### Navigation Menu

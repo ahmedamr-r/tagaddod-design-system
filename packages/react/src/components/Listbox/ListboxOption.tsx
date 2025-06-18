@@ -102,6 +102,9 @@ export const ListboxOption: React.FC<ListboxOptionProps> = ({
     }
   };
 
+  // Check if this is a separator item (has customContent and empty label)
+  const isSeparator = customContent && !label.trim();
+
   return (
     <div
       role={role}
@@ -114,6 +117,7 @@ export const ListboxOption: React.FC<ListboxOptionProps> = ({
         selected && styles.selected,
         disabled && styles.disabled,
         divider && styles.divider,
+        isSeparator && styles.separator,
         className
       )}
       onClick={handleClick}

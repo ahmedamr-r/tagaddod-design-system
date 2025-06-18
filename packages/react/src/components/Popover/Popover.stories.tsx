@@ -29,6 +29,35 @@ const meta: Meta<PopoverProps> = {
       control: 'boolean',
       description: 'Whether to show the arrow pointing to the trigger',
     },
+    margin: {
+      control: 'select',
+      options: ['none', 'small', 'medium', 'large'],
+      description: 'Custom margin for the popover content',
+    },
+    useListbox: {
+      control: 'boolean',
+      description: 'Enable listbox mode for dropdown functionality',
+    },
+    listboxShowIcons: {
+      control: 'boolean',
+      description: 'Whether to show icons for listbox items by default',
+    },
+    listboxMaxItems: {
+      control: 'number',
+      description: 'Maximum number of visible options in the listbox',
+    },
+    listboxMultiple: {
+      control: 'boolean',
+      description: 'Whether the listbox supports multiple selection',
+    },
+    listboxItemPaddingVertical: {
+      control: 'number',
+      description: 'Custom vertical padding (top and bottom) for listbox items in pixels',
+    },
+    listboxItemPaddingHorizontal: {
+      control: 'number',
+      description: 'Custom horizontal padding (left and right) for listbox items in pixels',
+    },
   },
 };
 
@@ -75,6 +104,291 @@ export const WithScrollbar: Story = {
     align: 'center',
     showArrow: true,
   },
+};
+
+// New Listbox integration stories
+export const WithListbox: Story = {
+  render: Template,
+  args: {
+    useListbox: true,
+    listboxOptions: [
+      { label: 'Option 1', value: '1' },
+      { label: 'Option 2', value: '2' },
+      { label: 'Option 3', value: '3' },
+      { label: 'Option 4', value: '4' },
+      { label: 'Option 5', value: '5' },
+    ],
+    listboxMaxItems: 5,
+    side: 'bottom',
+    align: 'center',
+    showArrow: true,
+    onListboxSelect: (value) => console.log('Selected:', value),
+  },
+};
+
+export const WithListboxIcons: Story = {
+  render: Template,
+  args: {
+    useListbox: true,
+    listboxShowIcons: true,
+    listboxDefaultIcon: '📄',
+    listboxOptions: [
+      { label: 'Documents', value: 'docs' },
+      { label: 'Images', value: 'images', icon: '🖼️' },
+      { label: 'Videos', value: 'videos', icon: '🎥' },
+      { label: 'Music', value: 'music', icon: '🎵' },
+      { label: 'Downloads', value: 'downloads' },
+    ],
+    listboxMaxItems: 5,
+    side: 'bottom',
+    align: 'center',
+    showArrow: true,
+    onListboxSelect: (value) => console.log('Selected:', value),
+  },
+};
+
+export const WithMixedIcons: Story = {
+  render: Template,
+  args: {
+    useListbox: true,
+    listboxShowIcons: false, // Global setting is false
+    listboxOptions: [
+      { label: 'Home', value: 'home', showIcon: true, icon: '🏠' },
+      { label: 'Profile', value: 'profile' }, // No icon
+      { label: 'Settings', value: 'settings', showIcon: true, icon: '⚙️' },
+      { label: 'Help', value: 'help' }, // No icon
+      { label: 'Logout', value: 'logout', showIcon: true, icon: '🚪' },
+    ],
+    listboxMaxItems: 5,
+    side: 'bottom',
+    align: 'center',
+    showArrow: true,
+    onListboxSelect: (value) => console.log('Selected:', value),
+  },
+};
+
+export const WithScrollableListbox: Story = {
+  render: Template,
+  args: {
+    useListbox: true,
+    type: 'with-scrollbar',
+    listboxOptions: Array.from({ length: 15 }, (_, i) => ({
+      label: `Option ${i + 1}`,
+      value: `option-${i + 1}`,
+      helpText: i % 3 === 0 ? `This is help text for option ${i + 1}` : undefined,
+    })),
+    listboxMaxItems: 6,
+    side: 'bottom',
+    align: 'center',
+    showArrow: true,
+    onListboxSelect: (value) => console.log('Selected:', value),
+  },
+};
+
+export const EnhancedScrollableDropdown: Story = {
+  render: Template,
+  args: {
+    useListbox: true,
+    type: 'with-scrollbar',
+    listboxShowIcons: true,
+    listboxOptions: [
+      // Recent Files Section
+      { label: 'Document.pdf', value: 'doc1', icon: '📄', helpText: 'Modified 2 hours ago' },
+      { label: 'Presentation.pptx', value: 'pres1', icon: '📊', helpText: 'Modified 1 day ago' },
+      { label: 'Spreadsheet.xlsx', value: 'sheet1', icon: '📈', helpText: 'Modified 3 days ago' },
+      
+      // Favorites Section  
+      { label: 'Project Plans', value: 'fav1', icon: '⭐', divider: true },
+      { label: 'Team Photos', value: 'fav2', icon: '⭐' },
+      { label: 'Budget 2024', value: 'fav3', icon: '⭐' },
+      
+      // Applications Section
+      { label: 'Calculator', value: 'app1', icon: '🧮', divider: true },
+      { label: 'Calendar', value: 'app2', icon: '📅' },
+      { label: 'Notes', value: 'app3', icon: '📝' },
+      { label: 'Weather', value: 'app4', icon: '🌤️' },
+      { label: 'Music Player', value: 'app5', icon: '🎵' },
+      { label: 'Photo Editor', value: 'app6', icon: '🖼️' },
+      { label: 'Video Player', value: 'app7', icon: '🎬' },
+      { label: 'Terminal', value: 'app8', icon: '💻' },
+      { label: 'Text Editor', value: 'app9', icon: '📄' },
+      { label: 'Web Browser', value: 'app10', icon: '🌐' },
+      { label: 'File Manager', value: 'app11', icon: '📁' },
+      { label: 'System Settings', value: 'app12', icon: '⚙️' },
+    ],
+    listboxMaxItems: 8,
+    side: 'bottom',
+    align: 'start',
+    showArrow: true,
+    margin: 'small',
+    onListboxSelect: (value) => console.log('Selected:', value),
+  },
+};
+
+export const WithMultipleSelection: Story = {
+  render: Template,
+  args: {
+    useListbox: true,
+    listboxMultiple: true,
+    listboxSelectedValue: ['1', '3'],
+    listboxOptions: [
+      { label: 'Option 1', value: '1' },
+      { label: 'Option 2', value: '2' },
+      { label: 'Option 3', value: '3' },
+      { label: 'Option 4', value: '4' },
+      { label: 'Option 5', value: '5' },
+    ],
+    listboxMaxItems: 5,
+    side: 'bottom',
+    align: 'center',
+    showArrow: true,
+    onListboxMultiSelect: (values) => console.log('Selected values:', values),
+  },
+};
+
+// Margin customization stories
+export const CustomMargins: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <Popover
+        content="No margin"
+        margin="none"
+      >
+        <Button>No Margin</Button>
+      </Popover>
+      
+      <Popover
+        content="Small margin"
+        margin="small"
+      >
+        <Button>Small</Button>
+      </Popover>
+      
+      <Popover
+        content="Medium margin (default)"
+        margin="medium"
+      >
+        <Button>Medium</Button>
+      </Popover>
+      
+      <Popover
+        content="Large margin"
+        margin="large"
+      >
+        <Button>Large</Button>
+      </Popover>
+      
+      <Popover
+        content="Custom 20px margin"
+        margin={20}
+      >
+        <Button>Custom (20px)</Button>
+      </Popover>
+    </div>
+  ),
+};
+
+export const ListboxWithCustomMargins: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '1rem' }}>
+      <Popover
+        useListbox
+        margin="none"
+        listboxOptions={[
+          { label: 'Compact Option 1', value: '1' },
+          { label: 'Compact Option 2', value: '2' },
+          { label: 'Compact Option 3', value: '3' },
+        ]}
+        onListboxSelect={(value) => console.log('Selected:', value)}
+      >
+        <Button>No Margin Listbox</Button>
+      </Popover>
+      
+      <Popover
+        useListbox
+        margin={10}
+        listboxShowIcons
+        listboxDefaultIcon="⭐"
+        listboxOptions={[
+          { label: 'Custom Margin 1', value: '1' },
+          { label: 'Custom Margin 2', value: '2' },
+          { label: 'Custom Margin 3', value: '3' },
+        ]}
+        onListboxSelect={(value) => console.log('Selected:', value)}
+      >
+        <Button>Custom Margin</Button>
+      </Popover>
+    </div>
+  ),
+};
+
+export const ListboxWithCustomPadding: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <Popover
+        useListbox
+        listboxItemPaddingVertical={8}
+        listboxItemPaddingHorizontal={12}
+        listboxOptions={[
+          { label: 'Compact Item 1', value: '1' },
+          { label: 'Compact Item 2', value: '2' },
+          { label: 'Compact Item 3', value: '3' },
+        ]}
+        onListboxSelect={(value) => console.log('Selected:', value)}
+      >
+        <Button>Compact Padding</Button>
+      </Popover>
+      
+      <Popover
+        useListbox
+        listboxItemPaddingVertical={20}
+        listboxItemPaddingHorizontal={24}
+        listboxShowIcons
+        listboxDefaultIcon="📄"
+        listboxOptions={[
+          { label: 'Spacious Item 1', value: '1' },
+          { label: 'Spacious Item 2', value: '2' },
+          { label: 'Spacious Item 3', value: '3' },
+        ]}
+        onListboxSelect={(value) => console.log('Selected:', value)}
+      >
+        <Button>Spacious Padding</Button>
+      </Popover>
+      
+      <Popover
+        useListbox
+        listboxItemPaddingVertical={4}
+        listboxItemPaddingHorizontal={32}
+        listboxShowIcons
+        listboxOptions={[
+          { label: 'Narrow Height', value: '1', icon: '🔥' },
+          { label: 'Wide Sides', value: '2', icon: '⚡' },
+          { label: 'Custom Shape', value: '3', icon: '🎯' },
+        ]}
+        onListboxSelect={(value) => console.log('Selected:', value)}
+      >
+        <Button>Custom Shape</Button>
+      </Popover>
+      
+      <Popover
+        useListbox
+        type="with-scrollbar"
+        listboxItemPaddingVertical={16}
+        listboxItemPaddingHorizontal={20}
+        listboxMaxItems={5}
+        listboxShowIcons
+        listboxOptions={Array.from({ length: 12 }, (_, i) => ({
+          label: `Padded Option ${i + 1}`,
+          value: `option-${i + 1}`,
+          icon: i % 3 === 0 ? '📁' : i % 3 === 1 ? '📄' : '🖼️',
+          helpText: i % 4 === 0 ? `Help text for option ${i + 1}` : undefined,
+        }))}
+        onListboxSelect={(value) => console.log('Selected:', value)}
+      >
+        <Button>Scrollable Custom Padding</Button>
+      </Popover>
+    </div>
+  ),
 };
 
 export const Different_Positions: Story = {

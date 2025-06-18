@@ -9,8 +9,8 @@
 }
 
 .count {
-  font-size: var(--t-font-size-base, 0.875rem);
-  color: var(--t-color-text-primary, #16161D);
+  font: var(--t-typography-body-sm-default);
+  color: var(--t-color-text-primary);
   position: relative;
 }
 
@@ -71,35 +71,121 @@
   flex-direction: row-reverse;
 }
 
+/* New Popover-based Rows Button */
+.rowsButton {
+  display: flex;
+  align-items: center;
+  gap: var(--t-space-200);
+  height: 2rem;
+  border-radius: var(--t-border-radius-200);
+  border: 1px solid var(--t-color-border-primary);
+  background-color: var(--t-color-fill-primary);
+  padding: 0 var(--t-space-200);
+  cursor: pointer;
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
+  font-family: var(--t-font-family-primary);
+  appearance: none;
+  outline: none;
+}
+
+.rowsButton:hover {
+  border-color: var(--t-color-border-hover);
+  background-color: var(--t-color-fill-hover);
+}
+
+.rowsButton:focus-visible {
+  outline: 2px solid var(--t-color-border-brand);
+  outline-offset: 1px;
+}
+
 .rowsLabel {
-  font-size: var(--t-font-size-base, 0.875rem);
-  color: var(--t-color-text-secondary, #7D8096);
+  font: var(--t-typography-body-sm-default);
+  color: var(--t-color-text-secondary);
   position: relative;
 }
 
-/* Line height trim for rows label */
+.rowsValue {
+  font: var(--t-typography-body-sm-medium);
+  color: var(--t-color-text-primary);
+  position: relative;
+}
+
+.chevron {
+  color: var(--t-color-text-secondary);
+  flex-shrink: 0;
+  transition: transform var(--t-duration-base) var(--t-easing-in-out);
+}
+
+.rowsButton[data-state="open"] .chevron {
+  transform: rotate(180deg);
+}
+
+/* Line height trim for rows label and value */
 .rowsLabel::before,
-.rowsLabel::after {
+.rowsLabel::after,
+.rowsValue::before,
+.rowsValue::after {
   content: '';
   display: block;
   height: 0;
 }
 
-.rowsLabel::before {
+.rowsLabel::before,
+.rowsValue::before {
   margin-top: -0.15em;
 }
 
-.rowsLabel::after {
+.rowsLabel::after,
+.rowsValue::after {
   margin-bottom: -0.15em;
 }
 
-/* Arabic font adjustment for rows label */
-:global([dir="rtl"]) .rowsLabel::before {
+/* Arabic font adjustment for rows label and value */
+:global([dir="rtl"]) .rowsLabel::before,
+:global([dir="rtl"]) .rowsValue::before {
   margin-top: -0.25em;
 }
 
-:global([dir="rtl"]) .rowsLabel::after {
+:global([dir="rtl"]) .rowsLabel::after,
+:global([dir="rtl"]) .rowsValue::after {
   margin-bottom: -0.25em;
+}
+
+/* Popover Content */
+.popoverContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 80px;
+  padding: 0;
+}
+
+.popoverOption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--t-space-200) var(--t-space-300);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: var(--t-typography-body-sm-default);
+  color: var(--t-color-text-primary);
+  transition: background-color var(--t-duration-base) var(--t-easing-in-out);
+  border-radius: var(--t-border-radius-100);
+  position: relative;
+}
+
+.popoverOption:hover {
+  background-color: var(--t-color-fill-hover);
+}
+
+.popoverOptionSelected {
+  background-color: var(--t-color-fill-brand-secondary);
+  color: var(--t-color-text-link);
+}
+
+.popoverOptionSelected:hover {
+  background-color: var(--t-color-fill-brand-secondary-hover);
 }
 
 .selectWrapper {
@@ -181,7 +267,7 @@
   font-family: Arial;
   font-size: 0.875rem;
   letter-spacing: 0.125rem;
-  background-color: var(--t-color-surface-background, #ffffff);
-  border: 1px solid var(--t-border-color-base, #C7C8D1);
+  background-color: transparent;
+  border: none;
   border-radius: var(--t-border-radius-200, 0.5rem);
 }
