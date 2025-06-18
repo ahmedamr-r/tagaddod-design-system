@@ -86,6 +86,9 @@ export const WithoutRowsSelector: Story = {
 // RTL pagination
 export const RTLMode: Story = {
   render: (args) => {
+    const [current, setCurrent] = React.useState(5);
+    const [pageSize, setPageSize] = React.useState(10);
+    
     // Set RTL for this story only
     React.useEffect(() => {
       const prevDir = document.dir;
@@ -98,11 +101,29 @@ export const RTLMode: Story = {
       };
     }, []);
     
-    return <Pagination {...args} />;
+    const handleChange = (page: number, size?: number) => {
+      console.log(`Page changed to ${page}, size: ${size}`);
+      setCurrent(page);
+      if (size) setPageSize(size);
+    };
+    
+    return (
+      <Pagination 
+        {...args} 
+        current={current} 
+        pageSize={pageSize}
+        onChange={handleChange}
+        onPageSizeChange={(size) => {
+          console.log(`Page size changed to ${size}`);
+          setPageSize(size);
+        }}
+        showCount={true}
+        showRowsInPage={true}
+      />
+    );
   },
   args: {
     total: 100,
-    current: 5,
   },
 };
 

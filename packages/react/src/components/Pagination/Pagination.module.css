@@ -4,8 +4,12 @@
   justify-content: space-between;
   width: 100%;
   font-family: var(--t-font-family-primary);
-  /* For RTL support, set direction based on document dir */
-  direction: inherit;
+  gap: 1rem;
+}
+
+/* RTL mode: ensure proper ordering */
+:global([dir="rtl"]) .pagination {
+  flex-direction: row;
 }
 
 .count {
@@ -48,15 +52,11 @@
 .paginationItems {
   display: flex;
   align-items: center;
-  gap: 0.25rem; /* Reduced gap between buttons */
+  gap: var(--t-space-150); /* Reduced gap between buttons */
 }
 
-/* RTL Support */
+/* RTL Support - Reverse pagination buttons order */
 :global([dir="rtl"]) .paginationItems {
-  flex-direction: row-reverse;
-}
-
-:global([dir="rtl"]) .controlsGroup {
   flex-direction: row-reverse;
 }
 
@@ -66,16 +66,11 @@
   gap: 0.5rem;
 }
 
-/* RTL Support for rows per page */
-:global([dir="rtl"]) .rowsPerPage {
-  flex-direction: row-reverse;
-}
-
 /* New Popover-based Rows Button */
 .rowsButton {
   display: flex;
   align-items: center;
-  gap: var(--t-space-200);
+  gap: var(--t-space-100);
   height: 2rem;
   border-radius: var(--t-border-radius-200);
   border: 1px solid var(--t-color-border-primary);
@@ -120,6 +115,11 @@
   transform: rotate(180deg);
 }
 
+/* RTL Support for rows button content */
+:global([dir="rtl"]) .rowsButton {
+  flex-direction: row-reverse;
+}
+
 /* Line height trim for rows label and value */
 .rowsLabel::before,
 .rowsLabel::after,
@@ -143,7 +143,7 @@
 /* Arabic font adjustment for rows label and value */
 :global([dir="rtl"]) .rowsLabel::before,
 :global([dir="rtl"]) .rowsValue::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .rowsLabel::after,
@@ -156,7 +156,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  min-width: 80px;
+  min-width: 60px; /* Reduced width for tighter appearance */
   padding: 0;
 }
 
@@ -164,7 +164,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--t-space-200) var(--t-space-300);
+  padding: var(--t-space-200) var(--t-space-200); /* Reduced horizontal padding for tighter appearance */
   border: none;
   background: transparent;
   cursor: pointer;

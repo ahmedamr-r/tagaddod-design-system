@@ -114,6 +114,8 @@ export const Pagination: React.FC<PaginationProps> = ({
   const [currentPageSize, setCurrentPageSize] = useState<number>(pageSize);
   // State to control the rows per page popover
   const [isRowsPopoverOpen, setIsRowsPopoverOpen] = useState<boolean>(false);
+  // State to track RTL direction (reactive to changes)
+  const [isRTL, setIsRTL] = useState<boolean>(false);
   
   // Update internal state when props change
   useEffect(() => {
@@ -123,6 +125,44 @@ export const Pagination: React.FC<PaginationProps> = ({
   useEffect(() => {
     setCurrentPageSize(pageSize);
   }, [pageSize]);
+
+  // Effect to monitor RTL direction changes
+  useEffect(() => {
+    const checkRTL = () => {
+      const rtl = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+      setIsRTL(prevRTL => {
+        // Only update if the value actually changed to avoid unnecessary re-renders
+        if (prevRTL !== rtl) {
+          return rtl;
+        }
+        return prevRTL;
+      });
+    };
+
+    // Check initially
+    checkRTL();
+
+    // Set up a MutationObserver to watch for dir attribute changes
+    const observer = new MutationObserver((mutations) => {
+      // Check if any mutation was related to the dir attribute
+      const dirChanged = mutations.some(mutation => 
+        mutation.type === 'attributes' && mutation.attributeName === 'dir'
+      );
+      if (dirChanged) {
+        checkRTL();
+      }
+    });
+
+    // Observe changes to dir attribute on html element
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['dir']
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
   
   // Get pagination data from hook
   const { paginationRange, totalPages } = usePagination({
@@ -171,8 +211,7 @@ export const Pagination: React.FC<PaginationProps> = ({
     return `Showing ${start} to ${end} of ${total} entries`;
   }, [currentPage, currentPageSize, total]);
   
-  // RTL detection for line height
-  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+  // Line height style based on RTL state
   const lineHeightStyle = {
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
@@ -203,59 +242,112 @@ export const Pagination: React.FC<PaginationProps> = ({
       
       <div className={styles.controlsGroup}>
         <div className={styles.paginationItems}>
-          {/* Previous button */}
-          <Button
-            size="micro"
-            variant="tertiary"
-            tone="neutral"
-            onClick={handlePrev}
-            disabled={currentPage === 1}
-            aria-label="Previous page"
-            prefixIcon={<IconChevronLeft size={16} />}
-          />
-          
-          {/* Page buttons */}
-          {paginationRange.map((pageNumber, index) => {
-            if (pageNumber === DOTS) {
-              return renderEllipsis(`ellipsis-${index}`);
-            }
-            
-            const page = pageNumber as number;
-            const isCurrentPage = page === currentPage;
-            
-            return (
+          {isRTL ? (
+            <>
+              {/* RTL: Next button first (left arrow pointing left) */}
               <Button
-                key={`page-${page}`}
                 size="micro"
                 variant="tertiary"
-                tone={isCurrentPage ? "default" : "neutral"}
-                onClick={() => handlePageChange(page)}
-                aria-current={isCurrentPage ? 'page' : undefined}
-              >
-                {page}
-              </Button>
-            );
-          })}
-          
-          {/* Next button */}
-          <Button
-            size="micro"
-            variant="tertiary"
-            tone="neutral"
-            onClick={handleNext}
-            disabled={currentPage === totalPages}
-            aria-label="Next page"
-            suffixIcon={<IconChevronRight size={16} />}
-          />
+                tone="neutral"
+                onClick={handleNext}
+                disabled={currentPage === totalPages}
+                aria-label="Next page"
+                prefixIcon={<IconChevronLeft size={16} />}
+              />
+              
+              {/* RTL: Page buttons in reverse order */}
+              {[...paginationRange].reverse().map((pageNumber, index) => {
+                if (pageNumber === DOTS) {
+                  return renderEllipsis(`ellipsis-rtl-${index}`);
+                }
+                
+                const page = pageNumber as number;
+                const isCurrentPage = page === currentPage;
+                
+                return (
+                  <Button
+                    key={`page-rtl-${page}`}
+                    size="micro"
+                    variant="tertiary"
+                    tone={isCurrentPage ? "default" : "neutral"}
+                    onClick={() => handlePageChange(page)}
+                    aria-current={isCurrentPage ? 'page' : undefined}
+                  >
+                    {page}
+                  </Button>
+                );
+              })}
+              
+              {/* RTL: Previous button last (right arrow pointing right) */}
+              <Button
+                size="micro"
+                variant="tertiary"
+                tone="neutral"
+                onClick={handlePrev}
+                disabled={currentPage === 1}
+                aria-label="Previous page"
+                prefixIcon={<IconChevronRight size={16} />}
+              />
+            </>
+          ) : (
+            <>
+              {/* LTR: Previous button first */}
+              <Button
+                size="micro"
+                variant="tertiary"
+                tone="neutral"
+                onClick={handlePrev}
+                disabled={currentPage === 1}
+                aria-label="Previous page"
+                prefixIcon={<IconChevronLeft size={16} />}
+              />
+              
+              {/* LTR: Page buttons in normal order */}
+              {paginationRange.map((pageNumber, index) => {
+                if (pageNumber === DOTS) {
+                  return renderEllipsis(`ellipsis-${index}`);
+                }
+                
+                const page = pageNumber as number;
+                const isCurrentPage = page === currentPage;
+                
+                return (
+                  <Button
+                    key={`page-${page}`}
+                    size="micro"
+                    variant="tertiary"
+                    tone={isCurrentPage ? "default" : "neutral"}
+                    onClick={() => handlePageChange(page)}
+                    aria-current={isCurrentPage ? 'page' : undefined}
+                  >
+                    {page}
+                  </Button>
+                );
+              })}
+              
+              {/* LTR: Next button last */}
+              <Button
+                size="micro"
+                variant="tertiary"
+                tone="neutral"
+                onClick={handleNext}
+                disabled={currentPage === totalPages}
+                aria-label="Next page"
+                suffixIcon={<IconChevronRight size={16} />}
+              />
+            </>
+          )}
         </div>
         
+        {/* Rows per page dropdown - shown for both LTR and RTL */}
         {showRowsInPage && (
           <div className={styles.rowsPerPage}>
             <Popover
               open={isRowsPopoverOpen}
               onOpenChange={setIsRowsPopoverOpen}
               side="bottom"
-              align="end"
+              align={isRTL ? "start" : "end"}
+              margin="none"
               content={
                 <div className={styles.popoverContent}>
                   {pageSizeOptions.map(size => (
@@ -276,16 +368,30 @@ export const Pagination: React.FC<PaginationProps> = ({
             >
               <button 
                 className={styles.rowsButton} 
-                aria-label={isRTL ? 'عدد الصفوف' : 'Rows in Page'}
+                aria-label={isRTL ? "عدد الصفوف" : "Rows in Page"}
                 data-state={isRowsPopoverOpen ? 'open' : 'closed'}
               >
-                <span className={styles.rowsLabel} style={lineHeightStyle}>
-                  {isRTL ? 'عدد الصفوف' : 'Rows in Page'}
-                </span>
-                <span className={styles.rowsValue} style={lineHeightStyle}>
-                  {currentPageSize}
-                </span>
-                <IconChevronDown size={16} className={styles.chevron} />
+                {isRTL ? (
+                  <>
+                    <IconChevronDown size={16} className={styles.chevron} />
+                    <span className={styles.rowsValue} style={lineHeightStyle}>
+                      {currentPageSize}
+                    </span>
+                    <span className={styles.rowsLabel} style={lineHeightStyle}>
+                      عدد الصفوف
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className={styles.rowsLabel} style={lineHeightStyle}>
+                      Rows in Page
+                    </span>
+                    <span className={styles.rowsValue} style={lineHeightStyle}>
+                      {currentPageSize}
+                    </span>
+                    <IconChevronDown size={16} className={styles.chevron} />
+                  </>
+                )}
               </button>
             </Popover>
           </div>
