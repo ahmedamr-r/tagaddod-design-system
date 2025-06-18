@@ -166,10 +166,125 @@ export const Loading: Story = {
   },
 };
 
+// Loading state variations
+export const LoadingVariants: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <Button variant="primary" loading>Primary Loading</Button>
+      <Button variant="secondary" loading>Secondary Loading</Button>
+      <Button variant="tertiary" loading>Tertiary Loading</Button>
+      <Button variant="plain" loading>Plain Loading</Button>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Loading states maintain button width and show only a centered spinner with full opacity.',
+      },
+    },
+  },
+};
+
+export const LoadingSizes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+      <Button size="large" loading>Large Loading</Button>
+      <Button size="medium" loading>Medium Loading</Button>
+      <Button size="micro" loading>Micro Loading</Button>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Loading buttons in different sizes maintain their original dimensions.',
+      },
+    },
+  },
+};
+
+export const LoadingWithIcons: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <Button prefixIcon={<IconPlus size={18} />} loading>
+        Add Item
+      </Button>
+      <Button suffixIcon={<IconArrowRight size={18} />} loading>
+        Next Step
+      </Button>
+      <Button 
+        prefixIcon={<IconSearch size={18} />}
+        suffixIcon={<IconArrowRight size={18} />}
+        loading
+      >
+        Search Results
+      </Button>
+      <Button prefixIcon={<IconPlus size={18} />} loading aria-label="Loading add" />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Loading buttons with icons maintain their width and show only the spinner.',
+      },
+    },
+  },
+};
+
 export const Disabled: Story = {
   args: {
     children: 'Disabled Button',
     disabled: true,
+  },
+};
+
+// Disabled variants showcase - matching Figma designs
+export const DisabledVariants: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'flex-start' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 600 }}>Disabled Variants (matching Figma)</h4>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <Button variant="primary" disabled>Primary Disabled</Button>
+          <Button variant="secondary" disabled>Secondary Disabled</Button>
+          <Button variant="tertiary" disabled>Tertiary Disabled</Button>
+          <Button variant="plain" disabled>Plain Disabled</Button>
+        </div>
+      </div>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 600 }}>Disabled with Icons</h4>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <Button variant="primary" disabled prefixIcon={<IconPlus size={18} />}>Add Item</Button>
+          <Button variant="secondary" disabled suffixIcon={<IconArrowRight size={18} />}>Next Step</Button>
+          <Button variant="tertiary" disabled prefixIcon={<IconEdit size={18} />}>Edit</Button>
+        </div>
+      </div>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 600 }}>Comparison: Normal vs Disabled</h4>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
+            <Button variant="primary">Primary Normal</Button>
+            <Button variant="primary" disabled>Primary Disabled</Button>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
+            <Button variant="secondary">Secondary Normal</Button>
+            <Button variant="secondary" disabled>Secondary Disabled</Button>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
+            <Button variant="tertiary">Tertiary Normal</Button>
+            <Button variant="tertiary" disabled>Tertiary Disabled</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Disabled button states matching Figma designs. Primary and Secondary use surface-disabled background with disabled text, Tertiary maintains transparent background with disabled border and text.',
+      },
+    },
   },
 };
 

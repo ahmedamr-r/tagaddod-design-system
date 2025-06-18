@@ -96,14 +96,18 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   const renderContent = () => {
     if (loading) {
       return (
-        <span className={styles.loadingWrapper}>
-          <IconLoader2 className={styles.spinner} />
-          {!isIconOnly && (
-            <span className={styles.loadingText} style={lineHeightStyle}>
-              {isRTL ? 'جارٍ التحميل...' : 'Loading...'}
-            </span>
-          )}
-        </span>
+        <>
+          {/* Hidden content to maintain width */}
+          <span style={{ visibility: 'hidden', position: 'absolute' }}>
+            {prefixIcon && <span className={styles.prefixIcon}>{prefixIcon}</span>}
+            {children && <span className={styles.label} style={lineHeightStyle}>{children}</span>}
+            {suffixIcon && <span className={styles.suffixIcon}>{suffixIcon}</span>}
+          </span>
+          {/* Visible spinner */}
+          <span className={styles.loadingWrapper}>
+            <IconLoader2 className={styles.spinner} />
+          </span>
+        </>
       );
     }
     

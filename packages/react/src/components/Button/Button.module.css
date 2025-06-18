@@ -29,7 +29,6 @@
 }
 
 .button:disabled {
-  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -63,17 +62,17 @@
 
 /* Icon-only button (square) */
 .iconOnly.sizeLarge {
-  width: 48px;
+  width: var(--t-size-1200);
   padding: 0;
 }
 
 .iconOnly.sizeMedium {
-  width: 40px;
+  width: var(--t-size-1000);
   padding: 0;
 }
 
 .iconOnly.sizeMicro {
-  width: 32px;
+  width: var(--t-size-800);
   padding: 0;
 }
 
@@ -86,10 +85,12 @@
 
 .variantPrimary:hover:not(:disabled) {
   background-color: var(--t-color-fill-brand-hover);
+  color: var(--t-color-text-on-fill-hover);
 }
 
 .variantPrimary:active:not(:disabled) {
   background-color: var(--t-color-fill-brand-active);
+  color: var(--t-color-text-on-fill-active);
 }
 
 /* Variant: Secondary */
@@ -101,10 +102,12 @@
 
 .variantSecondary:hover:not(:disabled) {
   background-color: var(--t-color-fill-brand-secondary-hover);
+  color: var(--t-color-text-link-hover);
 }
 
 .variantSecondary:active:not(:disabled) {
   background-color: var(--t-color-fill-brand-secondary-active);
+  color: var(--t-color-text-link-active);
 }
 
 /* Variant: Tertiary */
@@ -117,11 +120,13 @@
 .variantTertiary:hover:not(:disabled) {
   background-color: var(--t-color-fill-brand-secondary);
   border-color: var(--t-color-border-brand-hover);
+  color: var(--t-color-text-link-hover);
 }
 
 .variantTertiary:active:not(:disabled) {
   background-color: var(--t-color-fill-brand-secondary-active);
   border-color: var(--t-color-border-brand-active);
+  color: var(--t-color-text-link-active);
 }
 
 /* Variant: Plain */
@@ -135,10 +140,12 @@
 
 .variantPlain:hover:not(:disabled) {
   background-color: var(--t-color-fill-brand-secondary);
+  color: var(--t-color-text-link-hover);
 }
 
 .variantPlain:active:not(:disabled) {
   background-color: var(--t-color-fill-brand-secondary-active);
+  color: var(--t-color-text-link-active);
 }
 
 /* Tones */
@@ -152,10 +159,12 @@
 
 .toneCritical.variantPrimary:hover:not(:disabled) {
   background-color: var(--t-color-fill-critical-hover);
+  color: var(--t-color-text-on-fill-hover);
 }
 
 .toneCritical.variantPrimary:active:not(:disabled) {
   background-color: var(--t-color-fill-critical-active);
+  color: var(--t-color-text-on-fill-active);
 }
 
 .toneCritical.variantSecondary {
@@ -165,10 +174,12 @@
 
 .toneCritical.variantSecondary:hover:not(:disabled) {
   background-color: var(--t-color-fill-critical-secondary-hover);
+  color: var(--t-color-text-critical-hover);
 }
 
 .toneCritical.variantSecondary:active:not(:disabled) {
   background-color: var(--t-color-fill-critical-secondary-active);
+  color: var(--t-color-text-critical-active);
 }
 
 .toneCritical.variantTertiary,
@@ -196,6 +207,16 @@
   border-color: transparent;
 }
 
+.toneCritical.variantPlain:hover:not(:disabled) {
+  background-color: var(--t-color-fill-critical-secondary);
+  color: var(--t-color-text-critical-hover);
+}
+
+.toneCritical.variantPlain:active:not(:disabled) {
+  background-color: var(--t-color-fill-critical-secondary-active);
+  color: var(--t-color-text-critical-active);
+}
+
 /* Success tone */
 .toneSuccess.variantPrimary {
   background-color: var(--t-color-fill-success);
@@ -204,10 +225,12 @@
 
 .toneSuccess.variantPrimary:hover:not(:disabled) {
   background-color: var(--t-color-fill-success-hover);
+  color: var(--t-color-text-on-fill-hover);
 }
 
 .toneSuccess.variantPrimary:active:not(:disabled) {
   background-color: var(--t-color-fill-success-active);
+  color: var(--t-color-text-on-fill-active);
 }
 
 .toneSuccess.variantSecondary {
@@ -217,10 +240,12 @@
 
 .toneSuccess.variantSecondary:hover:not(:disabled) {
   background-color: var(--t-color-fill-success-secondary-hover);
+  color: var(--t-color-text-success-hover);
 }
 
 .toneSuccess.variantSecondary:active:not(:disabled) {
   background-color: var(--t-color-fill-success-secondary-active);
+  color: var(--t-color-text-success-active);
 }
 
 .toneSuccess.variantTertiary,
@@ -229,8 +254,30 @@
   border-color: var(--t-color-border-success);
 }
 
+.toneSuccess.variantTertiary:hover:not(:disabled) {
+  background-color: var(--t-color-fill-success-secondary);
+  border-color: var(--t-color-border-success-hover);
+  color: var(--t-color-text-success-hover);
+}
+
+.toneSuccess.variantTertiary:active:not(:disabled) {
+  background-color: var(--t-color-fill-success-secondary-active);
+  border-color: var(--t-color-border-success-active);
+  color: var(--t-color-text-success-active);
+}
+
 .toneSuccess.variantPlain {
   border-color: transparent;
+}
+
+.toneSuccess.variantPlain:hover:not(:disabled) {
+  background-color: var(--t-color-fill-success-secondary);
+  color: var(--t-color-text-success-hover);
+}
+
+.toneSuccess.variantPlain:active:not(:disabled) {
+  background-color: var(--t-color-fill-success-secondary-active);
+  color: var(--t-color-text-success-active);
 }
 
 /* Neutral tone */
@@ -241,27 +288,30 @@
 
 .toneNeutral.variantPrimary:hover:not(:disabled) {
   background-color: var( --t-color-gray-1400);
+  color: var(--t-color-text-on-fill-hover);
 }
 
 .toneNeutral.variantPrimary:active:not(:disabled) {
   background-color: var(--t-color-gray-1600);
+  color: var(--t-color-text-on-fill-active);
 }
 
 .toneNeutral.variantSecondary {
   background-color: var( --t-color-surface-secondary);
-  color: var(--t-color-text-neutral);
+  color: var(--t-color-text-primary);
 }
 
 .toneNeutral.variantSecondary:hover:not(:disabled) {
   background-color: var( --t-color-surface-secondary-hover);
+  color: var(--t-color-text-primary);
 }
 
 .toneNeutral.variantSecondary:active:not(:disabled) {
   background-color: var(--t-color-surface-secondary-active);
+  color: var(--t-color-text-primary);
 }
 
-.toneNeutral.variantTertiary,
-.toneNeutral.variantPlain {
+.toneNeutral.variantTertiary {
   background-color: var( --t-color-fill-primary);
   color: var(--t-color-text-primary);
   border-color: var( --t-color-border-primary);
@@ -270,10 +320,31 @@
 .toneNeutral.variantTertiary:hover:not(:disabled) {
     background-color: var( --t-color-fill-hover);
   border-color: var(   --t-color-border-hover);
+  color: var(--t-color-text-primary);
+}
+
+.toneNeutral.variantTertiary:active:not(:disabled) {
+  background-color: var(--t-color-fill-active);
+  border-color: var(--t-color-border-active);
+  color: var(--t-color-text-primary);
 }
 
 .toneNeutral.variantPlain {
   border-color: transparent;
+  color: var(--t-color-text-primary);
+  background-color: transparent;
+
+
+}
+
+.toneNeutral.variantPlain:hover:not(:disabled) {
+  background-color: var(--t-color-fill-hover);
+  color: var(--t-color-text-primary);
+}
+
+.toneNeutral.variantPlain:active:not(:disabled) {
+  background-color: var(--t-color-fill-active);
+  color: var(--t-color-text-primary);
 }
 
 /* Magic tone */
@@ -284,10 +355,12 @@
 
 .toneMagic.variantPrimary:hover:not(:disabled) {
   background-color: var(--t-color-fill-magic-hover);
+  color: var(--t-color-text-on-fill-hover);
 }
 
 .toneMagic.variantPrimary:active:not(:disabled) {
   background-color: var(--t-color-fill-magic-active);
+  color: var(--t-color-text-on-fill-active);
 }
 
 .toneMagic.variantSecondary {
@@ -340,6 +413,7 @@
 /* Loading state */
 .loading {
   cursor: wait;
+  opacity: 1;
 }
 
 .loadingWrapper {
@@ -347,6 +421,10 @@
   align-items: center;
   justify-content: center;
   gap: var(--t-space-200);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .spinner {
@@ -452,4 +530,34 @@
   .button.fullWidth {
     width: 100%;
   }
+}
+
+/* Disabled states - matching Figma designs */
+
+/* Primary disabled state */
+.variantPrimary:disabled {
+  background-color: var(--t-color-fill-disabled);
+  color: var(--t-color-text-on-fill);
+  border-color: transparent;
+}
+
+/* Secondary disabled state */
+.variantSecondary:disabled {
+  background-color: var(--t-color-bg-primary);
+  color: var(--t-color-text-disabled);
+  border-color: transparent;
+}
+
+/* Tertiary disabled state */
+.variantTertiary:disabled {
+  background-color: transparent;
+  color: var(--t-color-text-disabled);
+  border-color: var(--t-color-border-disabled);
+}
+
+/* Plain disabled state */
+.variantPlain:disabled {
+  background-color: transparent;
+  color: var(--t-color-text-disabled);
+  border-color: transparent;
 }

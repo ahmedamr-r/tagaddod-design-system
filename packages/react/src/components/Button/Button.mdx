@@ -147,7 +147,7 @@ For special or premium actions.
 
 ### Loading
 
-Shows a spinner and disables interaction. The button displays "Loading..." text in the current language.
+Shows a centered spinner and disables interaction. The button maintains its original width and full opacity during loading state.
 
 <Canvas of={ButtonStories.Loading} />
 
@@ -155,15 +155,36 @@ Shows a spinner and disables interaction. The button displays "Loading..." text 
 <Button loading>Loading Button</Button>
 ```
 
+#### Loading Variations
+
+<Canvas of={ButtonStories.LoadingVariants} />
+
+#### Loading with Different Sizes
+
+<Canvas of={ButtonStories.LoadingSizes} />
+
+#### Loading with Icons
+
+<Canvas of={ButtonStories.LoadingWithIcons} />
+
 ### Disabled
 
-Indicates that a button action is unavailable.
+Indicates that a button action is unavailable. Each variant has a specific disabled appearance matching the design system.
 
 <Canvas of={ButtonStories.Disabled} />
 
 ```jsx
 <Button disabled>Disabled Button</Button>
 ```
+
+#### Disabled Variants
+
+<Canvas of={ButtonStories.DisabledVariants} />
+
+All button variants have specific disabled styles:
+- **Primary/Secondary**: Light gray background with disabled text color
+- **Tertiary**: Transparent background with disabled border and text
+- **Plain**: Transparent background with disabled text color
 
 ### Full Width
 
@@ -239,7 +260,7 @@ The Button component properly handles Right-to-Left (RTL) languages automaticall
 
 1. Adjusting icon positioning for RTL text flow
 2. Applying appropriate line height for Arabic text
-3. Displaying "Loading..." text in Arabic when in RTL mode
+3. Maintaining proper spinner positioning in RTL mode
 
 <Canvas of={ButtonStories.RtlText} />
 
@@ -342,7 +363,9 @@ The Button uses the following token CSS variables:
 1. The component determines if it's icon-only by checking if there are no children but icon props exist
 2. Detects RTL mode from the document direction
 3. Applies appropriate classes based on props
-4. Renders content (including loading state) based on conditions
+4. Renders content based on loading state:
+   - **Normal state**: Shows text and icons as provided
+   - **Loading state**: Renders hidden content to maintain width and displays centered spinner with full opacity
 
 ### Browser Support
 
