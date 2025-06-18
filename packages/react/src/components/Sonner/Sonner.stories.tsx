@@ -535,4 +535,61 @@ export const WithCloseButton: Story = {
       <Sonner {...args} />
     </ToastDemo>
   ),
+};
+
+export const AlwaysVisible: Story = {
+  args: {
+    closeButton: true,
+    expand: false,
+    duration: Infinity, // Never auto-dismiss
+  },
+  render: (args: SonnerProps) => {
+    // Show toast immediately when story loads
+    React.useEffect(() => {
+      const timer = setTimeout(() => {
+        showSonner.info({
+          title: 'Persistent Toast for Testing',
+          description: 'This toast stays visible to test the close icon size. Click the X to dismiss.',
+          duration: Infinity, // Never auto-dismiss
+        });
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }, []);
+
+    return (
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        gap: '12px', 
+        minWidth: '300px',
+        minHeight: '200px'
+      }}>
+        <p style={{ 
+          fontFamily: 'Outfit, sans-serif', 
+          fontSize: '14px', 
+          color: '#666',
+          margin: 0 
+        }}>
+          This story automatically shows a persistent toast for testing the close icon size.
+        </p>
+        <DemoButton 
+          onClick={() => showSonner.error({
+            title: 'Another Test Toast',
+            description: 'This is another test toast with close button.',
+            duration: Infinity,
+          })}
+        >
+          Show Another Persistent Toast
+        </DemoButton>
+        <DemoButton 
+          variant="secondary"
+          onClick={() => showSonner.dismissAll()}
+        >
+          Dismiss All Toasts
+        </DemoButton>
+        <Sonner {...args} />
+      </div>
+    );
+  },
 }; 

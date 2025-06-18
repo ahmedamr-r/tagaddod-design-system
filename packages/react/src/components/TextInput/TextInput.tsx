@@ -167,7 +167,6 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             <div className={styles.labelContainer}>
               <Form.Label className={styles.label} style={lineHeightStyle}>
                 {label}
-                {required && <span className={styles.required}>*</span>}
                 {optional && <span className={styles.optional}>(Optional)</span>}
               </Form.Label>
             </div>

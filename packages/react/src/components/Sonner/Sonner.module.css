@@ -16,6 +16,7 @@
   --sonner-space-3: var(--t-space-150);
   --sonner-space-2: var(--t-space-100);
   --sonner-icon-size: var(--t-size-500);
+  --sonner-close-icon-size: var(--t-size-600);
 }
 
 /* Toaster Container */
@@ -24,19 +25,31 @@
   z-index: var(--t-z-toast);
 }
 
+/* Target Sonner library's built-in close button */
+.toaster :global([data-close-button]) {
+  width: var(--sonner-close-icon-size) !important;
+  height: var(--sonner-close-icon-size) !important;
+}
+
+.toaster :global([data-close-button] svg) {
+  width: var(--sonner-close-icon-size) !important;
+  height: var(--sonner-close-icon-size) !important;
+}
+
 /* Toast Component - Base styles matching Figma */
 .toast {
   display: flex;
   flex-direction: row;
   align-items: center;
-  min-width: 280px;
-  max-width: 480px;
-  padding: var(--sonner-space-12);
-  background-color: var(--sonner-default-bg);
-  border-radius: var(--sonner-border-radius);
+  min-width: 17.5rem;
+  max-width: 30rem;
+  min-height: var(--t-size-1200);
+  padding: var(--t-space-300);
+  background-color: var(--t-color-surface-primary);
+  border-radius: var(--t-border-radius-200);
   box-shadow: var(--sonner-shadow);
   position: relative;
-  gap: var(--sonner-space-8);
+  gap: var( --t-space-500);
   transition: all var(--t-duration-fast) var(--t-easing-in-out);
 }
 
@@ -44,7 +57,7 @@
 .mainContent {
   display: flex;
   align-items: center;
-  gap: var(--sonner-space-3);
+  gap: var(--t-space-300);
   flex: 1;
   min-width: 0;
 }
@@ -61,7 +74,7 @@
 
 .iconWithBackground {
   background-color: var(--sonner-icon-bg-default);
-  border-radius: var(--sonner-border-radius-small);
+  border-radius: var(--t-border-radius-100);
   padding: var(--sonner-space-12);
   width: auto;
   height: auto;
@@ -71,6 +84,12 @@
   width: var(--sonner-icon-size);
   height: var(--sonner-icon-size);
   flex-shrink: 0;
+  color: var(--t-color-icon-primary);
+}
+
+.icon svg {
+  color: inherit;
+  stroke: currentColor;
 }
 
 .spinning {
@@ -90,14 +109,14 @@
 
 .title {
   font: var(--t-typography-body-md-medium);
-  color: var(--sonner-text-primary);
+  color: var(--t-color-text-primary);
   margin: 0;
-  margin-bottom: var(--sonner-space-2);
+  margin-bottom: var(--t-space-50);
 }
 
 .description {
   font: var(--t-typography-body-sm-default);
-  color: var(--sonner-text-secondary);
+  color: var(--t-color-text-secondary);
   margin: 0;
 }
 
@@ -114,8 +133,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--sonner-icon-size);
-  height: var(--sonner-icon-size);
+  width: 2rem;
+  height: 2rem;
   background: none;
   border: none;
   cursor: pointer;
@@ -133,8 +152,8 @@
 }
 
 .closeIcon {
-  width: var(--sonner-icon-size);
-  height: var(--sonner-icon-size);
+  width: var(--sonner-close-icon-size);
+  height: var(--sonner-close-icon-size);
   stroke-width: var(--t-border-width-icon);
 }
 
@@ -203,7 +222,7 @@
 }
 
 .error .icon {
-  color: var(--sonner-text-on-bg);
+  color: var(--t-color-icon-on-fill);
 }
 
 .error .closeButton {
@@ -236,7 +255,7 @@
 }
 
 .success .icon {
-  color: var(--sonner-text-on-bg);
+  color: var(--t-color-icon-on-fill);
 }
 
 .success .closeButton {

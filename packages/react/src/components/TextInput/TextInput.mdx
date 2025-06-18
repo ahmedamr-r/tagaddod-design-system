@@ -58,7 +58,7 @@ Mark non-required fields with the "optional" flag to display "(Optional)" next t
 
 ### Required Fields
 
-Required fields display a red asterisk (*) after the label.
+All fields are required by default. Use the `optional` prop to mark fields as optional.
 
 <Canvas of={TextInputStories.Required} />
 
@@ -345,7 +345,7 @@ The TextInput component properly handles Right-to-Left (RTL) languages automatic
 ## Accessibility
 
 - Each input has a unique ID that connects it to its label, help text, and error message
-- Required fields use both the `required` attribute and visual indication
+- Required fields use the `required` attribute (all fields are required by default unless marked optional)
 - Error states use `aria-invalid` and connect error messages with `aria-describedby`
 - Interactive elements (clear button, password toggle) have appropriate `aria-label` values
 - Focus states are clearly visible for keyboard navigation

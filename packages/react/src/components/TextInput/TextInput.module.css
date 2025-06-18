@@ -3,7 +3,6 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--t-space-100);
   width: 100%;
 }
 
@@ -15,13 +14,11 @@
 .labelContainer {
   display: flex;
   align-items: center;
-  margin-bottom: var(--t-space-100);
+  margin-bottom: var(--t-space-200);
 }
 
 .label {
-  font-family: var(--t-font-family-primary);
-  font-size: var(--t-font-size-350);
-  font-weight: var(--t-font-weight-medium);
+  font: var(--t-typography-body-md-default);
   color: var(--t-color-text-primary);
   position: relative;
   line-height: 1.5;
@@ -46,7 +43,7 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .label::before {
-  margin-top: .09em;
+  margin-top: .1em;
 }
 
 :global([dir="rtl"]) .label::after {
@@ -157,7 +154,8 @@
 
 /* Size variants with adjusted spacing */
 .sizeMicro .inputWrapper {
-  min-height: var(--t-size-700); /* 20px equivalent */
+  height: var(--t-size-700); /* 28px fixed height */
+  min-height: var(--t-size-700);
 }
 
 .sizeMicro .input {
@@ -179,8 +177,13 @@
   padding-inline-end: var(--t-space-200);
 }
 
+.sizeMicro .label {
+  font: var(--t-typography-body-sm-default);
+}
+
 .sizeMedium .inputWrapper {
-  min-height: var(--t-size-1000); /* 32px equivalent */
+  height: var(--t-size-800); /* 32px fixed height */
+  min-height: var(--t-size-800);
 }
 
 .sizeMedium .input {
@@ -194,8 +197,13 @@
   font-size: var(--t-font-size-350);
 }
 
+.sizeMedium .label {
+  font: var(--t-typography-body-sm-default);
+}
+
 .sizeLarge .inputWrapper {
-  min-height: var(--t-size-1200); /* 40px equivalent */
+  height: var(--t-size-1000); /* 40px fixed height */
+  min-height: var(--t-size-1000);
 }
 
 .sizeLarge .input {
@@ -254,7 +262,7 @@
   gap: var(--t-space-100);
   color: var(--t-color-text-critical);
   font-size: var(--t-font-size-300);
-  margin-top: var(--t-space-100);
+  margin-top: var(--t-space-200);
   position: relative;
   line-height: 1.5;
 }
@@ -293,7 +301,7 @@
 .helpText {
   font-size: var(--t-font-size-300);
   color: var(--t-color-text-secondary);
-  margin-top: var(--t-space-100);
+  margin-top: var(--t-space-200);
   position: relative;
   line-height: 1.5;
 }

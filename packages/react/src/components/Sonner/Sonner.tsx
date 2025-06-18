@@ -112,22 +112,22 @@ function Toast(props: ToastProps) {
         return <IconAlertTriangle className={styles.icon} />;
       case 'loading':
         return <IconLoader className={clsx(styles.icon, styles.spinning)} />;
+      case 'info':
+        return <IconAlertTriangle className={styles.icon} />;
       default:
-        return null;
+        return <IconAlertTriangle className={styles.icon} />;
     }
   };
 
   return (
     <div className={clsx(styles.toast, styles[type])}>
       <div className={styles.mainContent}>
-        {getTypeIcon() && (
-          <div className={clsx(
-            styles.iconContainer,
-            iconBackground && styles.iconWithBackground
-          )}>
-            {getTypeIcon()}
-          </div>
-        )}
+        <div className={clsx(
+          styles.iconContainer,
+          iconBackground && styles.iconWithBackground
+        )}>
+          {getTypeIcon()}
+        </div>
         
         <div className={styles.textContent}>
           {title && (
@@ -222,7 +222,7 @@ export const Sonner: React.FC<SonnerProps> = ({
   expand = false,
   duration = 4000,
   visibleToasts = 3,
-  closeButton = false,
+  closeButton = true,
   gap = 14,
   offset,
   icons,
