@@ -121,7 +121,7 @@ font: var(--t-typography-body-sm-default);
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .label::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .label::after {
@@ -177,7 +177,7 @@ font: var(--t-typography-body-sm-default);
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .helpText::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .helpText::after {
@@ -186,12 +186,12 @@ font: var(--t-typography-body-sm-default);
 
 /* In LTR, indent the helpText from the left */
 :global([dir="ltr"]) .helpText {
-  padding-left: calc(var(--t-size-400) + var(--t-space-200));
+  padding-left: var(--t-size-800) ;
 }
 
 /* In RTL, indent the helpText from the right, exactly 24px as specified in Figma */
 :global([dir="rtl"]) .helpText {
-  padding-right: var(--t-space-600);
+  padding-right: var(--t-space-800);
 }
 
 .errorMessage {
@@ -224,7 +224,7 @@ font: var(--t-typography-body-sm-default);
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .errorMessage::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .errorMessage::after {
@@ -249,11 +249,12 @@ font: var(--t-typography-body-sm-default);
 
 .error .checkbox {
   border-color: var(--t-color-border-critical);
+  background-color: var(--t-color-fill-critical-secondary);
 }
 
 .error .checkbox:hover {
   border-color: var(--t-color-border-critical-hover);
-    background-color: var(--t-color-fill-critical-secondary);
+    background-color: var(--t-color-fill-critical-secondary-hover);
 
 }
 
