@@ -31,8 +31,8 @@
 /* Radio button item */
 .RadioButtonItem {
   all: unset;
-  width: var(--t-size-400);
-  height: var(--t-size-400);
+  width: var(--t-size-500);
+  height: var(--t-size-500);
   border-radius: 100%;
   border: var(--t-border-width-25) solid var(--t-color-border-primary);
   background-color: var(--t-color-surface-primary);
@@ -57,18 +57,18 @@
 /* When checked, change the border color */
 .RadioButtonItem[data-state="checked"] {
   border-color: var(--t-color-fill-brand);
-}
+  background-color: var(--t-color-fill-brand);}
 
 /* The indicator (inner circle) when checked */
 .RadioButtonIndicator {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: calc(var(--t-size-400) / 2);
-  height: calc(var(--t-size-400) / 2);
+  width: var(--t-size-200);
+  height: var(--t-size-200);
   position: relative;
   border-radius: 50%;
-  background-color: var(--t-color-fill-brand);
+  background-color: var(--t-color-fill-primary);
   transform: scale(0);
   transition: transform var(--t-duration-fast) var(--t-easing-in-out);
 }
@@ -79,9 +79,7 @@
 
 /* Label styling */
 .Label {
-  font-family: var(--t-font-family-primary);
-  font-size: var(--t-font-size-350);
-  font-weight: var(--t-font-weight-medium);
+ font: var(--t-typography-body-sm-default);
   color: var(--t-color-text-primary);
   cursor: pointer;
   position: relative;
@@ -107,7 +105,7 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .Label::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .Label::after {
@@ -129,8 +127,7 @@
 
 /* Help text styling */
 .HelpText {
-  font-family: var(--t-font-family-primary);
-  font-size: var(--t-font-size-300);
+font: var(--t-typography-body-sm-default);
   color: var(--t-color-text-secondary);
   position: relative;
   line-height: 1.5;
@@ -155,7 +152,7 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .HelpText::before {
-  margin-top: -0.25em;
+  margin-top: 0.10em;
 }
 
 :global([dir="rtl"]) .HelpText::after {
@@ -164,13 +161,13 @@
 
 /* In LTR, indent the helpText from the left */
 :global([dir="ltr"]) .HelpText {
-  padding-left: calc(var(--t-size-400) + var(--t-space-200));
+  padding-left: var(--t-size-800);
   margin-inline-start: 0;
 }
 
 /* In RTL, indent the helpText from the right */
 :global([dir="rtl"]) .HelpText {
-  padding-right: calc(var(--t-size-400) + var(--t-space-200));
+  padding-right: var(--t-size-800);
   margin-inline-end: 0;
 }
 
