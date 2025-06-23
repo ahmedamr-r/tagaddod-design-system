@@ -53,6 +53,7 @@ function MyComponent() {
         open={open}
         onOpenChange={setOpen}
         title="Drawer Title"
+        contentPadding="var(--t-space-500)" // Default 20px padding
       >
         <div style={{ padding: '16px 0' }}>
           <p>This is a default drawer content.</p>
@@ -204,32 +205,150 @@ The Drawer can appear from either side of the screen:
 
 ## Footer
 
-<Canvas of={DrawerStories.WithFooter} />
+The Drawer component supports multiple footer variants to accommodate different use cases and workflows.
+
+### Footer Variants
+
+#### Cancel and Actions (Default)
+
+Shows a cancel button on the left and action buttons on the right. This is the most common pattern for forms and dialogs.
+
+<Canvas of={DrawerStories.FooterCancelAndActions} />
 
 ```jsx
 <Drawer
   open={open}
   onOpenChange={setOpen}
-  title="Drawer with Footer"
+  title="Cancel and Actions Footer"
   showFooter={true}
-  primaryAction={{
-    label: 'Save',
-    onClick: () => {
-      // Save action
-      setOpen(false);
-    },
-    variant: 'primary',
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"
+  primaryLabel="Save Changes"
+  secondaryLabel="Save Draft"
+  onCancel={() => setOpen(false)}
+  onPrimary={() => {
+    // Save action
+    setOpen(false);
   }}
-  secondaryAction={{
-    label: 'Cancel',
-    onClick: () => setOpen(false),
-    variant: 'tertiary',
+  onSecondary={() => {
+    // Secondary action
   }}
-  footerContent={<span>Last edited: Today</span>}
+  showPrimaryButton={true}
+  showSecondaryButton={true}
 >
   {/* Content */}
 </Drawer>
 ```
+
+#### Swap and Actions
+
+Shows custom content on the left (like status or metadata) and action buttons on the right.
+
+<Canvas of={DrawerStories.FooterSwapAndActions} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Swap and Actions Footer"
+  showFooter={true}
+  footerVariant="swapAndActions"
+  primaryLabel="Publish"
+  secondaryLabel="Save Draft"
+  swapContent={
+    <span style={{ color: 'var(--t-color-text-secondary)' }}>
+      Status: Draft
+    </span>
+  }
+  onPrimary={() => setOpen(false)}
+  onSecondary={() => {}}
+  showPrimaryButton={true}
+  showSecondaryButton={true}
+>
+  {/* Content */}
+</Drawer>
+```
+
+#### Actions Only
+
+Shows only action buttons aligned to the right. Perfect for workflows where canceling is done via the close button.
+
+<Canvas of={DrawerStories.FooterActionsOnly} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Actions Only Footer"
+  showFooter={true}
+  footerVariant="actionsOnly"
+  primaryLabel="Confirm"
+  secondaryLabel="Review"
+  onPrimary={() => setOpen(false)}
+  onSecondary={() => {}}
+  showPrimaryButton={true}
+  showSecondaryButton={true}
+>
+  {/* Content */}
+</Drawer>
+```
+
+### Single Button Footers
+
+#### Primary Button Only
+
+<Canvas of={DrawerStories.FooterPrimaryOnly} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Primary Button Only"
+  showFooter={true}
+  footerVariant="actionsOnly"
+  primaryLabel="Understand"
+  onPrimary={() => setOpen(false)}
+  showPrimaryButton={true}
+  showSecondaryButton={false}
+>
+  {/* Content */}
+</Drawer>
+```
+
+#### Secondary Button Only
+
+<Canvas of={DrawerStories.FooterSecondaryOnly} />
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Secondary Button Only"
+  showFooter={true}
+  footerVariant="actionsOnly"
+  secondaryLabel="Maybe Later"
+  onSecondary={() => setOpen(false)}
+  showPrimaryButton={false}
+  showSecondaryButton={true}
+>
+  {/* Content */}
+</Drawer>
+```
+
+### Footer Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `footerVariant` | `'cancelAndActions' \| 'swapAndActions' \| 'actionsOnly'` | `'cancelAndActions'` | The footer layout variant |
+| `cancelLabel` | `string` | `'Cancel'` | Label for the cancel button |
+| `primaryLabel` | `string` | `'Label'` | Label for the primary button |
+| `secondaryLabel` | `string` | `'Label'` | Label for the secondary button |
+| `showPrimaryButton` | `boolean` | `true` | Whether to show the primary button |
+| `showSecondaryButton` | `boolean` | `true` | Whether to show the secondary button |
+| `swapContent` | `React.ReactNode` | - | Custom content for the swap area |
+| `onCancel` | `() => void` | - | Cancel button callback |
+| `onPrimary` | `() => void` | - | Primary button callback |
+| `onSecondary` | `() => void` | - | Secondary button callback |
 
 ## Modal Components Within Drawer
 
@@ -313,36 +432,31 @@ function ComponentInDrawer() {
 
 ## Visual Customization
 
-### Custom Overlay
+### Custom Padding
 
-<Canvas of={DrawerStories.CustomOverlay} />
-
-```jsx
-<Drawer
-  open={open}
-  onOpenChange={setOpen}
-  title="Custom Overlay Drawer"
-  overlayOpacity={0.9}
-  blurBackground={true}
->
-  {/* Content */}
-</Drawer>
-```
-
-### Surface Background
-
-<Canvas of={DrawerStories.SurfaceBackground} />
+<Canvas of={DrawerStories.CustomPadding} />
 
 ```jsx
 <Drawer
   open={open}
   onOpenChange={setOpen}
-  title="Surface Background Drawer"
-  useSurfaceBackground={true}
+  title="Custom Padding Drawer"
+  contentPadding="var(--t-space-600)" // 24px padding instead of default 20px
 >
   {/* Content */}
 </Drawer>
 ```
+
+The default content padding is `var(--t-space-500)` (20px). You can customize it using design tokens:
+
+- `var(--t-space-300)` = 12px (0.75rem)
+- `var(--t-space-400)` = 16px (1rem)
+- `var(--t-space-500)` = 20px (1.25rem) - default
+- `var(--t-space-600)` = 24px (1.5rem)
+- `var(--t-space-700)` = 32px (2rem)
+
+Or use custom values like `"2rem 1rem"` for different vertical and horizontal padding.
+
 
 ### Full Height
 
@@ -403,6 +517,7 @@ The Drawer component properly handles Right-to-Left (RTL) languages automaticall
   open={open}
   onOpenChange={setOpen}
   title="Add New User"
+  contentPadding="var(--t-space-600)" // Larger padding for forms
   showFooter={true}
   primaryAction={{
     label: 'Save',
@@ -417,6 +532,40 @@ The Drawer component properly handles Right-to-Left (RTL) languages automaticall
   <form onSubmit={handleSubmit}>
     {/* Form fields */}
   </form>
+</Drawer>
+```
+
+### Content with Different Padding Needs
+
+```jsx
+// Compact content
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Quick Actions"
+  contentPadding="var(--t-space-400)" // Smaller 16px padding
+>
+  {/* Compact action buttons */}
+</Drawer>
+
+// Detailed content
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Article Editor"
+  contentPadding="var(--t-space-700)" // Larger 32px padding
+>
+  {/* Rich text editor */}
+</Drawer>
+
+// Custom asymmetric padding
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Layout Preview"
+  contentPadding="3rem 1rem" // 48px vertical, 16px horizontal
+>
+  {/* Design preview content */}
 </Drawer>
 ```
 

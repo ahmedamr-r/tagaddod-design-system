@@ -141,7 +141,7 @@ export const Modal = ({
                         )}
                         {showSecondaryButton && (
                           <Button 
-                            variant="secondary" 
+                            variant="tertiary" 
                             onClick={onSecondary}
                             style={lineHeightStyle}
                           >
@@ -179,7 +179,7 @@ export const Modal = ({
                         )}
                         {showSecondaryButton && (
                           <Button 
-                            variant="secondary" 
+                            variant="tertiary" 
                             onClick={onSecondary}
                             style={lineHeightStyle}
                           >
@@ -236,7 +236,7 @@ export const Modal = ({
                       <div className={styles.footerRight}>
                         {showSecondaryButton && (
                           <Button 
-                            variant="secondary" 
+                            variant="tertiary" 
                             onClick={onSecondary}
                             style={lineHeightStyle}
                           >
@@ -263,7 +263,7 @@ export const Modal = ({
                       <div className={styles.footerRight}>
                         {showSecondaryButton && (
                           <Button 
-                            variant="secondary" 
+                            variant="tertiary" 
                             onClick={onSecondary}
                             style={lineHeightStyle}
                           >

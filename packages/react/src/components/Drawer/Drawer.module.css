@@ -84,7 +84,7 @@
   justify-content: space-between;
   padding: var(--t-space-400) var(--t-space-400);
   border-bottom: 1px solid var(--t-color-border-secondary);
-  min-height: 64px;
+  height: 3.5rem;
   background-color: var(--t-color-bg-light); /* Explicit white background */
 }
 
@@ -96,7 +96,7 @@
   overflow: hidden;
 }
 
-.backButton {
+/* .backButton {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,15 +107,15 @@
   margin-right: var(--t-space-100);
   padding: var(--t-space-100);
   border-radius: var(--t-border-radius-full);
-}
-
+} */
+/* 
 .backButton:hover {
   background-color: var(--t-color-fill-hover);
 }
 
 .backButton:active {
   background-color: var(--t-color-fill-pressed);
-}
+} */
 
 .headerPrefix, 
 .headerSuffix {
@@ -123,8 +123,7 @@
 }
 
 .title {
-  font-size: var(--t-font-size-500);
-  font-weight: var(--t-font-weight-semibold);
+  font: var(--t-typography-body-lg-semibold);
   color: var(--t-color-text-primary);
   margin: 0;
   white-space: nowrap;
@@ -154,14 +153,14 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .title::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .title::after {
   margin-bottom: -0.25em;
 }
 
-.closeButton {
+/* .closeButton {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -172,7 +171,7 @@
   margin-left: var(--t-space-100);
   padding: var(--t-space-100);
   border-radius: var(--t-border-radius-full);
-}
+} */
 
 .closeButton:hover {
   background-color: var(--t-color-fill-hover);
@@ -186,185 +185,78 @@
 .content {
   flex: 1;
   overflow-y: auto;
-  padding: var(--t-space-400);
   -webkit-overflow-scrolling: touch;
   background-color: var(--t-color-surface-background); /* Explicit white background */
 }
 
 /* Footer */
 .footer {
+  padding: var(--t-space-400, 16px);
   display: flex;
-  align-items: center;
+  border-top: 1px solid var(--t-color-border, #EFEFEF);
+  gap: var(--t-space-200, 8px);
+  background-color: var(--t-color-surface-background);
+}
+
+/* Footer variants */
+.footerCancelAndActions {
   justify-content: space-between;
-  padding: var(--t-space-300) var(--t-space-400);
-  border-top: 1px solid var(--t-color-border-secondary);
-  background-color: var(--t-color-surface-background); /* Explicit white background */
-  min-height: 64px;
 }
 
-.footerContent {
-  flex: 1;
+.footerSwapAndActions {
+  justify-content: space-between;
 }
 
-.actions {
+.footerActionsOnly {
+  justify-content: flex-end;
+}
+
+/* Footer sections */
+.footerLeft {
+  display: flex;
+  gap: var(--t-space-200, 8px);
+  align-items: center;
+}
+
+.footerRight {
+  display: flex;
+  gap: var(--t-space-200, 8px);
+  align-items: center;
+}
+
+.footerSwapArea {
   display: flex;
   align-items: center;
-  gap: var(--t-space-200);
-  margin-left: auto;
-}
-
-.footerButton {
-  cursor: pointer;
-  white-space: nowrap;
-  border-radius: var(--t-border-radius-200);
-  font-weight: var(--t-font-weight-semibold);
-  padding: var(--t-space-200) var(--t-space-300);
-  font-size: var(--t-font-size-350);
-  border: 1px solid;
-  transition: all var(--t-duration-base) var(--t-easing-in-out);
+  color: var(--t-color-text-secondary, #666);
+  font-size: var(--t-font-size-body-sm, 14px);
   position: relative;
   line-height: 1.5;
 }
 
-/* Line height trim for all languages */
-.footerButton::before,
-.footerButton::after {
+/* Line height trim for swap area */
+.footerSwapArea::before,
+.footerSwapArea::after {
   content: '';
   display: block;
   height: 0;
 }
 
-/* English font adjustment (smaller trim) */
-.footerButton::before {
+.footerSwapArea::before {
   margin-top: -0.15em;
 }
 
-.footerButton::after {
+.footerSwapArea::after {
   margin-bottom: -0.15em;
 }
 
-/* Arabic font adjustment (larger trim) */
-:global([dir="rtl"]) .footerButton::before {
-  margin-top: -0.25em;
+:global([dir="rtl"]) .footerSwapArea::before {
+  margin-top: 0.1em;
 }
 
-:global([dir="rtl"]) .footerButton::after {
+:global([dir="rtl"]) .footerSwapArea::after {
   margin-bottom: -0.25em;
 }
 
-/* Button variants */
-.variantPrimary {
-  background-color: var(--t-color-fill-brand);
-  color: var(--t-color-text-on-fill);
-  border-color: transparent;
-}
-
-.variantPrimary:hover:not(:disabled) {
-  background-color: var(--t-color-fill-brand-hover);
-}
-
-.variantPrimary:active:not(:disabled) {
-  background-color: var(--t-color-fill-brand-pressed);
-}
-
-.variantSecondary {
-  background-color: var(--t-color-fill-brand-secondary);
-  color: var(--t-color-text-primary);
-  border-color: transparent;
-}
-
-.variantSecondary:hover:not(:disabled) {
-  background-color: var(--t-color-fill-brand-secondary-hover);
-}
-
-.variantSecondary:active:not(:disabled) {
-  background-color: var(--t-color-fill-brand-secondary-pressed);
-}
-
-.variantTertiary {
-  background-color: transparent;
-  color: var(--t-color-text-brand);
-  border-color: var(--t-color-border-brand);
-}
-
-.variantTertiary:hover:not(:disabled) {
-  background-color: var(--t-color-fill-brand-secondary);
-  border-color: var(--t-color-border-brand-hover);
-}
-
-.variantTertiary:active:not(:disabled) {
-  background-color: var(--t-color-fill-brand-secondary-pressed);
-  border-color: var(--t-color-border-brand-pressed);
-}
-
-.variantPlain {
-  background-color: transparent;
-  color: var(--t-color-text-brand);
-  border-color: transparent;
-}
-
-.variantPlain:hover:not(:disabled) {
-  background-color: var(--t-color-fill-brand-secondary);
-}
-
-.variantPlain:active:not(:disabled) {
-  background-color: var(--t-color-fill-brand-secondary-pressed);
-}
-
-/* Tones */
-.toneDefault { /* Uses default brand colors defined above */ }
-
-.toneCritical {
-  background-color: var(--t-color-fill-critical);
-  color: var(--t-color-text-on-fill);
-  border-color: transparent;
-}
-
-.toneCritical:hover:not(:disabled) {
-  background-color: var(--t-color-fill-critical-hover);
-}
-
-.toneCritical:active:not(:disabled) {
-  background-color: var(--t-color-fill-critical-pressed);
-}
-
-.toneSuccess {
-  background-color: var(--t-color-fill-success);
-  color: var(--t-color-text-on-fill);
-  border-color: transparent;
-}
-
-.toneSuccess:hover:not(:disabled) {
-  background-color: var(--t-color-fill-success-hover);
-}
-
-.toneSuccess:active:not(:disabled) {
-  background-color: var(--t-color-fill-success-pressed);
-}
-
-.toneNeutral {
-  background-color: var(--t-color-fill-neutral);
-  color: var(--t-color-text-on-fill);
-  border-color: transparent;
-}
-
-.toneNeutral:hover:not(:disabled) {
-  background-color: var(--t-color-fill-neutral-hover);
-}
-
-.toneNeutral:active:not(:disabled) {
-  background-color: var(--t-color-fill-neutral-pressed);
-}
-
-/* States */
-.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.loading {
-  cursor: wait;
-}
 
 /* RTL specific styles */
 :global([dir="rtl"]) .backButton {

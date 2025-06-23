@@ -52,14 +52,6 @@ const meta: Meta<typeof Drawer> = {
       control: { type: 'text' },
       description: 'Element to display after the title',
     },
-    overlayOpacity: {
-      control: { type: 'range', min: 0, max: 1, step: 0.1 },
-      description: 'Opacity of the overlay background (0-1)',
-    },
-    blurBackground: {
-      control: 'boolean',
-      description: 'Whether to apply a blur effect to the background',
-    },
     useSurfaceBackground: {
       control: 'boolean',
       description: 'Whether to use the surface background color (--t-color-surface-background)',
@@ -67,6 +59,35 @@ const meta: Meta<typeof Drawer> = {
     fullHeight: {
       control: 'boolean',
       description: 'Whether to use full viewport height',
+    },
+    contentPadding: {
+      control: 'text',
+      description: 'Custom padding for the drawer content',
+    },
+    footerVariant: {
+      options: ['cancelAndActions', 'swapAndActions', 'actionsOnly'],
+      control: { type: 'radio' },
+      description: 'The footer variant layout',
+    },
+    cancelLabel: {
+      control: 'text',
+      description: 'Label for the cancel button',
+    },
+    primaryLabel: {
+      control: 'text',
+      description: 'Label for the primary button',
+    },
+    secondaryLabel: {
+      control: 'text',
+      description: 'Label for the secondary button',
+    },
+    showPrimaryButton: {
+      control: 'boolean',
+      description: 'Show or hide the primary button',
+    },
+    showSecondaryButton: {
+      control: 'boolean',
+      description: 'Show or hide the secondary button',
     },
   },
 };
@@ -86,7 +107,7 @@ export const Default: Story = {
           open={open}
           onOpenChange={setOpen}
         >
-          <div style={{ padding: '16px 0' }}>
+          <div>
             <p>This is a default drawer content.</p>
             <p>You can place any content here.</p>
           </div>
@@ -102,8 +123,6 @@ export const Default: Story = {
     showTitle: true,
     showClose: true,
     showFooter: false,
-    overlayOpacity: 0.7,
-    blurBackground: true,
     useSurfaceBackground: true,
     fullHeight: true,
   },
@@ -123,7 +142,7 @@ export const WithHeaderComponents: Story = {
           headerPrefix={<span style={{ background: 'var(--t-color-fill-brand-secondary)', padding: '4px 8px', borderRadius: '4px' }}>Badge</span>}
           headerSuffix={<Button variant="plain" size="micro">Action</Button>}
         >
-          <div style={{ padding: '16px 0' }}>
+          <div>
             <p>This drawer has custom header prefix and suffix components.</p>
             <p>You can use any component like badges or buttons.</p>
           </div>
@@ -139,8 +158,6 @@ export const WithHeaderComponents: Story = {
     showTitle: true,
     showClose: true,
     showFooter: false,
-    overlayOpacity: 0.7,
-    blurBackground: true,
     useSurfaceBackground: true,
     fullHeight: true,
   },
@@ -169,8 +186,9 @@ export const WithBackButton: Story = {
           showBackButton={true}
           onBackClick={handleBack}
           title={`Step ${step} of 3`}
+          step={step}
         >
-          <div style={{ padding: '16px 0' }}>
+          <div>
             <p>This is step {step} of a multi-step drawer.</p>
             {step < 3 && (
               <Button 
@@ -191,8 +209,6 @@ export const WithBackButton: Story = {
     showTitle: true,
     showClose: true,
     showFooter: false,
-    overlayOpacity: 0.7,
-    blurBackground: true,
     useSurfaceBackground: true,
     fullHeight: true,
   },
@@ -210,22 +226,20 @@ export const WithFooter: Story = {
           open={open}
           onOpenChange={setOpen}
           showFooter={true}
-          primaryAction={{
-            label: 'Save',
-            onClick: () => {
-              alert('Saved!');
-              setOpen(false);
-            },
-            variant: 'primary',
+          footerVariant="cancelAndActions"
+          cancelLabel="Cancel"
+          primaryLabel="Save"
+          secondaryLabel="Secondary"
+          onCancel={() => setOpen(false)}
+          onPrimary={() => {
+            alert('Saved!');
+            setOpen(false);
           }}
-          secondaryAction={{
-            label: 'Cancel',
-            onClick: () => setOpen(false),
-            variant: 'tertiary',
-          }}
-          footerContent={<span style={{ color: 'var(--t-color-text-subtle)' }}>Last edited: Today</span>}
+          onSecondary={() => alert('Secondary action')}
+          showPrimaryButton={true}
+          showSecondaryButton={true}
         >
-          <div style={{ padding: '16px 0' }}>
+          <div>
             <p>This drawer has a footer with action buttons and custom content.</p>
             <p>Click Save or Cancel to close the drawer.</p>
           </div>
@@ -241,8 +255,12 @@ export const WithFooter: Story = {
     showTitle: true,
     showClose: true,
     showFooter: true,
-    overlayOpacity: 0.7,
-    blurBackground: true,
+    footerVariant: 'cancelAndActions',
+    cancelLabel: 'Cancel',
+    primaryLabel: 'Save',
+    secondaryLabel: 'Secondary',
+    showPrimaryButton: true,
+    showSecondaryButton: true,
     useSurfaceBackground: true,
     fullHeight: true,
   },
@@ -270,21 +288,20 @@ export const RTLDrawer: Story = {
           open={open}
           onOpenChange={setOpen}
           showFooter={true}
-          primaryAction={{
-            label: 'حفظ',
-            onClick: () => {
-              alert('تم الحفظ!');
-              setOpen(false);
-            },
-            variant: 'primary',
+          footerVariant="cancelAndActions"
+          cancelLabel="إلغاء"
+          primaryLabel="حفظ"
+          secondaryLabel="ثانوي"
+          onCancel={() => setOpen(false)}
+          onPrimary={() => {
+            alert('تم الحفظ!');
+            setOpen(false);
           }}
-          secondaryAction={{
-            label: 'إلغاء',
-            onClick: () => setOpen(false),
-            variant: 'tertiary',
-          }}
+          onSecondary={() => alert('إجراء ثانوي')}
+          showPrimaryButton={true}
+          showSecondaryButton={true}
         >
-          <div style={{ padding: '16px 0', textAlign: 'right' }}>
+          <div style={{ textAlign: 'right' }}>
             <p>هذا محتوى الدرج باللغة العربية.</p>
             <p>يمكنك وضع أي محتوى هنا.</p>
           </div>
@@ -300,8 +317,12 @@ export const RTLDrawer: Story = {
     showTitle: true,
     showClose: true,
     showFooter: true,
-    overlayOpacity: 0.7,
-    blurBackground: true,
+    footerVariant: 'cancelAndActions',
+    cancelLabel: 'إلغاء',
+    primaryLabel: 'حفظ',
+    secondaryLabel: 'ثانوي',
+    showPrimaryButton: true,
+    showSecondaryButton: true,
     useSurfaceBackground: true,
     fullHeight: true,
   },
@@ -320,7 +341,7 @@ export const LargeDrawer: Story = {
           onOpenChange={setOpen}
           size="large"
         >
-          <div style={{ padding: '16px 0' }}>
+          <div>
             <p>This is a large drawer with more content space.</p>
             <p>It's useful for complex forms or detailed information.</p>
             <div style={{ height: '1000px', background: 'var(--t-color-fill-brand-secondary)', marginTop: '20px', padding: '20px' }}>
@@ -339,18 +360,15 @@ export const LargeDrawer: Story = {
     showTitle: true,
     showClose: true,
     showFooter: true,
-    primaryAction: {
-      label: 'Save',
-      onClick: () => alert('Saved!'),
-      variant: 'primary',
-    },
-    secondaryAction: {
-      label: 'Cancel',
-      onClick: () => {},
-      variant: 'tertiary',
-    },
-    overlayOpacity: 0.7,
-    blurBackground: true,
+    footerVariant: 'cancelAndActions',
+    cancelLabel: 'Cancel',
+    primaryLabel: 'Save',
+    secondaryLabel: 'Secondary',
+    onCancel: () => {},
+    onPrimary: () => alert('Saved!'),
+    onSecondary: () => {},
+    showPrimaryButton: true,
+    showSecondaryButton: true,
     useSurfaceBackground: true,
     fullHeight: true,
   },
@@ -369,7 +387,7 @@ export const FullHeightDrawer: Story = {
           onOpenChange={setOpen}
           fullHeight={true}
         >
-          <div style={{ padding: '16px 0' }}>
+          <div>
             <p>This drawer spans the full height of the viewport.</p>
             <p>It's ideal for displaying large amounts of content or for applications that need the drawer to match the page height.</p>
             <div style={{ height: '1000px', background: 'var(--t-color-fill-brand-secondary)', marginTop: '20px', padding: '20px' }}>
@@ -388,96 +406,273 @@ export const FullHeightDrawer: Story = {
     showTitle: true,
     showClose: true,
     showFooter: true,
-    primaryAction: {
-      label: 'Save',
-      onClick: () => alert('Saved!'),
-      variant: 'primary',
-    },
-    secondaryAction: {
-      label: 'Cancel',
-      onClick: () => {},
-      variant: 'tertiary',
-    },
-    overlayOpacity: 0.7,
-    blurBackground: true,
+    footerVariant: 'cancelAndActions',
+    cancelLabel: 'Cancel',
+    primaryLabel: 'Save',
+    secondaryLabel: 'Secondary',
+    onCancel: () => {},
+    onPrimary: () => alert('Saved!'),
+    onSecondary: () => {},
+    showPrimaryButton: true,
+    showSecondaryButton: true,
     useSurfaceBackground: true,
     fullHeight: true,
   },
 };
 
-export const SurfaceBackground: Story = {
+
+export const FooterCancelAndActions: Story = {
   render: (args) => {
     const [open, setOpen] = useState(false);
 
     return (
       <div>
-        <Button onClick={() => setOpen(true)}>Open White Background Drawer</Button>
+        <Button onClick={() => setOpen(true)}>Cancel and Actions Footer</Button>
         <Drawer
           {...args}
           open={open}
           onOpenChange={setOpen}
-          useSurfaceBackground={true}
         >
-          <div style={{ padding: '16px 0' }}>
-            <p>This drawer uses the --t-color-surface-background token for its background color.</p>
-            <p>This ensures it matches the design system's surface color (white by default).</p>
-            <div style={{ background: 'var(--t-color-fill-brand-secondary)', marginTop: '20px', padding: '20px', borderRadius: 'var(--t-border-radius-200)' }}>
-              <p>This colored box demonstrates the contrast with the drawer's white background.</p>
+          <div>
+            <p>This footer shows a cancel button on the left and action buttons on the right.</p>
+            <p>This is the most common footer pattern for forms and dialogs.</p>
+          </div>
+        </Drawer>
+      </div>
+    );
+  },
+  args: {
+    title: 'Cancel and Actions Footer',
+    size: 'medium',
+    position: 'right',
+    showBackButton: false,
+    showTitle: true,
+    showClose: true,
+    showFooter: true,
+    footerVariant: 'cancelAndActions',
+    cancelLabel: 'Cancel',
+    primaryLabel: 'Save Changes',
+    secondaryLabel: 'Save Draft',
+    showPrimaryButton: true,
+    showSecondaryButton: true,
+    useSurfaceBackground: true,
+    fullHeight: true,
+  },
+};
+
+export const FooterSwapAndActions: Story = {
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <div>
+        <Button onClick={() => setOpen(true)}>Swap and Actions Footer</Button>
+        <Drawer
+          {...args}
+          open={open}
+          onOpenChange={setOpen}
+          swapContent={
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--t-space-200)' }}>
+              <span style={{ color: 'var(--t-color-text-secondary)', fontSize: 'var(--t-font-size-body-sm)' }}>
+                Status: Draft
+              </span>
             </div>
+          }
+        >
+          <div>
+            <p>This footer shows custom content on the left and action buttons on the right.</p>
+            <p>Useful for showing status, metadata, or other contextual information.</p>
           </div>
         </Drawer>
       </div>
     );
   },
   args: {
-    title: 'Surface Background Drawer',
+    title: 'Swap and Actions Footer',
     size: 'medium',
     position: 'right',
     showBackButton: false,
     showTitle: true,
     showClose: true,
-    showFooter: false,
-    overlayOpacity: 0.7,
-    blurBackground: true,
+    showFooter: true,
+    footerVariant: 'swapAndActions',
+    primaryLabel: 'Publish',
+    secondaryLabel: 'Save Draft',
+    showPrimaryButton: true,
+    showSecondaryButton: true,
     useSurfaceBackground: true,
     fullHeight: true,
   },
 };
 
-export const CustomOverlay: Story = {
+export const FooterActionsOnly: Story = {
   render: (args) => {
     const [open, setOpen] = useState(false);
 
     return (
       <div>
-        <Button onClick={() => setOpen(true)}>Open with Custom Overlay</Button>
+        <Button onClick={() => setOpen(true)}>Actions Only Footer</Button>
         <Drawer
           {...args}
           open={open}
           onOpenChange={setOpen}
-          overlayOpacity={0.9}
-          blurBackground={true}
         >
-          <div style={{ padding: '16px 0' }}>
-            <p>This drawer has a darker overlay with opacity set to 0.9.</p>
-            <p>The background also has a blur effect applied.</p>
-            <p>These settings improve the visibility and focus on the drawer content.</p>
+          <div>
+            <p>This footer shows only action buttons aligned to the right.</p>
+            <p>Perfect for workflows where canceling is done via the close button or back button.</p>
           </div>
         </Drawer>
       </div>
     );
   },
   args: {
-    title: 'Custom Overlay Drawer',
+    title: 'Actions Only Footer',
+    size: 'medium',
+    position: 'right',
+    showBackButton: false,
+    showTitle: true,
+    showClose: true,
+    showFooter: true,
+    footerVariant: 'actionsOnly',
+    primaryLabel: 'Confirm',
+    secondaryLabel: 'Review',
+    showPrimaryButton: true,
+    showSecondaryButton: true,
+    useSurfaceBackground: true,
+    fullHeight: true,
+  },
+};
+
+export const FooterPrimaryOnly: Story = {
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <div>
+        <Button onClick={() => setOpen(true)}>Primary Button Only</Button>
+        <Drawer
+          {...args}
+          open={open}
+          onOpenChange={setOpen}
+        >
+          <div>
+            <p>This footer shows only a primary action button.</p>
+            <p>Used for simple confirmations or single-action workflows.</p>
+          </div>
+        </Drawer>
+      </div>
+    );
+  },
+  args: {
+    title: 'Primary Button Only',
+    size: 'medium',
+    position: 'right',
+    showBackButton: false,
+    showTitle: true,
+    showClose: true,
+    showFooter: true,
+    footerVariant: 'actionsOnly',
+    primaryLabel: 'Understand',
+    showPrimaryButton: true,
+    showSecondaryButton: false,
+    useSurfaceBackground: true,
+    fullHeight: true,
+  },
+};
+
+export const FooterSecondaryOnly: Story = {
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <div>
+        <Button onClick={() => setOpen(true)}>Secondary Button Only</Button>
+        <Drawer
+          {...args}
+          open={open}
+          onOpenChange={setOpen}
+        >
+          <div>
+            <p>This footer shows only a secondary action button.</p>
+            <p>Used for less prominent actions or optional workflows.</p>
+          </div>
+        </Drawer>
+      </div>
+    );
+  },
+  args: {
+    title: 'Secondary Button Only',
+    size: 'medium',
+    position: 'right',
+    showBackButton: false,
+    showTitle: true,
+    showClose: true,
+    showFooter: true,
+    footerVariant: 'actionsOnly',
+    secondaryLabel: 'Maybe Later',
+    showPrimaryButton: false,
+    showSecondaryButton: true,
+    useSurfaceBackground: true,
+    fullHeight: true,
+  },
+};
+
+export const CustomPadding: Story = {
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <div>
+        <Button onClick={() => setOpen(true)}>Open with Custom Padding</Button>
+        <Drawer
+          {...args}
+          open={open}
+          onOpenChange={setOpen}
+          contentPadding="var(--t-space-600)" // 24px padding (1.5rem)
+        >
+          <div style={{ 
+            backgroundColor: 'var(--t-color-fill-brand-secondary)', 
+            borderRadius: 'var(--t-border-radius-200)',
+            padding: 'var(--t-space-300)',
+            marginBottom: 'var(--t-space-400)'
+          }}>
+            <p><strong>Custom Content Padding Demo</strong></p>
+            <p>This drawer uses <code>var(--t-space-600)</code> (24px) for content padding instead of the default <code>var(--t-space-500)</code> (20px).</p>
+          </div>
+          
+          <div style={{ marginBottom: 'var(--t-space-400)' }}>
+            <h3 style={{ margin: '0 0 var(--t-space-200) 0', color: 'var(--t-color-text-primary)' }}>Available Spacing Tokens:</h3>
+            <ul style={{ margin: 0, paddingLeft: 'var(--t-space-400)' }}>
+              <li><code>var(--t-space-300)</code> = 12px (0.75rem)</li>
+              <li><code>var(--t-space-400)</code> = 16px (1rem)</li>
+              <li><code>var(--t-space-500)</code> = 20px (1.25rem) - default</li>
+              <li><code>var(--t-space-600)</code> = 24px (1.5rem) - current</li>
+              <li><code>var(--t-space-700)</code> = 32px (2rem)</li>
+            </ul>
+          </div>
+          
+          <div style={{ 
+            backgroundColor: 'var(--t-color-surface-secondary)', 
+            padding: 'var(--t-space-300)',
+            borderRadius: 'var(--t-border-radius-200)',
+            border: '1px solid var(--t-color-border-secondary)'
+          }}>
+            <p style={{ margin: 0 }}>You can also use custom values like <code>"2rem 1rem"</code> for different horizontal and vertical padding.</p>
+          </div>
+        </Drawer>
+      </div>
+    );
+  },
+  args: {
+    title: 'Custom Padding Drawer',
     size: 'medium',
     position: 'right',
     showBackButton: false,
     showTitle: true,
     showClose: true,
     showFooter: false,
-    overlayOpacity: 0.9,
-    blurBackground: true,
     useSurfaceBackground: true,
     fullHeight: true,
+    contentPadding: 'var(--t-space-600)', // 24px padding
   },
 };
