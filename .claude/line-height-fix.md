@@ -51,7 +51,7 @@ For complete line-height control, also include these CSS patterns in your compon
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .elementWithText::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .elementWithText::after {

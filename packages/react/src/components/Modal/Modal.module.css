@@ -11,6 +11,7 @@
 .content {
   background-color: var(--t-color-bg, white);
   border-radius: var(--t-border-radius-200, 8px);
+  overflow: hidden;
   box-shadow: var(--t-shadow-400, 0 10px 25px -5px rgba(0, 0, 0, 0.1));
   position: fixed;
   top: 50%;
@@ -40,24 +41,63 @@
   border-radius: 0;
 }
 
+/* Width variants */
+.content.widthSmall {
+  width: 26.5rem; /* 424px */
+}
+
+.content.widthMedium {
+  width: 38.75rem; /* 620px */
+}
+
+.content.widthLarge {
+  width: 61.25rem; /* 980px */
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: var(--t-space-400, 16px);
+  background-color: var(--t-color-bg-light);
   border-bottom: 1px solid var(--t-color-border, #EFEFEF);
 }
 
 .title {
-  font-size: var(--t-font-size-headline-sm, 18px);
-  font-weight: var(--t-font-weight-bold, 600);
+  font: var(--t-typography-heading-sm);
   color: var(--t-color-text-primary, #000);
   margin: 0;
-  /* Line height fix */
-  line-height: var(--t-line-height-normal, 1.5);
+  position: relative;
+  line-height: 1.5;
 }
 
-.closeButton {
+/* Line height trim for title */
+.title::before,
+.title::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.title::before {
+  margin-top: -0.15em;
+}
+
+.title::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .title::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .title::after {
+  margin-bottom: -0.25em;
+}
+
+/* .closeButton {
   background: transparent;
   border: none;
   cursor: pointer;
@@ -70,7 +110,7 @@
   padding: 0;
   color: var(--t-color-text-secondary, #666);
   transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
-}
+} */
 
 .closeButton:hover {
   background-color: var(--t-color-bg-hover, #f5f5f5);
@@ -78,7 +118,6 @@
 }
 
 .body {
-  padding: var(--t-space-400, 16px);
   overflow-y: auto;
   flex: 1;
 }
@@ -86,40 +125,67 @@
 .footer {
   padding: var(--t-space-400, 16px);
   display: flex;
-  justify-content: flex-end;
   border-top: 1px solid var(--t-color-border, #EFEFEF);
   gap: var(--t-space-200, 8px);
 }
 
-.rtl .footer {
-  justify-content: flex-start;
-}
-
-.rtl .footerButtonGroup {
-  flex-direction: row-reverse;
-}
-
-.footerButtonGroup {
-  display: flex;
-  gap: var(--t-space-200, 8px);
-}
-
-.footerSwapArea {
-  flex: 1;
-  align-self: center;
-}
-
-.footerStyleDefault {
-  /* Default footer style */
-}
-
-.footerStyleStyle1 {
-  display: flex;
+/* Footer variants */
+.footerCancelAndActions {
   justify-content: space-between;
 }
 
-.footerStyleStyle2 {
-  justify-content: center;
+.footerSwapAndActions {
+  justify-content: space-between;
+}
+
+.footerActionsOnly {
+  justify-content: flex-end;
+}
+
+/* Footer sections */
+.footerLeft {
+  display: flex;
+  gap: var(--t-space-200, 8px);
+  align-items: center;
+}
+
+.footerRight {
+  display: flex;
+  gap: var(--t-space-200, 8px);
+  align-items: center;
+}
+
+.footerSwapArea {
+  display: flex;
+  align-items: center;
+  color: var(--t-color-text-secondary, #666);
+  font-size: var(--t-font-size-body-sm, 14px);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for swap area */
+.footerSwapArea::before,
+.footerSwapArea::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.footerSwapArea::before {
+  margin-top: -0.15em;
+}
+
+.footerSwapArea::after {
+  margin-bottom: -0.15em;
+}
+
+:global([dir="rtl"]) .footerSwapArea::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .footerSwapArea::after {
+  margin-bottom: -0.25em;
 }
 
 /* Keyframe animations */

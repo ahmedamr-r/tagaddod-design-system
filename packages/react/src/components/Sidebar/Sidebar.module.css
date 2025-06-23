@@ -49,7 +49,6 @@
 
 .navigationSection {
   width: 100%;
-  margin-bottom: var(--t-space-500);
 }
 
 .separator {
@@ -79,10 +78,7 @@
   overflow: hidden;
   gap: var(--t-space-200);
   align-self: stretch;
-  font-family: var(--t-font-family-primary, Outfit);
-  font-size: var(--t-font-size-400);
-  font-style: normal;
-  font-weight: 600;
+ font: var( --t-typography-body-md-default);
   line-height: 150%;
   text-align: left;
 }
@@ -99,6 +95,7 @@
 .menuItemActive {
   background-color: var(--t-color-fill-brand-secondary);
   color: var(--t-color-text-link);
+  font: var( --t-typography-body-md-semibold);
 }
 
 .menuItemActive:hover {
@@ -106,8 +103,9 @@
 }
 
 .menuItemParentActive {
-  background-color: var(--t-color-surface-brand-subtle);
-  color: var(--t-color-text-brand);
+  background-color: var(--t-color-fill-brand-secondary);
+  color: var(--t-color-text-link);
+
 }
 
 .menuItemChild {
@@ -129,6 +127,16 @@
   border-radius: var(--t-border-radius-200);
   transition: all var(--t-duration-200, 0.2s) ease;
   text-align: left;
+}
+
+.menuItemChild:hover:not(.menuItemDisabled) {
+  background-color: var(--t-color-surface-secondary);
+}
+
+.menuItemChild.menuItemActive {
+  color: var(--t-color-text-link);
+  background-color: transparent;
+  font-weight: 500;
 }
 
 .sidebarRTL .menuItemChild {
@@ -192,7 +200,7 @@
 
 /* RTL-specific line height adjustments for Arabic */
 :global([dir="rtl"]) .menuItemLabel::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .menuItemLabel::after {

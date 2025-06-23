@@ -2,7 +2,6 @@ import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
 import * as ModalStories from './Modal.stories';
 import { Modal } from './Modal';
 import { Button } from '../Button/Button';
-import { IconInfoCircle, IconAlertTriangle, IconCheck } from '@tabler/icons-react';
 
 <Meta of={ModalStories} />
 
@@ -64,6 +63,156 @@ import { Modal, Button } from '@tagaddod/react';
 </Modal>
 ```
 
+## Content Padding
+
+The Modal content area has customizable padding using design tokens. The default value is `--t-space-500`.
+
+### Default Content Padding
+
+<Canvas of={ModalStories.Default} />
+
+```jsx
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  title="Default Padding"
+  // contentPadding="var(--t-space-500)" (default)
+>
+  <div>
+    Content with default padding (--t-space-500)
+  </div>
+</Modal>
+```
+
+### Custom Content Padding
+
+<Canvas of={ModalStories.CustomContentPadding} />
+
+```jsx
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  title="Custom Padding"
+  contentPadding="var(--t-space-700)"
+>
+  <div>
+    Content with larger padding (--t-space-700)
+  </div>
+</Modal>
+```
+
+### No Content Padding
+
+<Canvas of={ModalStories.NoContentPadding} />
+
+```jsx
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  title="No Padding"
+  contentPadding="0"
+>
+  <div style={{ padding: '16px', backgroundColor: '#f0f0f0' }}>
+    Content with no default padding - you can apply your own
+  </div>
+</Modal>
+```
+
+## Width Sizes
+
+The Modal component supports different width sizes to accommodate various content types and use cases.
+
+### Small Width (424px / 26.5rem)
+
+Perfect for simple confirmations and alerts.
+
+<Canvas of={ModalStories.SmallWidth} />
+
+```jsx
+<Modal
+  width="small"
+  trigger={<Button>Open Small Modal</Button>}
+  title="Small Modal"
+>
+  <div style={{ padding: '16px' }}>
+    This is a small modal perfect for confirmations.
+  </div>
+</Modal>
+```
+
+### Medium Width (620px / 38.75rem)
+
+The default width, ideal for most modal content.
+
+<Canvas of={ModalStories.MediumWidth} />
+
+```jsx
+<Modal
+  width="medium"
+  trigger={<Button>Open Medium Modal</Button>}
+  title="Medium Modal"
+>
+  <div style={{ padding: '16px' }}>
+    This is a medium modal suitable for forms and detailed content.
+  </div>
+</Modal>
+```
+
+### Large Width (980px / 61.25rem)
+
+For complex forms, data tables, or rich content.
+
+<Canvas of={ModalStories.LargeWidth} />
+
+```jsx
+<Modal
+  width="large"
+  trigger={<Button>Open Large Modal</Button>}
+  title="Large Modal"
+>
+  <div style={{ padding: '16px' }}>
+    This is a large modal perfect for complex content like forms or data tables.
+  </div>
+</Modal>
+```
+
+### Custom Width
+
+Use custom width with specific dimensions or percentages.
+
+<Canvas of={ModalStories.CustomWidth} />
+
+```jsx
+<Modal
+  width="custom"
+  customWidth="50rem"
+  trigger={<Button>Open Custom Width Modal</Button>}
+  title="Custom Width Modal"
+>
+  <div style={{ padding: '16px' }}>
+    This modal has a custom width of 50rem.
+  </div>
+</Modal>
+```
+
+### With Min/Max Width Constraints
+
+Control the responsive behavior with minimum and maximum width constraints.
+
+<Canvas of={ModalStories.WithMinMaxWidth} />
+
+```jsx
+<Modal
+  width="custom"
+  customWidth="70%"
+  minWidth="20rem"
+  maxWidth="60rem"
+  trigger={<Button>Open Modal with Min/Max Width</Button>}
+  title="Responsive Modal"
+>
+  <div style={{ padding: '16px' }}>
+    This modal has a responsive width of 70% with min/max constraints.
+  </div>
+</Modal>
+```
+
 ### Without Title
 
 <Canvas of={ModalStories.WithoutTitle} />
@@ -99,156 +248,137 @@ import { Modal, Button } from '@tagaddod/react';
 </Modal>
 ```
 
-### Fullscreen Modal
 
-<Canvas of={ModalStories.Fullscreen} />
+## Footer Variants
 
-```jsx
-<Modal
-  trigger={<Button>Open Fullscreen Modal</Button>}
-  title="Fullscreen Modal"
-  size="fullscreen"
->
-  <div style={{ padding: '16px' }}>
-    This modal takes up the entire screen
-  </div>
-</Modal>
-```
+The Modal component supports three footer variants to handle different use cases and layouts.
 
-## Footer Styles
+### Cancel and Actions Footer
 
-### Default Footer
+The default variant with a cancel button on the left and action buttons on the right. The cancel button uses a plain variant with neutral tone.
 
-<Canvas of={ModalStories.Default} />
+<Canvas of={ModalStories.CancelAndActions} />
 
 ```jsx
 <Modal
   trigger={<Button>Open Modal</Button>}
-  title="Default Footer"
-  footerStyle="default"
+  title="Cancel & Actions Footer"
+  footerVariant="cancelAndActions"
   cancelLabel="Cancel"
-  confirmLabel="Confirm"
+  primaryLabel="Save"
+  secondaryLabel="Draft"
+  showPrimaryButton={true}
+  showSecondaryButton={true}
+  onCancel={() => console.log('Cancelled')}
+  onPrimary={() => console.log('Primary action')}
+  onSecondary={() => console.log('Secondary action')}
 >
   <div style={{ padding: '16px' }}>
-    Modal with default footer style
+    Modal with cancel button and action buttons
   </div>
 </Modal>
 ```
 
-### Footer Style 1
+### Swap Area and Actions Footer
 
-<Canvas of={ModalStories.FooterStyle1} />
+A variant with a customizable swap area on the left and action buttons on the right. Perfect for displaying additional information or controls.
+
+<Canvas of={ModalStories.SwapAndActions} />
 
 ```jsx
 <Modal
   trigger={<Button>Open Modal</Button>}
-  title="Footer Style 1"
-  footerStyle="style1"
-  cancelLabel="Cancel"
-  confirmLabel="Confirm"
+  title="Swap & Actions Footer"
+  footerVariant="swapAndActions"
+  primaryLabel="Save"
+  secondaryLabel="Draft"
+  showPrimaryButton={true}
+  showSecondaryButton={true}
+  onPrimary={() => console.log('Primary action')}
+  onSecondary={() => console.log('Secondary action')}
 >
   <div style={{ padding: '16px' }}>
-    Modal with footer style 1 (content on left, buttons on right)
+    Modal with swap area and action buttons
   </div>
 </Modal>
 ```
 
-### Footer Style 2
+### Actions Only Footer
 
-<Canvas of={ModalStories.FooterStyle2} />
+A minimal variant with only action buttons aligned to the right. No additional elements on the left side.
+
+<Canvas of={ModalStories.ActionsOnly} />
 
 ```jsx
 <Modal
   trigger={<Button>Open Modal</Button>}
-  title="Footer Style 2"
-  footerStyle="style2"
+  title="Actions Only Footer"
+  footerVariant="actionsOnly"
+  primaryLabel="Save"
+  secondaryLabel="Draft"
+  showPrimaryButton={true}
+  showSecondaryButton={true}
+  onPrimary={() => console.log('Primary action')}
+  onSecondary={() => console.log('Secondary action')}
+>
+  <div style={{ padding: '16px' }}>
+    Modal with only action buttons
+  </div>
+</Modal>
+```
+
+### Single Button
+
+You can show or hide individual buttons using the `showPrimaryButton` and `showSecondaryButton` props.
+
+<Canvas of={ModalStories.SingleButton} />
+
+```jsx
+<Modal
+  trigger={<Button>Open Modal</Button>}
+  title="Single Button"
+  footerVariant="cancelAndActions"
   cancelLabel="Cancel"
-  confirmLabel="Confirm"
+  primaryLabel="Save"
+  showPrimaryButton={true}
+  showSecondaryButton={false}
+  onCancel={() => console.log('Cancelled')}
+  onPrimary={() => console.log('Primary action')}
 >
   <div style={{ padding: '16px' }}>
-    Modal with footer style 2 (centered buttons)
+    Modal with single action button
   </div>
 </Modal>
 ```
 
-## Contextual Modals
+### Custom Swap Content
 
-### Information Modal
+When using the `swapAndActions` variant, you can provide custom content for the swap area.
 
-<Canvas of={ModalStories.InfoModal} />
+<Canvas of={ModalStories.CustomSwapContent} />
 
 ```jsx
-import { IconInfoCircle } from '@tabler/icons-react';
-
 <Modal
-  trigger={<Button prefixIcon={<IconInfoCircle />}>Open Info Modal</Button>}
-  title={
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <IconInfoCircle size={20} color="#0066ff" />
-      Information
-    </div>
-  }
-  showFooter={true}
-  cancelLabel="Close"
-  confirmLabel="Got it"
+  trigger={<Button>Open Modal</Button>}
+  title="Custom Swap Content"
+  footerVariant="swapAndActions"
+  swapContent={<span style={{ color: 'blue', fontWeight: 'bold' }}>Custom Content</span>}
+  primaryLabel="Save"
+  secondaryLabel="Draft"
+  showPrimaryButton={true}
+  showSecondaryButton={true}
 >
   <div style={{ padding: '16px' }}>
-    This is an informational message.
+    Modal with custom swap area content
   </div>
 </Modal>
 ```
 
-### Warning Modal
 
-<Canvas of={ModalStories.WarningModal} />
-
-```jsx
-import { IconAlertTriangle } from '@tabler/icons-react';
-
-<Modal
-  trigger={<Button tone="warning" prefixIcon={<IconAlertTriangle />}>Open Warning Modal</Button>}
-  title={
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <IconAlertTriangle size={20} color="#ff9800" />
-      Warning
-    </div>
-  }
-  showFooter={true}
-  cancelLabel="Cancel"
-  confirmLabel="Proceed"
->
-  <div style={{ padding: '16px' }}>
-    Please be careful with this action.
-  </div>
-</Modal>
-```
-
-### Success Modal
-
-<Canvas of={ModalStories.SuccessModal} />
-
-```jsx
-import { IconCheck } from '@tabler/icons-react';
-
-<Modal
-  trigger={<Button tone="success" prefixIcon={<IconCheck />}>Open Success Modal</Button>}
-  title={
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <IconCheck size={20} color="#4caf50" />
-      Success
-    </div>
-  }
-  showFooter={false}
->
-  <div style={{ padding: '16px' }}>
-    Operation completed successfully!
-  </div>
-</Modal>
-```
 
 ## Internationalization
 
-The Modal component supports Right-to-Left (RTL) languages:
+The Modal component supports Right-to-Left (RTL) languages with automatic layout reflection for all footer variants:
 
 <Canvas of={ModalStories.RTL} />
 
@@ -257,14 +387,25 @@ The Modal component supports Right-to-Left (RTL) languages:
   trigger={<Button>افتح النافذة</Button>}
   title="العنوان"
   rtl={true}
+  footerVariant="cancelAndActions"
   cancelLabel="إلغاء"
-  confirmLabel="تأكيد"
+  primaryLabel="تأكيد"
+  secondaryLabel="ثانوي"
 >
   <div style={{ padding: '16px', textAlign: 'right' }}>
     هذا هو محتوى النافذة المنبثقة
   </div>
 </Modal>
 ```
+
+### RTL Footer Behavior
+
+In RTL mode, the Modal automatically adjusts footer layouts:
+
+- **Cancel and Actions**: Cancel button moves to the right, actions to the left
+- **Swap and Actions**: Swap area moves to the right, actions to the left  
+- **Actions Only**: Action buttons align to the left side
+- **Button Order**: Within action groups, button order is reversed (primary becomes leftmost)
 
 ## Use Cases
 

@@ -18,15 +18,37 @@ const meta: Meta<typeof Modal> = {
       control: 'select',
       options: ['default', 'fullscreen'],
     },
+    width: {
+      control: 'select',
+      options: ['small', 'medium', 'large', 'custom'],
+    },
+    customWidth: {
+      control: 'text',
+    },
+    minWidth: {
+      control: 'text',
+    },
+    maxWidth: {
+      control: 'text',
+    },
+    contentPadding: {
+      control: 'text',
+    },
     showTitle: {
       control: 'boolean',
     },
     showFooter: {
       control: 'boolean',
     },
-    footerStyle: {
+    footerVariant: {
       control: 'select',
-      options: ['default', 'style1', 'style2'],
+      options: ['cancelAndActions', 'swapAndActions', 'actionsOnly'],
+    },
+    showPrimaryButton: {
+      control: 'boolean',
+    },
+    showSecondaryButton: {
+      control: 'boolean',
     },
     rtl: {
       control: 'boolean',
@@ -43,12 +65,14 @@ export const Default: Story = {
     title: 'Title',
     showTitle: true,
     showFooter: true,
-    footerStyle: 'default',
+    footerVariant: 'cancelAndActions',
     cancelLabel: 'Cancel',
-    confirmLabel: 'Label',
+    primaryLabel: 'Label',
+    secondaryLabel: 'Label',
+    showPrimaryButton: true,
+    showSecondaryButton: true,
     size: 'default',
     rtl: false,
-    defaultOpen: true, // For Storybook viewing
     children: <div style={{ textAlign: 'center', padding: '16px' }}>Swap</div>,
     trigger: <Button>Open Modal</Button>,
   },
@@ -70,13 +94,6 @@ export const WithoutFooter: Story = {
   },
 };
 
-// Fullscreen Modal
-export const Fullscreen: Story = {
-  args: {
-    ...Default.args,
-    size: 'fullscreen',
-  },
-};
 
 // RTL Modal for Arabic
 export const RTL: Story = {
@@ -85,68 +102,111 @@ export const RTL: Story = {
     rtl: true,
     title: 'العنوان',
     cancelLabel: 'إلغاء',
-    confirmLabel: 'تأكيد',
+    primaryLabel: 'تأكيد',
+    secondaryLabel: 'ثانوي',
   },
 };
 
-// Modal with style1 footer
-export const FooterStyle1: Story = {
+// Footer variants
+export const CancelAndActions: Story = {
   args: {
     ...Default.args,
-    footerStyle: 'style1',
+    footerVariant: 'cancelAndActions',
+    trigger: <Button>Cancel & Actions Footer</Button>,
   },
 };
 
-// Modal with style2 footer
-export const FooterStyle2: Story = {
+export const SwapAndActions: Story = {
   args: {
     ...Default.args,
-    footerStyle: 'style2',
+    footerVariant: 'swapAndActions',
+    trigger: <Button>Swap & Actions Footer</Button>,
   },
 };
 
-// Modal with info icon
-export const InfoModal: Story = {
+export const ActionsOnly: Story = {
   args: {
     ...Default.args,
-    title: (
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <IconInfoCircle size={20} color="#0066ff" />
-        Information
-      </div>
-    ),
-    children: <div style={{ padding: '16px' }}>This is an informational message.</div>,
-    trigger: <Button prefixIcon={<IconInfoCircle />}>Open Info Modal</Button>,
+    footerVariant: 'actionsOnly',
+    trigger: <Button>Actions Only Footer</Button>,
   },
 };
 
-// Modal with warning
-export const WarningModal: Story = {
+export const SingleButton: Story = {
   args: {
     ...Default.args,
-    title: (
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <IconAlertTriangle size={20} color="#ff9800" />
-        Warning
-      </div>
-    ),
-    children: <div style={{ padding: '16px' }}>Please be careful with this action.</div>,
-    trigger: <Button tone="neutral" prefixIcon={<IconAlertTriangle />}>Open Warning Modal</Button>,
+    footerVariant: 'cancelAndActions',
+    showSecondaryButton: false,
+    trigger: <Button>Single Button Footer</Button>,
   },
 };
 
-// Success modal
-export const SuccessModal: Story = {
+export const CustomSwapContent: Story = {
   args: {
     ...Default.args,
-    title: (
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <IconCheck size={20} color="#4caf50" />
-        Success
-      </div>
-    ),
-    children: <div style={{ padding: '16px' }}>Operation completed successfully!</div>,
-    trigger: <Button tone="success" prefixIcon={<IconCheck />}>Open Success Modal</Button>,
-    showFooter: false,
+    footerVariant: 'swapAndActions',
+    swapContent: <span style={{ color: 'blue', fontWeight: 'bold' }}>Custom Content</span>,
+    trigger: <Button>Custom Swap Content</Button>,
+  },
+};
+
+// Width variants
+export const SmallWidth: Story = {
+  args: {
+    ...Default.args,
+    width: 'small',
+    trigger: <Button>Open Small Modal</Button>,
+  },
+};
+
+export const MediumWidth: Story = {
+  args: {
+    ...Default.args,
+    width: 'medium',
+    trigger: <Button>Open Medium Modal</Button>,
+  },
+};
+
+export const LargeWidth: Story = {
+  args: {
+    ...Default.args,
+    width: 'large',
+    trigger: <Button>Open Large Modal</Button>,
+  },
+};
+
+export const CustomWidth: Story = {
+  args: {
+    ...Default.args,
+    width: 'custom',
+    customWidth: '50rem',
+    trigger: <Button>Open Custom Width Modal</Button>,
+  },
+};
+
+export const WithMinMaxWidth: Story = {
+  args: {
+    ...Default.args,
+    width: 'custom',
+    customWidth: '70%',
+    minWidth: '20rem',
+    maxWidth: '60rem',
+    trigger: <Button>Open Modal with Min/Max Width</Button>,
+  },
+};
+
+export const CustomContentPadding: Story = {
+  args: {
+    ...Default.args,
+    contentPadding: 'var(--t-space-700)',
+    trigger: <Button>Open Modal with Custom Padding</Button>,
+  },
+};
+
+export const NoContentPadding: Story = {
+  args: {
+    ...Default.args,
+    contentPadding: '0',
+    trigger: <Button>Open Modal with No Padding</Button>,
   },
 };

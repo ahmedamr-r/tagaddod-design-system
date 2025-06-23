@@ -38,6 +38,11 @@ export interface SidebarProps extends React.ComponentPropsWithoutRef<'aside'> {
    */
   selectedItem?: string;
   /**
+   * Default selected menu item ID (used when selectedItem is not provided)
+   * @default 'dashboard'
+   */
+  defaultSelectedItem?: string;
+  /**
    * Callback when menu item is selected
    */
   onItemChange?: (itemId: string) => void;
@@ -53,6 +58,11 @@ export interface SidebarProps extends React.ComponentPropsWithoutRef<'aside'> {
    * Bottom navigation items (settings, logout)
    */
   bottomItems?: SidebarMenuItem[];
+  /**
+   * Whether to show the bottom section
+   * @default true
+   */
+  showBottomSection?: boolean;
   /**
    * Whether sidebar is in expanded state by default
    * @default false
@@ -85,10 +95,12 @@ export interface SidebarProps extends React.ComponentPropsWithoutRef<'aside'> {
 export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
   ({
     selectedItem,
+    defaultSelectedItem = 'dashboard',
     onItemChange,
     menuItems = [],
     secondaryItems = [],
     bottomItems = [],
+    showBottomSection = true,
     defaultExpanded = false,
     expanded: controlledExpanded,
     onExpandedChange,
@@ -101,6 +113,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
     const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set(['dashboard']));
     
     const isExpanded = controlledExpanded !== undefined ? controlledExpanded : internalExpanded;
+    const activeItem = selectedItem || defaultSelectedItem;
     
     // Detect RTL for line height adjustments and positioning
     const isRTL = typeof document !== 'undefined' && 
@@ -140,7 +153,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
       const IconComponent = item.icon;
       const hasChildren = item.hasChildren;
       const isGroupExpanded = expandedGroups.has(item.id);
-      const isParentOfActive = hasChildren && item.children?.some(child => child.id === selectedItem);
+      const isParentOfActive = hasChildren && item.children?.some(child => child.id === activeItem);
       
       return (
         <div key={item.id} className={styles.menuItemContainer}>
@@ -163,7 +176,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
             )}>
               <div className={styles.menuItemIcon}>
                 {!isChild && IconComponent && (
-                  <IconComponent size={20} className={styles.icon} />
+                  <IconComponent size={24} className={styles.icon} />
                 )}
               </div>
               
@@ -192,7 +205,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
           {hasChildren && item.children && isGroupExpanded && isExpanded && (
             <div className={styles.menuItemChildren}>
               {item.children.map(child => 
-                renderMenuItem(child, selectedItem === child.id, true)
+                renderMenuItem(child, activeItem === child.id, true)
               )}
             </div>
           )}
@@ -303,21 +316,35 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
         {/* Main Navigation */}
         <nav className={styles.navigation}>
           <div className={styles.navigationSection}>
-            {finalMenuItems.map(item => renderMenuItem(item, selectedItem === item.id))}
+            {finalMenuItems.map(item => {
+              const isDirectActive = activeItem === item.id;
+              const isParentActive = item.hasChildren && item.children?.some(child => child.id === activeItem);
+              return renderMenuItem(item, isDirectActive || isParentActive);
+            })}
           </div>
 
-          <Separator className={styles.separator} />
+          <Separator className={styles.separator} spacing="compact" />
 
           {/* Secondary Navigation */}
           <div className={styles.navigationSection}>
-            {finalSecondaryItems.map(item => renderMenuItem(item, selectedItem === item.id))}
+            {finalSecondaryItems.map(item => {
+              const isDirectActive = activeItem === item.id;
+              const isParentActive = item.hasChildren && item.children?.some(child => child.id === activeItem);
+              return renderMenuItem(item, isDirectActive || isParentActive);
+            })}
           </div>
         </nav>
 
         {/* Bottom Section */}
-        <div className={styles.bottomSection}>
-          {finalBottomItems.map(item => renderMenuItem(item, selectedItem === item.id))}
-        </div>
+        {showBottomSection && (
+          <div className={styles.bottomSection}>
+            {finalBottomItems.map(item => {
+            const isDirectActive = activeItem === item.id;
+            const isParentActive = item.hasChildren && item.children?.some(child => child.id === activeItem);
+            return renderMenuItem(item, isDirectActive || isParentActive);
+          })}
+          </div>
+        )}
       </aside>
     );
   }

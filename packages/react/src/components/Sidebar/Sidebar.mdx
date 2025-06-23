@@ -27,16 +27,32 @@ import { Sidebar } from '@tagaddod-design/react';
 <Canvas of={SidebarStories.Default} />
 
 ```jsx
-// Basic sidebar with default menu items
+// Basic sidebar with default menu items and default active item
 <div style={{ display: 'flex', height: '100vh' }}>
   <Sidebar 
     selectedItem="analytics"
     onItemChange={setSelectedItem}
+    // Dashboard is active by default when no selectedItem is provided
   />
   <main style={{ flex: 1, padding: '24px' }}>
     Your main content here
   </main>
 </div>
+```
+
+### Default Active State
+
+The Sidebar automatically shows a default active item (`'dashboard'`) when no `selectedItem` is provided, ensuring a consistent visual state on initial load.
+
+```jsx
+// Default active item (dashboard)
+<Sidebar onItemChange={setSelectedItem} />
+
+// Custom default active item
+<Sidebar 
+  defaultSelectedItem="users"
+  onItemChange={setSelectedItem} 
+/>
 ```
 
 ## Layout Integration
@@ -241,25 +257,70 @@ const secondaryItems = [
 
 ### Bottom Navigation (`bottomItems`)
 
-Items displayed at the bottom, typically for settings and logout.
+Items displayed at the bottom, typically for settings and logout. The bottom section can be toggled on or off.
 
 ```jsx
 const bottomItems = [
+  {
+    id: 'settings',
+    icon: IconSettings,
+    label: 'Settings'
+  },
   {
     id: 'logout',
     icon: IconLogout,
     label: 'Logout'
   }
 ];
+
+// Show bottom section (default)
+<Sidebar bottomItems={bottomItems} showBottomSection={true} />
+
+// Hide bottom section
+<Sidebar bottomItems={bottomItems} showBottomSection={false} />
+```
+
+### Toggle Bottom Section
+
+Control the visibility of the bottom section containing settings and logout items:
+
+```jsx
+function ConditionalBottomSection() {
+  const [showBottom, setShowBottom] = useState(true);
+  
+  return (
+    <div>
+      <button onClick={() => setShowBottom(!showBottom)}>
+        {showBottom ? 'Hide' : 'Show'} Bottom Section
+      </button>
+      <Sidebar 
+        showBottomSection={showBottom}
+        selectedItem="dashboard"
+        onItemChange={setSelectedItem}
+      />
+    </div>
+  );
+}
 ```
 
 ## States and Styling
 
 ### Active State
 
+The Sidebar supports different active states for main menu items and sub-menu items:
+
+- **Main menu items**: Show brand secondary background with white text
+- **Sub-menu items**: Show blue text with transparent background
+
 ```jsx
 <Sidebar 
   selectedItem="analytics" // Sets active state
+  onItemChange={setSelectedItem}
+/>
+
+// Sub-menu item active styling (blue text, no background)
+<Sidebar 
+  selectedItem="electronics" // Child of dashboard
   onItemChange={setSelectedItem}
 />
 ```
