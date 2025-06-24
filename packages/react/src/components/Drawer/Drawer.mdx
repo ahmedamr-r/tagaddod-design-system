@@ -22,6 +22,40 @@ import { Drawer, useDrawerContext } from '@tagaddod/react';
 
 <ArgTypes of={Drawer} />
 
+### Header Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `headerPrefix` | `React.ReactNode` | - | Content displayed in Group 1 after the title (e.g., badges, status indicators) |
+| `headerSuffix` | `React.ReactNode` | - | Content displayed in Group 2 before the close button (e.g., action buttons, menus) |
+| `showBackButton` | `boolean` | `false` | Show back button in Group 1 |
+| `showTitle` | `boolean` | `true` | Show title in Group 1 |
+| `showClose` | `boolean` | `true` | Show close button in Group 2 |
+| `onBackClick` | `() => void` | - | Back button callback |
+
+### Header Layout CSS Classes
+
+The header uses these CSS classes for layout control:
+
+```css
+.header {
+  display: flex;
+  justify-content: space-between; /* Separates Group 1 and Group 2 */
+}
+
+.headerLeft {
+  display: flex;
+  gap: var(--t-space-200); /* 8px gaps in Group 1 */
+  flex: 1; /* Takes available space */
+}
+
+.headerRight {
+  display: flex;
+  gap: var(--t-space-200); /* 8px gaps in Group 2 */
+  flex-shrink: 0; /* Fixed size */
+}
+```
+
 ## Z-Index Management
 
 The Drawer component uses a sophisticated z-index hierarchy to ensure proper layering:
@@ -65,48 +99,90 @@ function MyComponent() {
 }
 ```
 
-## Sizes
+## Width Configuration
 
-The Drawer component comes in three sizes:
+The Drawer component supports flexible width configuration with both default and custom options:
 
-### Medium (Default)
+### Default Width (Recommended)
 
-<Canvas of={DrawerStories.Default} />
+The default width provides an optimal balance of content space and screen real estate at `28.125rem` (450px) with a minimum width of `25rem` (400px).
+
+<Canvas of={DrawerStories.DefaultWidth} />
 
 ```jsx
 <Drawer
   open={open}
   onOpenChange={setOpen}
-  title="Medium Drawer"
-  size="medium"
+  title="Default Width Drawer"
+  width="default" // This is the default value
 >
   {/* Content */}
 </Drawer>
 ```
 
-### Small
+### Custom Width
+
+For specific use cases, you can set a custom width with optional minimum and maximum constraints:
+
+<Canvas of={DrawerStories.CustomWidthTester} />
 
 ```jsx
 <Drawer
   open={open}
   onOpenChange={setOpen}
-  title="Small Drawer"
-  size="small"
+  title="Custom Width Drawer"
+  width="custom"
+  customWidth="35rem"
+  minWidth="25rem"  // Always enforced (400px minimum)
+  maxWidth="50rem"  // Optional maximum constraint
 >
   {/* Content */}
 </Drawer>
 ```
 
-### Large
+#### Custom Width Examples
 
-<Canvas of={DrawerStories.LargeDrawer} />
+```jsx
+// Fixed rem-based width
+<Drawer width="custom" customWidth="30rem" />
+
+// Fixed pixel width  
+<Drawer width="custom" customWidth="500px" />
+
+// Viewport-based width
+<Drawer width="custom" customWidth="40vw" />
+
+// Responsive width with clamp
+<Drawer 
+  width="custom" 
+  customWidth="clamp(25rem, 40vw, 50rem)" 
+/>
+
+// Custom width with constraints
+<Drawer
+  width="custom"
+  customWidth="35rem"
+  minWidth="25rem"   // 400px minimum (always enforced)
+  maxWidth="60rem"   // 960px maximum
+/>
+```
+
+### Width Constraints
+
+- **Minimum Width**: Always `25rem` (400px) to ensure usability
+- **Default Width**: `28.125rem` (450px) - optimal for most use cases
+- **Custom Width**: Any valid CSS width value
+- **Maximum Width**: Optional constraint for responsive designs
+
+### Legacy Size Props
+
+The `size` prop is still supported for backward compatibility but is separate from the width system:
 
 ```jsx
 <Drawer
-  open={open}
-  onOpenChange={setOpen}
-  title="Large Drawer"
-  size="large"
+  size="medium"     // Controls internal layout/styling
+  width="custom"    // Controls drawer width
+  customWidth="40rem"
 >
   {/* Content */}
 </Drawer>
@@ -164,19 +240,48 @@ The Drawer can appear from either side of the screen:
 
 ### With Header Components
 
-<Canvas of={DrawerStories.WithHeaderComponents} />
+The Drawer header is organized into two distinct groups for better layout control:
 
 ```jsx
+import { Badge } from '@tagaddod-design/react';
+
 <Drawer
   open={open}
   onOpenChange={setOpen}
   title="Drawer with Header Components"
-  headerPrefix={<span className="badge">Badge</span>}
+  headerPrefix={<Badge tone="info">Status</Badge>}
   headerSuffix={<Button variant="plain" size="micro">Action</Button>}
 >
   {/* Content */}
 </Drawer>
 ```
+
+#### Header Layout Structure
+
+The header is divided into two groups with `justify-content: space-between`:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ [Back] Title [Prefix]     [space]     [Suffix] [Close] │
+│ ←──── Group 1 ────→                   ←─ Group 2 ─→    │
+└─────────────────────────────────────────────────────────┘
+```
+
+**Group 1 (Left)**: Back button, Title, Prefix
+- All items have `var(--t-space-200)` (8px) gaps between them
+- Takes available space with `flex: 1`
+- Title can expand or ellipsis within available space
+
+**Group 2 (Right)**: Suffix, Close button  
+- `var(--t-space-200)` (8px) gap between items
+- Fixed size with `flex-shrink: 0`
+- Always aligned to the right
+
+### Interactive Header Areas
+
+<Canvas of={DrawerStories.SwappableHeaderAreas} />
+
+This interactive story demonstrates the header groups with various Badge and Button combinations.
 
 ### Without Title
 
@@ -457,6 +562,18 @@ The default content padding is `var(--t-space-500)` (20px). You can customize it
 
 Or use custom values like `"2rem 1rem"` for different vertical and horizontal padding.
 
+### Width Testing
+
+Use the interactive **Custom Width Tester** story to experiment with different width configurations:
+
+<Canvas of={DrawerStories.CustomWidthTester} />
+
+This story provides:
+- Live input fields for testing custom width values
+- Real-time preview of width changes
+- Examples of different CSS units (rem, px, vw, clamp)
+- Validation of minimum width constraints
+
 
 ### Full Height
 
@@ -513,21 +630,21 @@ The Drawer component properly handles Right-to-Left (RTL) languages automaticall
 ### Form Entry
 
 ```jsx
+import { Badge } from '@tagaddod-design/react';
+
 <Drawer
   open={open}
   onOpenChange={setOpen}
   title="Add New User"
+  headerPrefix={<Badge tone="info">Draft</Badge>}
+  headerSuffix={<Button variant="plain" size="micro">Save Draft</Button>}
   contentPadding="var(--t-space-600)" // Larger padding for forms
   showFooter={true}
-  primaryAction={{
-    label: 'Save',
-    onClick: handleSave,
-    disabled: !isFormValid,
-  }}
-  secondaryAction={{
-    label: 'Cancel',
-    onClick: () => setOpen(false),
-  }}
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"
+  primaryLabel="Save User"
+  onCancel={() => setOpen(false)}
+  onPrimary={handleSave}
 >
   <form onSubmit={handleSubmit}>
     {/* Form fields */}
@@ -600,21 +717,22 @@ The Drawer component properly handles Right-to-Left (RTL) languages automaticall
 ### Multi-step Flows
 
 ```jsx
+import { Badge } from '@tagaddod-design/react';
+
 <Drawer
   open={open}
   onOpenChange={setOpen}
   title={`Step ${currentStep} of ${totalSteps}`}
+  headerPrefix={<Badge tone="warning">In Progress</Badge>}
   showBackButton={currentStep > 1}
   onBackClick={() => setCurrentStep(currentStep - 1)}
+  step={currentStep} // Controls back button visibility
   showFooter={true}
-  primaryAction={{
-    label: currentStep === totalSteps ? 'Finish' : 'Next',
-    onClick: handleNextStep,
-  }}
-  secondaryAction={{
-    label: 'Cancel',
-    onClick: () => setOpen(false),
-  }}
+  footerVariant="cancelAndActions"
+  cancelLabel="Cancel"
+  primaryLabel={currentStep === totalSteps ? 'Finish' : 'Next'}
+  onCancel={() => setOpen(false)}
+  onPrimary={handleNextStep}
 >
   <div>
     {/* Step content */}
@@ -629,11 +747,28 @@ The Drawer component properly handles Right-to-Left (RTL) languages automaticall
   open={open}
   onOpenChange={setOpen}
   title="Settings"
-  size="small"
+  width="default"  // Use default 450px width
   position="right"
 >
   <div>
     {/* Settings options */}
+  </div>
+</Drawer>
+```
+
+### Wide Content Drawer
+
+```jsx
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  title="Data Visualization"
+  width="custom"
+  customWidth="60rem"    // 960px for wide content
+  maxWidth="80vw"        // Responsive maximum
+>
+  <div>
+    {/* Charts, graphs, or wide data tables */}
   </div>
 </Drawer>
 ```

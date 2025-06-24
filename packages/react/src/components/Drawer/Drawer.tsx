@@ -39,12 +39,12 @@ export interface DrawerProps {
   title?: React.ReactNode;
   
   /**
-   * Component to display before the title
+   * Component to display after the title, before the suffix
    */
   headerPrefix?: React.ReactNode;
   
   /**
-   * Component to display after the title, before the close button
+   * Component to display after the prefix, before the close button
    */
   headerSuffix?: React.ReactNode;
   
@@ -180,11 +180,36 @@ export interface DrawerProps {
    * Used to control back button visibility (only shows if step > 1)
    */
   step?: number;
+  
+  /**
+   * Width variant for the drawer
+   * @default 'default'
+   */
+  width?: 'default' | 'custom';
+  
+  /**
+   * Custom width value (used when width is 'custom')
+   * @default undefined
+   */
+  customWidth?: string;
+  
+  /**
+   * Minimum width for the drawer
+   * @default '25rem' (400px)
+   */
+  minWidth?: string;
+  
+  /**
+   * Maximum width for the drawer
+   * @default undefined
+   */
+  maxWidth?: string;
 }
 
 export const drawerSizes = ['small', 'medium', 'large'] as const;
 export const drawerPositions = ['right', 'left'] as const;
 export const drawerFooterVariants = ['cancelAndActions', 'swapAndActions', 'actionsOnly'] as const;
+export const drawerWidths = ['default', 'custom'] as const;
 
 export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
   open,
@@ -214,6 +239,10 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
   fullHeight = true, // Default to full height
   contentPadding = 'var(--t-space-500)', // Default to 20px padding
   step = 1, // Default to step 1
+  width = 'default', // Default width variant
+  customWidth,
+  minWidth = '25rem', // Default minimum width (400px)
+  maxWidth,
   children,
   ...props
 }, ref) => {
@@ -225,14 +254,14 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
     setIsRTL(dir === 'rtl');
   }, []);
   
-  // Adjust position based on RTL
+  // In RTL, drawer should open from left (like reading direction)
   const adjustedPosition = isRTL 
-    ? (position === 'right' ? 'left' : 'right') 
-    : position;
+    ? 'left'  // Always left in RTL
+    : position; // Use provided position in LTR
   
   // Apply line height style based on text direction
   const lineHeightStyle = {
-    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.5)' : 'var(--t-line-height-english, 1.5)'
   };
   
   // Callback when back button is clicked
@@ -247,21 +276,45 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
   // Get correct back arrow icon based on direction
   const BackArrowIcon = isRTL ? IconArrowRight : IconArrowLeft;
   
+  // Create custom width styles similar to Modal
+  const getCustomStyles = () => {
+    const customStyles: React.CSSProperties = {};
+    
+    if (width === 'custom' && customWidth) {
+      customStyles.width = customWidth;
+    }
+    
+    if (minWidth) {
+      customStyles.minWidth = minWidth;
+    }
+    
+    if (maxWidth) {
+      customStyles.maxWidth = maxWidth;
+    }
+    
+    // Apply default styles
+    if (useSurfaceBackground) {
+      customStyles.backgroundColor = 'var(--t-color-surface-primary)';
+    }
+    
+    if (fullHeight) {
+      customStyles.height = '100vh';
+      customStyles.maxHeight = '100vh';
+    }
+    
+    return customStyles;
+  };
+
   // Combine all classes for the drawer
   const drawerClasses = clsx(
     styles.drawer,
     styles[`size${size.charAt(0).toUpperCase() + size.slice(1)}`],
     styles[`position${adjustedPosition.charAt(0).toUpperCase() + adjustedPosition.slice(1)}`],
+    {
+      [styles.widthDefault]: width === 'default',
+    },
     className
   );
-  
-  
-  // Create custom drawer style
-  const drawerStyle = {
-    backgroundColor: useSurfaceBackground ? 'var(--t-color-surface-primary)' : undefined,
-    height: fullHeight ? '100vh' : undefined,
-    maxHeight: fullHeight ? '100vh' : undefined,
-  };
   
   return (
     <VaulDrawer.Root
@@ -277,7 +330,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
           ref={ref} 
           className={drawerClasses} 
           data-direction={adjustedPosition}
-          style={drawerStyle}
+          style={getCustomStyles()}
+          dir={isRTL ? 'rtl' : 'ltr'}
           {...props}
         >
           <DrawerContext.Provider 
@@ -288,7 +342,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
           >
             {/* Header */}
             <div className={styles.header}>
-              <div className={styles.headerContent}>
+              {/* Group 1: Back + Title + Prefix */}
+              <div className={styles.headerLeft}>
                 {showBackButton && step > 1 && (
                   <Button 
                     variant="tertiary"
@@ -297,14 +352,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
                     onClick={handleBackClick}
                     aria-label={isRTL ? 'التالي' : 'Back'}
                     className={styles.backButton}
-                    prefixIcon={<BackArrowIcon size={20} />}
+                    prefixIcon={<BackArrowIcon size={16} />}
                   />
-                )}
-                
-                {headerPrefix && (
-                  <div className={styles.headerPrefix}>
-                    {headerPrefix}
-                  </div>
                 )}
                 
                 {showTitle && title && (
@@ -313,24 +362,33 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
                   </h2>
                 )}
                 
+                {headerPrefix && (
+                  <div className={styles.headerPrefix}>
+                    {headerPrefix}
+                  </div>
+                )}
+              </div>
+              
+              {/* Group 2: Suffix + Close */}
+              <div className={styles.headerRight}>
                 {headerSuffix && (
                   <div className={styles.headerSuffix}>
                     {headerSuffix}
                   </div>
                 )}
+                
+                {showClose && (
+                  <Button 
+                    variant="tertiary"
+                    tone="neutral"
+                    size="micro"
+                    onClick={() => onOpenChange(false)}
+                    aria-label={isRTL ? 'إغلاق' : 'Close'}
+                    className={styles.closeButton}
+                    prefixIcon={<IconX size={16} />}
+                  />
+                )}
               </div>
-              
-              {showClose && (
-                <Button 
-                  variant="tertiary"
-                  tone="neutral"
-                  size="micro"
-                  onClick={() => onOpenChange(false)}
-                  aria-label={isRTL ? 'إغلاق' : 'Close'}
-                  className={styles.closeButton}
-                  prefixIcon={<IconX size={20} />}
-                />
-              )}
             </div>
             
             {/* Content */}
@@ -341,184 +399,88 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
             {/* Footer */}
             {showFooter && (
               <div className={clsx(styles.footer, styles[`footer${footerVariant.charAt(0).toUpperCase() + footerVariant.slice(1)}`])}>
-                {isRTL ? (
-                  // RTL: Render in reversed order
+                {footerVariant === 'cancelAndActions' && (
                   <>
-                    {footerVariant === 'cancelAndActions' && (
-                      <>
-                        {/* RTL: Action buttons on the left */}
-                        <div className={styles.footerLeft}>
-                          {showPrimaryButton && (
-                            <Button 
-                              variant="primary" 
-                              onClick={onPrimary}
-                              style={lineHeightStyle}
-                            >
-                              {primaryLabel}
-                            </Button>
-                          )}
-                          {showSecondaryButton && (
-                            <Button 
-                              variant="tertiary" 
-                              onClick={onSecondary}
-                              style={lineHeightStyle}
-                            >
-                              {secondaryLabel}
-                            </Button>
-                          )}
-                        </div>
-                        {/* RTL: Cancel button on the right */}
-                        <div className={styles.footerRight}>
-                          <Button 
-                            variant="plain" 
-                            tone="neutral"
-                            onClick={onCancel || (() => onOpenChange(false))}
-                            style={lineHeightStyle}
-                          >
-                            {cancelLabel}
-                          </Button>
-                        </div>
-                      </>
-                    )}
-                    {footerVariant === 'swapAndActions' && (
-                      <>
-                        {/* RTL: Action buttons on the left */}
-                        <div className={styles.footerLeft}>
-                          {showPrimaryButton && (
-                            <Button 
-                              variant="primary" 
-                              onClick={onPrimary}
-                              style={lineHeightStyle}
-                            >
-                              {primaryLabel}
-                            </Button>
-                          )}
-                          {showSecondaryButton && (
-                            <Button 
-                              variant="tertiary" 
-                              onClick={onSecondary}
-                              style={lineHeightStyle}
-                            >
-                              {secondaryLabel}
-                            </Button>
-                          )}
-                        </div>
-                        {/* RTL: Swap content on the right */}
-                        <div className={styles.footerRight}>
-                          {swapContent || <div className={styles.footerSwapArea} style={lineHeightStyle}>Swap</div>}
-                        </div>
-                      </>
-                    )}
-                    {footerVariant === 'actionsOnly' && (
-                      <div className={styles.footerLeft}>
-                        {showPrimaryButton && (
-                          <Button 
-                            variant="primary" 
-                            onClick={onPrimary}
-                            style={lineHeightStyle}
-                          >
-                            {primaryLabel}
-                          </Button>
-                        )}
-                        {showSecondaryButton && (
-                          <Button 
-                            variant="tertiary" 
-                            onClick={onSecondary}
-                            style={lineHeightStyle}
-                          >
-                            {secondaryLabel}
-                          </Button>
-                        )}
-                      </div>
-                    )}
+                    <div className={styles.footerLeft}>
+                      <Button 
+                        variant="plain" 
+                        tone="neutral"
+                        onClick={onCancel || (() => onOpenChange(false))}
+                        style={lineHeightStyle}
+                      >
+                        {cancelLabel}
+                      </Button>
+                    </div>
+                    <div className={styles.footerRight}>
+                      {showSecondaryButton && (
+                        <Button 
+                          variant="tertiary" 
+                          onClick={onSecondary}
+                          style={lineHeightStyle}
+                        >
+                          {secondaryLabel}
+                        </Button>
+                      )}
+                      {showPrimaryButton && (
+                        <Button 
+                          variant="primary" 
+                          onClick={onPrimary}
+                          style={lineHeightStyle}
+                        >
+                          {primaryLabel}
+                        </Button>
+                      )}
+                    </div>
                   </>
-                ) : (
-                  // LTR: Normal order
+                )}
+                {footerVariant === 'swapAndActions' && (
                   <>
-                    {footerVariant === 'cancelAndActions' && (
-                      <>
-                        <div className={styles.footerLeft}>
-                          <Button 
-                            variant="plain" 
-                            tone="neutral"
-                            onClick={onCancel || (() => onOpenChange(false))}
-                            style={lineHeightStyle}
-                          >
-                            {cancelLabel}
-                          </Button>
-                        </div>
-                        <div className={styles.footerRight}>
-                          {showSecondaryButton && (
-                            <Button 
-                              variant="tertiary" 
-                              onClick={onSecondary}
-                              style={lineHeightStyle}
-                            >
-                              {secondaryLabel}
-                            </Button>
-                          )}
-                          {showPrimaryButton && (
-                            <Button 
-                              variant="primary" 
-                              onClick={onPrimary}
-                              style={lineHeightStyle}
-                            >
-                              {primaryLabel}
-                            </Button>
-                          )}
-                        </div>
-                      </>
-                    )}
-                    {footerVariant === 'swapAndActions' && (
-                      <>
-                        <div className={styles.footerLeft}>
-                          {swapContent || <div className={styles.footerSwapArea} style={lineHeightStyle}>Swap</div>}
-                        </div>
-                        <div className={styles.footerRight}>
-                          {showSecondaryButton && (
-                            <Button 
-                              variant="tertiary" 
-                              onClick={onSecondary}
-                              style={lineHeightStyle}
-                            >
-                              {secondaryLabel}
-                            </Button>
-                          )}
-                          {showPrimaryButton && (
-                            <Button 
-                              variant="primary" 
-                              onClick={onPrimary}
-                              style={lineHeightStyle}
-                            >
-                              {primaryLabel}
-                            </Button>
-                          )}
-                        </div>
-                      </>
-                    )}
-                    {footerVariant === 'actionsOnly' && (
-                      <div className={styles.footerRight}>
-                        {showSecondaryButton && (
-                          <Button 
-                            variant="tertiary" 
-                            onClick={onSecondary}
-                            style={lineHeightStyle}
-                          >
-                            {secondaryLabel}
-                          </Button>
-                        )}
-                        {showPrimaryButton && (
-                          <Button 
-                            variant="primary" 
-                            onClick={onPrimary}
-                            style={lineHeightStyle}
-                          >
-                            {primaryLabel}
-                          </Button>
-                        )}
-                      </div>
-                    )}
+                    <div className={styles.footerLeft}>
+                      {swapContent || <div className={styles.footerSwapArea} style={lineHeightStyle}>Swap</div>}
+                    </div>
+                    <div className={styles.footerRight}>
+                      {showSecondaryButton && (
+                        <Button 
+                          variant="tertiary" 
+                          onClick={onSecondary}
+                          style={lineHeightStyle}
+                        >
+                          {secondaryLabel}
+                        </Button>
+                      )}
+                      {showPrimaryButton && (
+                        <Button 
+                          variant="primary" 
+                          onClick={onPrimary}
+                          style={lineHeightStyle}
+                        >
+                          {primaryLabel}
+                        </Button>
+                      )}
+                    </div>
                   </>
+                )}
+                {footerVariant === 'actionsOnly' && (
+                  <div className={styles.footerRight}>
+                    {showSecondaryButton && (
+                      <Button 
+                        variant="tertiary" 
+                        onClick={onSecondary}
+                        style={lineHeightStyle}
+                      >
+                        {secondaryLabel}
+                      </Button>
+                    )}
+                    {showPrimaryButton && (
+                      <Button 
+                        variant="primary" 
+                        onClick={onPrimary}
+                        style={lineHeightStyle}
+                      >
+                        {primaryLabel}
+                      </Button>
+                    )}
+                  </div>
                 )}
               </div>
             )}

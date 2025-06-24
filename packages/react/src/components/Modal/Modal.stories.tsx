@@ -71,8 +71,7 @@ export const Default: Story = {
     showPrimaryButton: true,
     showSecondaryButton: true,
     size: 'default',
-    rtl: false,
-    children: <div style={{ textAlign: 'center', padding: '16px' }}>Swap</div>,
+    children: <div style={{ textAlign: 'center', padding: '16px' }}>Modal Content</div>,
     trigger: <Button>Open Modal</Button>,
   },
 };
@@ -94,15 +93,27 @@ export const WithoutFooter: Story = {
 };
 
 
-// RTL Modal for Arabic
-export const RTL: Story = {
+// RTL Modal with Arabic content
+export const ArabicContent: Story = {
   args: {
     ...Default.args,
-    rtl: true,
     title: 'العنوان',
     cancelLabel: 'إلغاء',
     primaryLabel: 'تأكيد',
     secondaryLabel: 'ثانوي',
+    children: (
+      <div style={{ padding: '16px', textAlign: 'right', direction: 'rtl' }}>
+        محتوى النافذة المنبثقة باللغة العربية. يمكنك تبديل الاتجاه من شريط الأدوات لرؤية التخطيط الصحيح.
+      </div>
+    ),
+    trigger: <Button>فتح النافذة</Button>,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Modal with Arabic content - switch to RTL mode in the Storybook toolbar to see proper layout mirroring',
+      },
+    },
   },
 };
 

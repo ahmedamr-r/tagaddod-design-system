@@ -55,9 +55,9 @@ export const Modal = ({
   onSecondary,
   ...props
 }: ModalProps) => {
-  // Detect RTL for line height adjustments
-  const isRTL = typeof document !== 'undefined' && 
-    (document.dir === 'rtl' || document.documentElement.dir === 'rtl');
+  // Detect RTL from prop or document direction (for Storybook compatibility)
+  const isRTL = rtl || (typeof document !== 'undefined' && 
+    (document.dir === 'rtl' || document.documentElement.dir === 'rtl'));
   
   // Apply line height style based on text direction
   const lineHeightStyle = {
@@ -97,7 +97,7 @@ export const Modal = ({
             [styles.rtl]: rtl
           })}
           style={getCustomStyles()}
-          dir={rtl ? 'rtl' : 'ltr'}
+          dir={isRTL ? 'rtl' : 'ltr'}
         >
           {showTitle && (
             <div className={styles.header}>
@@ -123,188 +123,88 @@ export const Modal = ({
           
           {showFooter && (
             <div className={clsx(styles.footer, styles[`footer${footerVariant.charAt(0).toUpperCase() + footerVariant.slice(1)}`])}>
-              {isRTL ? (
-                // RTL: Render in reversed order
+              {footerVariant === 'cancelAndActions' && (
                 <>
-                  {footerVariant === 'cancelAndActions' && (
-                    <>
-                      {/* RTL: Action buttons on the left */}
-                      <div className={styles.footerLeft}>
-                        {showPrimaryButton && (
-                          <Button 
-                            variant="primary" 
-                            onClick={onPrimary}
-                            style={lineHeightStyle}
-                          >
-                            {primaryLabel}
-                          </Button>
-                        )}
-                        {showSecondaryButton && (
-                          <Button 
-                            variant="tertiary" 
-                            onClick={onSecondary}
-                            style={lineHeightStyle}
-                          >
-                            {secondaryLabel}
-                          </Button>
-                        )}
-                      </div>
-                      {/* RTL: Cancel button on the right */}
-                      <div className={styles.footerRight}>
-                        <Dialog.Close asChild>
-                          <Button 
-                            variant="plain" 
-                            tone="neutral"
-                            onClick={onCancel}
-                            style={lineHeightStyle}
-                          >
-                            {cancelLabel}
-                          </Button>
-                        </Dialog.Close>
-                      </div>
-                    </>
-                  )}
-                  {footerVariant === 'swapAndActions' && (
-                    <>
-                      {/* RTL: Action buttons on the left */}
-                      <div className={styles.footerLeft}>
-                        {showPrimaryButton && (
-                          <Button 
-                            variant="primary" 
-                            onClick={onPrimary}
-                            style={lineHeightStyle}
-                          >
-                            {primaryLabel}
-                          </Button>
-                        )}
-                        {showSecondaryButton && (
-                          <Button 
-                            variant="tertiary" 
-                            onClick={onSecondary}
-                            style={lineHeightStyle}
-                          >
-                            {secondaryLabel}
-                          </Button>
-                        )}
-                      </div>
-                      {/* RTL: Swap content on the right */}
-                      <div className={styles.footerRight}>
-                        {swapContent || <div className={styles.footerSwapArea} style={lineHeightStyle}>Swap</div>}
-                      </div>
-                    </>
-                  )}
-                  {footerVariant === 'actionsOnly' && (
-                    <div className={styles.footerLeft}>
-                      {showPrimaryButton && (
-                        <Button 
-                          variant="primary" 
-                          onClick={onPrimary}
-                          style={lineHeightStyle}
-                        >
-                          {primaryLabel}
-                        </Button>
-                      )}
-                      {showSecondaryButton && (
-                        <Button 
-                          variant="secondary" 
-                          onClick={onSecondary}
-                          style={lineHeightStyle}
-                        >
-                          {secondaryLabel}
-                        </Button>
-                      )}
-                    </div>
-                  )}
+                  <div className={styles.footerLeft}>
+                    <Button 
+                      variant="plain" 
+                      tone="neutral"
+                      onClick={onCancel || (() => {})}
+                      style={lineHeightStyle}
+                    >
+                      {cancelLabel}
+                    </Button>
+                  </div>
+                  <div className={styles.footerRight}>
+                    {showSecondaryButton && (
+                      <Button 
+                        variant="tertiary" 
+                        onClick={onSecondary}
+                        style={lineHeightStyle}
+                      >
+                        {secondaryLabel}
+                      </Button>
+                    )}
+                    {showPrimaryButton && (
+                      <Button 
+                        variant="primary" 
+                        onClick={onPrimary}
+                        style={lineHeightStyle}
+                      >
+                        {primaryLabel}
+                      </Button>
+                    )}
+                  </div>
                 </>
-              ) : (
-                // LTR: Normal order
+              )}
+              {footerVariant === 'swapAndActions' && (
                 <>
-                  {footerVariant === 'cancelAndActions' && (
-                    <>
-                      <div className={styles.footerLeft}>
-                        <Dialog.Close asChild>
-                          <Button 
-                            variant="plain" 
-                            tone="neutral"
-                            onClick={onCancel}
-                            style={lineHeightStyle}
-                          >
-                            {cancelLabel}
-                          </Button>
-                        </Dialog.Close>
-                      </div>
-                      <div className={styles.footerRight}>
-                        {showSecondaryButton && (
-                          <Button 
-                            variant="tertiary" 
-                            onClick={onSecondary}
-                            style={lineHeightStyle}
-                          >
-                            {secondaryLabel}
-                          </Button>
-                        )}
-                        {showPrimaryButton && (
-                          <Button 
-                            variant="primary" 
-                            onClick={onPrimary}
-                            style={lineHeightStyle}
-                          >
-                            {primaryLabel}
-                          </Button>
-                        )}
-                      </div>
-                    </>
-                  )}
-                  {footerVariant === 'swapAndActions' && (
-                    <>
-                      <div className={styles.footerLeft}>
-                        {swapContent || <div className={styles.footerSwapArea} style={lineHeightStyle}>Swap</div>}
-                      </div>
-                      <div className={styles.footerRight}>
-                        {showSecondaryButton && (
-                          <Button 
-                            variant="tertiary" 
-                            onClick={onSecondary}
-                            style={lineHeightStyle}
-                          >
-                            {secondaryLabel}
-                          </Button>
-                        )}
-                        {showPrimaryButton && (
-                          <Button 
-                            variant="primary" 
-                            onClick={onPrimary}
-                            style={lineHeightStyle}
-                          >
-                            {primaryLabel}
-                          </Button>
-                        )}
-                      </div>
-                    </>
-                  )}
-                  {footerVariant === 'actionsOnly' && (
-                    <div className={styles.footerRight}>
-                      {showSecondaryButton && (
-                        <Button 
-                          variant="secondary" 
-                          onClick={onSecondary}
-                          style={lineHeightStyle}
-                        >
-                          {secondaryLabel}
-                        </Button>
-                      )}
-                      {showPrimaryButton && (
-                        <Button 
-                          variant="primary" 
-                          onClick={onPrimary}
-                          style={lineHeightStyle}
-                        >
-                          {primaryLabel}
-                        </Button>
-                      )}
-                    </div>
-                  )}
+                  <div className={styles.footerLeft}>
+                    {swapContent || <div className={styles.footerSwapArea} style={lineHeightStyle}>Swap</div>}
+                  </div>
+                  <div className={styles.footerRight}>
+                    {showSecondaryButton && (
+                      <Button 
+                        variant="tertiary" 
+                        onClick={onSecondary}
+                        style={lineHeightStyle}
+                      >
+                        {secondaryLabel}
+                      </Button>
+                    )}
+                    {showPrimaryButton && (
+                      <Button 
+                        variant="primary" 
+                        onClick={onPrimary}
+                        style={lineHeightStyle}
+                      >
+                        {primaryLabel}
+                      </Button>
+                    )}
+                  </div>
                 </>
+              )}
+              {footerVariant === 'actionsOnly' && (
+                <div className={styles.footerRight}>
+                  {showSecondaryButton && (
+                    <Button 
+                      variant="tertiary" 
+                      onClick={onSecondary}
+                      style={lineHeightStyle}
+                    >
+                      {secondaryLabel}
+                    </Button>
+                  )}
+                  {showPrimaryButton && (
+                    <Button 
+                      variant="primary" 
+                      onClick={onPrimary}
+                      style={lineHeightStyle}
+                    >
+                      {primaryLabel}
+                    </Button>
+                  )}
+                </div>
               )}
             </div>
           )}

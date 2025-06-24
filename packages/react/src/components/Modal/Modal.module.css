@@ -63,6 +63,11 @@
   border-bottom: 1px solid var(--t-color-border, #EFEFEF);
 }
 
+/* RTL Header positioning - title on right, close button on left */
+:global([dir="rtl"]) .header {
+  direction: rtl;
+}
+
 .title {
   font: var(--t-typography-heading-sm);
   color: var(--t-color-text-primary, #000);
@@ -186,6 +191,36 @@
 
 :global([dir="rtl"]) .footerSwapArea::after {
   margin-bottom: -0.25em;
+}
+
+/* RTL Footer positioning - actions on left, cancel on right */
+:global([dir="rtl"]) .footer {
+  /* direction: rtl; */
+}
+
+:global([dir="rtl"]) .footer .footerLeft {
+  order: 2 !important; /* In RTL, left area (cancel) moves to right side */
+}
+
+:global([dir="rtl"]) .footer .footerRight {
+  order: 1 !important; /* In RTL, right area (actions) moves to left side */
+  flex-direction: row-reverse; /* Reverse button order within actions: primary then secondary */
+}
+
+/* Ensure RTL works for all footer variants */
+:global([dir="rtl"]) .footerCancelAndActions .footerLeft,
+:global([dir="rtl"]) .footerSwapAndActions .footerLeft {
+  order: 2 !important;
+}
+
+:global([dir="rtl"]) .footerCancelAndActions .footerRight,
+:global([dir="rtl"]) .footerSwapAndActions .footerRight {
+  order: 1 !important;
+  flex-direction: row-reverse;
+}
+
+:global([dir="rtl"]) .footerActionsOnly {
+  justify-content: flex-start !important; /* In RTL, actions should be on the left */
 }
 
 /* Keyframe animations */

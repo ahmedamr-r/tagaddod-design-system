@@ -376,27 +376,67 @@ When using the `swapAndActions` variant, you can provide custom content for the 
 
 
 
-## Internationalization
+## Internationalization & RTL Support
 
-The Modal component supports Right-to-Left (RTL) languages with automatic layout reflection for all footer variants:
+The Modal component provides comprehensive Right-to-Left (RTL) support with automatic layout mirroring for Arabic, Hebrew, and other RTL languages. The component adapts both header and footer positioning when the direction changes.
 
-<Canvas of={ModalStories.RTL} />
+### RTL Layout Behavior
+
+#### Header RTL Positioning
+- **LTR**: [Title] ←→ [Close Button]
+- **RTL**: [Close Button] ←→ [Title]
+
+#### Footer RTL Positioning
+- **Cancel & Actions RTL**: [Primary] [Secondary] ←→ [Cancel]
+- **Swap & Actions RTL**: [Primary] [Secondary] ←→ [Swap Content]
+- **Actions Only RTL**: [Primary] [Secondary] (left-aligned)
+
+### Arabic Content Example
+
+<Canvas of={ModalStories.ArabicContent} />
 
 ```jsx
 <Modal
-  trigger={<Button>افتح النافذة</Button>}
+  trigger={<Button>فتح النافذة</Button>}
   title="العنوان"
-  rtl={true}
   footerVariant="cancelAndActions"
   cancelLabel="إلغاء"
   primaryLabel="تأكيد"
   secondaryLabel="ثانوي"
 >
-  <div style={{ padding: '16px', textAlign: 'right' }}>
-    هذا هو محتوى النافذة المنبثقة
+  <div style={{ padding: '16px', textAlign: 'right', direction: 'rtl' }}>
+    محتوى النافذة المنبثقة باللغة العربية. يمكنك تبديل الاتجاه من شريط الأدوات لرؤية التخطيط الصحيح.
   </div>
 </Modal>
 ```
+
+### Using RTL Mode
+
+The Modal automatically detects RTL direction from:
+
+1. **Storybook Toolbar**: Use the direction toggle in Storybook
+2. **Document Direction**: Set `document.dir = 'rtl'` or `document.documentElement.dir = 'rtl'`
+3. **RTL Prop**: Explicitly pass `rtl={true}` to the component
+
+```jsx
+// Method 1: Automatic detection from document
+document.dir = 'rtl';
+
+// Method 2: Explicit prop
+<Modal rtl={true} title="العنوان">
+  {/* Content */}
+</Modal>
+
+// Method 3: Storybook toolbar (development)
+// Use the direction toggle in Storybook's toolbar
+```
+
+### RTL Font and Typography
+
+The component automatically adjusts line-height and typography settings for RTL languages:
+
+- **Arabic/RTL**: Uses `var(--t-line-height-arabic, 1.2)` for better text rendering
+- **English/LTR**: Uses `var(--t-line-height-english, 1.5)` for optimal readability
 
 ### RTL Footer Behavior
 
