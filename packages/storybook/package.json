@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prestorybook": "cp ../react/llms.txt public/llms.txt",
+    "prestorybook": "shx cp ../react/llms.txt public/llms.txt",
     "storybook": "storybook dev -p 6009",
-    "prewatch": "cp ../react/llms.txt public/llms.txt",
+    "prewatch": "shx cp ../react/llms.txt public/llms.txt",
     "watch": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "clean": "rm -rf .storybook-static",
-    "prebuild-storybook": "cd ../tokens && yarn build && cd ../react && yarn build && cp llms.txt ../storybook/public/llms.txt",
+    "clean": "shx rm -rf .storybook-static",
+    "prebuild-storybook": "cd ../tokens && yarn build && cd ../react && yarn build && shx cp llms.txt ../storybook/public/llms.txt",
     "vercel-build": "yarn build-storybook"
   },
   "main": "index.js",
@@ -44,6 +44,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.5.1",
+    "shx": "^0.3.4",
     "storybook": "^8.6.12",
     "storybook-design-token": "3.2.0",
     "vite": "^6.3.5"
