@@ -44,13 +44,25 @@ export interface ListboxOptionProps {
    */
   onClick?: (value: string | number) => void;
   /**
-   * Additional CSS class name
+   * Additional CSS class name for the option container
    */
   className?: string;
   /**
-   * Additional styles to apply
+   * Additional styles to apply to the option container
    */
   style?: React.CSSProperties;
+  /**
+   * Additional CSS class name for the label text
+   */
+  labelClassName?: string;
+  /**
+   * Additional styles to apply to the label text
+   */
+  labelStyle?: React.CSSProperties;
+  /**
+   * Additional CSS class name for the prefix element
+   */
+  prefixClassName?: string;
   /**
    * ARIA props
    */
@@ -73,6 +85,9 @@ export const ListboxOption: React.FC<ListboxOptionProps> = ({
   onClick,
   className,
   style,
+  labelClassName,
+  labelStyle,
+  prefixClassName,
   'aria-selected': ariaSelected,
   role = 'option',
   id,
@@ -84,7 +99,7 @@ export const ListboxOption: React.FC<ListboxOptionProps> = ({
   
   // Apply line height style based on text direction
   const lineHeightStyle = {
-    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.5)' : 'var(--t-line-height-english, 1.5)'
   };
 
   const handleClick = () => {
@@ -127,12 +142,17 @@ export const ListboxOption: React.FC<ListboxOptionProps> = ({
       {...props}
     >
       <div className={styles.optionContent}>
-        {prefix && <div className={styles.prefix}>{prefix}</div>}
+        {prefix && <div className={clsx(styles.prefix, prefixClassName)}>{prefix}</div>}
         
         <div className={styles.labelContainer}>
           {customContent || (
             <>
-              <span className={styles.label} style={lineHeightStyle}>{label}</span>
+              <span 
+                className={clsx(styles.label, labelClassName)} 
+                style={{ ...lineHeightStyle, ...labelStyle }}
+              >
+                {label}
+              </span>
               {helpText && (
                 <span className={styles.helpText} style={lineHeightStyle}>{helpText}</span>
               )}

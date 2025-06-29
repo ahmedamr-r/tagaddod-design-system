@@ -302,6 +302,118 @@ export const ArabicRTL: Story = {
   ],
 };
 
+// Arabic (RTL) with prefix elements (icons, checkboxes)
+export const ArabicRTLWithPrefixes: Story = {
+  args: {
+    options: [
+      { 
+        label: 'العناصر المحددة', 
+        value: 'selected',
+        prefix: <IconCheck size={16} />,
+        helpText: 'العناصر التي تم اختيارها'
+      },
+      { 
+        label: 'العناصر المميزة', 
+        value: 'tagged',
+        prefix: <IconTag size={16} />,
+        suffix: <span style={{fontSize: '12px', color: 'var(--t-color-text-subtle)'}}>١٢</span>,
+        helpText: 'العناصر التي تم تمييزها'
+      },
+      { 
+        label: 'المفضلة', 
+        value: 'favorites',
+        prefix: <IconStar size={16} />,
+        suffix: <span style={{fontSize: '12px', color: 'var(--t-color-text-subtle)'}}>٥</span>
+      },
+    ],
+    selectedValue: 'selected',
+    inPopover: false,
+  },
+  parameters: {
+    globals: {
+      direction: 'rtl',
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: '280px', border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px' }}>
+        <Story />
+      </div>
+    ),
+  ],
+  render: () => {
+    const [selected, setSelected] = useState<string[]>(['selected']);
+    
+    return (
+      <div style={{ width: '280px', border: '1px solid var(--t-color-border-subtle)', borderRadius: '8px' }}>
+        <Listbox
+          options={[
+            { 
+              label: 'العناصر المحددة', 
+              value: 'selected',
+              prefix: (
+                <Checkbox
+                  checked={selected.includes('selected')}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setSelected([...selected, 'selected']);
+                    } else {
+                      setSelected(selected.filter(v => v !== 'selected'));
+                    }
+                  }}
+                  hideLabel={true}
+                />
+              ),
+              helpText: 'العناصر التي تم اختيارها'
+            },
+            { 
+              label: 'العناصر المميزة', 
+              value: 'tagged',
+              prefix: (
+                <Checkbox
+                  checked={selected.includes('tagged')}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setSelected([...selected, 'tagged']);
+                    } else {
+                      setSelected(selected.filter(v => v !== 'tagged'));
+                    }
+                  }}
+                  hideLabel={true}
+                />
+              ),
+              suffix: <span style={{fontSize: '12px', color: 'var(--t-color-text-subtle)'}}>١٢</span>,
+              helpText: 'العناصر التي تم تمييزها'
+            },
+            { 
+              label: 'المفضلة', 
+              value: 'favorites',
+              prefix: (
+                <Checkbox
+                  checked={selected.includes('favorites')}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setSelected([...selected, 'favorites']);
+                    } else {
+                      setSelected(selected.filter(v => v !== 'favorites'));
+                    }
+                  }}
+                  hideLabel={true}
+                />
+              ),
+              suffix: <span style={{fontSize: '12px', color: 'var(--t-color-text-subtle)'}}>٥</span>
+            },
+          ]}
+          selectedValue={selected}
+          multiple={true}
+          onMultiSelect={(values) => setSelected(values as string[])}
+          inPopover={false}
+        />
+      </div>
+    );
+  },
+};
+
 // Disabled options
 export const WithDisabledOptions: Story = {
   args: {

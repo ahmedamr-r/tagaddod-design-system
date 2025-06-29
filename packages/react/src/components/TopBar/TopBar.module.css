@@ -1,12 +1,15 @@
 /* TopBar Component Styles */
 
 .topBar {
+  --t-topbar-height: 64px; /* Define TopBar height as CSS custom property */
   position: relative;
   width: 100%;
-  background-color: var(--t-color-bg-primary, #ffffff);
+  background-color: var(--t-color-surface-primary);
   border-bottom: 1px solid var(--t-color-border-primary, #e5e7eb);
   padding: var(--t-space-300, 0.75rem) var(--t-space-400, 1rem);
-  z-index: 40;
+  z-index: 50; /* Higher z-index to stay above sidebar */
+  height: var(--t-topbar-height);
+  box-sizing: border-box;
 }
 
 .topBarContent {
@@ -16,6 +19,24 @@
   max-width: 100%;
   margin: 0 auto;
   gap: var(--t-space-400, 1rem);
+}
+
+/* Hamburger Menu Button */
+.hamburgerButton {
+  display: none;
+  flex-shrink: 0;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+/* Left section containing hamburger and logo */
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: var(--t-space-200, 0.5rem);
+  flex-shrink: 0;
 }
 
 .logoSection {
@@ -49,7 +70,7 @@
 }
 
 .warehouseTrigger:hover {
-  background-color: var(--t-color-bg-secondary, #f9fafb);
+  background-color: var(--t-color-surface-hover);
   border-color: var(--t-color-border-focus, #3b82f6);
 }
 
@@ -57,11 +78,11 @@
 .warehouseTrigger:focus-visible {
   outline: 2px solid var(--t-color-focus-ring, #3b82f6);
   outline-offset: 2px;
-  background-color: var(--t-color-bg-secondary, #f9fafb);
+  background-color: var(--t-color-surface-hover);
 }
 
 .warehouseTrigger[data-state="open"] {
-  background-color: var(--t-color-bg-secondary, #f9fafb);
+  background-color: var(--t-color-surface-hover);
   border-color: var(--t-color-border-focus, #3b82f6);
 }
 
@@ -72,16 +93,43 @@
 }
 
 .warehouseIcon {
-  color: var(--t-color-text-secondary, #6b7280);
+  color: var(--t-color-icon-primary);
   flex-shrink: 0;
 }
 
 .warehouseText {
   color: var(--t-color-text-primary, #111827);
-  font-weight: var(--t-font-weight-medium, 500);
+  font: var(--t-typography-body-sm-medium);
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for warehouse text */
+.warehouseText::before,
+.warehouseText::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.warehouseText::before {
+  margin-top: -0.15em;
+}
+
+.warehouseText::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic (RTL) line height adjustments for warehouse text */
+:global([dir="rtl"]) .warehouseText::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .warehouseText::after {
+  margin-bottom: -0.25em;
 }
 
 .warehouseChevron {
@@ -94,117 +142,100 @@
   transform: rotate(180deg);
 }
 
-/* Warehouse Popover Content */
-.warehousePopover {
+/* Warehouse Listbox Styles */
+.warehouseListbox {
   min-width: 240px;
-  padding: 0;
-  border: 1px solid var(--t-color-border-primary, #e5e7eb);
-  border-radius: var(--t-border-radius-200, 0.375rem);
-  background-color: var(--t-color-bg-primary, #ffffff);
-  box-shadow: var(--t-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05));
-  overflow: hidden;
 }
 
-.warehouseDropdown {
-  width: 100%;
+/* Logout Option Styles - These styles target the ListboxOption component */
+.warehouseListbox :global(.logoutOption) {
+  color: var(--t-color-text-critical);
 }
 
-.warehouseHeader {
-  padding: var(--t-space-300, 0.75rem) var(--t-space-300, 0.75rem) var(--t-space-200, 0.5rem);
-  border-bottom: 1px solid var(--t-color-border-secondary, #f3f4f6);
-  background-color: var(--t-color-bg-secondary, #f9fafb);
+.warehouseListbox :global(.logoutOption:hover) {
+  color: var(--t-color-text-critical-hover);
+  background-color: var(--t-color-fill-critical-secondary);
 }
 
-.warehouseHeaderText {
-  font-size: var(--t-font-size-250, 0.8125rem);
-  font-weight: var(--t-font-weight-semibold, 600);
-  color: var(--t-color-text-secondary, #6b7280);
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
+.warehouseListbox :global(.logoutOption) .logoutIcon {
+  color: var(--t-color-icon-critical);
 }
 
-.warehouseList {
-  padding: var(--t-space-100, 0.25rem);
+.warehouseListbox :global(.logoutOption:hover) .logoutIcon {
+  color: var(--t-color-icon-critical-hover);
 }
 
-.warehouseOption {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--t-space-200, 0.5rem);
-  width: 100%;
-  padding: var(--t-space-250, 0.625rem) var(--t-space-300, 0.75rem);
-  background-color: transparent;
-  border: none;
-  border-radius: var(--t-border-radius-100, 0.25rem);
-  font-size: var(--t-font-size-300, 0.875rem);
-  color: var(--t-color-text-primary, #111827);
-  cursor: pointer;
-  transition: all var(--t-transition-duration-200, 0.2s) var(--t-transition-timing-ease, ease);
-  text-align: left;
-  white-space: nowrap;
+/* Individual styles for direct targeting */
+.logoutOption {
+  color: var(--t-color-text-critical);
 }
 
-.warehouseOption:hover {
-  background-color: var(--t-color-bg-secondary, #f9fafb);
+.logoutOption:hover {
+  color: var(--t-color-text-critical-hover);
+  background-color: var(--t-color-fill-critical-secondary);
 }
 
-.warehouseOption:focus,
-.warehouseOption:focus-visible {
-  outline: 2px solid var(--t-color-focus-ring, #3b82f6);
-  outline-offset: -2px;
-  background-color: var(--t-color-bg-secondary, #f9fafb);
+.logoutIcon {
+  color: var(--t-color-icon-critical);
 }
 
-.warehouseOptionActive {
-  background-color: var(--t-color-bg-brand-subtle, #eff6ff);
-  color: var(--t-color-text-brand, #1d4ed8);
-  font-weight: var(--t-font-weight-medium, 500);
+.logoutOption:hover .logoutIcon {
+  color: var(--t-color-icon-critical-hover);
 }
 
-.warehouseOptionActive:hover {
-  background-color: var(--t-color-bg-brand-subtle-hover, #dbeafe);
+/* Specific classes for listbox option customization */
+.logoutLabel {
+  color: var(--t-color-text-critical) !important;
 }
 
-.warehouseOptionIcon {
-  color: var(--t-color-text-secondary, #6b7280);
-  flex-shrink: 0;
+.logoutPrefix {
+  color: var(--t-color-icon-critical) !important;
 }
 
-.warehouseOptionActive .warehouseOptionIcon {
-  color: var(--t-color-text-brand, #1d4ed8);
-}
 
-.warehouseOptionCheck {
-  color: var(--t-color-text-brand, #1d4ed8);
-  font-weight: var(--t-font-weight-bold, 700);
-  font-size: var(--t-font-size-300, 0.875rem);
-  flex-shrink: 0;
-}
 
 /* RTL adjustments for TopBar */
 :global([dir="rtl"]) .topBarContent {
   flex-direction: row-reverse;
 }
 
-:global([dir="rtl"]) .warehouseOption {
-  text-align: right;
-  flex-direction: row-reverse;
+/* RTL: Left section becomes right section - keep hamburger + logo together */
+:global([dir="rtl"]) .leftSection {
+  /* Don't reverse the flex-direction - keep hamburger before logo */
+  justify-content: flex-end;
 }
 
-:global([dir="rtl"]) .warehouseOptionCheck {
-  margin-right: auto;
-  margin-left: 0;
+/* RTL: Warehouse dropdown alignment */
+:global([dir="rtl"]) .warehouseSection {
+  order: -1; /* Move warehouse section to the left in RTL */
 }
+
+
 
 /* Mobile responsive for TopBar */
 @media (max-width: 768px) {
   .topBar {
+    --t-topbar-height: 56px; /* Slightly smaller on mobile */
+    height: var(--t-topbar-height);
     padding: var(--t-space-250, 0.625rem) var(--t-space-300, 0.75rem);
   }
   
   .topBarContent {
     gap: var(--t-space-300, 0.75rem);
+  }
+  
+  /* Left section (hamburger + logo) takes 50% width on mobile */
+  .leftSection {
+    width: 50%;
+    gap: var(--t-space-200, 0.5rem);
+  }
+
+  .logoSection {
+    flex: 1; /* Logo takes remaining space within the 50% container */
+  }
+  
+  .mobileOnly {
+    display: flex;
   }
   
   .warehouseTrigger {
@@ -213,41 +244,115 @@
   }
   
   .warehouseText {
-    max-width: 120px;
+    display: none;
   }
 
-  .warehousePopover {
+  .warehouseListbox {
     min-width: 200px;
   }
+
+  /* Update mobile overlay and sidebar positioning for mobile TopBar height */
+  .mobileOverlay {
+    top: var(--t-topbar-height, 56px);
+  }
+
+  .mobileSidebarWrapper {
+    top: var(--t-topbar-height, 56px);
+  }
+
+  /* RTL mobile adjustments */
+  :global([dir="rtl"]) .leftSection {
+    width: 50%; /* Keep the 50% width in RTL mobile */
+    justify-content: flex-end; /* Align hamburger + logo to right edge of their 50% container */
+  }
+
+  :global([dir="rtl"]) .warehouseSection {
+    order: -1; /* Ensure warehouse section is on the left in RTL mobile */
+  }
 }
 
-/* Animation support for popover */
-.warehousePopover[data-state="open"] {
-  animation: slideInFromTop 0.2s ease-out;
+
+
+/* Mobile Overlay Styles */
+.mobileOverlay {
+  position: fixed;
+  top: var(--t-topbar-height, 64px); /* Position overlay below TopBar */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--t-color-overlay-dark-60);
+  z-index: var(--t-z-dropdown);
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+  display: none;
+  pointer-events: none;
 }
 
-.warehousePopover[data-state="closed"] {
-  animation: slideOutToTop 0.2s ease-in;
+.mobileOverlay.open {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-@keyframes slideInFromTop {
+@media (max-width: 768px) {
+  .mobileOverlay {
+    display: block;
+  }
+}
+
+.mobileSidebarWrapper {
+  position: fixed;
+  top: var(--t-topbar-height, 64px); /* Position sidebar below TopBar */
+  left: -280px; /* Start off-screen (assuming sidebar width ~280px) */
+  bottom: 0;
+  z-index: var(--t-z-modal);
+  width: 280px; /* Fixed width for consistent animation */
+  transform: translateX(0);
+  transition: transform 0.3s var(--t-easing-out-cubic, cubic-bezier(0.33, 1, 0.68, 1));
+  display: none;
+}
+
+.mobileSidebarWrapper.open {
+  transform: translateX(280px); /* Slide in from left */
+}
+
+.mobileSidebarWrapper.rtl {
+  left: auto;
+  right: -280px; /* Start off-screen on the right for RTL */
+}
+
+.mobileSidebarWrapper.rtl.open {
+  transform: translateX(-280px); /* Slide in from right for RTL */
+}
+
+@media (max-width: 768px) {
+  .mobileSidebarWrapper {
+    display: block;
+  }
+}
+
+.desktopSidebar {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .desktopSidebar {
+    display: none;
+  }
+}
+
+/* Fade in animation for overlay */
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-8px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
   }
 }
 
-@keyframes slideOutToTop {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.96);
+/* Ensure hamburger button is visible on mobile */
+@media (max-width: 768px) {
+  .hamburgerButton.mobileOnly {
+    display: flex;
   }
 }

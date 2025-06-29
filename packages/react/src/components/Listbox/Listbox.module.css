@@ -107,7 +107,7 @@
 
 /* Arabic (RTL) line height adjustments */
 :global([dir="rtl"]) .label::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .label::after {
@@ -139,7 +139,7 @@
 
 /* Arabic (RTL) line height adjustments for help text */
 :global([dir="rtl"]) .helpText::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .helpText::after {
@@ -160,7 +160,36 @@
   text-align: center;
   border-top: 1px solid var(--t-color-border-subtle);
   background-color: var(--t-color-surface-secondary);
+  position: relative;
+  line-height: 1.5;
 }
+
+/* Line height trim for "more options" text */
+.moreOptions::before,
+.moreOptions::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.moreOptions::before {
+  margin-top: -0.15em;
+}
+
+.moreOptions::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic (RTL) line height adjustments for "more options" text */
+:global([dir="rtl"]) .moreOptions::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .moreOptions::after {
+  margin-bottom: -0.25em;
+}
+
+
 
 /* Focus ring styling */
 .option:focus-visible {
@@ -171,9 +200,39 @@
 
 /* RTL support */
 :global([dir="rtl"]) .optionContent {
+  /* Keep normal flex direction but use order to control positioning */
   flex-direction: row-reverse;
 }
 
+/* RTL element ordering */
+:global([dir="rtl"]) .prefix {
+  /* Prefix (checkbox/icon) appears on the right side in RTL */
+  order: 3;
+}
+
 :global([dir="rtl"]) .labelContainer {
-  align-items: flex-end;
+  /* Label stays in the middle */
+  order: 2;
+  /* Align text to start from the right side in RTL */
+  text-align: right;
+}
+
+:global([dir="rtl"]) .suffix {
+  /* Suffix (numbers/badges) appears on the left side in RTL */
+  order: 1;
+}
+
+:global([dir="rtl"]) .label {
+  /* Ensure label text starts from the right side */
+  text-align: right;
+}
+
+:global([dir="rtl"]) .helpText {
+  /* Ensure help text starts from the right side */
+  text-align: right;
+}
+
+:global([dir="rtl"]) .moreOptions {
+  /* Align "more options" text to the right instead of center */
+  text-align: right;
 }

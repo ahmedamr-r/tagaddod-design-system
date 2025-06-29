@@ -74,6 +74,15 @@ export const Listbox: React.FC<ListboxProps> = ({
   itemPaddingHorizontal,
   ...props
 }) => {
+  // Detect RTL direction for line height adjustments
+  const isRTL = typeof document !== 'undefined' && 
+    (document.dir === 'rtl' || document.documentElement.dir === 'rtl');
+  
+  // Apply line height style based on text direction
+  const lineHeightStyle = {
+    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.5)' : 'var(--t-line-height-english, 1.5)'
+  };
+
   // If selectedValue is an array but multiple is false, take the first value
   const normalizedSelectedValue = !multiple && Array.isArray(selectedValue) 
     ? selectedValue[0] 
@@ -139,7 +148,7 @@ export const Listbox: React.FC<ListboxProps> = ({
         );
       })}
       {options.length > maxVisibleOptions && (
-        <div className={styles.moreOptions}>
+        <div className={styles.moreOptions} style={lineHeightStyle}>
           +{options.length - maxVisibleOptions} more options
         </div>
       )}

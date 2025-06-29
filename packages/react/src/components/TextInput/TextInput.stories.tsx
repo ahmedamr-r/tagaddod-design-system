@@ -48,6 +48,15 @@ export const WithError: Story = {
   },
 };
 
+export const WithErrorAndHelpText: Story = {
+  args: {
+    label: 'Email',
+    placeholder: 'Enter your email',
+    helpText: 'We will never share your email with anyone else.',
+    errorMessage: 'Please enter a valid email address',
+  },
+};
+
 export const Required: Story = {
   args: {
     label: 'Username',
@@ -80,30 +89,27 @@ export const ReadOnly: Story = {
   },
 };
 
-// Examples showing prefix with proper spacing
-export const EmailWithPrefix: Story = {
-  args: {
-    label: 'Email',
-    placeholder: 'Enter your email address',
-    prefix: <IconMail size={18} />,
-  },
-};
-
-export const SearchWithPrefix: Story = {
-  args: {
-    label: 'Search',
-    placeholder: 'Search for something',
-    prefix: <IconSearch size={18} />,
-  },
-};
-
-// Examples with text prefix
-export const TextPrefix: Story = {
-  args: {
-    label: 'Amount',
-    placeholder: '0.00',
-    prefix: '$',
-  },
+// Examples showing different prefix types
+export const PrefixExamples: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
+      <TextInput
+        label="Email"
+        placeholder="Enter your email address"
+        prefix={<IconMail size={18} />}
+      />
+      <TextInput
+        label="Search"
+        placeholder="Search for something"
+        prefix={<IconSearch size={18} />}
+      />
+      <TextInput
+        label="Amount"
+        placeholder="0.00"
+        prefix="$"
+      />
+    </div>
+  ),
 };
 
 // Examples with different length text prefixes
@@ -223,55 +229,39 @@ export const WithPrefixAndClearable: Story = {
 };
 
 // Size examples
-export const Micro: Story = {
-  args: {
-    label: 'Micro Input',
-    placeholder: 'Micro size (20px)',
-    size: 'micro',
-  },
+export const Sizes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
+      <TextInput label="Micro (20px)" placeholder="Micro size input" size="micro" />
+      <TextInput label="Medium (32px)" placeholder="Medium size input (default)" size="medium" />
+      <TextInput label="Large (40px)" placeholder="Large size input" size="large" />
+    </div>
+  ),
 };
 
-export const Medium: Story = {
-  args: {
-    label: 'Medium Input',
-    placeholder: 'Medium size (32px, default)',
-    size: 'medium',
-  },
-};
-
-export const Large: Story = {
-  args: {
-    label: 'Large Input',
-    placeholder: 'Large size (40px)',
-    size: 'large',
-  },
-};
-
-export const MicroWithPrefix: Story = {
-  args: {
-    label: 'Micro Search',
-    placeholder: 'Search...',
-    size: 'micro',
-    prefix: <IconSearch size={14} />,
-  },
-};
-
-export const MediumWithPrefix: Story = {
-  args: {
-    label: 'Medium Search',
-    placeholder: 'Search...',
-    size: 'medium',
-    prefix: <IconSearch size={18} />,
-  },
-};
-
-export const LargeWithPrefix: Story = {
-  args: {
-    label: 'Large Search',
-    placeholder: 'Search...',
-    size: 'large',
-    prefix: <IconSearch size={22} />,
-  },
+export const SizesWithPrefix: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
+      <TextInput
+        label="Micro Search"
+        placeholder="Search..."
+        size="micro"
+        prefix={<IconSearch size={14} />}
+      />
+      <TextInput
+        label="Medium Search"
+        placeholder="Search..."
+        size="medium"
+        prefix={<IconSearch size={18} />}
+      />
+      <TextInput
+        label="Large Search"
+        placeholder="Search..."
+        size="large"
+        prefix={<IconSearch size={22} />}
+      />
+    </div>
+  ),
 };
 
 export const FullWidth: Story = {
@@ -299,42 +289,7 @@ export const AllStates: Story = {
   ),
 };
 
-// Show all sizes in one view
-export const AllSizes: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
-      <TextInput label="Micro (20px)" placeholder="Micro input" size="micro" />
-      <TextInput label="Medium (32px)" placeholder="Medium input" size="medium" />
-      <TextInput label="Large (40px)" placeholder="Large input" size="large" />
-    </div>
-  ),
-};
 
-// Show proper prefix spacing in all sizes
-export const PrefixComparison: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
-      <TextInput
-        label="Email (Micro)"
-        placeholder="email@example.com"
-        size="micro"
-        prefix={<IconMail size={14} />}
-      />
-      <TextInput
-        label="Email (Medium)"
-        placeholder="email@example.com"
-        size="medium"
-        prefix={<IconMail size={18} />}
-      />
-      <TextInput
-        label="Email (Large)"
-        placeholder="email@example.com"
-        size="large"
-        prefix={<IconMail size={22} />}
-      />
-    </div>
-  ),
-};
 
 // RTL example
 export const RTLExample: Story = {
@@ -350,31 +305,3 @@ export const RTLExample: Story = {
   ),
 };
 
-// Showcase the specific examples from the Figma links you shared
-export const EmailInput: Story = {
-  args: {
-    label: "Email",
-    placeholder: "Enter you@example.com",
-    prefix: <IconMail size={18} />,
-    size: "medium"
-  },
-};
-
-export const SearchInput: Story = {
-  args: {
-    label: "Search",
-    placeholder: "Search for something",
-    prefix: <IconSearch size={18} />,
-    size: "medium"
-  },
-};
-
-// Figma example of amount with $ prefix
-export const AmountInput: Story = {
-  args: {
-    label: "Amount",
-    placeholder: "0.00",
-    prefix: "$",
-    size: "medium"
-  },
-};

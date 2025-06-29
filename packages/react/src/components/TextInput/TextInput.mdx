@@ -133,7 +133,7 @@ Display information that cannot be edited but should remain visible.
 
 TextInput comes in three sizes to fit different UI contexts.
 
-<Canvas of={TextInputStories.AllSizes} />
+<Canvas of={TextInputStories.Sizes} />
 
 ```jsx
 <TextInput 
@@ -161,30 +161,43 @@ TextInput comes in three sizes to fit different UI contexts.
 
 Add icons or text before or after the input text.
 
-#### Icon Prefix
+#### Prefix Examples
 
-<Canvas of={TextInputStories.EmailWithPrefix} />
+Different types of prefixes including icons and text.
+
+<Canvas of={TextInputStories.PrefixExamples} />
 
 ```jsx
-import { IconMail } from '@tabler/icons-react';
+import { IconMail, IconSearch } from '@tabler/icons-react';
 
+// Icon prefix
 <TextInput 
   label="Email"
   placeholder="Enter your email address"
   prefix={<IconMail size={18} />}
 />
-```
 
-#### Text Prefix
-
-<Canvas of={TextInputStories.TextPrefix} />
-
-```jsx
+// Text prefix
 <TextInput 
   label="Amount"
   placeholder="0.00"
   prefix="$"
 />
+```
+
+#### Sizes with Prefix
+
+Prefixes adapt to different input sizes with appropriate icon sizing.
+
+<Canvas of={TextInputStories.SizesWithPrefix} />
+
+```jsx
+import { IconSearch } from '@tabler/icons-react';
+
+// Different sizes with appropriate icon sizing
+<TextInput size="micro" prefix={<IconSearch size={14} />} />
+<TextInput size="medium" prefix={<IconSearch size={18} />} />
+<TextInput size="large" prefix={<IconSearch size={22} />} />
 ```
 
 #### Suffix
@@ -269,39 +282,28 @@ Set `fullWidth` to true to make the input take 100% of its container width.
 
 ## Common Use Cases
 
-### Search Input
+The most common input patterns are demonstrated in the `PrefixExamples` story:
 
-<Canvas of={TextInputStories.SearchInput} />
+<Canvas of={TextInputStories.PrefixExamples} />
 
 ```jsx
-import { IconSearch } from '@tabler/icons-react';
+import { IconSearch, IconMail } from '@tabler/icons-react';
 
+// Search input
 <TextInput 
   label="Search"
   placeholder="Search for something"
   prefix={<IconSearch size={18} />}
 />
-```
 
-### Email Input
-
-<Canvas of={TextInputStories.EmailInput} />
-
-```jsx
-import { IconMail } from '@tabler/icons-react';
-
+// Email input
 <TextInput 
   label="Email"
-  placeholder="Enter you@example.com"
+  placeholder="Enter your email address"
   prefix={<IconMail size={18} />}
 />
-```
 
-### Amount Input
-
-<Canvas of={TextInputStories.AmountInput} />
-
-```jsx
+// Amount input
 <TextInput 
   label="Amount"
   placeholder="0.00"

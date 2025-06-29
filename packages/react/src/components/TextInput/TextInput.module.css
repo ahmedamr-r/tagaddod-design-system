@@ -14,7 +14,7 @@
 .labelContainer {
   display: flex;
   align-items: center;
-  margin-bottom: var(--t-space-200);
+  margin-bottom: var(--t-space-150);
 }
 
 .label {
@@ -43,7 +43,7 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .label::before {
-  margin-top: .1em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .label::after {
@@ -57,9 +57,15 @@
 
 .optional {
   color: var(--t-color-text-secondary);
-  margin-inline-start: var(--t-space-100);
   font-size: var(--t-font-size-300);
   font-weight: var(--t-font-weight-regular);
+  margin-left: var(--t-space-100);
+}
+
+/* RTL support for optional text margin */
+:global([dir="rtl"]) .optional {
+  margin-left: 0;
+  margin-right: var(--t-space-100);
 }
 
 /* Input wrapper and flex positioning */
@@ -97,6 +103,40 @@
   font-size: var(--t-font-size-350);
   outline: none;
   width: 100%;
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for input field */
+.input::before,
+.input::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.input::before {
+  margin-top: -0.15em;
+}
+
+.input::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .input::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .input::after {
+  margin-bottom: -0.25em;
+}
+
+/* RTL specific vertical centering for Arabic text */
+:global([dir="rtl"]) .input {
+  padding-top: calc(var(--t-space-200) + 2px);
+  padding-bottom: calc(var(--t-space-200) - 2px);
 }
 
 /* Input states */
@@ -129,8 +169,7 @@
   align-items: center;
   padding-inline-start: var(--t-space-300);
   color: var(--t-color-icon-secondary);
-  /* Add 6px gap to the right of the prefix */
-  margin-inline-end: var(--t-space-100); 
+
 }
 
 .suffix {
@@ -139,8 +178,19 @@
   padding-inline-end: var(--t-space-300);
   color: var(--t-color-icon-secondary);
   /* Add 6px gap to the left of the suffix */
-  margin-inline-start: var(--t-space-100);
-  gap: var(--t-space-100);
+  /* margin-inline-start: var(--t-space-100);
+  gap: var(--t-space-100); */
+}
+
+/* RTL vertical centering for prefix and suffix text */
+:global([dir="rtl"]) .prefix {
+  padding-top: 2px;
+  padding-bottom: 0px;
+}
+
+:global([dir="rtl"]) .suffix {
+  padding-top: 2px;
+  padding-bottom: 0px;
 }
 
 /* Add padding adjustments for input with prefix/suffix */
@@ -161,7 +211,13 @@
 .sizeMicro .input {
   font-size: var(--t-font-size-300);
   padding-block: var(--t-space-50);
-  padding-inline: var(--t-space-200);
+  padding-inline: var(--t-space-300);
+}
+
+/* RTL vertical centering for micro size */
+:global([dir="rtl"]) .sizeMicro .input {
+  padding-top: calc(var(--t-space-50) + 1px);
+  padding-bottom: calc(var(--t-space-50) - 1px);
 }
 
 .sizeMicro .prefix,
@@ -170,11 +226,18 @@
 }
 
 .sizeMicro .prefix {
-  padding-inline-start: var(--t-space-200);
+  padding-inline-start: var(--t-space-300);
 }
 
 .sizeMicro .suffix {
   padding-inline-end: var(--t-space-200);
+}
+
+/* RTL vertical centering for micro prefix/suffix */
+:global([dir="rtl"]) .sizeMicro .prefix,
+:global([dir="rtl"]) .sizeMicro .suffix {
+  padding-top: 1px;
+  padding-bottom: 0px;
 }
 
 .sizeMicro .label {
@@ -192,9 +255,22 @@
   padding-inline: var(--t-space-300);
 }
 
+/* RTL vertical centering for medium size */
+:global([dir="rtl"]) .sizeMedium .input {
+  padding-top: calc(var(--t-space-150) + 2px);
+  padding-bottom: calc(var(--t-space-150) - 2px);
+}
+
 .sizeMedium .prefix,
 .sizeMedium .suffix {
   font-size: var(--t-font-size-350);
+}
+
+/* RTL vertical centering for medium prefix/suffix */
+:global([dir="rtl"]) .sizeMedium .prefix,
+:global([dir="rtl"]) .sizeMedium .suffix {
+  padding-top: var(--t-space-50);
+  padding-bottom: 0px;
 }
 
 .sizeMedium .label {
@@ -209,15 +285,28 @@
 .sizeLarge .input {
   font-size: var(--t-font-size-400);
   padding-block: var(--t-space-200);
-  padding-inline: var(--t-space-400);
+  padding-inline: var(--t-space-300);
+}
+
+/* RTL vertical centering for large size */
+:global([dir="rtl"]) .sizeLarge .input {
+  padding-top: calc(var(--t-space-200) + 3px);
+  padding-bottom: calc(var(--t-space-200) - 3px);
 }
 
 .sizeLarge .prefix {
-  padding-inline-start: var(--t-space-400);
+  padding-inline-start: var(--t-space-300);
 }
 
 .sizeLarge .suffix {
   padding-inline-end: var(--t-space-400);
+}
+
+/* RTL vertical centering for large prefix/suffix */
+:global([dir="rtl"]) .sizeLarge .prefix,
+:global([dir="rtl"]) .sizeLarge .suffix {
+  padding-top: 3px;
+  padding-bottom: 0px;
 }
 
 .sizeLarge .prefix,
@@ -259,9 +348,8 @@
 .errorMessage {
   display: flex;
   align-items: center;
-  gap: var(--t-space-100);
   color: var(--t-color-text-critical);
-  font-size: var(--t-font-size-300);
+  font: var(--t-typography-body-sm-default);
   margin-top: var(--t-space-200);
   position: relative;
   line-height: 1.5;
@@ -286,7 +374,7 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .errorMessage::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .errorMessage::after {
@@ -295,16 +383,25 @@
 
 .errorIcon {
   color: var(--t-color-icon-critical);
+  margin-right: var(--t-space-200);
+  flex-shrink: 0;
+}
+
+/* RTL support for error icon */
+:global([dir="rtl"]) .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-200);
 }
 
 /* Help text */
 .helpText {
-  font-size: var(--t-font-size-300);
+  font: var(--t-typography-body-sm-default);
   color: var(--t-color-text-secondary);
   margin-top: var(--t-space-200);
   position: relative;
   line-height: 1.5;
 }
+
 
 /* Line height trim for help text */
 .helpText::before,
@@ -325,7 +422,7 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .helpText::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .helpText::after {

@@ -167,7 +167,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             <div className={styles.labelContainer}>
               <Form.Label className={styles.label} style={lineHeightStyle}>
                 {label}
-                {optional && <span className={styles.optional}>(Optional)</span>}
+                {optional && <span className={styles.optional} style={lineHeightStyle}>(Optional)</span>}
               </Form.Label>
             </div>
           )}
@@ -190,6 +190,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                   prefix && styles.withPrefix,
                   (suffix || clearButton || passwordSuffix) && styles.withSuffix
                 )}
+                style={lineHeightStyle}
                 name={name}
                 value={value === undefined ? inputValue : value}
                 placeholder={placeholder}
@@ -209,16 +210,17 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             )}
           </div>
           
-          {hasError ? (
+          {hasError && (
             <div id={`${uniqueId}-error`} className={styles.errorMessage} style={lineHeightStyle}>
-              <IconExclamationCircle size={16} className={styles.errorIcon} />
+              <IconExclamationCircle size={20} className={styles.errorIcon} />
               {errorMessage}
             </div>
-          ) : helpText ? (
+          )}
+          {helpText && (
             <div id={`${uniqueId}-helptext`} className={styles.helpText} style={lineHeightStyle}>
               {helpText}
             </div>
-          ) : null}
+          )}
         </Form.Field>
       </Form.Root>
     );
