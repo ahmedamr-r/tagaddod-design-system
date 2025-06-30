@@ -54,6 +54,9 @@ export const Table = <T extends object>({
   pagination,
   striped = true,
   gridCells = false,
+  disableRowHover = false,
+  enableColumnResizing = false,
+  enableColumnOrdering = false,
   showHeader = true,
   showTabs = false,
   showPagination = true,
@@ -73,6 +76,7 @@ export const Table = <T extends object>({
   errorMessage,
   emptyMessage,
   notFoundMessage,
+  notFoundSubtitle,
   searchQuery = '',
   onSearchChange,
   onExport,
@@ -265,7 +269,7 @@ export const Table = <T extends object>({
     // Always use pagination model for consistent behavior
     getPaginationRowModel: getPaginationRowModel(),
     // Enable column features
-    enableColumnResizing: true,
+    enableColumnResizing: enableColumnResizing,
     columnResizeMode: 'onChange',
     columnResizeDirection: isRTL ? 'rtl' : 'ltr',
     // Indicate if using manual pagination (e.g., server-side)
@@ -335,7 +339,7 @@ export const Table = <T extends object>({
     }
     
     if (state === 'notFound') {
-      return <TableContentCase type="notFound" message={notFoundMessage} />;
+      return <TableContentCase type="notFound" message={notFoundMessage} subtitle={notFoundSubtitle} />;
     }
     
     if (state === 'empty' || activeData.length === 0) {
@@ -345,30 +349,86 @@ export const Table = <T extends object>({
       return <TableContentCase type="empty" message={emptyMessage} />;
     }
     
+    if (enableColumnOrdering) {
+      return (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <table className={clsx(styles.table, className?.includes('fixed-width') && styles.fixedWidthTable)}>
+            <thead className={styles.tableHead}>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  <SortableContext
+                    items={columnOrder}
+                    strategy={horizontalListSortingStrategy}
+                  >
+                    {headerGroup.headers.map((header) => (
+                      <SortableHeaderCell
+                        key={header.id}
+                        header={header}
+                        enableColumnOrdering={enableColumnOrdering}
+                      />
+                    ))}
+                  </SortableContext>
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row, rowIndex) => {
+                const isEvenRow = rowIndex % 2 === 0;
+                
+                return (
+                  <tr
+                    key={row.id}
+                    className={clsx(
+                      styles.tableRow,
+                      onRowClick && styles.clickableRow,
+                      disableRowHover && styles.staticRow
+                    )}
+                    onClick={() => onRowClick?.(row)}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className={`${styles.tableCell} ${cell.column.columnDef.meta?.cellClassName || ''} ${
+                          striped && !isEvenRow ? styles.striped : ''
+                        } ${gridCells ? styles.gridCell : ''}`}
+                        style={{ width: `${cell.column.getSize()}px` }}
+                        onClick={() => onCellClick?.(cell)}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </DndContext>
+      );
+    }
+    
+    // Static table without column ordering
     return (
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <table className={clsx(styles.table, className?.includes('fixed-width') && styles.fixedWidthTable)}>
-          <thead className={styles.tableHead}>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                <SortableContext
-                  items={columnOrder}
-                  strategy={horizontalListSortingStrategy}
-                >
-                  {headerGroup.headers.map((header) => (
-                    <SortableHeaderCell
-                      key={header.id}
-                      header={header}
-                    />
-                  ))}
-                </SortableContext>
-              </tr>
-            ))}
-          </thead>
+      <table className={clsx(styles.table, className?.includes('fixed-width') && styles.fixedWidthTable)}>
+        <thead className={styles.tableHead}>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <SortableHeaderCell
+                  key={header.id}
+                  header={header}
+                  enableColumnOrdering={enableColumnOrdering}
+                />
+              ))}
+            </tr>
+          ))}
+        </thead>
         <tbody>
           {table.getRowModel().rows.map((row, rowIndex) => {
             const isEvenRow = rowIndex % 2 === 0;
@@ -378,7 +438,8 @@ export const Table = <T extends object>({
                 key={row.id}
                 className={clsx(
                   styles.tableRow,
-                  onRowClick && styles.clickableRow
+                  onRowClick && styles.clickableRow,
+                  disableRowHover && styles.staticRow
                 )}
                 onClick={() => onRowClick?.(row)}
               >
@@ -401,8 +462,7 @@ export const Table = <T extends object>({
             );
           })}
         </tbody>
-        </table>
-      </DndContext>
+      </table>
     );
   };
 
@@ -413,6 +473,7 @@ export const Table = <T extends object>({
         striped && styles.striped,
         gridCells && styles.gridCells,
         isFilterBarVisible && styles.tableWithActiveFilter,
+        !enableColumnOrdering && styles.disableColumnOrdering,
         className
       )}
     >

@@ -101,6 +101,24 @@ export interface TableProps<T extends object> {
   striped?: boolean;
   
   /**
+   * Whether to disable row hover effects (for static/non-interactive tables)
+   * @default false
+   */
+  disableRowHover?: boolean;
+  
+  /**
+   * Whether to enable column resizing
+   * @default false
+   */
+  enableColumnResizing?: boolean;
+  
+  /**
+   * Whether to enable column ordering (drag and drop)
+   * @default false
+   */
+  enableColumnOrdering?: boolean;
+  
+  /**
    * Whether to show grid cells with borders
    * @default false
    */
@@ -221,6 +239,11 @@ export interface TableProps<T extends object> {
    * Message to display when state is 'notFound'
    */
   notFoundMessage?: string;
+  
+  /**
+   * Subtitle message to display when state is 'notFound'
+   */
+  notFoundSubtitle?: string;
   
   /**
    * Search query
@@ -459,4 +482,9 @@ export type TableContentCaseProps = {
    * Message to display
    */
   message?: string;
+  
+  /**
+   * Subtitle message for notFound case (optional)
+   */
+  subtitle?: string;
 };

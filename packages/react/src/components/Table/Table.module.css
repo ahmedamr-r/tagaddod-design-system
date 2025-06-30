@@ -171,6 +171,7 @@
 .filterBar {
   display: flex;
   align-items: center;
+  background-color: var(--t-color-fill-hover);
   padding: var(--t-space-300) var(--t-space-400);
   border-bottom: 1px solid var(--t-color-border-tertiary);
   gap: var(--t-space-300);
@@ -636,6 +637,11 @@
   z-index: 2; /* Same z-index as hovered rows */
 }
 
+/* Disable hover for static rows */
+.staticRow:hover .tableCell {
+  background-color: inherit !important;
+}
+
 :global([dir="rtl"]) .tableCell {
   text-align: right;
 }
@@ -735,6 +741,13 @@
   background-color: var(--t-color-surface-hover) !important;
 }
 
+/* Static row - no hover effects */
+.staticRow:hover,
+.staticRow:hover .tableCell {
+  background-color: inherit !important;
+  cursor: default !important;
+}
+
 /* Pagination container */
 .paginationContainer {
   padding: var(--t-space-300) var(--t-space-400);
@@ -765,6 +778,17 @@
   gap: var(--t-space-300);
 }
 
+.contentCaseIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: var(--t-color-surface-secondary-hover);
+  color: var(--t-color-icon-primary);
+}
+
 .contentCaseIcon {
   color: var(--t-color-text-tertiary);
 }
@@ -790,28 +814,59 @@
   position: relative;
 }
 
+.contentCaseNotFoundContent {
+  text-align: center;
+  max-width: 400px;
+}
+
+.contentCaseNotFoundTitle {
+  font: var(--t-typography-body-lg-semibold);
+  color: var(--t-color-text-primary);
+  margin: 0 0 var(--t-space-200) 0;
+  position: relative;
+}
+
+.contentCaseNotFoundSubtitle {
+  font: var(--t-typography-body-md-default);
+  color: var(--t-color-text-secondary);
+  margin: 0;
+  position: relative;
+}
+
 /* Line height trim for content case message */
 .contentCaseMessage::before,
-.contentCaseMessage::after {
+.contentCaseMessage::after,
+.contentCaseNotFoundTitle::before,
+.contentCaseNotFoundTitle::after,
+.contentCaseNotFoundSubtitle::before,
+.contentCaseNotFoundSubtitle::after {
   content: '';
   display: block;
   height: 0;
 }
 
-.contentCaseMessage::before {
+.contentCaseMessage::before,
+.contentCaseNotFoundTitle::before,
+.contentCaseNotFoundSubtitle::before {
   margin-top: -0.15em;
 }
 
-.contentCaseMessage::after {
+.contentCaseMessage::after,
+.contentCaseNotFoundTitle::after,
+.contentCaseNotFoundSubtitle::after {
   margin-bottom: -0.15em;
 }
 
 /* Arabic font adjustment for content case message */
-:global([dir="rtl"]) .contentCaseMessage::before {
+:global([dir="rtl"]) .contentCaseMessage::before,
+:global([dir="rtl"]) .contentCaseNotFoundTitle::before,
+:global([dir="rtl"]) .contentCaseNotFoundSubtitle::before {
   margin-top: -0.25em;
 }
 
-:global([dir="rtl"]) .contentCaseMessage::after {
+:global([dir="rtl"]) .contentCaseMessage::after,
+:global([dir="rtl"]) .contentCaseNotFoundTitle::after,
+:global([dir="rtl"]) .contentCaseNotFoundSubtitle::after {
   margin-bottom: -0.25em;
 }
 
@@ -935,7 +990,15 @@
   position: relative;
   height: 100%;
   transition: padding var(--t-duration-base) var(--t-easing-in-out);
- 
+}
+
+/* Disable transitions when column ordering is disabled */
+.disableColumnOrdering .headerContent {
+  transition: none;
+}
+
+.disableColumnOrdering .dragHandle {
+  transition: none;
 }
 
 .dragging {

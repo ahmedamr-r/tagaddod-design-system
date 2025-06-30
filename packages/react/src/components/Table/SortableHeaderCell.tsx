@@ -7,9 +7,10 @@ import styles from './Table.module.css';
 
 interface SortableHeaderCellProps<T> {
   header: Header<T, unknown>;
+  enableColumnOrdering?: boolean;
 }
 
-export function SortableHeaderCell<T>({ header }: SortableHeaderCellProps<T>) {
+export function SortableHeaderCell<T>({ header, enableColumnOrdering = false }: SortableHeaderCellProps<T>) {
   const {
     attributes,
     listeners,
@@ -54,16 +55,18 @@ export function SortableHeaderCell<T>({ header }: SortableHeaderCellProps<T>) {
           onSort={handleSort}
           className={styles.headerContent}
         >
-          {/* Visible drag handle with 9 dots inside header content */}
-          <div
-            ref={setActivatorNodeRef}
-            {...attributes}
-            {...listeners}
-            className={styles.dragHandle}
-            aria-label={`Drag to reorder ${header.column.columnDef.header} column`}
-          >
-            <IconGripVertical size={16} />
-          </div>
+          {/* Visible drag handle with 9 dots inside header content - only show if column ordering is enabled */}
+          {enableColumnOrdering && (
+            <div
+              ref={setActivatorNodeRef}
+              {...attributes}
+              {...listeners}
+              className={styles.dragHandle}
+              aria-label={`Drag to reorder ${header.column.columnDef.header} column`}
+            >
+              <IconGripVertical size={16} />
+            </div>
+          )}
           
           {header.isPlaceholder ? null : (
             flexRender(

@@ -168,6 +168,21 @@ const meta: Meta<typeof Table> = {
       description: 'Whether to show striped rows (use only for non-interactive data)',
       defaultValue: false,
     },
+    disableRowHover: {
+      control: 'boolean',
+      description: 'Whether to disable row hover effects (for static/non-interactive tables)',
+      defaultValue: false,
+    },
+    enableColumnResizing: {
+      control: 'boolean',
+      description: 'Whether to enable column resizing with drag handles',
+      defaultValue: false,
+    },
+    enableColumnOrdering: {
+      control: 'boolean',
+      description: 'Whether to enable column ordering with drag and drop',
+      defaultValue: false,
+    },
     gridCells: {
       control: 'boolean',
       description: 'Whether to show grid cells with borders',
@@ -229,6 +244,11 @@ const meta: Meta<typeof Table> = {
       description: 'Not found message (when state is "notFound")',
       if: { arg: 'state', eq: 'notFound' },
     },
+    notFoundSubtitle: {
+      control: 'text',
+      description: 'Not found subtitle message (when state is "notFound")',
+      if: { arg: 'state', eq: 'notFound' },
+    },
     badge: {
       control: 'number',
       description: 'Number badge next to title',
@@ -248,7 +268,8 @@ const meta: Meta<typeof Table> = {
     state: 'normal',
     errorMessage: 'Error in data retrieving. Don\'t worry, it\'s our fault. Please try again later.',
     emptyMessage: 'There are no records to display.',
-    notFoundMessage: 'No available results for the current search. Try different criteria.',
+    notFoundMessage: 'No available results for "searched item"',
+    notFoundSubtitle: 'Try using different search terms or check your spelling',
   }
 };
 
@@ -715,7 +736,8 @@ export const TableStates: Story = {
             ...baseProps,
             data: [],
             state: 'notFound' as const,
-            notFoundMessage: "No products found matching your search criteria. Try adjusting your filters or search terms.",
+            notFoundMessage: "No available results for \"non-existent-product\"",
+            notFoundSubtitle: "Try different search terms or check your spelling",
             searchQuery: "non-existent-product",
           };
         default:
@@ -1106,5 +1128,358 @@ export const ColumnManagement: Story = {
         </div>
       </div>
     );
+  }
+};
+
+// Export functionality story
+export const WithExport: Story = {
+  name: 'With Export CSV',
+  args: {
+    title: 'Product Inventory',
+    data: sampleProducts,
+    columns: productColumns,
+    showExport: true,
+    showSearch: true,
+    showFilters: true,
+    showPagination: true,
+    badge: sampleProducts.length, // Show total count with default tone
+  },
+  render: (args) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    
+    const handleExport = () => {
+      // Convert data to CSV format
+      const headers = ['ID', 'Item', 'Dispatched to collectors', 'Available at warehouse'];
+      const csvContent = [
+        headers.join(','),
+        ...sampleProducts.map(product => 
+          [product.id, `"${product.name}"`, product.stockCollectors, product.stockWarehouse].join(',')
+        )
+      ].join('\n');
+      
+      // Create and download CSV file
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'product-inventory.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Show confirmation
+      alert('CSV file has been downloaded successfully!');
+    };
+    
+    return (
+      <Table
+        {...args}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onExport={handleExport}
+      />
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'This story demonstrates the export CSV functionality with the export button visible in the header. The badge shows the total number of rows using the default tone. Click the export button to download a CSV file of the current data.'
+      }
+    }
+  }
+};
+
+// Striped Table Story
+export const StripedTable: Story = {
+  name: 'Striped Table',
+  args: {
+    title: 'Striped Product Inventory',
+    data: sampleProducts,
+    columns: productColumns,
+    striped: true,
+    gridCells: false,
+    showSearch: true,
+    showFilters: true,
+    showPagination: true,
+    badge: sampleProducts.length,
+  },
+  render: (args) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filters, setFilters] = useState<Record<string, any>>({});
+    
+    // Filter the data based on search and filters
+    const filteredData = sampleProducts.filter(product => {
+      // Search filter
+      if (searchQuery && !product.name.toLowerCase().includes(searchQuery.toLowerCase()) && 
+          !product.id.toString().includes(searchQuery)) {
+        return false;
+      }
+      
+      // Additional filters can be added here
+      return true;
+    });
+    
+    return (
+      <Table
+        {...args}
+        data={filteredData}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        activeFilters={filters}
+        onFilterChange={setFilters}
+        badge={filteredData.length}
+      />
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'This story demonstrates the striped table variant with alternating row colors. The striped pattern helps distinguish between rows in large datasets. Search functionality is enabled to test data filtering.'
+      }
+    }
+  }
+};
+
+// Grid Table Story
+export const GridTable: Story = {
+  name: 'Grid Table',
+  args: {
+    title: 'Grid Product Inventory',
+    data: sampleProducts,
+    columns: productColumns,
+    striped: false,
+    gridCells: true,
+    showSearch: true,
+    showFilters: true,
+    showPagination: true,
+    badge: sampleProducts.length,
+  },
+  render: (args) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filters, setFilters] = useState<Record<string, any>>({});
+    
+    // Filter the data based on search and filters
+    const filteredData = sampleProducts.filter(product => {
+      // Search filter
+      if (searchQuery && !product.name.toLowerCase().includes(searchQuery.toLowerCase()) && 
+          !product.id.toString().includes(searchQuery)) {
+        return false;
+      }
+      
+      // Additional filters can be added here
+      return true;
+    });
+    
+    return (
+      <Table
+        {...args}
+        data={filteredData}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        activeFilters={filters}
+        onFilterChange={setFilters}
+        badge={filteredData.length}
+      />
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'This story demonstrates the grid table variant with visible cell borders. The grid layout provides clear visual separation between cells and is ideal for data-heavy tables where precise data alignment is important.'
+      }
+    }
+  }
+};
+
+// Tabbed Table Story
+export const TabbedTable: Story = {
+  name: 'Tabbed Table',
+  args: {
+    title: 'Multi-Category Inventory',
+    showTabs: true,
+    showSearch: true,
+    showFilters: true,
+    showPagination: true,
+    striped: false,
+    gridCells: false,
+  },
+  render: (args) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filters, setFilters] = useState<Record<string, any>>({});
+    const [activeTab, setActiveTab] = useState('all');
+    
+    // Create different data sets for each tab
+    const allProducts = sampleProducts;
+    const lowStockProducts = sampleProducts.filter(p => p.stockWarehouse < 100);
+    const highStockProducts = sampleProducts.filter(p => p.stockWarehouse >= 100);
+    
+    // Define tabs with their data
+    const tableTabs = [
+      {
+        id: 'all',
+        label: 'All Products',
+        data: allProducts,
+        columns: productColumns,
+        badge: allProducts.length,
+      },
+      {
+        id: 'low-stock',
+        label: 'Low Stock',
+        data: lowStockProducts,
+        columns: productColumns,
+        badge: lowStockProducts.length,
+      },
+      {
+        id: 'high-stock',
+        label: 'High Stock',
+        data: highStockProducts,
+        columns: productColumns,
+        badge: highStockProducts.length,
+      },
+    ];
+    
+    // Get current tab data
+    const currentTab = tableTabs.find(tab => tab.id === activeTab) || tableTabs[0];
+    
+    // Filter the current tab data based on search and filters
+    const filteredData = currentTab.data.filter(product => {
+      // Search filter
+      if (searchQuery && !product.name.toLowerCase().includes(searchQuery.toLowerCase()) && 
+          !product.id.toString().includes(searchQuery)) {
+        return false;
+      }
+      
+      // Additional filters can be added here
+      return true;
+    });
+    
+    return (
+      <Table
+        {...args}
+        data={filteredData}
+        columns={currentTab.columns}
+        tableTabs={tableTabs}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        activeFilters={filters}
+        onFilterChange={setFilters}
+        badge={filteredData.length}
+      />
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'This story demonstrates the tabbed table functionality where users can switch between different data views. Each tab has its own data set and badge count. The search and filter functionality works independently for each tab, allowing users to find specific items within each category.'
+      }
+    }
+  }
+};
+
+// Static Table Story (no hover effects)
+export const StaticTable: Story = {
+  name: 'Static Table',
+  args: {
+    title: 'Static Product Report',
+    data: sampleProducts,
+    columns: productColumns,
+    striped: true,
+    gridCells: false,
+    disableRowHover: true,
+    showSearch: false,
+    showFilters: false,
+    showPagination: false,
+    badge: sampleProducts.length,
+  },
+  render: (args) => {
+    return (
+      <Table
+        {...args}
+      />
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'This story demonstrates a static table with no interactive features. Row hover effects are disabled using `disableRowHover={true}`, making it ideal for read-only data displays, reports, or when the table is purely informational. Search, filters, and pagination are also disabled to emphasize the static nature.'
+      }
+    }
+  }
+};
+
+// Column Management Story (dragging and resizing)
+export const ColumnManagementFeatures: Story = {
+  name: 'Column Management Features',
+  args: {
+    title: 'Column Management Demo',
+    data: sampleProducts,
+    columns: productColumns,
+    enableColumnResizing: true,
+    enableColumnOrdering: true,
+    striped: false,
+    gridCells: true,
+    showSearch: true,
+    showFilters: true,
+    showPagination: true,
+    badge: sampleProducts.length,
+  },
+  render: (args) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filters, setFilters] = useState<Record<string, any>>({});
+    
+    // Filter the data based on search and filters
+    const filteredData = sampleProducts.filter(product => {
+      // Search filter
+      if (searchQuery && !product.name.toLowerCase().includes(searchQuery.toLowerCase()) && 
+          !product.id.toString().includes(searchQuery)) {
+        return false;
+      }
+      
+      // Additional filters can be added here
+      return true;
+    });
+    
+    return (
+      <div>
+        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+          <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 600 }}>
+            Column Management Features
+          </h3>
+          <div style={{ fontSize: '14px', lineHeight: 1.5, color: '#666' }}>
+            <p style={{ margin: '0 0 8px 0' }}>
+              <strong>Column Ordering:</strong> Hover over column headers to see drag handles (⋮⋮⋮). 
+              Click and drag to reorder columns.
+            </p>
+            <p style={{ margin: '0 0 8px 0' }}>
+              <strong>Column Resizing:</strong> Hover over column borders to see resize handles. 
+              Drag to resize columns or double-click to auto-fit.
+            </p>
+            <p style={{ margin: '0' }}>
+              <strong>Keyboard Support:</strong> Use Tab + Arrow keys + Space for accessible column reordering.
+            </p>
+          </div>
+        </div>
+        
+        <Table
+          {...args}
+          data={filteredData}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          activeFilters={filters}
+          onFilterChange={setFilters}
+          badge={filteredData.length}
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'This story demonstrates both column ordering (drag & drop) and column resizing features. Column ordering is always enabled, while column resizing can be controlled via the `enableColumnResizing` prop. Both features include full keyboard accessibility and RTL support.'
+      }
+    }
   }
 };

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { 
   IconCloudOff, 
   IconPackageOff, 
-  IconSearch, 
+  IconSearchOff, 
   IconLoader2
 } from '@tabler/icons-react';
 import styles from './Table.module.css';
@@ -12,6 +12,7 @@ import { TableContentCaseProps } from './types';
 export const TableContentCase: React.FC<TableContentCaseProps> = ({
   type,
   message,
+  subtitle,
 }) => {
   // Detect RTL for line height adjustments
   const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
@@ -39,30 +40,67 @@ export const TableContentCase: React.FC<TableContentCaseProps> = ({
 
   // Determine which icon to show
   const renderIcon = () => {
-    switch (type) {
-      case 'error':
-        return <IconCloudOff size={48} className={styles.contentCaseIcon} />;
-      case 'empty':
-        return <IconPackageOff size={48} className={styles.contentCaseIcon} />;
-      case 'notFound':
-        return <IconSearch size={48} className={styles.contentCaseIcon} />;
-      case 'loading':
-        return <IconLoader2 size={48} className={clsx(styles.contentCaseIcon, styles.spinnerIcon)} />;
-      default:
-        return null;
-    }
+    const iconElement = (() => {
+      switch (type) {
+        case 'error':
+          return <IconCloudOff size={32} stroke={2} className={styles.contentCaseIcon} />;
+        case 'empty':
+          return <IconPackageOff size={32} stroke={2} className={styles.contentCaseIcon} />;
+        case 'notFound':
+          return <IconSearchOff size={32} stroke={2} className={styles.contentCaseIcon} />;
+        case 'loading':
+          return <IconLoader2 size={32} stroke={2} className={clsx(styles.contentCaseIcon, styles.spinnerIcon)} />;
+        default:
+          return null;
+      }
+    })();
+
+    if (!iconElement) return null;
+
+    return (
+      <div className={styles.contentCaseIconWrapper}>
+        {iconElement}
+      </div>
+    );
   };
 
   // Get the message to display
   const displayMessage = message || defaultMessages[type];
 
+  // Render message content based on type
+  const renderMessageContent = () => {
+    if (type === 'notFound') {
+      const defaultTitle = isRTL 
+        ? 'لا توجد نتائج متاحة للعنصر "{المطلوب}"'
+        : 'No available results for "{Searched item}"';
+      const defaultSubtitle = isRTL 
+        ? 'جرب استخدام مصطلحات بحث مختلفة أو تحقق من الإملاء'
+        : 'Try using different search terms or check your spelling';
+      
+      return (
+        <div className={styles.contentCaseNotFoundContent}>
+          <h3 className={styles.contentCaseNotFoundTitle} style={lineHeightStyle}>
+            {message || defaultTitle}
+          </h3>
+          <p className={styles.contentCaseNotFoundSubtitle} style={lineHeightStyle}>
+            {subtitle || defaultSubtitle}
+          </p>
+        </div>
+      );
+    }
+    
+    return (
+      <p className={styles.contentCaseMessage} style={lineHeightStyle}>
+        {displayMessage}
+      </p>
+    );
+  };
+
   return (
     <div className={styles.contentCaseContainer}>
       <div className={styles.contentCaseContent}>
         {renderIcon()}
-        <p className={styles.contentCaseMessage} style={lineHeightStyle}>
-          {displayMessage}
-        </p>
+        {renderMessageContent()}
       </div>
     </div>
   );

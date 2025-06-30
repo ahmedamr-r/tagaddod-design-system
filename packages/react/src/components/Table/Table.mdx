@@ -138,6 +138,25 @@ Try out all the Table component features in a single place:
 
 <Canvas of={TableStories.Playground} />
 
+## Table Variants
+
+Explore different table configurations through these comprehensive examples:
+
+### Striped Table
+<Canvas of={TableStories.StripedTable} />
+
+### Grid Table  
+<Canvas of={TableStories.GridTable} />
+
+### Tabbed Table
+<Canvas of={TableStories.TabbedTable} />
+
+### Static Table
+<Canvas of={TableStories.StaticTable} />
+
+### Column Management Features
+<Canvas of={TableStories.ColumnManagementFeatures} />
+
 ## Column Management Features
 
 The Table component includes advanced column management capabilities that allow users to customize their data view through interactive column ordering and resizing.
@@ -146,7 +165,7 @@ The Table component includes advanced column management capabilities that allow 
 
 ### Column Ordering
 
-Column ordering allows users to reorder table columns by dragging and dropping them. This feature is built using @dnd-kit for modern, accessible drag and drop interactions.
+Column ordering allows users to reorder table columns by dragging and dropping them. This feature is **disabled by default** and must be explicitly enabled via the `enableColumnOrdering` prop. It is built using @dnd-kit for modern, accessible drag and drop interactions.
 
 #### Basic Implementation
 
@@ -173,12 +192,14 @@ const columns = [
   data={data}
   columns={columns}
   title="Users Table"
+  enableColumnOrdering={true}  // Enable column ordering
 />
 ```
 
 #### Key Features
 
-- **Drag Handles**: Hover over column headers to reveal drag handles (⋮⋮⋮)
+- **Default State**: Column ordering is disabled by default (`enableColumnOrdering={false}`)
+- **Drag Handles**: When enabled, hover over column headers to reveal drag handles (⋮⋮⋮)
 - **Visual Feedback**: Columns show visual feedback during drag operations
 - **Keyboard Accessible**: Use Tab + Arrow keys + Space for reordering
 - **Automatic Persistence**: Column order state is maintained during table interactions
@@ -192,11 +213,13 @@ const columns = [
 
 ### Column Resizing  
 
-Column resizing enables users to adjust column widths by dragging resize handles that appear on column borders.
+Column resizing enables users to adjust column widths by dragging resize handles that appear on column borders. This feature is **disabled by default** and must be explicitly enabled via the `enableColumnResizing` prop.
 
 #### Configuration
 
 ```jsx
+import { Table } from '@tagaddod/react';
+
 const columns = [
   {
     accessorKey: 'name',
@@ -219,15 +242,24 @@ const columns = [
     enableResizing: false, // Disable resizing for this column
   },
 ];
+
+<Table
+  data={data}
+  columns={columns}
+  title="Resizable Table"
+  enableColumnResizing={true}  // Enable column resizing
+/>
 ```
 
 #### Resize Behavior
 
-- **Interactive Handles**: Resize handles appear on hover at column borders
+- **Default State**: Column resizing is disabled by default (`enableColumnResizing={false}`)
+- **Interactive Handles**: When enabled, resize handles appear on hover at column borders
 - **Real-time Updates**: Column widths update immediately during drag
 - **Constraints**: Respects `minSize` and `maxSize` boundaries
-- **Visual Indicators**: Active resize handles are highlighted
+- **Visual Indicators**: Active resize handles are highlighted in blue
 - **Touch Support**: Works on touch devices for mobile compatibility
+- **Double-click**: Double-click resize handles to auto-fit column content
 
 #### Column Sizing Properties
 
@@ -241,20 +273,46 @@ const columns = [
 #### Advanced Configuration
 
 ```jsx
-// Global defaults for all columns
-const table = useReactTable({
-  data,
-  columns,
-  defaultColumn: {
-    size: 150,        // Default width for all columns
-    minSize: 50,      // Global minimum width
-    maxSize: 500,     // Global maximum width
-  },
-  enableColumnResizing: true,     // Enable/disable globally
-  columnResizeMode: 'onChange',   // Real-time vs onEnd
-  columnResizeDirection: 'ltr',   // LTR or RTL
-});
+// Complete column management setup
+<Table
+  data={data}
+  columns={columns}
+  title="Advanced Table"
+  enableColumnOrdering={true}     // Enable column ordering
+  enableColumnResizing={true}     // Enable column resizing
+  gridCells={true}                // Show borders for better visual feedback
+  // RTL direction is automatically detected
+/>
 ```
+
+#### Combining Features
+
+```jsx
+// Table with both column ordering and resizing
+<Table
+  data={data}
+  columns={columns}
+  title="Full Column Management"
+  enableColumnOrdering={true}   // Enable column ordering
+  enableColumnResizing={true}   // Enable column resizing
+  showSearch={true}
+  showFilters={true}
+  gridCells={true}  // Recommended for better visual feedback
+/>
+```
+
+#### Column Management Summary
+
+| Feature | Default State | How to Enable |
+|---------|---------------|---------------|
+| **Column Ordering** | ❌ Disabled | `enableColumnOrdering={true}` |
+| **Column Resizing** | ❌ Disabled | `enableColumnResizing={true}` |
+
+**Best Practices:**
+- Use `gridCells={true}` when enabling column management features for better visual feedback
+- Column ordering works best with unique column IDs
+- Both features are disabled by default for better performance
+- Consider performance impact with many columns (50+) when enabling both features
 
 Use the controls panel below to:
 - Toggle features on/off (search, filters, pagination, tabs, etc.)
@@ -706,6 +764,31 @@ Use striped rows **only for read-only data** without interactive elements. Strip
 />
 ```
 
+### Static Tables (No Hover Effects)
+
+For purely static data displays like reports or dashboards where user interaction is not needed, you can disable row hover effects using the `disableRowHover` prop.
+
+```jsx
+// ✅ Static table - perfect for reports and read-only displays
+<Table
+  data={reportData}
+  columns={reportColumns}
+  title="Monthly Report"
+  striped={true}
+  disableRowHover={true}
+  showSearch={false}
+  showFilters={false}
+  showPagination={false}
+/>
+```
+
+**When to use `disableRowHover`:**
+- Static data reports that won't be modified
+- Dashboard summary tables
+- Print-friendly table layouts
+- Performance-critical displays with many rows
+- Tables embedded in cards or confined spaces
+
 ## Table States
 
 ### Empty State
@@ -751,7 +834,7 @@ Show an error message when data retrieval fails.
 
 ### Not Found State
 
-Indicate when a search yields no results.
+Indicate when a search yields no results. The not found state features a title/subtitle structure with customizable messages.
 
 ```jsx
 <Table
@@ -759,10 +842,18 @@ Indicate when a search yields no results.
   columns={columns}
   title="Inventory Stock"
   state="notFound"
-  notFoundMessage="No available results for 'product XYZ'. Try different item name or ID."
-  searchQuery="product XYZ"
+  notFoundMessage="No available results for 'searched item'"
+  notFoundSubtitle="Try using different search terms or check your spelling"
+  searchQuery="searched item"
 />
 ```
+
+**Not Found State Features:**
+- **Icon**: Uses `IconSearchOff` with 32px size in a 72px circular background
+- **Title**: Uses `body-lg-semibold` typography with primary text color
+- **Subtitle**: Uses `body-md-default` typography with secondary text color
+- **Customizable**: Both title and subtitle messages can be customized
+- **Defaults**: Provides sensible default messages if not specified
 
 ## Internationalization
 

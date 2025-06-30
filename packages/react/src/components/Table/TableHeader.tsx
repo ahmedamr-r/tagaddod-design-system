@@ -40,7 +40,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
             <h3 className={styles.title} style={lineHeightStyle}>
               {title}
               {badge !== undefined && badge !== null && (
-                <Badge tone="info" className={styles.titleBadge}>
+                <Badge tone="default" className={styles.titleBadge}>
                   {badge}
                 </Badge>
               )}
@@ -52,7 +52,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
           {showSearch && (
             <div className={styles.searchWrapper}>
               <TextInput
-                size="medium"
+                size="large"
                 placeholder={isRTL ? "ابحث باسم العنصر أو معرّفه..." : "Search by item name or ID..."}
                 value={searchQuery}
                 onChange={(e) => onSearchChange?.(e.target.value)}
@@ -79,7 +79,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
           {showExport && (
             <Button 
               variant="tertiary" 
-              tone="neutral" 
+              tone="default" 
               onClick={onExport}
               prefixIcon={<IconFileExport size={16} />}
               size="medium"
