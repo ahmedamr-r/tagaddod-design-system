@@ -6,7 +6,7 @@ import { Table } from './Table';
 
 # Table Component
 
-The Table component is a powerful, feature-rich data display component built on TanStack Table, offering extensive customization options including sorting, filtering, pagination, and tabbed interfaces.
+The Table component is a powerful, feature-rich data display component built on TanStack Table, offering extensive customization options including sorting, filtering, pagination, tabbed interfaces, column ordering, and column resizing.
 
 ## Overview
 
@@ -16,6 +16,8 @@ The Tagaddod Table component provides an intuitive way to display structured dat
 - Text search and filtering
 - Pagination
 - Tabbed interfaces
+- **Column ordering** with drag and drop
+- **Column resizing** with interactive handles
 - Customizable row styling
 - Export functionality
 - Error, loading, and empty states
@@ -26,7 +28,20 @@ This component is ideal for data-heavy applications where users need to view, so
 ## Import
 
 ```jsx
+// Basic table import
 import { Table } from '@tagaddod/react';
+
+// Cell variants imports
+import { 
+  Table, 
+  QuickColumns, 
+  createCellColumn, 
+  createInteractiveCellColumn, 
+  createActionCellColumn,
+  createCustomCellColumn,
+  TableCellVariants,
+  CellVariantProps 
+} from '@tagaddod/react';
 ```
 
 ## Props
@@ -123,12 +138,405 @@ Try out all the Table component features in a single place:
 
 <Canvas of={TableStories.Playground} />
 
+## Column Management Features
+
+The Table component includes advanced column management capabilities that allow users to customize their data view through interactive column ordering and resizing.
+
+<Canvas of={TableStories.ColumnManagement} />
+
+### Column Ordering
+
+Column ordering allows users to reorder table columns by dragging and dropping them. This feature is built using @dnd-kit for modern, accessible drag and drop interactions.
+
+#### Basic Implementation
+
+```jsx
+import { Table } from '@tagaddod/react';
+
+const columns = [
+  {
+    id: 'name',        // Important: Provide unique IDs for all columns
+    accessorKey: 'name',
+    header: 'Name',
+    size: 200,
+  },
+  {
+    id: 'email',
+    accessorKey: 'email', 
+    header: 'Email',
+    size: 250,
+  },
+  // ... more columns
+];
+
+<Table
+  data={data}
+  columns={columns}
+  title="Users Table"
+/>
+```
+
+#### Key Features
+
+- **Drag Handles**: Hover over column headers to reveal drag handles (⋮⋮⋮)
+- **Visual Feedback**: Columns show visual feedback during drag operations
+- **Keyboard Accessible**: Use Tab + Arrow keys + Space for reordering
+- **Automatic Persistence**: Column order state is maintained during table interactions
+- **RTL Support**: Proper handling for right-to-left languages
+
+#### Best Practices
+
+- Always provide unique `id` properties for columns
+- Use descriptive column IDs that won't conflict
+- Consider disabling column ordering for tables with many interactive cell variants
+
+### Column Resizing  
+
+Column resizing enables users to adjust column widths by dragging resize handles that appear on column borders.
+
+#### Configuration
+
+```jsx
+const columns = [
+  {
+    accessorKey: 'name',
+    header: 'Name',
+    size: 200,           // Initial width
+    minSize: 100,        // Minimum width
+    maxSize: 400,        // Maximum width
+  },
+  {
+    accessorKey: 'email',
+    header: 'Email', 
+    size: 250,
+    minSize: 150,
+    maxSize: 500,
+  },
+  {
+    accessorKey: 'actions',
+    header: 'Actions',
+    size: 100,
+    enableResizing: false, // Disable resizing for this column
+  },
+];
+```
+
+#### Resize Behavior
+
+- **Interactive Handles**: Resize handles appear on hover at column borders
+- **Real-time Updates**: Column widths update immediately during drag
+- **Constraints**: Respects `minSize` and `maxSize` boundaries
+- **Visual Indicators**: Active resize handles are highlighted
+- **Touch Support**: Works on touch devices for mobile compatibility
+
+#### Column Sizing Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `size` | `number` | Initial column width in pixels |
+| `minSize` | `number` | Minimum allowed width (default: 20px) |
+| `maxSize` | `number` | Maximum allowed width (default: unlimited) |
+| `enableResizing` | `boolean` | Whether column can be resized (default: true) |
+
+#### Advanced Configuration
+
+```jsx
+// Global defaults for all columns
+const table = useReactTable({
+  data,
+  columns,
+  defaultColumn: {
+    size: 150,        // Default width for all columns
+    minSize: 50,      // Global minimum width
+    maxSize: 500,     // Global maximum width
+  },
+  enableColumnResizing: true,     // Enable/disable globally
+  columnResizeMode: 'onChange',   // Real-time vs onEnd
+  columnResizeDirection: 'ltr',   // LTR or RTL
+});
+```
+
 Use the controls panel below to:
 - Toggle features on/off (search, filters, pagination, tabs, etc.)
 - Switch between different table states (normal, error, empty, etc.)
 - Change direction (LTR/RTL)
 - Configure tab behavior
 - Modify display options
+
+## Cell Variants
+
+The Table component includes a comprehensive cell variants system that makes it easy to create consistent, interactive table cells. This system provides predefined cell types and helper functions for common use cases.
+
+<Canvas of={TableStories.CellVariants} />
+
+### Available Cell Variants
+
+The table supports 11 predefined cell variants:
+
+1. **Text Single Line** - Basic text display with typography `--t-typography-body-sm-default` and primary text color
+2. **Text Multiline** - Multi-line text with first line in primary color, subsequent lines in secondary color
+3. **Badge** - Status badges with color tones (default, info, success, warning, critical, magic)
+4. **Badge Multiple** - Multiple badges in one cell
+5. **Checkbox** - Interactive checkbox for selection
+6. **Radio Button** - Radio button group for exclusive selection
+7. **Select** - Dropdown selection with options
+8. **Text Field** - Editable text input field
+9. **Updated Number** - Formatted numbers with proper alignment
+10. **Action Icon** - Single action button (typically three dots menu)
+11. **Action Dropdown** - Multiple actions in dropdown menu
+
+### Quick Usage with Helper Functions
+
+The easiest way to use cell variants is with the `QuickColumns` helper:
+
+```jsx
+import { Table, QuickColumns, createInteractiveCellColumn } from '@tagaddod/react';
+
+const columns = [
+  QuickColumns.text('name', 'Customer Name'),
+  QuickColumns.badge('status', 'Status'),
+  QuickColumns.checkbox('selected', 'Select', (checked, row) => {
+    console.log(`Row ${row.id} selected: ${checked}`);
+  }),
+  QuickColumns.number('amount', 'Amount'),
+  QuickColumns.actions('Actions', (row) => {
+    console.log('Action clicked for:', row);
+  }),
+];
+```
+
+### Advanced Cell Variant Usage
+
+For more control, use the detailed helper functions:
+
+```jsx
+import { 
+  createCellColumn, 
+  createInteractiveCellColumn, 
+  createActionCellColumn 
+} from '@tagaddod/react';
+
+const columns = [
+  // Text variants
+  createCellColumn('customer', 'Customer', 'textSingleLine'),
+  createCellColumn('description', 'Description', 'textMultiline'),
+  
+  // Badge variants
+  createCellColumn('status', 'Status', 'badge'),
+  createCellColumn('tags', 'Tags', 'badgeMultiple'),
+  
+  // Interactive variants
+  createInteractiveCellColumn('priority', 'Priority', 'select', handlePriorityChange, {
+    cellProps: { 
+      options: [
+        { label: 'High', value: 'high' },
+        { label: 'Medium', value: 'medium' },
+        { label: 'Low', value: 'low' }
+      ]
+    }
+  }),
+  
+  createInteractiveCellColumn('approved', 'Approved', 'checkbox', handleApprovalChange),
+  
+  createInteractiveCellColumn('notes', 'Notes', 'textField', handleNotesChange, {
+    cellProps: { placeholder: 'Add notes...' }
+  }),
+  
+  // Action variants
+  createActionCellColumn('Actions', 'actionIcon', handleRowAction),
+  createActionCellColumn('More', 'actionDropdownIcon', () => {}, {
+    actions: [
+      { label: 'Edit', onClick: (row) => editRow(row) },
+      { label: 'Delete', onClick: (row) => deleteRow(row) },
+      { label: 'View Details', onClick: (row) => viewDetails(row) }
+    ]
+  })
+];
+```
+
+### Data Structure for Cell Variants
+
+Different cell variants expect specific data structures:
+
+```jsx
+const salesData = [
+  {
+    id: 1,
+    customer: 'Olivia Rhye',                                    // textSingleLine
+    description: 'Premium customer with\nmultiple orders',      // textMultiline
+    status: { text: 'Active', tone: 'success' },               // badge
+    tags: [                                                     // badgeMultiple
+      { text: 'VIP', tone: 'success' },
+      { text: 'Premium', tone: 'info' }
+    ],
+    selected: true,                                             // checkbox
+    priority: 'high',                                           // select/radioButton
+    amount: 2400.50,                                            // updatedNumber
+    notes: 'Important client'                                   // textField
+  }
+];
+```
+
+### Creating Custom Cell Variants
+
+You can create custom cell variants using the `createCustomCellColumn` helper:
+
+```jsx
+import { createCustomCellColumn, CellVariantProps } from '@tagaddod/react';
+
+// Create custom progress bar cell
+const ProgressBarCell: React.FC<CellVariantProps<number>> = ({ value }) => (
+  <div style={{ 
+    width: '100%', 
+    height: '8px', 
+    backgroundColor: '#eee', 
+    borderRadius: '4px',
+    overflow: 'hidden'
+  }}>
+    <div 
+      style={{ 
+        width: `${value}%`, 
+        height: '100%', 
+        backgroundColor: '#007bff', 
+        transition: 'width 0.3s ease'
+      }} 
+    />
+    <span style={{ fontSize: '12px', marginLeft: '8px' }}>{value}%</span>
+  </div>
+);
+
+// Use custom cell in column definition
+const columns = [
+  createCustomCellColumn('progress', 'Progress', ProgressBarCell),
+];
+```
+
+### Extending the Cell Variants Registry
+
+You can extend the built-in cell variants registry:
+
+```jsx
+import { TableCellVariants } from '@tagaddod/react';
+
+// Add your custom variants to the registry
+const ExtendedCellVariants = {
+  ...TableCellVariants,
+  customProgress: ProgressBarCell,
+  customRating: RatingStarsCell,
+  customChart: MiniChartCell,
+};
+
+// Now you can use them with helper functions
+const columns = [
+  createCellColumn('progress', 'Progress', 'customProgress'),
+];
+```
+
+### Cell Variant Props Interface
+
+All cell variants implement the `CellVariantProps` interface:
+
+```typescript
+interface CellVariantProps<T = any> {
+  value: T;                                    // The cell value
+  row?: any;                                   // The entire row data
+  onChange?: (value: T, row?: any) => void;    // Change handler for interactive cells
+  onClick?: (row?: any) => void;               // Click handler for action cells
+  options?: Array<{ label: string; value: any }>; // Options for select/radio cells
+  className?: string;                          // Additional CSS classes
+  [key: string]: any;                         // Additional props
+}
+```
+
+### RTL Support in Cell Variants
+
+All cell variants automatically support RTL languages with proper:
+- Text alignment (right for RTL, left for LTR)
+- Font family switching (Arabic fonts for RTL content)
+- Line height adjustments (optimized for Arabic text)
+- Layout direction (flex-direction, positioning)
+
+The RTL detection and styling is handled automatically by each cell variant component.
+
+### Important Notes for Cell Variants
+
+#### Select Component Requirements
+When using Select or ActionDropdown cell variants, ensure that:
+- All option values are **non-empty strings**
+- Empty string values are automatically filtered out
+- Use meaningful values like `'high'`, `'medium'`, `'low'` instead of `''`
+
+```jsx
+// ✅ Correct - Non-empty option values
+const priorityOptions = [
+  { label: 'High', value: 'high' },
+  { label: 'Medium', value: 'medium' },
+  { label: 'Low', value: 'low' }
+];
+
+// ❌ Incorrect - Empty string values will cause errors
+const badOptions = [
+  { label: 'Select...', value: '' },  // This will be filtered out
+  { label: 'High', value: 'high' }
+];
+```
+
+#### Badge Component Tones
+Badge components use `tone` prop with these available values:
+- `'default'` - Gray/neutral appearance
+- `'info'` - Blue informational tone
+- `'success'` - Green success tone  
+- `'warning'` - Yellow/orange warning tone
+- `'critical'` - Red error/critical tone
+- `'magic'` - Purple/gradient special tone
+
+#### Typography Implementation
+Text cell variants use consistent typography:
+- **Font**: `--t-typography-body-sm-default` for consistent styling
+- **Text Single Line**: Primary text color (`--t-color-text-primary`)
+- **Text Multiline**: First line uses primary color, subsequent lines use secondary color (`--t-color-text-secondary`)
+- **RTL Support**: Automatic line-height adjustments for Arabic text
+
+#### Performance Considerations
+For optimal performance with cell variants:
+- Use `React.memo` for custom cell components when dealing with large datasets
+- Prefer static options arrays over inline object creation
+- Consider virtualization for tables with 1000+ rows and complex cell variants
+
+### Troubleshooting Cell Variants
+
+#### Common Issues and Solutions
+
+**"Select.Item must have a value prop that is not an empty string"**
+- **Cause**: Select options contain empty string values
+- **Solution**: Ensure all option values are non-empty strings or they will be filtered out automatically
+
+**Cell variant not rendering correctly**
+- **Cause**: Incorrect data structure passed to cell variant
+- **Solution**: Check the expected data structure for each variant in the documentation above
+
+**TypeScript errors with custom cell variants**
+- **Cause**: Custom component doesn't implement `CellVariantProps` interface
+- **Solution**: Ensure your custom component extends `React.FC<CellVariantProps<YourDataType>>`
+
+**Interactive cells not updating**
+- **Cause**: Missing or incorrect `onChange` callback
+- **Solution**: Use `createInteractiveCellColumn` and provide proper onChange handler
+
+```jsx
+// ✅ Correct interactive cell setup
+createInteractiveCellColumn('status', 'Status', 'select', (value, row) => {
+  console.log('Status changed:', value, 'for row:', row);
+  // Update your data state here
+}, {
+  cellProps: { 
+    options: [
+      { label: 'Active', value: 'active' },
+      { label: 'Inactive', value: 'inactive' }
+    ]
+  }
+})
+```
 
 ## Features
 
@@ -269,8 +677,32 @@ Enable grid cells to show borders between cells for better data visualization.
   data={data}
   columns={columns}
   title="Inventory Stock"
-  striped={true}
+  striped={false}
   gridCells={true}
+/>
+```
+
+### Striped Rows
+
+Use striped rows **only for read-only data** without interactive elements. Striped rows should be avoided when the table contains interactive components like buttons, checkboxes, or form inputs as they can interfere with hover states and user interactions.
+
+```jsx
+// ✅ Good - Read-only data display
+<Table
+  data={readOnlyData}
+  columns={displayColumns}
+  title="Report Data"
+  striped={true}
+  onRowClick={undefined} // No row interactions
+/>
+
+// ❌ Avoid - Interactive data with form elements
+<Table
+  data={interactiveData}
+  columns={cellVariantColumns}
+  title="Editable Data"
+  striped={false} // Keep false for better UX
+  onRowClick={handleRowClick}
 />
 ```
 
@@ -648,12 +1080,18 @@ The Table component uses the following token CSS variables:
 | Variable | Purpose |
 |----------|---------|
 | `--t-space-*` | Padding and spacing |
+| `--t-typography-body-sm-default` | Typography for text cell variants |
 | `--t-font-family-primary` | Text font |
 | `--t-font-size-*` | Font sizes for text elements |
 | `--t-font-weight-*` | Font weights |
-| `--t-color-text-*` | Text colors |
+| `--t-color-text-primary` | Primary text color |
+| `--t-color-text-secondary` | Secondary text color (multiline second lines) |
+| `--t-color-text-tertiary` | Tertiary text color |
 | `--t-color-border-*` | Border colors |
-| `--t-color-surface-*` | Background colors |
+| `--t-color-surface-primary` | Table background color |
+| `--t-color-surface-hover` | Row hover background color |
+| `--t-color-surface-active` | Striped row hover background color |
+| `--t-color-surface-secondary` | Header background color |
 | `--t-color-fill-*` | Highlight colors |
 | `--t-border-radius-*` | Border radius |
 | `--t-shadow-*` | Box shadows |
@@ -705,3 +1143,21 @@ The Table component is compatible with all modern browsers:
 - Mobile browsers (iOS Safari, Android Chrome)
 
 RTL language support works across all supported browsers.
+
+## Dependencies
+
+The Table component's advanced features require these additional dependencies:
+
+### Column Ordering & Resizing
+- `@dnd-kit/core` - Modern drag and drop library for React
+- `@dnd-kit/sortable` - Sortable utilities for column reordering
+- `@dnd-kit/utilities` - Utility functions for drag and drop
+
+These dependencies are automatically included when you install the Table component and provide:
+- **Modern DnD**: React 18+ compatible drag and drop
+- **Accessibility**: Full keyboard and screen reader support
+- **Performance**: Optimized for smooth interactions
+- **Touch Support**: Works on mobile and tablet devices
+
+### Bundle Size Impact
+The column management features add approximately 15-20KB to your bundle size. If you don't need these features, they can be tree-shaken out in future versions of the component library.

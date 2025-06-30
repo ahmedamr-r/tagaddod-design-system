@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: var(--t-color-surface-background);
+  background-color: var(--t-color-surface-primary);
   border-radius: var(--t-border-radius-200);
   border: 1px solid var(--t-color-border-tertiary);
   overflow: hidden;
@@ -15,7 +15,7 @@
 /* Tab styles */
 .tabsContainer {
   padding: var(--t-space-200) var(--t-space-200) 0;
-  background-color: var(--t-color-surface-background);
+  background-color: var(--t-color-surface-primary);
   border-bottom: 1px solid var(--t-color-border-tertiary);
 }
 
@@ -254,7 +254,7 @@
 
 /* Selected filter state */
 .filterSelected {
-  background-color: var(--t-color-surface-background);
+  background-color: var(--t-color-surface-primary);
   border: 1px solid var(--t-color-border-tertiary);
   border-radius: var(--t-border-radius-200);
   box-shadow: var(--t-shadow-xs);
@@ -402,7 +402,7 @@
   padding: var(--t-space-100);
   box-shadow: var(--t-shadow-dropdown);
   border-radius: var(--t-border-radius-200);
-  background-color: var(--t-color-surface-background);
+  background-color: var(--t-color-surface-primary);
   border: 1px solid var(--t-color-border-base);
   z-index: 101; /* Higher than popover to ensure dropdown is above */
   pointer-events: auto; /* Ensure clicks on dropdown work */
@@ -441,6 +441,36 @@
   z-index: 1; /* Create stacking context for table content */
 }
 
+/* Cell variant styles */
+.textWithBadgeCell {
+  display: flex;
+  align-items: center;
+  gap: var(--t-space-200);
+}
+
+.badgeMultipleCell {
+  display: flex;
+  align-items: center;
+  gap: var(--t-space-100);
+  flex-wrap: wrap;
+}
+
+.radioButtonCell {
+  display: flex;
+  align-items: center;
+  gap: var(--t-space-300);
+}
+
+.updatedNumberCell {
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+:global([dir="rtl"]) .updatedNumberCell {
+  text-align: left;
+}
+
 /* Create a helper class for when filters are open */
 .tableWithActiveFilter .tableContent {
   z-index: 0; /* Lower z-index when filters are active */
@@ -451,6 +481,19 @@
   border-collapse: separate;
   border-spacing: 0;
   position: relative;
+  background-color: var(--t-color-surface-primary);
+  table-layout: fixed; /* Fixed layout for better column control */
+}
+
+/* Fixed width table for cell variants showcase */
+.fixedWidthTable {
+  width: 100%;
+  max-width: 1200px;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  position: relative;
+  background-color: var(--t-color-surface-primary);
 }
 
 /* Table header */
@@ -459,7 +502,6 @@
 }
 
 .tableHeaderCell {
-  padding: var(--t-space-300) var(--t-space-400);
   text-align: left;
   font: var(--t-typography-body-sm-medium);
   color: var(--t-color-text-secondary);
@@ -468,9 +510,11 @@
   position: sticky;
   top: 0;
   z-index: 2;
-  background-color: var(--t-color-surface-secondary);
+  background-color: var( --t-color-bg-primary);
   transition: background-color var(--t-duration-base) var(--t-easing-in-out),
               box-shadow var(--t-duration-base) var(--t-easing-in-out);
+  height: 2.75rem; /* 44px equivalent */
+  max-height: 2.75rem; /* Use size token for max-height - 48px equivalent */
 }
 
 :global([dir="rtl"]) .tableHeaderCell {
@@ -481,6 +525,9 @@
   display: flex;
   align-items: center;
   gap: var(--t-space-200);
+  padding: 0 var(--t-space-400);
+
+
 }
 
 .headerCellLabel {
@@ -532,8 +579,14 @@
 }
 
 .activeSorted {
-  background-color: var(--t-color-surface-selected);
+  background-color: var(--t-color-surface-active);
   box-shadow: inset 0 -2px 0 0 var(--t-color-border-interactive);
+  color: var(--t-color-text-primary);
+
+}
+
+.activeSorted .headerCellLabel {
+  color: var(--t-color-text-primary);
 }
 
 .sortIcon {
@@ -566,15 +619,19 @@
   text-align: left;
   font-size: var(--t-font-size-300);
   color: var(--t-color-text-primary);
+  background-color: var(--t-color-surface-primary);
   border-bottom: 1px solid var(--t-color-border-tertiary);
   line-height: 1;
   vertical-align: middle;
   position: relative;
   transition: background-color var(--t-duration-base) var(--t-easing-in-out);
+  height: var(--t-space-1400); /* 56px equivalent from space tokens */
+  min-height: var(--t-space-1400);
+  max-height: var(--t-space-1400);
 }
 
 .tableRow:hover .tableCell {
-  /* Make this style apply on parent row hover */
+  background-color: var(--t-color-surface-hover) !important;
   position: relative;
   z-index: 2; /* Same z-index as hovered rows */
 }
@@ -615,7 +672,12 @@
 
 /* Striped rows */
 .striped .tableCell.striped {
-  background-color: var( --t-color-bg-light);
+  background-color: var(--t-color-bg-light);
+}
+
+/* Striped row hover effect - use darker color for better contrast */
+.striped .tableRow:hover .tableCell.striped {
+  background-color: var(--t-color-surface-active) !important;
 }
 
 /* Grid cells */
@@ -669,8 +731,8 @@
   cursor: pointer;
 }
 
-.clickableRow:hover {
-  background-color: var(--t-color-surface-hover);
+.clickableRow:hover .tableCell {
+  background-color: var(--t-color-surface-hover) !important;
 }
 
 /* Pagination container */
@@ -807,4 +869,122 @@
 .filterChevronActive {
   transform: rotate(180deg) !important;
   color: var(--t-color-text-interactive) !important;
+}
+
+/* Column drag and drop styles */
+.headerCellContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 100%;
+  min-height: var(--t-size-1200); /* Use size token - 48px equivalent */
+}
+
+/* Removed hidden drag activator - using visible drag handle instead */
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 0;
+  height: 16px;
+  cursor: grab;
+  color: var(--t-color-text-tertiary);
+  opacity: 0;
+  overflow: hidden;
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.dragHandle:hover {
+  opacity: 1;
+  color: var(--t-color-text-secondary);
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.headerCellContainer:hover .dragHandle {
+  width: 16px;
+  opacity: 1;
+}
+
+.headerCellContainer:hover .headerContent {
+  padding-left: calc(16px + var(--t-space-200)); /* Make space for drag handle */
+}
+
+/* RTL support for drag handle */
+:global([dir="rtl"]) .dragHandle {
+  left: auto;
+  right: 0;
+}
+
+:global([dir="rtl"]) .headerCellContainer:hover .headerContent {
+  padding-left: 0;
+  padding-right: calc(16px + var(--t-space-200)); /* Make space for drag handle in RTL */
+}
+
+.headerContent {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  height: 100%;
+  transition: padding var(--t-duration-base) var(--t-easing-in-out);
+ 
+}
+
+.dragging {
+  background-color: var(--t-color-surface-active) !important;
+  box-shadow: var(--t-shadow-md);
+  transform: rotate(2deg);
+}
+
+/* Column resizing styles */
+.resizeHandle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 8px;
+  background-color: transparent;
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+  border-right: 2px solid transparent;
+  transition: border-color var(--t-duration-base) var(--t-easing-in-out);
+  z-index: 10;
+}
+
+.resizeHandle:hover {
+  border-right-color: var(--t-color-border-interactive);
+}
+
+.resizeHandle:active,
+.resizing {
+  border-right-color: var(--t-color-border-brand) !important;
+  background-color: var(--t-color-border-brand);
+}
+
+/* RTL support for drag handle and resize handle */
+/* Removed RTL drag handle styles - no longer needed */
+
+:global([dir="rtl"]) .resizeHandle {
+  right: auto;
+  left: 0;
+  border-right: none;
+  border-left: 2px solid transparent;
+}
+
+:global([dir="rtl"]) .resizeHandle:hover {
+  border-left-color: var(--t-color-border-interactive);
+}
+
+:global([dir="rtl"]) .resizeHandle:active,
+:global([dir="rtl"]) .resizing {
+  border-left-color: var(--t-color-border-brand) !important;
 }

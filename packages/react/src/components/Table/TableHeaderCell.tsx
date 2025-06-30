@@ -5,7 +5,8 @@ import { Checkbox } from '../Checkbox';
 import styles from './Table.module.css';
 import { TableHeaderCellProps } from './types';
 
-export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
+// Content-only version for use inside other th elements
+export const TableHeaderCellContent: React.FC<TableHeaderCellProps> = ({
   children,
   isSortable = false,
   sortDirection = false,
@@ -59,9 +60,9 @@ export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
   };
 
   return (
-    <th 
+    <div 
       className={clsx(
-        styles.tableHeaderCell,
+        styles.headerCellContent,
         isSortable && styles.sortable,
         isSortable && sortDirection && styles.activeSorted,
         className
@@ -71,32 +72,46 @@ export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
       tabIndex={isSortable ? 0 : undefined}
       aria-sort={sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
     >
-      <div className={styles.headerCellContent}>
-        {showCheckbox && (
-          <div className={styles.headerCheckbox}>
-            <Checkbox
-              checked={isChecked}
-              onCheckedChange={handleCheckboxChange}
-            />
-          </div>
-        )}
-        
-        {typeof children === 'string' ? (
-          <span className={styles.headerCellLabel} style={lineHeightStyle}>
-            {children}
-          </span>
-        ) : (
-          children
-        )}
-        
-        {isSortable && renderSortIcon()}
-        
-        {showHelp && helpText && (
-          <div className={styles.helpIconWrapper} title={helpText}>
-            <IconHelp className={styles.helpIcon} size={16} />
-          </div>
-        )}
-      </div>
+      {showCheckbox && (
+        <div className={styles.headerCheckbox}>
+          <Checkbox
+            checked={isChecked}
+            onCheckedChange={handleCheckboxChange}
+          />
+        </div>
+      )}
+      
+      {typeof children === 'string' ? (
+        <span className={styles.headerCellLabel} style={lineHeightStyle}>
+          {children}
+        </span>
+      ) : (
+        children
+      )}
+      
+      {isSortable && renderSortIcon()}
+      
+      {showHelp && helpText && (
+        <div className={styles.helpIconWrapper} title={helpText}>
+          <IconHelp className={styles.helpIcon} size={16} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Original component with th wrapper
+export const TableHeaderCell: React.FC<TableHeaderCellProps> = (props) => {
+  return (
+    <th 
+      className={clsx(
+        styles.tableHeaderCell,
+        props.isSortable && styles.sortable,
+        props.isSortable && props.sortDirection && styles.activeSorted,
+        props.className
+      )}
+    >
+      <TableHeaderCellContent {...props} />
     </th>
   );
 };

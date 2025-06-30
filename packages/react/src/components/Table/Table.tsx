@@ -9,8 +9,25 @@ import {
   ColumnDef,
   SortingState,
   VisibilityState,
+  ColumnOrderState,
+  ColumnSizingState,
   flexRender,
 } from '@tanstack/react-table';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  horizontalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import { Tabs, TabsList, TabsTrigger } from '../Tabs';
 
 // Extend ColumnMeta to include custom properties
@@ -23,8 +40,7 @@ declare module '@tanstack/react-table' {
 }
 import { FilterItem } from './FilterItem';
 import { TableHeader } from './TableHeader';
-import { TableHeaderCell } from './TableHeaderCell';
-import { TableCell } from './TableCell';
+import { SortableHeaderCell } from './SortableHeaderCell';
 import { TableContentCase } from './TableContentCase';
 import { Pagination } from '../Pagination';
 import styles from './Table.module.css';
@@ -72,6 +88,10 @@ export const Table = <T extends object>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(defaultColumnVisibility);
   const [globalFilter, setGlobalFilter] = useState<string>(searchQuery);
   const [isFilterBarVisible, setIsFilterBarVisible] = useState<boolean>(defaultShowFilterBar);
+  
+  // Column ordering and sizing state
+  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([]);
+  const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
   
   // Default pagination state for internal use when not provided
   const [internalPagination, setInternalPagination] = useState({
@@ -125,6 +145,14 @@ export const Table = <T extends object>({
     return columns;
   }, [columns, activeTabConfig, usingEnhancedTabs]);
 
+  // Initialize column order when columns change
+  useEffect(() => {
+    const columnIds = activeColumns.map((col, index) => 
+      col.id ?? (col as any).accessorKey?.toString() ?? index.toString()
+    );
+    setColumnOrder(columnIds);
+  }, [activeColumns]);
+
   // Get the current title for the active tab (or default title)
   const activeTitle = useMemo<string | undefined>(() => {
     if (usingEnhancedTabs && activeTabConfig?.title) {
@@ -145,6 +173,29 @@ export const Table = <T extends object>({
   useEffect(() => {
     setGlobalFilter(searchQuery);
   }, [searchQuery]);
+
+  // Detect RTL for line height adjustments and column resize direction
+  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+
+  // Drag and drop sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Handle column reordering
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (active.id !== over?.id) {
+      const oldIndex = columnOrder.indexOf(active.id as string);
+      const newIndex = columnOrder.indexOf(over?.id as string);
+      const newColumnOrder = arrayMove(columnOrder, oldIndex, newIndex);
+      setColumnOrder(newColumnOrder);
+    }
+  };
 
   // Transform tabItems or tableTabs to tab props needed by Tabs component
   const tabsForDisplay = useMemo(() => {
@@ -173,6 +224,8 @@ export const Table = <T extends object>({
       sorting,
       columnVisibility,
       globalFilter,
+      columnOrder,
+      columnSizing,
       // Use either provided pagination or internal pagination state
       pagination: activePagination ? {
         pageIndex: activePagination.pageIndex,
@@ -181,6 +234,8 @@ export const Table = <T extends object>({
     },
     onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
+    onColumnOrderChange: setColumnOrder,
+    onColumnSizingChange: setColumnSizing,
     onGlobalFilterChange: (value) => {
       setGlobalFilter(String(value));
       onSearchChange?.(String(value));
@@ -209,6 +264,10 @@ export const Table = <T extends object>({
     getFilteredRowModel: getFilteredRowModel(),
     // Always use pagination model for consistent behavior
     getPaginationRowModel: getPaginationRowModel(),
+    // Enable column features
+    enableColumnResizing: true,
+    columnResizeMode: 'onChange',
+    columnResizeDirection: isRTL ? 'rtl' : 'ltr',
     // Indicate if using manual pagination (e.g., server-side)
     manualPagination: !!activePagination,
     // Pagination page count
@@ -247,9 +306,6 @@ export const Table = <T extends object>({
     onFilterChange?.(newFilters);
   };
 
-  // Detect RTL for line height adjustments
-  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
-  
   // Create lineHeightStyle object for proper text rendering
   const lineHeightStyle = {
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
@@ -290,29 +346,29 @@ export const Table = <T extends object>({
     }
     
     return (
-      <table className={styles.table}>
-        <thead className={styles.tableHead}>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHeaderCell
-                  key={header.id}
-                  isSortable={header.column.getCanSort()}
-                  sortDirection={header.column.getIsSorted() as any}
-                  onSort={() => header.column.toggleSorting()}
-                  className={header.column.columnDef.meta?.headerClassName}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <table className={clsx(styles.table, className?.includes('fixed-width') && styles.fixedWidthTable)}>
+          <thead className={styles.tableHead}>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                <SortableContext
+                  items={columnOrder}
+                  strategy={horizontalListSortingStrategy}
                 >
-                  {header.isPlaceholder ? null : (
-                    flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )
-                  )}
-                </TableHeaderCell>
-              ))}
-            </tr>
-          ))}
-        </thead>
+                  {headerGroup.headers.map((header) => (
+                    <SortableHeaderCell
+                      key={header.id}
+                      header={header}
+                    />
+                  ))}
+                </SortableContext>
+              </tr>
+            ))}
+          </thead>
         <tbody>
           {table.getRowModel().rows.map((row, rowIndex) => {
             const isEvenRow = rowIndex % 2 === 0;
@@ -327,24 +383,26 @@ export const Table = <T extends object>({
                 onClick={() => onRowClick?.(row)}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell
+                  <td
                     key={cell.id}
-                    isStriped={striped && !isEvenRow}
-                    isGridCell={gridCells}
-                    className={cell.column.columnDef.meta?.cellClassName}
+                    className={`${styles.tableCell} ${cell.column.columnDef.meta?.cellClassName || ''} ${
+                      striped && !isEvenRow ? styles.striped : ''
+                    } ${gridCells ? styles.gridCell : ''}`}
+                    style={{ width: `${cell.column.getSize()}px` }}
                     onClick={() => onCellClick?.(cell)}
                   >
                     {flexRender(
                       cell.column.columnDef.cell,
                       cell.getContext()
                     )}
-                  </TableCell>
+                  </td>
                 ))}
               </tr>
             );
           })}
         </tbody>
-      </table>
+        </table>
+      </DndContext>
     );
   };
 

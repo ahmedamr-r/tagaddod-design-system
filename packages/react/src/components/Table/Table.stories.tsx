@@ -4,6 +4,7 @@ import { Table } from './Table';
 import { ColumnDef } from '@tanstack/react-table';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { Button } from '../Button';
+import { QuickColumns, createCellColumn, createInteractiveCellColumn, createActionCellColumn } from './TableCellHelpers';
 
 // Define product data type
 interface Product {
@@ -164,8 +165,8 @@ const meta: Meta<typeof Table> = {
     },
     striped: {
       control: 'boolean',
-      description: 'Whether to show striped rows',
-      defaultValue: true,
+      description: 'Whether to show striped rows (use only for non-interactive data)',
+      defaultValue: false,
     },
     gridCells: {
       control: 'boolean',
@@ -235,7 +236,7 @@ const meta: Meta<typeof Table> = {
   },
   args: {
     title: 'Inventory Stock',
-    striped: true,
+    striped: false,
     gridCells: false,
     showHeader: true,
     showTabs: false,
@@ -339,9 +340,771 @@ export const Example: Story = {
       data={sampleProducts}
       columns={productColumns}
       title="Inventory Stock"
-      striped={true}
+      striped={false}
       showHeader={true}
       onRowClick={(row) => console.log('Row clicked:', row.original)}
     />
   )
+};
+
+// Cell Variants Showcase
+interface SalesData {
+  id: number;
+  customer: string;
+  email: string;
+  description: string;
+  status: { text: string; tone: 'default' | 'info' | 'success' | 'warning' | 'critical' | 'magic' };
+  tags: Array<{ text: string; tone: 'default' | 'info' | 'success' | 'warning' | 'critical' | 'magic' }>;
+  selected: boolean;
+  priority: string;
+  category: string;
+  amount: number;
+  approved: boolean;
+  notes: string;
+}
+
+const salesData: SalesData[] = [
+  {
+    id: 1,
+    customer: 'Olivia Rhye',
+    email: 'olivia@untitledui.com',
+    description: 'Premium customer with\nmultiple product orders\nand high satisfaction rating',
+    status: { text: 'Active', tone: 'success' },
+    tags: [
+      { text: 'VIP', tone: 'success' },
+      { text: 'Premium', tone: 'info' }
+    ],
+    selected: true,
+    priority: 'high',
+    category: 'enterprise',
+    amount: 2400.50,
+    approved: true,
+    notes: 'Important client - handle with priority'
+  },
+  {
+    id: 2,
+    customer: 'Phoenix Baker',
+    email: 'phoenix@baker.com',
+    description: 'Regular customer with\nsteady purchase history',
+    status: { text: 'Pending', tone: 'warning' },
+    tags: [
+      { text: 'Regular', tone: 'info' }
+    ],
+    selected: false,
+    priority: 'medium',
+    category: 'business',
+    amount: 1200.00,
+    approved: false,
+    notes: 'Pending approval for bulk discount'
+  },
+  {
+    id: 3,
+    customer: 'Lana Steiner',
+    email: 'lana@steiner.co',
+    description: 'New customer exploring\nour product catalog',
+    status: { text: 'Inactive', tone: 'critical' },
+    tags: [
+      { text: 'New', tone: 'warning' },
+      { text: 'Trial', tone: 'info' }
+    ],
+    selected: false,
+    priority: 'low',
+    category: 'individual',
+    amount: 350.75,
+    approved: true,
+    notes: 'Trial period customer'
+  },
+  {
+    id: 4,
+    customer: 'Demi Wilkinson',
+    email: 'demi@wilkinson.org',
+    description: 'Corporate account with\nlarge volume requirements',
+    status: { text: 'Active', tone: 'success' },
+    tags: [
+      { text: 'Corporate', tone: 'success' },
+      { text: 'Bulk', tone: 'warning' },
+      { text: 'Priority', tone: 'critical' }
+    ],
+    selected: true,
+    priority: 'high',
+    category: 'enterprise',
+    amount: 5600.25,
+    approved: true,
+    notes: 'Corporate contract - quarterly reviews'
+  },
+  {
+    id: 5,
+    customer: 'Candice Wu',
+    email: 'candice@wu.design',
+    description: 'Design agency with\nspecialized requirements',
+    status: { text: 'Review', tone: 'info' },
+    tags: [
+      { text: 'Agency', tone: 'info' }
+    ],
+    selected: false,
+    priority: 'medium',
+    category: 'business',
+    amount: 890.00,
+    approved: false,
+    notes: 'Requires custom design services'
+  }
+];
+
+export const CellVariants: Story = {
+  name: 'Cell Variants Showcase',
+  render: () => {
+    const [data, setData] = useState(salesData);
+    
+    const handleCheckboxChange = (checked: boolean, row: SalesData) => {
+      setData(prevData => 
+        prevData.map(item => 
+          item.id === row.id ? { ...item, selected: checked } : item
+        )
+      );
+    };
+    
+    const handlePriorityChange = (value: string, row: SalesData) => {
+      setData(prevData => 
+        prevData.map(item => 
+          item.id === row.id ? { ...item, priority: value } : item
+        )
+      );
+    };
+    
+    const handleApprovalChange = (checked: boolean, row: SalesData) => {
+      setData(prevData => 
+        prevData.map(item => 
+          item.id === row.id ? { ...item, approved: checked } : item
+        )
+      );
+    };
+    
+    const handleNotesChange = (value: string, row: SalesData) => {
+      setData(prevData => 
+        prevData.map(item => 
+          item.id === row.id ? { ...item, notes: value } : item
+        )
+      );
+    };
+    
+    const handleRowAction = (row: SalesData) => {
+      alert(`Action clicked for: ${row.customer}`);
+    };
+
+    const cellVariantColumns: ColumnDef<SalesData, any>[] = [
+      // Text Single Line
+      {
+        ...QuickColumns.text('customer', 'Customer'),
+        size: 150,
+        minSize: 100,
+        maxSize: 200,
+      },
+      
+      // Text Truncated with Tooltip (NEW)
+      {
+        ...createCellColumn('description', 'Description', 'textTruncated'),
+        size: 180,
+        minSize: 120,
+        maxSize: 250,
+      },
+      
+      // Badge Single
+      {
+        ...createCellColumn('status', 'Status', 'badge'),
+        size: 120,
+        minSize: 80,
+        maxSize: 150,
+      },
+      
+      // Badge Multiple
+      {
+        ...createCellColumn('tags', 'Tags', 'badgeMultiple'),
+        size: 140,
+        minSize: 100,
+        maxSize: 200,
+      },
+      
+      // Checkbox
+      {
+        ...createInteractiveCellColumn('selected', 'Selected', 'checkbox', handleCheckboxChange),
+        size: 80,
+        minSize: 60,
+        maxSize: 100,
+      },
+      
+      // Select Dropdown
+      {
+        ...createInteractiveCellColumn('priority', 'Priority', 'select', handlePriorityChange, {
+          cellProps: { 
+            options: [
+              { label: 'High', value: 'high' },
+              { label: 'Medium', value: 'medium' },
+              { label: 'Low', value: 'low' }
+            ]
+          }
+        }),
+        size: 120,
+        minSize: 90,
+        maxSize: 150,
+      },
+      
+      // Updated Number
+      {
+        ...QuickColumns.number('amount', 'Amount'),
+        size: 110,
+        minSize: 80,
+        maxSize: 140,
+      },
+      
+      // Approval Checkbox
+      {
+        ...createInteractiveCellColumn('approved', 'Approved', 'checkbox', handleApprovalChange),
+        size: 80,
+        minSize: 60,
+        maxSize: 100,
+      },
+      
+      // Text Field
+      {
+        ...createInteractiveCellColumn('notes', 'Notes', 'textField', handleNotesChange, {
+          cellProps: { placeholder: 'Add notes...' }
+        }),
+        size: 150,
+        minSize: 100,
+        maxSize: 200,
+      },
+      
+      // Action Icon
+      {
+        ...createActionCellColumn('Actions', 'actionIcon', handleRowAction),
+        size: 80,
+        minSize: 60,
+        maxSize: 100,
+        enableResizing: false,
+      }
+    ];
+
+    return (
+      <div style={{ padding: '20px' }}>
+        <h2 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: 600 }}>
+          Table Cell Variants Showcase
+        </h2>
+        <p style={{ marginBottom: '30px', color: '#666', lineHeight: 1.5 }}>
+          This table demonstrates all available cell variants in the design system. 
+          Each column shows a different cell type with interactive functionality where applicable.
+        </p>
+        
+        <Table
+          data={data}
+          columns={cellVariantColumns}
+          title="Sales Dashboard"
+          badge={data.length}
+          striped={false} // Interactive cells - striped is disabled for better UX
+          showHeader={true}
+          showPagination={true}
+          showSearch={true}
+          showFilters={false}
+          className="fixed-width"
+          onRowClick={(row) => console.log('Row clicked:', row.original)}
+          pagination={{
+            pageIndex: 0,
+            pageSize: 10,
+            pageCount: Math.ceil(data.length / 10),
+            onPageChange: () => {},
+            pageSizeOptions: [5, 10, 20]
+          }}
+        />
+        
+        <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+          <h3 style={{ marginBottom: '15px', fontSize: '18px', fontWeight: 600 }}>
+            Available Cell Variants:
+          </h3>
+          <ul style={{ margin: 0, paddingLeft: '20px', lineHeight: 1.8 }}>
+            <li><strong>Text Single Line:</strong> Basic text display with RTL support</li>
+            <li><strong>Text Truncated:</strong> Text with ellipsis and tooltip on overflow (NEW)</li>
+            <li><strong>Badge:</strong> Status badges with color tones</li>
+            <li><strong>Badge Multiple:</strong> Multiple badges in one cell</li>
+            <li><strong>Checkbox (Selection):</strong> Interactive checkbox for row selection</li>
+            <li><strong>Select:</strong> Dropdown selection with options</li>
+            <li><strong>Updated Number:</strong> Formatted numbers with proper alignment</li>
+            <li><strong>Checkbox (Approval):</strong> Interactive checkbox for approval workflow</li>
+            <li><strong>Text Field:</strong> Editable text input field</li>
+            <li><strong>Action Icon:</strong> Button with plain variant and neutral tone</li>
+          </ul>
+        </div>
+      </div>
+    );
+  }
+};
+
+// Table States Showcase
+export const TableStates: Story = {
+  name: 'Table States Showcase',
+  render: () => {
+    const [currentState, setCurrentState] = useState<'normal' | 'loading' | 'error' | 'empty' | 'notFound'>('normal');
+    
+    // Sample data for normal state
+    const normalData = sampleProducts.slice(0, 3);
+    
+    // Basic columns for states demo
+    const stateColumns: ColumnDef<Product, any>[] = [
+      {
+        accessorKey: 'id',
+        header: 'ID',
+        size: 80,
+      },
+      {
+        accessorKey: 'name',
+        header: 'Product Name',
+        size: 300,
+      },
+      {
+        accessorKey: 'stockCollectors',
+        header: 'Stock',
+        size: 120,
+      },
+    ];
+
+    const stateButtons = [
+      { label: 'Normal', state: 'normal' as const, description: 'Default state with data' },
+      { label: 'Loading', state: 'loading' as const, description: 'Shows loading spinner' },
+      { label: 'Error', state: 'error' as const, description: 'Displays error message' },
+      { label: 'Empty', state: 'empty' as const, description: 'No data available' },
+      { label: 'Not Found', state: 'notFound' as const, description: 'Search yielded no results' },
+    ];
+
+    const getTableProps = () => {
+      const baseProps = {
+        columns: stateColumns,
+        title: 'Product Inventory',
+        showHeader: true,
+        showSearch: true,
+        showFilters: true,
+        showPagination: true,
+      };
+
+      switch (currentState) {
+        case 'normal':
+          return {
+            ...baseProps,
+            data: normalData,
+            state: 'normal' as const,
+          };
+        case 'loading':
+          return {
+            ...baseProps,
+            data: [],
+            state: 'loading' as const,
+          };
+        case 'error':
+          return {
+            ...baseProps,
+            data: [],
+            state: 'error' as const,
+            errorMessage: "Failed to load product data. Please check your connection and try again.",
+          };
+        case 'empty':
+          return {
+            ...baseProps,
+            data: [],
+            state: 'empty' as const,
+            emptyMessage: "No products have been added to your inventory yet. Add your first product to get started.",
+          };
+        case 'notFound':
+          return {
+            ...baseProps,
+            data: [],
+            state: 'notFound' as const,
+            notFoundMessage: "No products found matching your search criteria. Try adjusting your filters or search terms.",
+            searchQuery: "non-existent-product",
+          };
+        default:
+          return { ...baseProps, data: normalData, state: 'normal' as const };
+      }
+    };
+
+    return (
+      <div style={{ padding: '20px' }}>
+        <h2 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: 600 }}>
+          Table States Showcase
+        </h2>
+        <p style={{ marginBottom: '30px', color: '#666', lineHeight: 1.5 }}>
+          The Table component supports different states to handle various data scenarios. 
+          Click the buttons below to see how each state is displayed.
+        </p>
+
+        {/* State Selection Controls */}
+        <div style={{ marginBottom: '30px' }}>
+          <h3 style={{ marginBottom: '15px', fontSize: '18px', fontWeight: 600 }}>
+            Select Table State:
+          </h3>
+          <div style={{ 
+            display: 'flex', 
+            gap: '12px', 
+            flexWrap: 'wrap',
+            marginBottom: '20px'
+          }}>
+            {stateButtons.map((button) => (
+              <button
+                key={button.state}
+                onClick={() => setCurrentState(button.state)}
+                style={{
+                  padding: '8px 16px',
+                  border: '1px solid #ddd',
+                  borderRadius: '6px',
+                  backgroundColor: currentState === button.state ? '#007bff' : '#fff',
+                  color: currentState === button.state ? '#fff' : '#333',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                {button.label}
+              </button>
+            ))}
+          </div>
+          
+          {/* Current State Description */}
+          <div style={{ 
+            padding: '12px 16px', 
+            backgroundColor: '#f8f9fa', 
+            borderRadius: '6px',
+            border: '1px solid #e9ecef'
+          }}>
+            <strong>Current State: {currentState}</strong>
+            <br />
+            <span style={{ color: '#666' }}>
+              {stateButtons.find(b => b.state === currentState)?.description}
+            </span>
+          </div>
+        </div>
+
+        {/* Table Component with Dynamic State */}
+        <div style={{ 
+          border: '1px solid #e9ecef', 
+          borderRadius: '8px',
+          overflow: 'hidden'
+        }}>
+          <Table {...getTableProps()} />
+        </div>
+
+        {/* State Usage Examples */}
+        <div style={{ marginTop: '40px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+          <h3 style={{ marginBottom: '20px', fontSize: '18px', fontWeight: 600 }}>
+            Usage Examples:
+          </h3>
+          
+          <div style={{ display: 'grid', gap: '20px', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+            {/* Normal State */}
+            <div>
+              <h4 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600, color: '#28a745' }}>
+                Normal State
+              </h4>
+              <pre style={{ 
+                backgroundColor: '#fff', 
+                padding: '12px', 
+                borderRadius: '4px', 
+                fontSize: '12px',
+                overflow: 'auto',
+                border: '1px solid #dee2e6'
+              }}>
+{`<Table
+  data={products}
+  columns={columns}
+  state="normal"
+/>`}
+              </pre>
+            </div>
+
+            {/* Loading State */}
+            <div>
+              <h4 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600, color: '#6c757d' }}>
+                Loading State
+              </h4>
+              <pre style={{ 
+                backgroundColor: '#fff', 
+                padding: '12px', 
+                borderRadius: '4px', 
+                fontSize: '12px',
+                overflow: 'auto',
+                border: '1px solid #dee2e6'
+              }}>
+{`<Table
+  data={[]}
+  columns={columns}
+  state="loading"
+/>`}
+              </pre>
+            </div>
+
+            {/* Error State */}
+            <div>
+              <h4 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600, color: '#dc3545' }}>
+                Error State
+              </h4>
+              <pre style={{ 
+                backgroundColor: '#fff', 
+                padding: '12px', 
+                borderRadius: '4px', 
+                fontSize: '12px',
+                overflow: 'auto',
+                border: '1px solid #dee2e6'
+              }}>
+{`<Table
+  data={[]}
+  columns={columns}
+  state="error"
+  errorMessage="Failed to load data"
+/>`}
+              </pre>
+            </div>
+
+            {/* Empty State */}
+            <div>
+              <h4 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600, color: '#ffc107' }}>
+                Empty State
+              </h4>
+              <pre style={{ 
+                backgroundColor: '#fff', 
+                padding: '12px', 
+                borderRadius: '4px', 
+                fontSize: '12px',
+                overflow: 'auto',
+                border: '1px solid #dee2e6'
+              }}>
+{`<Table
+  data={[]}
+  columns={columns}
+  state="empty"
+  emptyMessage="No data available"
+/>`}
+              </pre>
+            </div>
+
+            {/* Not Found State */}
+            <div>
+              <h4 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600, color: '#17a2b8' }}>
+                Not Found State
+              </h4>
+              <pre style={{ 
+                backgroundColor: '#fff', 
+                padding: '12px', 
+                borderRadius: '4px', 
+                fontSize: '12px',
+                overflow: 'auto',
+                border: '1px solid #dee2e6'
+              }}>
+{`<Table
+  data={[]}
+  columns={columns}
+  state="notFound"
+  notFoundMessage="No results found"
+  searchQuery="search term"
+/>`}
+              </pre>
+            </div>
+
+            {/* Dynamic State Example */}
+            <div>
+              <h4 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600, color: '#6f42c1' }}>
+                Dynamic State (Recommended)
+              </h4>
+              <pre style={{ 
+                backgroundColor: '#fff', 
+                padding: '12px', 
+                borderRadius: '4px', 
+                fontSize: '12px',
+                overflow: 'auto',
+                border: '1px solid #dee2e6'
+              }}>
+{`const [loading, setLoading] = useState(false);
+const [error, setError] = useState(null);
+const [data, setData] = useState([]);
+
+const getTableState = () => {
+  if (loading) return 'loading';
+  if (error) return 'error';
+  if (data.length === 0) return 'empty';
+  return 'normal';
+};
+
+<Table
+  data={data}
+  columns={columns}
+  state={getTableState()}
+  errorMessage={error}
+/>`}
+              </pre>
+            </div>
+          </div>
+        </div>
+
+        {/* Best Practices */}
+        <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#e7f3ff', borderRadius: '8px' }}>
+          <h3 style={{ marginBottom: '15px', fontSize: '18px', fontWeight: 600 }}>
+            Best Practices:
+          </h3>
+          <ul style={{ margin: 0, paddingLeft: '20px', lineHeight: 1.8 }}>
+            <li><strong>Loading State:</strong> Show immediately when data fetching begins</li>
+            <li><strong>Error State:</strong> Provide clear, actionable error messages</li>
+            <li><strong>Empty State:</strong> Guide users on how to add their first data</li>
+            <li><strong>Not Found:</strong> Suggest alternative search terms or filters</li>
+            <li><strong>State Management:</strong> Use dynamic state calculation based on data status</li>
+            <li><strong>Consistency:</strong> Maintain consistent messaging across your application</li>
+          </ul>
+        </div>
+      </div>
+    );
+  }
+};
+
+// Column Ordering and Resizing Showcase
+export const ColumnManagement: Story = {
+  name: 'Column Ordering & Resizing',
+  render: () => {
+    const managementColumns: ColumnDef<Product, any>[] = [
+      {
+        id: 'id',
+        accessorKey: 'id',
+        header: 'ID',
+        size: 80,
+        minSize: 50,
+        maxSize: 150,
+      },
+      {
+        id: 'name',
+        accessorKey: 'name',
+        header: 'Product Name',
+        size: 250,
+        minSize: 150,
+        maxSize: 400,
+      },
+      {
+        id: 'stockCollectors',
+        accessorKey: 'stockCollectors',
+        header: 'Dispatched',
+        size: 120,
+        minSize: 80,
+        maxSize: 200,
+      },
+      {
+        id: 'stockWarehouse',
+        accessorKey: 'stockWarehouse',
+        header: 'Available',
+        size: 120,
+        minSize: 80,
+        maxSize: 200,
+      },
+      {
+        id: 'actions',
+        header: 'Actions',
+        size: 100,
+        minSize: 80,
+        maxSize: 150,
+        enableResizing: false, // Disable resizing for action column
+        cell: () => (
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <Button
+              variant="plain"
+              size="micro"
+              tone="neutral"
+              prefixIcon={<IconEdit size={16} />}
+              onClick={(e) => {
+                e.stopPropagation();
+                alert('Edit clicked');
+              }}
+            />
+            <Button
+              variant="plain"
+              size="micro"
+              tone="critical"
+              prefixIcon={<IconTrash size={16} />}
+              onClick={(e) => {
+                e.stopPropagation();
+                alert('Delete clicked');
+              }}
+            />
+          </div>
+        ),
+      },
+    ];
+
+    return (
+      <div style={{ padding: '20px' }}>
+        <h2 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: 600 }}>
+          Column Ordering & Resizing Demo
+        </h2>
+        
+        <div style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+          <h3 style={{ marginBottom: '15px', fontSize: '18px', fontWeight: 600 }}>
+            How to Use:
+          </h3>
+          <ul style={{ margin: 0, paddingLeft: '20px', lineHeight: 1.8 }}>
+            <li><strong>Column Ordering:</strong> Hover over column headers to see drag handles (⋮⋮⋮), then drag to reorder</li>
+            <li><strong>Column Resizing:</strong> Hover over column borders to see resize cursor, then drag to adjust width</li>
+            <li><strong>Keyboard Support:</strong> Use Tab to navigate and arrow keys with Space to reorder columns</li>
+            <li><strong>Constraints:</strong> Each column has minimum and maximum width limits</li>
+            <li><strong>Disabled Resizing:</strong> The Actions column cannot be resized (as an example)</li>
+          </ul>
+        </div>
+        
+        <Table
+          data={sampleProducts.slice(0, 5)}
+          columns={managementColumns}
+          title="Product Management"
+          badge={5}
+          striped={false} // Better UX for interactive features
+          showHeader={true}
+          showPagination={false} // Disable for cleaner demo
+          showSearch={false}
+          showFilters={false}
+          onRowClick={(row) => console.log('Row clicked:', row.original)}
+        />
+        
+        <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#e7f3ff', borderRadius: '8px' }}>
+          <h3 style={{ marginBottom: '15px', fontSize: '18px', fontWeight: 600 }}>
+            Features Demonstrated:
+          </h3>
+          <div style={{ display: 'grid', gap: '15px', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
+            <div>
+              <h4 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600, color: '#0066cc' }}>
+                Column Ordering
+              </h4>
+              <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '14px' }}>
+                <li>Drag and drop column reordering</li>
+                <li>Visual feedback during drag</li>
+                <li>Keyboard accessibility</li>
+                <li>Smooth animations</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600, color: '#0066cc' }}>
+                Column Resizing
+              </h4>
+              <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '14px' }}>
+                <li>Interactive resize handles</li>
+                <li>Min/max width constraints</li>
+                <li>Real-time width adjustment</li>
+                <li>Selective resize disable</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600, color: '#0066cc' }}>
+                Integration
+              </h4>
+              <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '14px' }}>
+                <li>Works with sorting</li>
+                <li>Compatible with cell variants</li>
+                <li>RTL language support</li>
+                <li>Touch device support</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 };
