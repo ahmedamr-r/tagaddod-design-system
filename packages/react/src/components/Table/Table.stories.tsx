@@ -84,24 +84,19 @@ const sampleProducts: Product[] = [
 // Define product columns
 const productColumns: ColumnDef<Product, any>[] = [
   {
-    accessorKey: 'id',
-    header: 'ID',
+    ...QuickColumns.number('id', 'ID'),
     size: 80,
   },
   {
-    accessorKey: 'name',
-    header: 'Item',
+    ...QuickColumns.text('name', 'Item'),
     size: 250,
-    cell: info => info.getValue(),
   },
   {
-    accessorKey: 'stockCollectors',
-    header: 'Dispatched to collectors',
+    ...QuickColumns.number('stockCollectors', 'Dispatched to collectors'),
     size: 150,
   },
   {
-    accessorKey: 'stockWarehouse',
-    header: 'Available at warehouse',
+    ...QuickColumns.number('stockWarehouse', 'Available at warehouse'),
     size: 150,
   },
   {
@@ -670,18 +665,15 @@ export const TableStates: Story = {
     // Basic columns for states demo
     const stateColumns: ColumnDef<Product, any>[] = [
       {
-        accessorKey: 'id',
-        header: 'ID',
+        ...QuickColumns.number('id', 'ID'),
         size: 80,
       },
       {
-        accessorKey: 'name',
-        header: 'Product Name',
+        ...QuickColumns.text('name', 'Product Name'),
         size: 300,
       },
       {
-        accessorKey: 'stockCollectors',
-        header: 'Stock',
+        ...QuickColumns.number('stockCollectors', 'Stock'),
         size: 120,
       },
     ];
@@ -981,155 +973,6 @@ const getTableState = () => {
   }
 };
 
-// Column Ordering and Resizing Showcase
-export const ColumnManagement: Story = {
-  name: 'Column Ordering & Resizing',
-  render: () => {
-    const managementColumns: ColumnDef<Product, any>[] = [
-      {
-        id: 'id',
-        accessorKey: 'id',
-        header: 'ID',
-        size: 80,
-        minSize: 50,
-        maxSize: 150,
-      },
-      {
-        id: 'name',
-        accessorKey: 'name',
-        header: 'Product Name',
-        size: 250,
-        minSize: 150,
-        maxSize: 400,
-      },
-      {
-        id: 'stockCollectors',
-        accessorKey: 'stockCollectors',
-        header: 'Dispatched',
-        size: 120,
-        minSize: 80,
-        maxSize: 200,
-      },
-      {
-        id: 'stockWarehouse',
-        accessorKey: 'stockWarehouse',
-        header: 'Available',
-        size: 120,
-        minSize: 80,
-        maxSize: 200,
-      },
-      {
-        id: 'actions',
-        header: 'Actions',
-        size: 100,
-        minSize: 80,
-        maxSize: 150,
-        enableResizing: false, // Disable resizing for action column
-        cell: () => (
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <Button
-              variant="plain"
-              size="micro"
-              tone="neutral"
-              prefixIcon={<IconEdit size={16} />}
-              onClick={(e) => {
-                e.stopPropagation();
-                alert('Edit clicked');
-              }}
-            />
-            <Button
-              variant="plain"
-              size="micro"
-              tone="critical"
-              prefixIcon={<IconTrash size={16} />}
-              onClick={(e) => {
-                e.stopPropagation();
-                alert('Delete clicked');
-              }}
-            />
-          </div>
-        ),
-      },
-    ];
-
-    return (
-      <div style={{ padding: '20px' }}>
-        <h2 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: 600 }}>
-          Column Ordering & Resizing Demo
-        </h2>
-        
-        <div style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
-          <h3 style={{ marginBottom: '15px', fontSize: '18px', fontWeight: 600 }}>
-            How to Use:
-          </h3>
-          <ul style={{ margin: 0, paddingLeft: '20px', lineHeight: 1.8 }}>
-            <li><strong>Column Ordering:</strong> Hover over column headers to see drag handles (⋮⋮⋮), then drag to reorder</li>
-            <li><strong>Column Resizing:</strong> Hover over column borders to see resize cursor, then drag to adjust width</li>
-            <li><strong>Keyboard Support:</strong> Use Tab to navigate and arrow keys with Space to reorder columns</li>
-            <li><strong>Constraints:</strong> Each column has minimum and maximum width limits</li>
-            <li><strong>Disabled Resizing:</strong> The Actions column cannot be resized (as an example)</li>
-          </ul>
-        </div>
-        
-        <Table
-          data={sampleProducts.slice(0, 5)}
-          columns={managementColumns}
-          title="Product Management"
-          badge={5}
-          striped={false} // Better UX for interactive features
-          showHeader={true}
-          showPagination={false} // Disable for cleaner demo
-          showSearch={false}
-          showFilters={false}
-          onRowClick={(row) => console.log('Row clicked:', row.original)}
-        />
-        
-        <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#e7f3ff', borderRadius: '8px' }}>
-          <h3 style={{ marginBottom: '15px', fontSize: '18px', fontWeight: 600 }}>
-            Features Demonstrated:
-          </h3>
-          <div style={{ display: 'grid', gap: '15px', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
-            <div>
-              <h4 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600, color: '#0066cc' }}>
-                Column Ordering
-              </h4>
-              <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '14px' }}>
-                <li>Drag and drop column reordering</li>
-                <li>Visual feedback during drag</li>
-                <li>Keyboard accessibility</li>
-                <li>Smooth animations</li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600, color: '#0066cc' }}>
-                Column Resizing
-              </h4>
-              <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '14px' }}>
-                <li>Interactive resize handles</li>
-                <li>Min/max width constraints</li>
-                <li>Real-time width adjustment</li>
-                <li>Selective resize disable</li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600, color: '#0066cc' }}>
-                Integration
-              </h4>
-              <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '14px' }}>
-                <li>Works with sorting</li>
-                <li>Compatible with cell variants</li>
-                <li>RTL language support</li>
-                <li>Touch device support</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-};
 
 // Export functionality story
 export const WithExport: Story = {
@@ -1410,17 +1253,17 @@ export const StaticTable: Story = {
   }
 };
 
-// Column Management Story (dragging and resizing)
-export const ColumnManagementFeatures: Story = {
-  name: 'Column Management Features',
+// Column Management Story (ordering and resizing)
+export const ColumnManagement: Story = {
+  name: 'Column Ordering & Resizing',
   args: {
-    title: 'Column Management Demo',
+    title: 'Interactive Column Management',
     data: sampleProducts,
     columns: productColumns,
-    enableColumnResizing: true,
-    enableColumnOrdering: true,
     striped: false,
-    gridCells: true,
+    gridCells: true, // Recommended for better visual feedback
+    enableColumnOrdering: true,
+    enableColumnResizing: true,
     showSearch: true,
     showFilters: true,
     showPagination: true,
@@ -1443,22 +1286,22 @@ export const ColumnManagementFeatures: Story = {
     });
     
     return (
-      <div>
-        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
-          <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 600 }}>
-            Column Management Features
+      <div style={{ padding: '20px' }}>
+        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '1px solid #e9ecef' }}>
+          <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 600, color: '#495057' }}>
+            ✨ Column Management Features Enabled
           </h3>
-          <div style={{ fontSize: '14px', lineHeight: 1.5, color: '#666' }}>
+          <div style={{ fontSize: '14px', lineHeight: 1.5, color: '#6c757d' }}>
             <p style={{ margin: '0 0 8px 0' }}>
-              <strong>Column Ordering:</strong> Hover over column headers to see drag handles (⋮⋮⋮). 
+              <strong>📋 Column Ordering:</strong> Hover over column headers to reveal drag handles (⋮⋮⋮). 
               Click and drag to reorder columns.
             </p>
             <p style={{ margin: '0 0 8px 0' }}>
-              <strong>Column Resizing:</strong> Hover over column borders to see resize handles. 
-              Drag to resize columns or double-click to auto-fit.
+              <strong>📏 Column Resizing:</strong> Hover over column borders to reveal resize handles. 
+              Click and drag to adjust column widths. Double-click to auto-fit content.
             </p>
             <p style={{ margin: '0' }}>
-              <strong>Keyboard Support:</strong> Use Tab + Arrow keys + Space for accessible column reordering.
+              <strong>🎯 Grid Cells:</strong> Enabled for better visual feedback during column management operations.
             </p>
           </div>
         </div>
@@ -1471,6 +1314,7 @@ export const ColumnManagementFeatures: Story = {
           activeFilters={filters}
           onFilterChange={setFilters}
           badge={filteredData.length}
+          onRowClick={(row) => console.log('Row clicked:', row.original)}
         />
       </div>
     );
@@ -1478,8 +1322,9 @@ export const ColumnManagementFeatures: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'This story demonstrates both column ordering (drag & drop) and column resizing features. Column ordering is always enabled, while column resizing can be controlled via the `enableColumnResizing` prop. Both features include full keyboard accessibility and RTL support.'
+        story: 'This story demonstrates the advanced column management features of the Table component. Both **Column Ordering** and **Column Resizing** are enabled, allowing users to customize their data view by reordering columns via drag and drop and adjusting column widths with resize handles. Grid cells are enabled to provide better visual feedback during these operations. These features are disabled by default for performance and must be explicitly enabled via props.'
       }
     }
   }
 };
+

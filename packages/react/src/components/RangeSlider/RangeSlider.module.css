@@ -1,0 +1,285 @@
+/* RangeSlider Component Styles - Updated to match Figma design */
+
+/* Design tokens mapping */
+:root {
+  --range-slider-color-text: var(--t-color-text-primary, #16161d);
+  --range-slider-color-bg-fill-brand: var(--t-color-fill-brand-primary, #3959fe);
+  --range-slider-color-border-secondary: var(--t-color-border-secondary, #e0e2e6);
+  --range-slider-color-text-on-bg-fill: var(--t-color-text-on-brand, #ffffff);
+  --range-slider-color-text-disabled: var(--t-color-text-disabled, #adafbd);
+  --range-slider-color-bg-fill-disabled: var(--t-color-fill-disabled, #c7c8d1);
+  --range-slider-color-bg-fill-critical: var(--t-color-fill-critical, #d51e25);
+  --range-slider-color-text-critical: var(--t-color-text-critical, #d51e25);
+  --range-slider-color-bg-overlay: var(--t-color-bg-overlay, rgba(22, 22, 29, 0.85));
+  --range-slider-space-100: var(--t-space-100, 4px);
+  --range-slider-space-200: var(--t-space-200, 8px);
+  --range-slider-space-300: var(--t-space-300, 12px);
+  --range-slider-border-radius-100: var(--t-border-radius-100, 4px);
+  --range-slider-border-radius-200: var(--t-border-radius-200, 8px);
+}
+
+/* Container */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--range-slider-space-100);
+  width: 100%;
+  font-family: var(--t-font-family-primary, 'Outfit', sans-serif);
+}
+
+/* Label */
+.labelContainer {
+  margin-bottom: var(--range-slider-space-100);
+}
+
+.label {
+font: var(--t-typography-body-sm-default);
+  color: var(--t-color-text-primary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Disabled label */
+.container.disabled .label {
+  color: var(--range-slider-color-text-disabled);
+}
+
+/* Slider Container */
+.sliderContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--range-slider-space-200);
+  height: 20px;
+}
+
+/* Prefix and Suffix */
+.prefix,
+.suffix {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--range-slider-color-text);
+  line-height: 1.5;
+}
+
+.container.disabled .prefix,
+.container.disabled .suffix {
+  color: var(--range-slider-color-text-disabled);
+}
+
+/* Slider Root */
+.root {
+  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+  width: 100%;
+  height: 20px;
+  flex: 1;
+}
+
+/* Track (background line) */
+.track {
+  background-color: var(--range-slider-color-border-secondary);
+  position: relative;
+  flex-grow: 1;
+  height: 4px;
+  border-radius: var(--range-slider-border-radius-100);
+}
+
+/* Disabled track */
+.container.disabled .track {
+  background-color: var(--range-slider-color-border-secondary);
+}
+
+/* Range (filled portion) */
+.range {
+  position: absolute;
+  height: 100%;
+  background-color: var(--range-slider-color-bg-fill-brand);
+  border-radius: inherit;
+}
+
+/* State-specific range colors */
+.container.error .range {
+  background-color: var(--range-slider-color-bg-fill-critical);
+}
+
+.container.disabled .range {
+  background-color: rgba(0, 0, 0, 0.17);
+}
+
+/* Thumb (slider handle) */
+.thumb {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--range-slider-color-bg-fill-brand);
+  border: 2px solid var(--range-slider-color-bg-fill-brand);
+  border-radius: 50%;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+}
+
+/* Thumb states */
+.thumb:hover {
+  transform: scale(1.1);
+}
+
+.thumb:focus-visible {
+  outline: 3px solid rgba(57, 89, 254, 0.3);
+  outline-offset: 2px;
+}
+
+/* Active thumb with focus ring */
+.container.active .thumb,
+.container.focus .thumb {
+  outline: 3px solid rgba(57, 89, 254, 0.3);
+  outline-offset: 2px;
+}
+
+/* Error state thumb */
+.container.error .thumb {
+  background-color: var(--range-slider-color-bg-fill-critical);
+  border-color: var(--range-slider-color-bg-fill-critical);
+}
+
+/* Disabled thumb */
+.container.disabled .thumb {
+  background-color: var(--range-slider-color-bg-fill-disabled);
+  border-color: var(--range-slider-color-bg-fill-disabled);
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.container.disabled .thumb:hover,
+.container.disabled .thumb:focus,
+.container.disabled .thumb:active {
+  transform: none !important;
+  outline: none;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.tooltipContent {
+  background-color: var(--range-slider-color-bg-overlay);
+  color: var(--range-slider-color-text-on-bg-fill);
+  padding: var(--range-slider-space-300) var(--range-slider-space-200);
+  border-radius: var(--range-slider-border-radius-200);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  white-space: nowrap;
+  box-shadow: 0px 4px 6px -2px rgba(26, 26, 26, 0.2);
+}
+
+.tooltipArrow {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--range-slider-color-bg-overlay);
+}
+
+.tooltipArrow::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: -6px;
+  width: 12px;
+  height: 8px;
+  background-color: var(--range-slider-color-bg-overlay);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+
+/* Error Container */
+.errorContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--range-slider-space-100);
+  margin-top: var(--range-slider-space-100);
+}
+
+.errorIcon {
+  color: var(--range-slider-color-text-critical);
+  flex-shrink: 0;
+}
+
+.errorMessage {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--range-slider-color-text-critical);
+  line-height: 1.5;
+}
+
+/* RTL support */
+:global([dir="rtl"]) .sliderContainer {
+  flex-direction: row; /* Reverse the order: suffix, slider, prefix */
+}
+
+:global([dir="rtl"]) .label,
+:global([dir="rtl"]) .prefix,
+:global([dir="rtl"]) .suffix,
+:global([dir="rtl"]) .errorMessage {
+  text-align: right;
+  font-family: var(--t-font-family-arabic, 'Tajawal', system-ui, sans-serif);
+}
+
+/* RTL error icon positioning */
+:global([dir="rtl"]) .errorContainer {
+  flex-direction: row-reverse;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .track {
+    border: 1px solid var(--range-slider-color-text);
+  }
+  
+  .thumb {
+    border-width: 3px;
+  }
+  
+  .range {
+    border: 1px solid var(--range-slider-color-text);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .thumb {
+    transition: none;
+  }
+  
+  .tooltip {
+    transition: none;
+  }
+}
+
+/* Mobile touch targets */
+@media (max-width: 768px) {
+  .thumb {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .sliderContainer {
+    height: 24px;
+  }
+}

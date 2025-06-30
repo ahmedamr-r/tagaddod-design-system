@@ -131,7 +131,7 @@
 
 /* Arabic font adjustment for title */
 :global([dir="rtl"]) .title::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .title::after {
@@ -204,7 +204,7 @@
 
 /* Arabic font adjustment for filter bar label */
 :global([dir="rtl"]) .filterBarLabel::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .filterBarLabel::after {
@@ -341,7 +341,7 @@
 /* Arabic font adjustment for filter label and value */
 :global([dir="rtl"]) .filterLabel::before,
 :global([dir="rtl"]) .filterValue::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .filterLabel::after,
@@ -514,8 +514,8 @@
   background-color: var( --t-color-bg-primary);
   transition: background-color var(--t-duration-base) var(--t-easing-in-out),
               box-shadow var(--t-duration-base) var(--t-easing-in-out);
-  height: 2.75rem; /* 44px equivalent */
-  max-height: 2.75rem; /* Use size token for max-height - 48px equivalent */
+  height: var(--t-size-1400); /* 56px equivalent from size tokens */
+  max-height: var(--t-size-1400);
 }
 
 :global([dir="rtl"]) .tableHeaderCell {
@@ -553,7 +553,7 @@
 
 /* Arabic font adjustment for header cell label */
 :global([dir="rtl"]) .headerCellLabel::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .headerCellLabel::after {
@@ -626,9 +626,9 @@
   vertical-align: middle;
   position: relative;
   transition: background-color var(--t-duration-base) var(--t-easing-in-out);
-  height: var(--t-space-1400); /* 56px equivalent from space tokens */
-  min-height: var(--t-space-1400);
-  max-height: var(--t-space-1400);
+  height: var(--t-size-1400); /* 56px equivalent from size tokens */
+  min-height: var(--t-size-1400);
+  max-height: var(--t-size-1400);
 }
 
 .tableRow:hover .tableCell {
@@ -669,7 +669,7 @@
 
 /* Arabic font adjustment for cell text */
 :global([dir="rtl"]) .cellText::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .cellText::after {
@@ -861,7 +861,7 @@
 :global([dir="rtl"]) .contentCaseMessage::before,
 :global([dir="rtl"]) .contentCaseNotFoundTitle::before,
 :global([dir="rtl"]) .contentCaseNotFoundSubtitle::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .contentCaseMessage::after,
@@ -932,7 +932,7 @@
   align-items: center;
   position: relative;
   height: 100%;
-  min-height: var(--t-size-1200); /* Use size token - 48px equivalent */
+  min-height: var(--t-size-1400); /* Use size token - 56px equivalent */
 }
 
 /* Removed hidden drag activator - using visible drag handle instead */
@@ -969,8 +969,19 @@
   opacity: 1;
 }
 
+/* Prevent drag handle from showing when column ordering is disabled */
+.disableColumnOrdering .headerCellContainer:hover .dragHandle {
+  width: 0;
+  opacity: 0;
+}
+
 .headerCellContainer:hover .headerContent {
   padding-left: calc(16px + var(--t-space-200)); /* Make space for drag handle */
+}
+
+/* Prevent padding adjustment when column ordering is disabled */
+.disableColumnOrdering .headerCellContainer:hover .headerContent {
+  padding-left: var(--t-space-400); /* Keep original padding */
 }
 
 /* RTL support for drag handle */
@@ -982,6 +993,12 @@
 :global([dir="rtl"]) .headerCellContainer:hover .headerContent {
   padding-left: 0;
   padding-right: calc(16px + var(--t-space-200)); /* Make space for drag handle in RTL */
+}
+
+/* Prevent padding adjustment in RTL when column ordering is disabled */
+:global([dir="rtl"]) .disableColumnOrdering .headerCellContainer:hover .headerContent {
+  padding-left: 0;
+  padding-right: var(--t-space-400); /* Keep original padding in RTL */
 }
 
 .headerContent {
