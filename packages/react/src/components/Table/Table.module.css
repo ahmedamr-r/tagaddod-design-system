@@ -447,6 +447,33 @@
   display: flex;
   align-items: center;
   gap: var(--t-space-200);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for text with badge cell */
+.textWithBadgeCell::before,
+.textWithBadgeCell::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.textWithBadgeCell::before {
+  margin-top: -0.15em;
+}
+
+.textWithBadgeCell::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for text with badge cell */
+:global([dir="rtl"]) .textWithBadgeCell::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .textWithBadgeCell::after {
+  margin-bottom: -0.25em;
 }
 
 .badgeMultipleCell {
@@ -454,6 +481,33 @@
   align-items: center;
   gap: var(--t-space-100);
   flex-wrap: wrap;
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for badge multiple cell */
+.badgeMultipleCell::before,
+.badgeMultipleCell::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.badgeMultipleCell::before {
+  margin-top: -0.15em;
+}
+
+.badgeMultipleCell::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for badge multiple cell */
+:global([dir="rtl"]) .badgeMultipleCell::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .badgeMultipleCell::after {
+  margin-bottom: -0.25em;
 }
 
 .radioButtonCell {
@@ -466,6 +520,33 @@
   font-feature-settings: 'tnum';
   font-variant-numeric: tabular-nums;
   text-align: right;
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for updated number cell */
+.updatedNumberCell::before,
+.updatedNumberCell::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.updatedNumberCell::before {
+  margin-top: -0.15em;
+}
+
+.updatedNumberCell::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for updated number cell */
+:global([dir="rtl"]) .updatedNumberCell::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .updatedNumberCell::after {
+  margin-bottom: -0.25em;
 }
 
 :global([dir="rtl"]) .updatedNumberCell {
@@ -739,6 +820,21 @@
 
 .clickableRow:hover .tableCell {
   background-color: var(--t-color-surface-hover) !important;
+}
+
+/* Error row styling - full row highlighting */
+.errorRow {
+  background-color: var(--t-color-fill-critical-secondary) !important;
+}
+
+.errorRow:hover {
+  background-color: var(--t-color-fill-critical-secondary) !important;
+  /* Slightly darker on hover for error rows */
+  filter: brightness(0.98);
+}
+
+.errorRow .tableCell {
+  background-color: transparent !important;
 }
 
 /* Static row - no hover effects */

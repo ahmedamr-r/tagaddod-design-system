@@ -6,7 +6,7 @@ import { Select } from '../Select';
 import { TextInput } from '../TextInput';
 import { Button } from '../Button';
 import { Tooltip, TooltipProvider } from '../Tooltip';
-import { IconDotsVertical } from '@tabler/icons-react';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
 import styles from './Table.module.css';
 
 // Cell variant type definitions
@@ -121,7 +121,7 @@ export const TextTruncatedCell: React.FC<CellVariantProps<string>> = ({ value, c
   return textContent;
 };
 
-export const TextSingleLineWithBadgeCell: React.FC<CellVariantProps<{ text: string; badge: string; badgeVariant?: 'success' | 'warning' | 'error' | 'info' }>> = ({ 
+export const TextSingleLineWithBadgeCell: React.FC<CellVariantProps<{ text: string; badge: string; badgeVariant?: 'success' | 'warning' | 'critical' | 'info'; prefixIcon?: React.ReactNode }>> = ({ 
   value, 
   className 
 }) => {
@@ -129,12 +129,26 @@ export const TextSingleLineWithBadgeCell: React.FC<CellVariantProps<{ text: stri
   const textStyle = {
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
     font: 'var(--t-typography-body-sm-default)',
-    color: 'var(--t-color-text-primary)'
+    color: 'var(--t-color-text-primary)',
+    flex: 1
   };
   
   return (
-    <div className={`${styles.textWithBadgeCell} ${className || ''}`}>
-      <span style={textStyle}>{value?.text || '-'}</span>
+    <div className={`${styles.textWithBadgeCell} ${className || ''}`} style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: 'var(--t-space-200)',
+      justifyContent: 'space-between',
+      width: '100%'
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--t-space-100)', flex: 1 }}>
+        {value?.prefixIcon && (
+          <span style={{ display: 'flex', alignItems: 'center', color: 'var(--t-color-text-secondary)' }}>
+            {value.prefixIcon}
+          </span>
+        )}
+        <span style={textStyle}>{value?.text || '-'}</span>
+      </div>
       {value?.badge && (
         <Badge tone={value.badgeVariant || 'info'} size="medium">
           {value.badge}
@@ -149,7 +163,16 @@ export const BadgeCell: React.FC<CellVariantProps<{ text: string; tone?: 'defaul
   value, 
   className 
 }) => {
-  if (!value?.text) return <span>-</span>;
+  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+  const lineHeightStyle = {
+    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+    font: 'var(--t-typography-body-sm-default)',
+    color: 'var(--t-color-text-primary)'
+  };
+  
+  if (!value?.text) {
+    return <span style={lineHeightStyle}>-</span>;
+  }
   
   return (
     <Badge tone={value.tone || 'info'} size="medium" className={className}>
@@ -162,7 +185,16 @@ export const BadgeMultipleCell: React.FC<CellVariantProps<Array<{ text: string; 
   value, 
   className 
 }) => {
-  if (!value || !Array.isArray(value)) return <span>-</span>;
+  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+  const lineHeightStyle = {
+    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)',
+    font: 'var(--t-typography-body-sm-default)',
+    color: 'var(--t-color-text-primary)'
+  };
+  
+  if (!value || !Array.isArray(value)) {
+    return <span style={lineHeightStyle}>-</span>;
+  }
   
   return (
     <div className={`${styles.badgeMultipleCell} ${className || ''}`}>
@@ -254,7 +286,7 @@ export const TextFieldCell: React.FC<CellVariantProps<string>> = ({
   );
 };
 
-export const UpdatedNumberCell: React.FC<CellVariantProps<number>> = ({ 
+export const UpdatedNumberCell: React.FC<CellVariantProps<number | { primary: number; secondary?: number }>> = ({ 
   value, 
   className 
 }) => {
@@ -263,6 +295,42 @@ export const UpdatedNumberCell: React.FC<CellVariantProps<number>> = ({
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
   
+  // Handle both simple number and complex object with primary/secondary values
+  if (typeof value === 'object' && value !== null && 'primary' in value) {
+    return (
+      <div className={`${styles.updatedNumberCell} ${className || ''}`} style={{
+        ...lineHeightStyle,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%'
+      }}>
+        <span style={{ 
+          ...lineHeightStyle,
+          font: 'var(--t-typography-body-sm-medium)',
+          color: 'var(--t-color-text-primary)',
+          fontFeatureSettings: 'tnum',
+          fontVariantNumeric: 'tabular-nums'
+        }}>
+          {value.primary.toLocaleString()}
+        </span>
+        {value.secondary !== undefined && (
+          <span style={{ 
+            ...lineHeightStyle,
+            font: 'var(--t-typography-body-sm-default)',
+            color: 'var(--t-color-text-disabled)',
+            fontFeatureSettings: 'tnum',
+            fontVariantNumeric: 'tabular-nums',
+            textDecoration: 'line-through'
+          }}>
+            {value.secondary.toLocaleString()}
+          </span>
+        )}
+      </div>
+    );
+  }
+  
+  // Handle simple number value
   return (
     <span className={`${styles.updatedNumberCell} ${className || ''}`} style={lineHeightStyle}>
       {typeof value === 'number' ? value.toLocaleString() : '-'}
@@ -271,20 +339,51 @@ export const UpdatedNumberCell: React.FC<CellVariantProps<number>> = ({
 };
 
 // Action Cell Variants
-export const ActionIconCell: React.FC<CellVariantProps<any>> = ({ 
+interface ActionIconCellAction {
+  icon: React.ReactNode;
+  onClick: (row: any) => void;
+  label: string;
+}
+
+export const ActionIconCell: React.FC<CellVariantProps<any> & { actions?: ActionIconCellAction[] }> = ({ 
   onClick, 
   row, 
-  className 
+  className,
+  actions = []
 }) => {
+  // Default actions if none provided
+  const defaultActions: ActionIconCellAction[] = [
+    {
+      icon: <IconEdit size={16} />,
+      onClick: (row: any) => onClick?.(row),
+      label: 'Edit'
+    },
+    {
+      icon: <IconTrash size={16} />,
+      onClick: (row: any) => onClick?.(row),
+      label: 'Delete'
+    }
+  ];
+
+  const actionsToRender = actions.length > 0 ? actions : defaultActions;
+
   return (
-    <Button
-      onClick={() => onClick?.(row)}
-      variant="plain"
-      size="micro"
-      tone="neutral"
-      prefixIcon={<IconDotsVertical size={16} />}
-      className={className}
-    />
+    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--t-space-100)' }} className={className}>
+      {actionsToRender.map((action: ActionIconCellAction, index: number) => (
+        <Button
+          key={index}
+          onClick={(e) => {
+            e.stopPropagation();
+            action.onClick(row);
+          }}
+          variant="plain"
+          size="micro"
+          tone="neutral"
+          prefixIcon={action.icon}
+          title={action.label}
+        />
+      ))}
+    </div>
   );
 };
 

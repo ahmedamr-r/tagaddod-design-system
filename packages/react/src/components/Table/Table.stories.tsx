@@ -2,12 +2,8 @@ import React, { useState, useMemo } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Table } from './Table';
 import { ColumnDef } from '@tanstack/react-table';
-import { IconEdit, IconTrash, IconFilter, IconChevronDown } from '@tabler/icons-react';
+import { IconEdit, IconTrash, IconFilter, IconAlertTriangle } from '@tabler/icons-react';
 import { Button } from '../Button';
-import { Listbox } from '../Listbox';
-import { Popover } from '../Popover';
-import { RangeSlider } from '../RangeSlider';
-import { TextInput } from '../TextInput';
 import { QuickColumns, createCellColumn, createInteractiveCellColumn, createActionCellColumn } from './TableCellHelpers';
 
 // Define product data type
@@ -471,186 +467,350 @@ const salesData: SalesData[] = [
 ];
 
 export const CellVariants: Story = {
-  name: 'Cell Variants Showcase',
+  name: 'Sales Variant Showcase',
   render: () => {
-    const [data, setData] = useState(salesData);
-    
-    const handleCheckboxChange = (checked: boolean, row: SalesData) => {
-      setData(prevData => 
-        prevData.map(item => 
-          item.id === row.id ? { ...item, selected: checked } : item
-        )
-      );
-    };
-    
-    const handlePriorityChange = (value: string, row: SalesData) => {
-      setData(prevData => 
-        prevData.map(item => 
-          item.id === row.id ? { ...item, priority: value } : item
-        )
-      );
-    };
-    
-    const handleApprovalChange = (checked: boolean, row: SalesData) => {
-      setData(prevData => 
-        prevData.map(item => 
-          item.id === row.id ? { ...item, approved: checked } : item
-        )
-      );
-    };
-    
-    const handleNotesChange = (value: string, row: SalesData) => {
-      setData(prevData => 
-        prevData.map(item => 
-          item.id === row.id ? { ...item, notes: value } : item
-        )
-      );
-    };
-    
-    const handleRowAction = (row: SalesData) => {
-      alert(`Action clicked for: ${row.customer}`);
-    };
+    // Enhanced sample data for comprehensive grid showcase
+    const textVariantsData = [
+      { id: 1, singleLine: 'Ahmed Al-Rashid', multiLine: 'Premium customer\nwith excellent\nrating history', truncated: 'This is a very long text that will be truncated with ellipsis when it overflows the cell width and shows tooltip on hover', withBadge: { text: 'Ahmed Al-Rashid', badge: 'VIP', badgeVariant: 'success' as const } },
+      { id: 2, singleLine: 'Fatima Hassan', multiLine: 'Regular customer\nsteady orders', truncated: 'Another long description that demonstrates the truncation feature with tooltip', withBadge: { text: 'Fatima Hassan', badge: 'Premium', badgeVariant: 'info' as const } },
+      { id: 3, singleLine: 'Omar Khalil', multiLine: 'New customer\nexploring catalog', truncated: 'Short text', withBadge: { text: 'Omar Khalil', badge: 'Trial', badgeVariant: 'warning' as const } }
+    ];
 
-    const cellVariantColumns: ColumnDef<SalesData, any>[] = [
-      // Text Single Line
-      {
-        ...QuickColumns.text('customer', 'Customer'),
-        size: 150,
-        minSize: 100,
-        maxSize: 200,
+    const badgeVariantsData = [
+      { id: 1, single: { text: 'Active', tone: 'success' as const }, multiple: [{ text: 'VIP', tone: 'success' as const }, { text: 'Premium', tone: 'info' as const }] },
+      { id: 2, single: { text: 'Pending', tone: 'warning' as const }, multiple: [{ text: 'Regular', tone: 'info' as const }] },
+      { id: 3, single: { text: 'Inactive', tone: 'critical' as const }, multiple: [{ text: 'New', tone: 'warning' as const }, { text: 'Trial', tone: 'info' as const }] }
+    ];
+
+    const interactiveVariantsData = [
+      { id: 1, checkbox: true, select: 'high', radioButton: 'option1', textField: 'Edit me', number: 2450.75, complexNumber: { primary: 100, secondary: 50 } },
+      { id: 2, checkbox: false, select: 'medium', radioButton: 'option2', textField: 'Custom notes', number: 1200.00, complexNumber: { primary: 250, secondary: 30 } },
+      { id: 3, checkbox: true, select: 'low', radioButton: 'option3', textField: 'Additional info', number: 350.50, complexNumber: { primary: 75 } }
+    ];
+
+    // Enhanced cell variants data showcasing the new Figma designs
+    const enhancedVariantsData = [
+      { 
+        id: 1, 
+        textWithBadge: { 
+          text: 'Olivia Rhye', 
+          badge: 'Low', 
+          badgeVariant: 'warning' as const,
+          prefixIcon: <IconAlertTriangle size={16} />
+        },
+        actionIcons: 'actions',
+        updatedNumbers: { primary: 100, secondary: 50 }
       },
-      
-      // Text Truncated with Tooltip (NEW)
-      {
-        ...createCellColumn('description', 'Description', 'textTruncated'),
-        size: 180,
-        minSize: 120,
-        maxSize: 250,
+      { 
+        id: 2, 
+        textWithBadge: { 
+          text: 'Ahmed Al-Rashid', 
+          badge: 'High', 
+          badgeVariant: 'critical' as const
+        },
+        actionIcons: 'actions',
+        updatedNumbers: { primary: 250, secondary: 30 }
       },
-      
-      // Badge Single
-      {
-        ...createCellColumn('status', 'Status', 'badge'),
-        size: 120,
-        minSize: 80,
-        maxSize: 150,
-      },
-      
-      // Badge Multiple
-      {
-        ...createCellColumn('tags', 'Tags', 'badgeMultiple'),
-        size: 140,
-        minSize: 100,
-        maxSize: 200,
-      },
-      
-      // Checkbox
-      {
-        ...createInteractiveCellColumn('selected', 'Selected', 'checkbox', handleCheckboxChange),
-        size: 80,
-        minSize: 60,
-        maxSize: 100,
-      },
-      
-      // Select Dropdown
-      {
-        ...createInteractiveCellColumn('priority', 'Priority', 'select', handlePriorityChange, {
-          cellProps: { 
-            options: [
-              { label: 'High', value: 'high' },
-              { label: 'Medium', value: 'medium' },
-              { label: 'Low', value: 'low' }
-            ]
-          }
-        }),
-        size: 120,
-        minSize: 90,
-        maxSize: 150,
-      },
-      
-      // Updated Number
-      {
-        ...QuickColumns.number('amount', 'Amount'),
-        size: 110,
-        minSize: 80,
-        maxSize: 140,
-      },
-      
-      // Approval Checkbox
-      {
-        ...createInteractiveCellColumn('approved', 'Approved', 'checkbox', handleApprovalChange),
-        size: 80,
-        minSize: 60,
-        maxSize: 100,
-      },
-      
-      // Text Field
-      {
-        ...createInteractiveCellColumn('notes', 'Notes', 'textField', handleNotesChange, {
-          cellProps: { placeholder: 'Add notes...' }
-        }),
-        size: 150,
-        minSize: 100,
-        maxSize: 200,
-      },
-      
-      // Action Icon
-      {
-        ...createActionCellColumn('Actions', 'actionIcon', handleRowAction),
-        size: 80,
-        minSize: 60,
-        maxSize: 100,
-        enableResizing: false,
+      { 
+        id: 3, 
+        textWithBadge: { 
+          text: 'Fatima Hassan', 
+          badge: 'Medium', 
+          badgeVariant: 'info' as const
+        },
+        actionIcons: 'actions',
+        updatedNumbers: { primary: 75 }
       }
     ];
 
+    const [textData] = useState(textVariantsData);
+    const [badgeData] = useState(badgeVariantsData);
+    const [interactiveData, setInteractiveData] = useState(interactiveVariantsData);
+    const [enhancedData] = useState(enhancedVariantsData);
+
+    // Handlers for interactive cells
+    const handleCheckboxChange = (checked: boolean, row: any) => {
+      setInteractiveData(prevData => 
+        prevData.map(item => 
+          item.id === row.id ? { ...item, checkbox: checked } : item
+        )
+      );
+    };
+
+    const handleSelectChange = (value: string, row: any) => {
+      setInteractiveData(prevData => 
+        prevData.map(item => 
+          item.id === row.id ? { ...item, select: value } : item
+        )
+      );
+    };
+
+    const handleRadioChange = (value: string, row: any) => {
+      setInteractiveData(prevData => 
+        prevData.map(item => 
+          item.id === row.id ? { ...item, radioButton: value } : item
+        )
+      );
+    };
+
+    const handleTextFieldChange = (value: string, row: any) => {
+      setInteractiveData(prevData => 
+        prevData.map(item => 
+          item.id === row.id ? { ...item, textField: value } : item
+        )
+      );
+    };
+
+         const handleActionClick = (row: any) => {
+       alert(`Action clicked for ID: ${row.id}`);
+     };
+
+     const handleEditAction = (row: any) => {
+       alert(`Edit clicked for: ${row.id}`);
+     };
+
+     const handleDeleteAction = (row: any) => {
+       alert(`Delete clicked for: ${row.id}`);
+     };
+
+     // Column definitions for each grid
+    const textVariantColumns: ColumnDef<any, any>[] = [
+      { ...createCellColumn('singleLine', 'Single Line Text', 'textSingleLine'), size: 140 },
+      { ...createCellColumn('multiLine', 'Multi-line Text', 'textMultiline'), size: 140 },
+      { ...createCellColumn('truncated', 'Truncated Text', 'textTruncated'), size: 140 },
+      { ...createCellColumn('withBadge', 'Text + Badge', 'textSingleLineWithBadge'), size: 140 }
+    ];
+
+    const badgeVariantColumns: ColumnDef<any, any>[] = [
+      { ...createCellColumn('single', 'Single Badge', 'badge'), size: 120 },
+      { ...createCellColumn('multiple', 'Multiple Badges', 'badgeMultiple'), size: 200 }
+    ];
+
+    const interactiveVariantColumns: ColumnDef<any, any>[] = [
+      { ...createInteractiveCellColumn('checkbox', 'Checkbox', 'checkbox', handleCheckboxChange), size: 90 },
+      { ...createInteractiveCellColumn('select', 'Select', 'select', handleSelectChange, {
+        cellProps: { 
+          options: [
+            { label: 'High', value: 'high' },
+            { label: 'Medium', value: 'medium' },
+            { label: 'Low', value: 'low' }
+          ]
+        }
+      }), size: 110 },
+      { ...createInteractiveCellColumn('radioButton', 'Radio Button', 'radioButton', handleRadioChange, {
+        cellProps: { 
+          options: [
+            { label: 'Option 1', value: 'option1' },
+            { label: 'Option 2', value: 'option2' },
+            { label: 'Option 3', value: 'option3' }
+          ]
+        }
+      }), size: 130 },
+             { ...createInteractiveCellColumn('textField', 'Text Field', 'textField', handleTextFieldChange, {
+         cellProps: { placeholder: 'Enter text...' }
+       }), size: 130 },
+       { ...createCellColumn('number', 'Formatted Number', 'updatedNumber'), size: 130 },
+       { ...createCellColumn('complexNumber', 'Complex Number', 'updatedNumber'), size: 130 },
+       { ...createActionCellColumn('Actions', 'actionIcon', handleActionClick), size: 80 }
+     ];
+
+     // Enhanced variants columns for Figma designs
+     const enhancedVariantColumns: ColumnDef<any, any>[] = [
+       { ...createCellColumn('textWithBadge', 'Text + Badge (Enhanced)', 'textSingleLineWithBadge'), size: 200 },
+       { 
+         id: 'enhancedActions',
+         header: 'Actions (Enhanced)',
+         cell: ({ row }) => {
+           const actions = [
+             { icon: <IconEdit size={16} />, onClick: handleEditAction, label: 'Edit' },
+             { icon: <IconTrash size={16} />, onClick: handleDeleteAction, label: 'Delete' }
+           ];
+           return (
+             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--t-space-100)' }}>
+               {actions.map((action, index) => (
+                 <Button
+                   key={index}
+                   onClick={(e) => {
+                     e.stopPropagation();
+                     action.onClick(row.original);
+                   }}
+                   variant="plain"
+                   size="micro"
+                   tone="neutral"
+                   prefixIcon={action.icon}
+                   title={action.label}
+                 />
+               ))}
+             </div>
+           );
+         },
+         size: 120 
+       },
+       { ...createCellColumn('updatedNumbers', 'Updated Numbers', 'updatedNumber'), size: 150 }
+     ];
+
+    const gridStyle = {
+      marginBottom: '40px',
+      padding: '20px',
+      border: '1px solid #e5e7eb',
+      borderRadius: '8px',
+      backgroundColor: '#fff'
+    };
+
+    const headerStyle = {
+      fontSize: '18px',
+      fontWeight: 600,
+      marginBottom: '10px',
+      color: '#1f2937'
+    };
+
+    const descriptionStyle = {
+      fontSize: '14px',
+      color: '#6b7280',
+      marginBottom: '20px',
+      lineHeight: 1.5
+    };
+
     return (
       <div style={{ padding: '20px' }}>
-        <h2 style={{ marginBottom: '20px', fontSize: '24px', fontWeight: 600 }}>
-          Table Cell Variants Showcase
-        </h2>
-        <p style={{ marginBottom: '30px', color: '#666', lineHeight: 1.5 }}>
-          This table demonstrates all available cell variants in the design system. 
-          Each column shows a different cell type with interactive functionality where applicable.
+        <h1 style={{ marginBottom: '20px', fontSize: '28px', fontWeight: 700, color: '#111827' }}>
+          📊 Sales Variant Showcase
+        </h1>
+        <p style={{ marginBottom: '40px', color: '#6b7280', fontSize: '16px', lineHeight: 1.6 }}>
+          Comprehensive showcase of all available Table cell variants organized by category. 
+          Each grid demonstrates different cell types with real-time interactive functionality.
         </p>
-        
-        <Table
-          data={data}
-          columns={cellVariantColumns}
-          title="Sales Dashboard"
-          badge={data.length}
-          striped={false} // Interactive cells - striped is disabled for better UX
-          showHeader={true}
-          showPagination={true}
-          showSearch={true}
-          showFilters={false}
-          className="fixed-width"
-          onRowClick={(row) => console.log('Row clicked:', row.original)}
-          pagination={{
-            pageIndex: 0,
-            pageSize: 10,
-            pageCount: Math.ceil(data.length / 10),
-            onPageChange: () => {},
-            pageSizeOptions: [5, 10, 20]
-          }}
-        />
-        
-        <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
-          <h3 style={{ marginBottom: '15px', fontSize: '18px', fontWeight: 600 }}>
-            Available Cell Variants:
-          </h3>
-          <ul style={{ margin: 0, paddingLeft: '20px', lineHeight: 1.8 }}>
-            <li><strong>Text Single Line:</strong> Basic text display with RTL support</li>
-            <li><strong>Text Truncated:</strong> Text with ellipsis and tooltip on overflow (NEW)</li>
-            <li><strong>Badge:</strong> Status badges with color tones</li>
-            <li><strong>Badge Multiple:</strong> Multiple badges in one cell</li>
-            <li><strong>Checkbox (Selection):</strong> Interactive checkbox for row selection</li>
-            <li><strong>Select:</strong> Dropdown selection with options</li>
-            <li><strong>Updated Number:</strong> Formatted numbers with proper alignment</li>
-            <li><strong>Checkbox (Approval):</strong> Interactive checkbox for approval workflow</li>
-            <li><strong>Text Field:</strong> Editable text input field</li>
-            <li><strong>Action Icon:</strong> Button with plain variant and neutral tone</li>
-          </ul>
+
+        {/* Text Variants Grid */}
+        <div style={gridStyle}>
+          <h2 style={headerStyle}>📝 Text Cell Variants</h2>
+          <p style={descriptionStyle}>
+            Different text display options including RTL support, multiline text, truncation with tooltips, and text with badges.
+          </p>
+          <Table
+            data={textData}
+            columns={textVariantColumns}
+            title="Text Variants"
+            badge={textData.length}
+            showPagination={false}
+            showSearch={false}
+            showFilters={false}
+            striped={true}
+            gridCells={true}
+          />
+        </div>
+
+        {/* Badge Variants Grid */}
+        <div style={gridStyle}>
+          <h2 style={headerStyle}>🏷️ Badge Cell Variants</h2>
+          <p style={descriptionStyle}>
+            Status badges with different tones and support for multiple badges in a single cell.
+          </p>
+          <Table
+            data={badgeData}
+            columns={badgeVariantColumns}
+            title="Badge Variants"
+            badge={badgeData.length}
+            showPagination={false}
+            showSearch={false}
+            showFilters={false}
+            striped={true}
+            gridCells={true}
+          />
+        </div>
+
+        {/* Interactive Variants Grid */}
+        <div style={gridStyle}>
+          <h2 style={headerStyle}>⚡ Interactive Cell Variants</h2>
+          <p style={descriptionStyle}>
+            Interactive elements including checkboxes, dropdowns, radio buttons, text inputs, formatted numbers, and action buttons.
+          </p>
+          <Table
+            data={interactiveData}
+            columns={interactiveVariantColumns}
+            title="Interactive Variants"
+            badge={interactiveData.length}
+            showPagination={false}
+            showSearch={false}
+            showFilters={false}
+            striped={false}
+            gridCells={true}
+            onRowClick={(row) => console.log('Interactive row clicked:', row.original)}
+          />
+        </div>
+
+        {/* Enhanced Variants Grid - New Figma Designs */}
+        <div style={gridStyle}>
+          <h2 style={headerStyle}>✨ Enhanced Cell Variants (New Figma Designs)</h2>
+          <p style={descriptionStyle}>
+            Enhanced cell variants based on the latest Figma designs: improved text+badge layout, multiple action icons, and enhanced number display.
+          </p>
+          <Table
+            data={enhancedData}
+            columns={enhancedVariantColumns}
+            title="Enhanced Variants"
+            badge={enhancedData.length}
+            showPagination={false}
+            showSearch={false}
+            showFilters={false}
+            striped={false}
+            gridCells={true}
+            onRowClick={(row) => console.log('Enhanced row clicked:', row.original)}
+          />
+        </div>
+
+        {/* Complete Variants Reference */}
+        <div style={{ ...gridStyle, backgroundColor: '#f8fafc' }}>
+          <h2 style={headerStyle}>📋 Complete Cell Variants Reference</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginTop: '20px' }}>
+            
+            <div style={{ padding: '16px', backgroundColor: '#fff', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: '#374151' }}>Text Variants</h4>
+              <ul style={{ fontSize: '13px', color: '#6b7280', margin: 0, paddingLeft: '16px', lineHeight: 1.6 }}>
+                <li><code>textSingleLine</code> - Basic single line text with RTL support</li>
+                <li><code>textMultiline</code> - Multi-line text with proper line breaks</li>
+                <li><code>textTruncated</code> - Truncated text with tooltip on overflow</li>
+                <li><code>textSingleLineWithBadge</code> - Text combined with badge</li>
+              </ul>
+            </div>
+
+            <div style={{ padding: '16px', backgroundColor: '#fff', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: '#374151' }}>Badge Variants</h4>
+              <ul style={{ fontSize: '13px', color: '#6b7280', margin: 0, paddingLeft: '16px', lineHeight: 1.6 }}>
+                <li><code>badge</code> - Single badge with tone support</li>
+                <li><code>badgeMultiple</code> - Multiple badges in one cell</li>
+              </ul>
+            </div>
+
+            <div style={{ padding: '16px', backgroundColor: '#fff', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: '#374151' }}>Interactive Variants</h4>
+              <ul style={{ fontSize: '13px', color: '#6b7280', margin: 0, paddingLeft: '16px', lineHeight: 1.6 }}>
+                <li><code>checkbox</code> - Interactive checkbox input</li>
+                <li><code>radioButton</code> - Radio button group</li>
+                <li><code>select</code> - Dropdown select with options</li>
+                <li><code>textField</code> - Editable text input field</li>
+              </ul>
+            </div>
+
+            <div style={{ padding: '16px', backgroundColor: '#fff', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: '#374151' }}>Special Variants</h4>
+              <ul style={{ fontSize: '13px', color: '#6b7280', margin: 0, paddingLeft: '16px', lineHeight: 1.6 }}>
+                <li><code>updatedNumber</code> - Formatted numbers with locale support</li>
+                <li><code>actionIcon</code> - Action button with icon</li>
+                <li><code>actionDropdownIcon</code> - Action dropdown menu</li>
+              </ul>
+            </div>
+
+            <div style={{ padding: '16px', backgroundColor: '#fff', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: '#374151' }}>Enhanced Variants (New)</h4>
+              <ul style={{ fontSize: '13px', color: '#6b7280', margin: 0, paddingLeft: '16px', lineHeight: 1.6 }}>
+                <li><code>textSingleLineWithBadge</code> - Enhanced text+badge with prefix icon support</li>
+                <li><code>actionIcon (Enhanced)</code> - Multiple action icons (edit, delete)</li>
+                <li><code>updatedNumber (Enhanced)</code> - Primary/secondary number display</li>
+              </ul>
+            </div>
+
+          </div>
         </div>
       </div>
     );
@@ -1207,7 +1367,6 @@ export const TabbedTable: Story = {
         data={filteredData}
         columns={currentTab.columns}
         tableTabs={tableTabs}
-        activeTab={activeTab}
         onTabChange={setActiveTab}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
@@ -1723,6 +1882,106 @@ export const AdvancedFilters: Story = {
     docs: {
       description: {
         story: 'This comprehensive story demonstrates the **complete advanced filtering system** with real-world scenarios and edge cases. Features include: **PopoverListbox filters** with zero margins for categories and suppliers, **debounced RangeSlider filters** for price and stock levels, **CheckboxGroup filters** for multi-brand selection, **RadioGroup filters** for availability status, **30 realistic products** optimized for smooth performance, **status showcases** (normal, loading, error, empty, not found), **advanced search** across multiple fields, and **filter performance optimization** with 500ms debouncing to prevent excessive API calls.'
+      }
+    }
+  }
+};
+
+// Error Row Highlighting Story
+export const ErrorRowHighlighting: Story = {
+  name: 'Error Row Highlighting',
+  render: () => {
+    // Simple demonstration data with error styling
+    const errorData = [
+      { id: 1, name: 'Valid Product', price: 25.99, status: 'Valid', hasError: false },
+      { id: 2, name: 'Invalid Product', price: 0, status: 'Error', hasError: true },
+      { id: 3, name: 'Another Valid Product', price: 15.50, status: 'Valid', hasError: false },
+    ];
+
+    const errorColumns: ColumnDef<any, any>[] = [
+      {
+        id: 'id',
+        header: 'ID',
+        accessorKey: 'id',
+        size: 80,
+        cell: ({ row, getValue }) => (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px',
+            backgroundColor: row.original.hasError ? 'var(--t-color-fill-critical-secondary)' : 'transparent',
+            borderRadius: '4px',
+          }}>
+            {row.original.hasError && (
+              <IconAlertTriangle size={14} style={{ color: 'var(--t-color-text-critical)' }} />
+            )}
+            <span>{getValue()}</span>
+          </div>
+        ),
+      },
+      {
+        id: 'name',
+        header: 'Product Name',
+        accessorKey: 'name',
+        size: 200,
+      },
+      {
+        id: 'price',
+        header: 'Price ($)',
+        accessorKey: 'price',
+        size: 120,
+      },
+      {
+        id: 'status',
+        header: 'Status',
+        accessorKey: 'status',
+        size: 100,
+        cell: ({ row, getValue }) => (
+          <span style={{ 
+            color: row.original.hasError ? 'var(--t-color-text-critical)' : 'var(--t-color-text-success)',
+            fontWeight: 500 
+          }}>
+            {getValue()}
+          </span>
+        ),
+      },
+    ];
+
+    return (
+      <div style={{ padding: '20px' }}>
+        <div style={{ 
+          marginBottom: '16px', 
+          padding: '16px', 
+          backgroundColor: 'var(--t-color-fill-info-secondary)', 
+          borderRadius: '8px' 
+        }}>
+          <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', fontWeight: 600 }}>
+            Error Row Highlighting Demo
+          </h4>
+          <p style={{ margin: '0', fontSize: '13px' }}>
+            Rows with validation errors are highlighted using <code>fill-critical-secondary</code> token.
+          </p>
+        </div>
+
+        <Table
+          data={errorData}
+          columns={errorColumns}
+          title="Product Validation"
+          badge={errorData.length}
+          showPagination={false}
+          showSearch={false}
+          showFilters={false}
+          gridCells={true}
+          disableRowHover={false}
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Demonstrates **error row highlighting** using the `fill-critical-secondary` token. Rows with validation errors are visually highlighted to help users identify problematic data.'
       }
     }
   }
