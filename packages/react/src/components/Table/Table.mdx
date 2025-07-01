@@ -323,21 +323,72 @@ The Table component includes a comprehensive cell variants system that makes it 
 
 <Canvas of={TableStories.CellVariants} />
 
+### How to Create Table Cells
+
+The Table component provides three main approaches for creating table cells, from simple to fully custom:
+
+#### 1. **Quick Columns (Simplest)**
+For standard cases, use the `QuickColumns` helper:
+```jsx
+import { QuickColumns } from '@tagaddod/react';
+
+const columns = [
+  QuickColumns.text('name', 'Name'),              // Simple text
+  QuickColumns.badge('status', 'Status'),         // Status badges
+  QuickColumns.number('amount', 'Amount'),        // Formatted numbers
+  QuickColumns.checkbox('selected', 'Select', handleSelection),
+  QuickColumns.actions('Actions', handleAction), // Action buttons
+];
+```
+
+#### 2. **Pre-built Cell Variants (Flexible)**
+For more control, use specific cell variant functions:
+```jsx
+import { createCellColumn, createInteractiveCellColumn } from '@tagaddod/react';
+
+const columns = [
+  createCellColumn('description', 'Description', 'textMultiline'),
+  createCellColumn('tags', 'Tags', 'badgeMultiple'),
+  createInteractiveCellColumn('priority', 'Priority', 'select', handleChange, {
+    cellProps: { options: [{ label: 'High', value: 'high' }] }
+  }),
+];
+```
+
+#### 3. **Custom Cell Components (Full Control)**
+For unique requirements, create completely custom cells:
+```jsx
+import { createCustomCellColumn, CellVariantProps } from '@tagaddod/react';
+
+const CustomCell: React.FC<CellVariantProps<any>> = ({ value, row, onChange }) => {
+  // Your custom cell implementation with any design system component
+  return <YourCustomDesign value={value} />;
+};
+
+const columns = [
+  createCustomCellColumn('custom', 'Custom', CustomCell),
+];
+```
+
 ### Available Cell Variants
 
-The table supports 11 predefined cell variants:
+The table supports **13 predefined cell variants** that you can use with `createCellColumn`:
 
-1. **Text Single Line** - Basic text display with typography `--t-typography-body-sm-default` and primary text color
-2. **Text Multiline** - Multi-line text with first line in primary color, subsequent lines in secondary color
-3. **Badge** - Status badges with color tones (default, info, success, warning, critical, magic)
-4. **Badge Multiple** - Multiple badges in one cell
-5. **Checkbox** - Interactive checkbox for selection
-6. **Radio Button** - Radio button group for exclusive selection
-7. **Select** - Dropdown selection with options
-8. **Text Field** - Editable text input field
-9. **Updated Number** - Formatted numbers with proper alignment
-10. **Action Icon** - Single action button (typically three dots menu)
-11. **Action Dropdown** - Multiple actions in dropdown menu
+| Variant Type | Cell Variant Name | Description | Data Type |
+|--------------|-------------------|-------------|-----------|
+| **Text** | `textSingleLine` | Basic text display with RTL support | `string` |
+| **Text** | `textMultiline` | Multi-line text with proper line breaks | `string` (with `\n`) |
+| **Text** | `textTruncated` | Text with ellipsis and tooltip on overflow | `string` |
+| **Text** | `textSingleLineWithBadge` | Text with optional badge and prefix icon | `{text: string, badge?: string, badgeVariant?: string, prefixIcon?: ReactNode}` |
+| **Badge** | `badge` | Single status badge with tone | `{text: string, tone?: 'success' \| 'warning' \| ...}` |
+| **Badge** | `badgeMultiple` | Multiple badges in one cell | `Array<{text: string, tone?: string}>` |
+| **Interactive** | `checkbox` | Interactive checkbox for selection | `boolean` |
+| **Interactive** | `radioButton` | Radio button group for exclusive selection | `string` + options |
+| **Interactive** | `select` | Dropdown selection with options | `string` + options |
+| **Interactive** | `textField` | Editable text input field | `string` |
+| **Data** | `updatedNumber` | Formatted numbers with locale support | `number` or `{primary: number, secondary?: number}` |
+| **Actions** | `actionIcon` | Single or multiple action buttons | Any (uses onClick callback) |
+| **Actions** | `actionDropdownIcon` | Action dropdown menu | `Array<{label: string, onClick: Function}>` |
 
 ### Quick Usage with Helper Functions
 
@@ -433,41 +484,409 @@ const salesData = [
 
 ### Creating Custom Cell Variants
 
-You can create custom cell variants using the `createCustomCellColumn` helper:
+You can create completely custom cell variants using the `createCustomCellColumn` helper. This gives you full control over the cell's appearance and behavior while maintaining consistency with the table system.
+
+#### Example 1: Progress Bar Cell
 
 ```jsx
 import { createCustomCellColumn, CellVariantProps } from '@tagaddod/react';
 
 // Create custom progress bar cell
-const ProgressBarCell: React.FC<CellVariantProps<number>> = ({ value }) => (
-  <div style={{ 
-    width: '100%', 
-    height: '8px', 
-    backgroundColor: '#eee', 
-    borderRadius: '4px',
-    overflow: 'hidden'
-  }}>
-    <div 
-      style={{ 
-        width: `${value}%`, 
-        height: '100%', 
-        backgroundColor: '#007bff', 
-        transition: 'width 0.3s ease'
-      }} 
-    />
-    <span style={{ fontSize: '12px', marginLeft: '8px' }}>{value}%</span>
-  </div>
-);
+const ProgressBarCell: React.FC<CellVariantProps<number>> = ({ value }) => {
+  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+  
+  return (
+    <div style={{ 
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--t-space-100)',
+      width: '100%'
+    }}>
+      <div style={{ 
+        flex: 1,
+        height: '8px', 
+        backgroundColor: 'var(--t-color-surface-tertiary)', 
+        borderRadius: 'var(--t-border-radius-sm)',
+        overflow: 'hidden'
+      }}>
+        <div 
+          style={{ 
+            width: `${value || 0}%`, 
+            height: '100%', 
+            backgroundColor: 'var(--t-color-fill-brand-primary)', 
+            transition: 'width 0.3s ease'
+          }} 
+        />
+      </div>
+      <span style={{ 
+        fontSize: 'var(--t-font-size-sm)',
+        fontWeight: 'var(--t-font-weight-medium)',
+        color: 'var(--t-color-text-secondary)',
+        minWidth: '32px',
+        textAlign: isRTL ? 'left' : 'right'
+      }}>
+        {value || 0}%
+      </span>
+    </div>
+  );
+};
 
-// Use custom cell in column definition
+// Use in column definition
 const columns = [
-  createCustomCellColumn('progress', 'Progress', ProgressBarCell),
+  createCustomCellColumn('completion', 'Progress', ProgressBarCell),
+];
+```
+
+#### Example 2: User Avatar Cell with Two Lines
+
+```jsx
+import { Avatar } from '@tagaddod/react';
+
+interface UserCellData {
+  name: string;
+  email: string;
+  avatar?: string;
+}
+
+const UserAvatarCell: React.FC<CellVariantProps<UserCellData>> = ({ value }) => {
+  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+  
+  const lineHeightStyle = {
+    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+  };
+  
+  return (
+    <div style={{ 
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--t-space-200)'
+    }}>
+      <Avatar 
+        src={value?.avatar} 
+        fallback={value?.name?.charAt(0) || '?'}
+        size="small"
+      />
+      <div>
+        <div style={{ 
+          ...lineHeightStyle,
+          font: 'var(--t-typography-body-sm-medium)',
+          color: 'var(--t-color-text-primary)'
+        }}>
+          {value?.name || '-'}
+        </div>
+        <div style={{ 
+          ...lineHeightStyle,
+          font: 'var(--t-typography-body-sm-default)',
+          color: 'var(--t-color-text-secondary)'
+        }}>
+          {value?.email || '-'}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Usage with data structure
+const userData = [
+  {
+    id: 1,
+    user: {
+      name: 'Ahmed Al-Rashid',
+      email: 'ahmed@example.com',
+      avatar: 'https://example.com/avatar1.jpg'
+    },
+    role: 'Admin'
+  }
+];
+
+const columns = [
+  createCustomCellColumn('user', 'User', UserAvatarCell),
+  QuickColumns.text('role', 'Role'),
+];
+```
+
+#### Example 3: Interactive Rating Cell
+
+```jsx
+import { useState } from 'react';
+import { IconStar } from '@tabler/icons-react';
+
+const RatingCell: React.FC<CellVariantProps<number>> = ({ 
+  value, 
+  onChange, 
+  row 
+}) => {
+  const [hoveredStar, setHoveredStar] = useState<number | null>(null);
+  
+  const handleStarClick = (rating: number) => {
+    onChange?.(rating, row);
+  };
+  
+  return (
+    <div style={{ 
+      display: 'flex',
+      gap: 'var(--t-space-050)'
+    }}>
+      {[1, 2, 3, 4, 5].map((star) => (
+        <IconStar
+          key={star}
+          size={16}
+          style={{
+            cursor: 'pointer',
+            color: (hoveredStar || value || 0) >= star 
+              ? 'var(--t-color-fill-warning-primary)' 
+              : 'var(--t-color-border-secondary)',
+            fill: (hoveredStar || value || 0) >= star 
+              ? 'var(--t-color-fill-warning-primary)' 
+              : 'transparent'
+          }}
+          onClick={() => handleStarClick(star)}
+          onMouseEnter={() => setHoveredStar(star)}
+          onMouseLeave={() => setHoveredStar(null)}
+        />
+      ))}
+    </div>
+  );
+};
+
+// Use as interactive cell
+const columns = [
+  createInteractiveCellColumn('rating', 'Rating', 'custom', handleRatingChange, {
+    cellProps: { CustomComponent: RatingCell }
+  })
+];
+```
+
+#### Example 4: Status Cell with Icon and Color
+
+```jsx
+import { IconCircleCheck, IconClock, IconAlertTriangle } from '@tabler/icons-react';
+
+interface StatusCellData {
+  status: 'completed' | 'pending' | 'failed';
+  label: string;
+}
+
+const StatusIconCell: React.FC<CellVariantProps<StatusCellData>> = ({ value }) => {
+  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+  
+  const getStatusConfig = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return {
+          icon: <IconCircleCheck size={16} />,
+          color: 'var(--t-color-text-success)',
+          bgColor: 'var(--t-color-fill-success-secondary)'
+        };
+      case 'pending':
+        return {
+          icon: <IconClock size={16} />,
+          color: 'var(--t-color-text-warning)',
+          bgColor: 'var(--t-color-fill-warning-secondary)'
+        };
+      case 'failed':
+        return {
+          icon: <IconAlertTriangle size={16} />,
+          color: 'var(--t-color-text-critical)',
+          bgColor: 'var(--t-color-fill-critical-secondary)'
+        };
+      default:
+        return {
+          icon: <IconClock size={16} />,
+          color: 'var(--t-color-text-secondary)',
+          bgColor: 'var(--t-color-surface-secondary)'
+        };
+    }
+  };
+  
+  const config = getStatusConfig(value?.status || '');
+  
+  return (
+    <div style={{ 
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--t-space-100)',
+      padding: 'var(--t-space-100) var(--t-space-200)',
+      backgroundColor: config.bgColor,
+      borderRadius: 'var(--t-border-radius-sm)',
+      width: 'fit-content'
+    }}>
+      <span style={{ color: config.color, display: 'flex' }}>
+        {config.icon}
+      </span>
+      <span style={{ 
+        font: 'var(--t-typography-body-sm-medium)',
+        color: config.color,
+        lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+      }}>
+        {value?.label || '-'}
+      </span>
+    </div>
+  );
+};
+
+// Usage
+const taskData = [
+  {
+    id: 1,
+    task: 'Setup Database',
+    status: {
+      status: 'completed' as const,
+      label: 'Completed'
+    }
+  }
+];
+
+const columns = [
+  QuickColumns.text('task', 'Task'),
+  createCustomCellColumn('status', 'Status', StatusIconCell),
+];
+```
+
+### Custom Cells by Importing Other Components
+
+The Table component works seamlessly with other Tagaddod Design System components. Here are examples of creating custom cells by importing and using existing components:
+
+#### Example 5: Dropdown Actions Cell
+
+```jsx
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@tagaddod/react';
+import { Button } from '@tagaddod/react';
+import { IconDots, IconEdit, IconTrash, IconEye } from '@tabler/icons-react';
+
+const DropdownActionsCell: React.FC<CellVariantProps<any>> = ({ row }) => {
+  const handleEdit = () => {
+    console.log('Edit:', row);
+  };
+  
+  const handleDelete = () => {
+    console.log('Delete:', row);
+  };
+  
+  const handleView = () => {
+    console.log('View:', row);
+  };
+  
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="plain"
+          size="micro"
+          tone="neutral"
+          prefixIcon={<IconDots size={16} />}
+          onClick={(e) => e.stopPropagation()}
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={handleView}>
+          <IconEye size={16} />
+          View Details
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleEdit}>
+          <IconEdit size={16} />
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleDelete} destructive>
+          <IconTrash size={16} />
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+const columns = [
+  QuickColumns.text('name', 'Name'),
+  createCustomCellColumn('actions', 'Actions', DropdownActionsCell),
+];
+```
+
+#### Example 6: Toggle Switch Cell
+
+```jsx
+import { Switch } from '@tagaddod/react';
+
+const ToggleSwitchCell: React.FC<CellVariantProps<boolean>> = ({ 
+  value, 
+  onChange, 
+  row 
+}) => {
+  return (
+    <Switch
+      checked={value || false}
+      onCheckedChange={(checked) => onChange?.(checked, row)}
+      onClick={(e) => e.stopPropagation()}
+    />
+  );
+};
+
+const columns = [
+  QuickColumns.text('feature', 'Feature'),
+  createInteractiveCellColumn('enabled', 'Enabled', 'custom', handleToggleChange, {
+    cellProps: { CustomComponent: ToggleSwitchCell }
+  }),
+];
+```
+
+#### Example 7: Tag Input Cell
+
+```jsx
+import { TagInput } from '@tagaddod/react';
+
+const TagInputCell: React.FC<CellVariantProps<string[]>> = ({ 
+  value, 
+  onChange, 
+  row 
+}) => {
+  return (
+    <TagInput
+      value={value || []}
+      onValueChange={(tags) => onChange?.(tags, row)}
+      placeholder="Add tags..."
+      onClick={(e) => e.stopPropagation()}
+    />
+  );
+};
+
+const columns = [
+  QuickColumns.text('title', 'Title'),
+  createInteractiveCellColumn('tags', 'Tags', 'custom', handleTagsChange, {
+    cellProps: { CustomComponent: TagInputCell }
+  }),
+];
+```
+
+#### Example 8: Date Picker Cell
+
+```jsx
+import { DatePicker } from '@tagaddod/react';
+
+const DatePickerCell: React.FC<CellVariantProps<Date | null>> = ({ 
+  value, 
+  onChange, 
+  row 
+}) => {
+  return (
+    <DatePicker
+      value={value}
+      onValueChange={(date) => onChange?.(date, row)}
+      onClick={(e) => e.stopPropagation()}
+    />
+  );
+};
+
+const columns = [
+  QuickColumns.text('task', 'Task'),
+  createInteractiveCellColumn('dueDate', 'Due Date', 'custom', handleDateChange, {
+    cellProps: { CustomComponent: DatePickerCell }
+  }),
 ];
 ```
 
 ### Extending the Cell Variants Registry
 
-You can extend the built-in cell variants registry:
+You can extend the built-in cell variants registry to add your custom variants and use them with the helper functions:
 
 ```jsx
 import { TableCellVariants } from '@tagaddod/react';
@@ -475,15 +894,88 @@ import { TableCellVariants } from '@tagaddod/react';
 // Add your custom variants to the registry
 const ExtendedCellVariants = {
   ...TableCellVariants,
-  customProgress: ProgressBarCell,
-  customRating: RatingStarsCell,
-  customChart: MiniChartCell,
+  progressBar: ProgressBarCell,
+  userAvatar: UserAvatarCell,
+  ratingStars: RatingCell,
+  statusIcon: StatusIconCell,
+  dropdownActions: DropdownActionsCell,
+  toggleSwitch: ToggleSwitchCell,
 };
 
 // Now you can use them with helper functions
 const columns = [
-  createCellColumn('progress', 'Progress', 'customProgress'),
+  createCellColumn('completion', 'Progress', 'progressBar'),
+  createCellColumn('user', 'User', 'userAvatar'),
+  createInteractiveCellColumn('rating', 'Rating', 'ratingStars', handleRatingChange),
+  createCellColumn('status', 'Status', 'statusIcon'),
+  createCustomCellColumn('actions', 'Actions', 'dropdownActions'),
 ];
+```
+
+### Custom Cell Best Practices
+
+When creating custom cells, follow these best practices:
+
+#### 1. **RTL Support**
+Always include RTL detection and proper styling:
+```jsx
+const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+const lineHeightStyle = {
+  lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+};
+```
+
+#### 2. **Use Design Tokens**
+Always use design system tokens for consistency:
+```jsx
+// ✅ Good - Using design tokens
+color: 'var(--t-color-text-primary)',
+padding: 'var(--t-space-200)',
+borderRadius: 'var(--t-border-radius-sm)',
+font: 'var(--t-typography-body-sm-default)'
+
+// ❌ Bad - Hard-coded values
+color: '#333',
+padding: '8px',
+borderRadius: '4px',
+font: '14px sans-serif'
+```
+
+#### 3. **Handle Click Events Properly**
+Prevent event bubbling for interactive elements:
+```jsx
+<Button
+  onClick={(e) => {
+    e.stopPropagation(); // Prevent row click when button is clicked
+    handleAction();
+  }}
+/>
+```
+
+#### 4. **Data Type Safety**
+Define proper TypeScript interfaces for complex data:
+```jsx
+interface CustomCellData {
+  primary: string;
+  secondary?: string;
+  metadata?: Record<string, any>;
+}
+
+const CustomCell: React.FC<CellVariantProps<CustomCellData>> = ({ value }) => {
+  // Type-safe access to value properties
+  return <div>{value?.primary || '-'}</div>;
+};
+```
+
+#### 5. **Performance Optimization**
+Use React.memo for complex cells with large datasets:
+```jsx
+import { memo } from 'react';
+
+const ExpensiveCustomCell: React.FC<CellVariantProps<ComplexData>> = memo(({ value }) => {
+  // Complex rendering logic
+  return <div>...</div>;
+});
 ```
 
 ### Cell Variant Props Interface
@@ -591,6 +1083,83 @@ createInteractiveCellColumn('status', 'Status', 'select', (value, row) => {
   }
 })
 ```
+
+## Custom Cell Development Summary
+
+The Table component's cell variant system provides multiple levels of customization:
+
+### Choose Your Approach
+
+| Approach | Best For | Complexity | Flexibility |
+|----------|----------|------------|-------------|
+| **QuickColumns** | Standard data types (text, numbers, badges) | Low | Low |
+| **Cell Variants** | Common interactive patterns | Medium | Medium |
+| **Custom Cells** | Unique designs, complex interactions | High | High |
+| **Component Import** | Using existing design system components | Medium | High |
+
+### Quick Reference Guide
+
+```jsx
+// 1. Simple text and numbers
+QuickColumns.text('name', 'Name')
+QuickColumns.number('amount', 'Amount')
+
+// 2. Interactive elements
+QuickColumns.checkbox('selected', 'Select', handleChange)
+QuickColumns.actions('Actions', handleClick)
+
+// 3. Custom styling with variants
+createCellColumn('status', 'Status', 'badge')
+createCellColumn('description', 'Description', 'textMultiline')
+
+// 4. Interactive variants with options
+createInteractiveCellColumn('priority', 'Priority', 'select', handleChange, {
+  cellProps: { options: [...] }
+})
+
+// 5. Fully custom cells
+const CustomCell = ({ value, row, onChange }) => (
+  <YourCustomComponent value={value} onChange={onChange} />
+);
+createCustomCellColumn('custom', 'Custom', CustomCell)
+
+// 6. Using other design system components
+const ComponentCell = ({ value, onChange, row }) => (
+  <Switch checked={value} onCheckedChange={(v) => onChange(v, row)} />
+);
+createCustomCellColumn('toggle', 'Toggle', ComponentCell)
+```
+
+### Data Structure Patterns
+
+```jsx
+// Text variants
+name: "Ahmed Al-Rashid"                    // textSingleLine
+description: "Line 1\nLine 2\nLine 3"     // textMultiline
+
+// Badge variants  
+status: { text: "Active", tone: "success" }              // badge
+tags: [{ text: "VIP", tone: "success" }, {...}]         // badgeMultiple
+
+// Complex text with badge
+user: { 
+  text: "Ahmed", 
+  badge: "VIP", 
+  badgeVariant: "success",
+  prefixIcon: <IconUser />
+}                                          // textSingleLineWithBadge
+
+// Numbers
+amount: 1250.50                            // updatedNumber (simple)
+counts: { primary: 100, secondary: 50 }   // updatedNumber (complex)
+
+// Interactive
+selected: true                             // checkbox
+priority: "high"                          // select, radioButton
+notes: "Custom text"                      // textField
+```
+
+The Table component's cell system is designed to be both powerful and approachable, allowing you to start simple and add complexity only when needed. Whether you're displaying basic data or creating complex interactive experiences, the cell variant system provides the tools and patterns to build consistent, accessible, and performant table interfaces.
 
 ## Features
 

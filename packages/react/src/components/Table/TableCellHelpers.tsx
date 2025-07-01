@@ -24,9 +24,9 @@ export function createCellColumn<T extends object>(
       const value = getValue();
       return (
         <CellComponent
-          value={value}
-          row={row.original}
-          {...options?.cellProps}
+          value={value as any}
+          row={row.original as T}
+          {...(options?.cellProps as any)}
         />
       );
     },
@@ -62,10 +62,10 @@ export function createInteractiveCellColumn<T extends object>(
       const value = getValue();
       return (
         <CellComponent
-          value={value}
-          row={row.original}
-          onChange={onChange}
-          {...options?.cellProps}
+          value={value as any}
+          row={row.original as T}
+          onChange={onChange as any}
+          {...(options?.cellProps as any)}
         />
       );
     },
@@ -108,9 +108,9 @@ export function createActionCellColumn<T extends object>(
       
       return (
         <CellComponent
-          value={null}
-          row={row.original}
-          onClick={onClick}
+          value={[] as any}
+          row={row.original as T}
+          onClick={onClick as any}
         />
       );
     },

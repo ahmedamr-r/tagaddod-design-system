@@ -363,108 +363,8 @@ export const Example: Story = {
   )
 };
 
-// Cell Variants Showcase
-interface SalesData {
-  id: number;
-  customer: string;
-  email: string;
-  description: string;
-  status: { text: string; tone: 'default' | 'info' | 'success' | 'warning' | 'critical' | 'magic' };
-  tags: Array<{ text: string; tone: 'default' | 'info' | 'success' | 'warning' | 'critical' | 'magic' }>;
-  selected: boolean;
-  priority: string;
-  category: string;
-  amount: number;
-  approved: boolean;
-  notes: string;
-}
+// Cell Variants Showcase - SalesData interface defined in AdvancedFilters story
 
-const salesData: SalesData[] = [
-  {
-    id: 1,
-    customer: 'Olivia Rhye',
-    email: 'olivia@untitledui.com',
-    description: 'Premium customer with\nmultiple product orders\nand high satisfaction rating',
-    status: { text: 'Active', tone: 'success' },
-    tags: [
-      { text: 'VIP', tone: 'success' },
-      { text: 'Premium', tone: 'info' }
-    ],
-    selected: true,
-    priority: 'high',
-    category: 'enterprise',
-    amount: 2400.50,
-    approved: true,
-    notes: 'Important client - handle with priority'
-  },
-  {
-    id: 2,
-    customer: 'Phoenix Baker',
-    email: 'phoenix@baker.com',
-    description: 'Regular customer with\nsteady purchase history',
-    status: { text: 'Pending', tone: 'warning' },
-    tags: [
-      { text: 'Regular', tone: 'info' }
-    ],
-    selected: false,
-    priority: 'medium',
-    category: 'business',
-    amount: 1200.00,
-    approved: false,
-    notes: 'Pending approval for bulk discount'
-  },
-  {
-    id: 3,
-    customer: 'Lana Steiner',
-    email: 'lana@steiner.co',
-    description: 'New customer exploring\nour product catalog',
-    status: { text: 'Inactive', tone: 'critical' },
-    tags: [
-      { text: 'New', tone: 'warning' },
-      { text: 'Trial', tone: 'info' }
-    ],
-    selected: false,
-    priority: 'low',
-    category: 'individual',
-    amount: 350.75,
-    approved: true,
-    notes: 'Trial period customer'
-  },
-  {
-    id: 4,
-    customer: 'Demi Wilkinson',
-    email: 'demi@wilkinson.org',
-    description: 'Corporate account with\nlarge volume requirements',
-    status: { text: 'Active', tone: 'success' },
-    tags: [
-      { text: 'Corporate', tone: 'success' },
-      { text: 'Bulk', tone: 'warning' },
-      { text: 'Priority', tone: 'critical' }
-    ],
-    selected: true,
-    priority: 'high',
-    category: 'enterprise',
-    amount: 5600.25,
-    approved: true,
-    notes: 'Corporate contract - quarterly reviews'
-  },
-  {
-    id: 5,
-    customer: 'Candice Wu',
-    email: 'candice@wu.design',
-    description: 'Design agency with\nspecialized requirements',
-    status: { text: 'Review', tone: 'info' },
-    tags: [
-      { text: 'Agency', tone: 'info' }
-    ],
-    selected: false,
-    priority: 'medium',
-    category: 'business',
-    amount: 890.00,
-    approved: false,
-    notes: 'Requires custom design services'
-  }
-];
 
 export const CellVariants: Story = {
   name: 'Sales Variant Showcase',
@@ -1182,6 +1082,8 @@ export const WithExport: Story = {
     return (
       <Table
         {...args}
+        data={args.data}
+        columns={args.columns}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onExport={handleExport}
@@ -1231,6 +1133,7 @@ export const StripedTable: Story = {
       <Table
         {...args}
         data={filteredData}
+        columns={productColumns}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         activeFilters={filters}
@@ -1282,6 +1185,7 @@ export const GridTable: Story = {
       <Table
         {...args}
         data={filteredData}
+        columns={productColumns}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         activeFilters={filters}
@@ -1404,6 +1308,8 @@ export const StaticTable: Story = {
     return (
       <Table
         {...args}
+        data={args.data}
+        columns={args.columns}
       />
     );
   },
@@ -1472,6 +1378,7 @@ export const ColumnManagement: Story = {
         <Table
           {...args}
           data={filteredData}
+          columns={productColumns}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           activeFilters={filters}
@@ -1495,7 +1402,7 @@ export const ColumnManagement: Story = {
 export const AdvancedFilters: Story = {
   name: 'Advanced Filters with Real-World Scenarios',
   args: {
-    title: 'E-Commerce Product Inventory',
+    title: 'Customer Sales Management',
     showSearch: true,
     showFilters: true,
     showFilterBar: false, 
@@ -1505,221 +1412,229 @@ export const AdvancedFilters: Story = {
     state: 'normal',
   },
   render: (args) => {
-    // Optimized product data - reduced to 30 items for better performance
-    const comprehensiveProducts = useMemo(() => {
-      const categories = ['electronics', 'clothing', 'home', 'books', 'sports', 'beauty', 'toys'];
-      const brands = ['Apple', 'Samsung', 'Nike', 'Adidas', 'IKEA', 'Sony', 'Canon'];
-      const suppliers = ['Global Tech', 'Fashion Hub', 'Home Solutions', 'Book Central', 'Sports World'];
-      const statuses = ['in-stock', 'low-stock', 'out-of-stock'];
-      
-      // Generate fixed data to prevent Math.random() performance issues
-      const baseProducts = [
-        { price: 899, stock: 45, rating: '4.2', reviews: 234 },
-        { price: 1299, stock: 12, rating: '4.7', reviews: 567 },
-        { price: 89, stock: 156, rating: '3.9', reviews: 89 },
-        { price: 249, stock: 78, rating: '4.1', reviews: 345 },
-        { price: 1899, stock: 3, rating: '4.8', reviews: 123 },
-        { price: 129, stock: 234, rating: '4.0', reviews: 678 },
-        { price: 699, stock: 67, rating: '4.3', reviews: 456 },
-        { price: 349, stock: 89, rating: '3.8', reviews: 234 },
-        { price: 1599, stock: 23, rating: '4.6', reviews: 789 },
-        { price: 199, stock: 145, rating: '4.2', reviews: 345 }
-      ];
-      
-      const products = Array.from({ length: 30 }, (_, i) => {
-        const baseIndex = i % baseProducts.length;
-        const base = baseProducts[baseIndex];
-        
-        return {
-          id: i + 1,
-          name: `Product ${i + 1} - ${categories[i % categories.length]} item`,
-          price: base.price,
-          category: categories[i % categories.length],
-          brand: brands[i % brands.length],
-          supplier: suppliers[i % suppliers.length],
-          stockWarehouse: base.stock,
-          stockCollectors: Math.floor(base.stock * 0.2),
-          status: statuses[
-            i < 3 ? 2 : // First 3 are out of stock
-            i < 8 ? 1 : // Next 5 are low stock
-            0 // Rest are in stock
-          ],
-          rating: base.rating,
-          reviews: base.reviews,
-          tags: i % 3 === 0 ? ['bestseller'] : i % 5 === 0 ? ['new-arrival', 'featured'] : [],
-        };
-      });
-      
-      return products;
-    }, []);
+    // Sales data using the same structure as Sales Variant Showcase
+    const salesData = useMemo(() => [
+      {
+        id: 1,
+        customer: 'Ahmed Al-Rashid',
+        email: 'ahmed@rashid.com',
+        description: 'VIP customer with excellent\nhistory and high satisfaction\nratings across all channels',
+        status: { text: 'Active', tone: 'success' as const },
+        tags: [
+          { text: 'VIP', tone: 'success' as const },
+          { text: 'Premium', tone: 'info' as const }
+        ],
+        selected: true,
+        priority: 'high',
+        category: 'enterprise',
+        amount: 2450.75,
+        approved: true,
+        notes: 'Priority customer - handle with care',
+        region: 'MENA',
+        department: 'Corporate'
+      },
+      {
+        id: 2,
+        customer: 'Fatima Hassan',
+        email: 'fatima@hassan.co',
+        description: 'Regular customer with\nsteady purchase pattern\nand reliable payment history',
+        status: { text: 'Pending', tone: 'warning' as const },
+        tags: [
+          { text: 'Regular', tone: 'info' as const }
+        ],
+        selected: false,
+        priority: 'medium',
+        category: 'business',
+        amount: 1200.00,
+        approved: false,
+        notes: 'Pending approval for bulk discount',
+        region: 'MENA',
+        department: 'Sales'
+      },
+      {
+        id: 3,
+        customer: 'Omar Khalil',
+        email: 'omar@khalil.org',
+        description: 'New customer exploring\nour product catalog\nwith trial account',
+        status: { text: 'Trial', tone: 'warning' as const },
+        tags: [
+          { text: 'New', tone: 'warning' as const },
+          { text: 'Trial', tone: 'info' as const }
+        ],
+        selected: false,
+        priority: 'low',
+        category: 'individual',
+        amount: 350.75,
+        approved: true,
+        notes: 'Trial period - monitor usage',
+        region: 'MENA',
+        department: 'Marketing'
+      },
+      {
+        id: 4,
+        customer: 'Olivia Rhye',
+        email: 'olivia@untitledui.com',
+        description: 'Corporate account with\nlarge volume requirements\nand quarterly contracts',
+        status: { text: 'Active', tone: 'success' as const },
+        tags: [
+          { text: 'Corporate', tone: 'success' as const },
+          { text: 'Bulk', tone: 'warning' as const }
+        ],
+        selected: true,
+        priority: 'high',
+        category: 'enterprise',
+        amount: 5600.25,
+        approved: true,
+        notes: 'Quarterly contract renewal',
+        region: 'US',
+        department: 'Corporate'
+      },
+      {
+        id: 5,
+        customer: 'Phoenix Baker',
+        email: 'phoenix@baker.com',
+        description: 'Design agency with\nspecialized requirements\nand custom solutions',
+        status: { text: 'Review', tone: 'info' as const },
+        tags: [
+          { text: 'Agency', tone: 'info' as const }
+        ],
+        selected: false,
+        priority: 'medium',
+        category: 'business',
+        amount: 890.00,
+        approved: false,
+        notes: 'Custom design services needed',
+        region: 'US',
+        department: 'Creative'
+      },
+      {
+        id: 6,
+        customer: 'Lana Steiner',
+        email: 'lana@steiner.co',
+        description: 'Seasonal customer with\nvariable order patterns\nand special requests',
+        status: { text: 'Inactive', tone: 'critical' as const },
+        tags: [
+          { text: 'Seasonal', tone: 'warning' as const }
+        ],
+        selected: false,
+        priority: 'low',
+        category: 'individual',
+        amount: 245.50,
+        approved: true,
+        notes: 'Seasonal customer - Q4 focus',
+        region: 'EU',
+        department: 'Sales'
+      }
+    ], []);
 
-    // Enhanced columns with more realistic data - optimized for performance
-    const comprehensiveColumns: ColumnDef<any, any>[] = useMemo(() => [
-      QuickColumns.number('id', 'ID', 60),
-      {
-        ...QuickColumns.text('name', 'Product Name'),
-        size: 200,
-      },
-      {
-        ...QuickColumns.number('price', 'Price'),
-        size: 100,
-        cell: ({ getValue }: { getValue: () => any }) => `$${getValue()}`,
-      },
-      {
-        ...QuickColumns.text('category', 'Category'),
-        size: 120,
-        cell: ({ getValue }: { getValue: () => any }) => (
-          <span style={{ 
-            textTransform: 'capitalize',
-            padding: '4px 8px',
-            borderRadius: '4px',
-            backgroundColor: '#f8f9fa',
-            fontSize: '12px'
-          }}>
-            {getValue()}
-          </span>
-        ),
-      },
-      {
-        ...QuickColumns.text('brand', 'Brand'),
-        size: 100,
-      },
-      {
-        ...QuickColumns.text('status', 'Status'),
-        size: 120,
-        cell: ({ getValue }: { getValue: () => any }) => {
-          const status = getValue();
-          const colors = {
-            'in-stock': '#28a745',
-            'low-stock': '#ffc107', 
-            'out-of-stock': '#dc3545'
-          };
-          return (
-            <span style={{ 
-              color: colors[status as keyof typeof colors],
-              fontWeight: 500,
-              textTransform: 'capitalize'
-            }}>
-              {status.replace('-', ' ')}
-            </span>
-          );
-        },
-      },
-      QuickColumns.number('stockWarehouse', 'Stock', 80),
-      {
-        ...QuickColumns.text('supplier', 'Supplier'),
-        size: 140,
-      },
-      // Efficient action column without React elements in data
-      {
-        id: 'actions',
-        header: 'Actions',
-        size: 120,
-        cell: ({ row }: { row: any }) => (
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <Button onClick={() => console.log('Edit product:', row.original.id)}>
-              <IconEdit size={16} />
-            </Button>
-            <Button tone="critical" onClick={() => console.log('Delete product:', row.original.id)}>
-              <IconTrash size={16} />
-            </Button>
-          </div>
-        ),
-      },
+    // Columns using predefined cell variants from Sales Showcase
+    const salesColumns: ColumnDef<any, any>[] = useMemo(() => [
+      { ...createCellColumn('id', 'ID', 'textSingleLine'), size: 60 },
+      { ...createCellColumn('customer', 'Customer Name', 'textSingleLineWithBadge'), size: 200 },
+      { ...createCellColumn('email', 'Email', 'textTruncated'), size: 180 },
+      { ...createCellColumn('description', 'Description', 'textMultiline'), size: 200 },
+      { ...createCellColumn('status', 'Status', 'badge'), size: 100 },
+      { ...createCellColumn('tags', 'Tags', 'badgeMultiple'), size: 150 },
+      { ...createCellColumn('amount', 'Amount', 'updatedNumber'), size: 120 },
+      { ...createCellColumn('priority', 'Priority', 'textSingleLine'), size: 80 },
+      { ...createActionCellColumn('Actions', 'actionIcon', (row) => console.log('Action:', row)), size: 80 }
     ], []);
     
-    // Complex filter state including all new types
+    // State management
     const [activeFilters, setActiveFilters] = useState<Record<string, any>>({});
     const [searchQuery, setSearchQuery] = useState('');
     const [tableState, setTableState] = useState<'normal' | 'error' | 'empty' | 'notFound' | 'loading'>('normal');
+    const [isRTL, setIsRTL] = useState(false);
     
-    // Comprehensive filter options demonstrating all filter types
-    const filterOptions = useMemo(() => ({
-      category: {
-        label: 'Category', 
-        type: 'popoverListbox' as const,
-        options: [
-          { label: 'All Categories', value: '' },
-          { label: 'Electronics', value: 'electronics' },
-          { label: 'Clothing', value: 'clothing' },
-          { label: 'Home & Garden', value: 'home' },
-          { label: 'Books', value: 'books' },
-          { label: 'Sports', value: 'sports' },
-          { label: 'Beauty', value: 'beauty' },
-          { label: 'Toys', value: 'toys' },
-        ],
-      },
-      priceRange: {
-        label: 'Price Range',
-        type: 'rangeSlider' as const,
-        rangeConfig: {
-          min: 0,
-          max: 2000,
-          step: 50,
-          prefix: '$',
-          formatValue: (value: number) => value.toString(),
+    // Enhanced filter options with RTL/Arabic support and popover configuration
+    const filterOptions = useMemo(() => {
+      const baseFilters = {
+        category: {
+          label: isRTL ? 'الفئة' : 'Category',
+          type: 'popoverListbox' as const,
+          popoverProps: { 
+            margin: 'small' as const,
+            placement: 'bottom-start' as const 
+          },
+          options: [
+            { label: isRTL ? 'جميع الفئات' : 'All Categories', value: '' },
+            { label: isRTL ? 'مؤسسات' : 'Enterprise', value: 'enterprise' },
+            { label: isRTL ? 'أعمال' : 'Business', value: 'business' },
+            { label: isRTL ? 'أفراد' : 'Individual', value: 'individual' },
+          ],
         },
-      },
-      stockLevel: {
-        label: 'Stock Level',
-        type: 'rangeSlider' as const,
-        rangeConfig: {
-          min: 0,
-          max: 500,
-          step: 25,
-          suffix: ' units',
-          formatValue: (value: number) => value.toString(),
+        amountRange: {
+          label: isRTL ? 'نطاق المبلغ' : 'Amount Range',
+          type: 'rangeSlider' as const,
+          rangeConfig: {
+            min: 0,
+            max: 6000,
+            step: 100,
+            prefix: '$',
+            formatValue: (value: number) => value.toString(),
+          },
         },
-      },
-      brands: {
-        label: 'Brands',
-        type: 'checkboxGroup' as const,
-        options: [
-          { label: 'Apple', value: 'Apple' },
-          { label: 'Samsung', value: 'Samsung' },
-          { label: 'Nike', value: 'Nike' },
-          { label: 'Adidas', value: 'Adidas' },
-          { label: 'IKEA', value: 'IKEA' },
-          { label: 'Sony', value: 'Sony' },
-          { label: 'Canon', value: 'Canon' },
-        ],
-      },
-      availabilityStatus: {
-        label: 'Availability',
-        type: 'radioGroup' as const,
-        options: [
-          { label: 'All Items', value: '' },
-          { label: 'In Stock', value: 'in-stock' },
-          { label: 'Low Stock', value: 'low-stock' },
-          { label: 'Out of Stock', value: 'out-of-stock' },
-        ],
-      },
-      supplier: {
-        label: 'Supplier',
-        type: 'popoverListbox' as const,
-        options: [
-          { label: 'All Suppliers', value: '' },
-          { label: 'Global Tech', value: 'Global Tech' },
-          { label: 'Fashion Hub', value: 'Fashion Hub' },
-          { label: 'Home Solutions', value: 'Home Solutions' },
-          { label: 'Book Central', value: 'Book Central' },
-          { label: 'Sports World', value: 'Sports World' },
-        ],
-      },
-    }), []);
+        region: {
+          label: isRTL ? 'المنطقة' : 'Region',
+          type: 'checkboxGroup' as const,
+          popoverProps: { 
+            margin: 'small' as const,
+            placement: 'bottom-start' as const 
+          },
+          options: [
+            { label: isRTL ? 'الشرق الأوسط وشمال أفريقيا' : 'MENA', value: 'MENA' },
+            { label: isRTL ? 'الولايات المتحدة' : 'United States', value: 'US' },
+            { label: isRTL ? 'أوروبا' : 'Europe', value: 'EU' },
+          ],
+        },
+        statusFilter: {
+          label: isRTL ? 'الحالة' : 'Status',
+          type: 'radioGroup' as const,
+          popoverProps: { 
+            margin: 'small' as const,
+            placement: 'bottom-start' as const 
+          },
+          options: [
+            { label: isRTL ? 'جميع الحالات' : 'All Status', value: '' },
+            { label: isRTL ? 'نشط' : 'Active', value: 'Active' },
+            { label: isRTL ? 'قيد المراجعة' : 'Review', value: 'Review' },
+            { label: isRTL ? 'معلق' : 'Pending', value: 'Pending' },
+            { label: isRTL ? 'تجريبي' : 'Trial', value: 'Trial' },
+            { label: isRTL ? 'غير نشط' : 'Inactive', value: 'Inactive' },
+          ],
+        },
+        department: {
+          label: isRTL ? 'القسم' : 'Department',
+          type: 'popoverListbox' as const,
+          popoverProps: { 
+            margin: 'small' as const,
+            placement: 'bottom-start' as const 
+          },
+          options: [
+            { label: isRTL ? 'جميع الأقسام' : 'All Departments', value: '' },
+            { label: isRTL ? 'المؤسسات' : 'Corporate', value: 'Corporate' },
+            { label: isRTL ? 'المبيعات' : 'Sales', value: 'Sales' },
+            { label: isRTL ? 'التسويق' : 'Marketing', value: 'Marketing' },
+            { label: isRTL ? 'الإبداع' : 'Creative', value: 'Creative' },
+          ],
+        },
+      };
+      
+      return baseFilters;
+    }, [isRTL]);
     
-    // Advanced filtering with realistic business logic
+    // Advanced filtering with sales data business logic
     const filteredData = useMemo(() => {
-      let filtered = comprehensiveProducts.filter(product => {
+      let filtered = salesData.filter(customer => {
         // Search filter - search across multiple fields
         if (searchQuery) {
           const query = searchQuery.toLowerCase();
           const searchableFields = [
-            product.name,
-            product.category,
-            product.brand,
-            product.supplier,
-            product.id.toString()
+            customer.customer,
+            customer.email,
+            customer.description,
+            customer.notes,
+            customer.id.toString()
           ].join(' ').toLowerCase();
           
           if (!searchableFields.includes(query)) {
@@ -1729,43 +1644,37 @@ export const AdvancedFilters: Story = {
         
         // Category filter
         if (activeFilters.category && activeFilters.category !== '') {
-          if (product.category !== activeFilters.category) return false;
+          if (customer.category !== activeFilters.category) return false;
         }
         
-        // Price range filter with debounced performance
-        if (activeFilters.priceRange && Array.isArray(activeFilters.priceRange)) {
-          const [minPrice, maxPrice] = activeFilters.priceRange;
-          if (product.price < minPrice || product.price > maxPrice) return false;
+        // Amount range filter
+        if (activeFilters.amountRange && Array.isArray(activeFilters.amountRange)) {
+          const [minAmount, maxAmount] = activeFilters.amountRange;
+          if (customer.amount < minAmount || customer.amount > maxAmount) return false;
         }
         
-        // Stock level filter
-        if (activeFilters.stockLevel && Array.isArray(activeFilters.stockLevel)) {
-          const [minStock, maxStock] = activeFilters.stockLevel;
-          if (product.stockWarehouse < minStock || product.stockWarehouse > maxStock) return false;
+        // Multi-select region filter
+        if (activeFilters.region && Array.isArray(activeFilters.region) && activeFilters.region.length > 0) {
+          if (!activeFilters.region.includes(customer.region)) return false;
         }
         
-        // Multi-select brands filter
-        if (activeFilters.brands && Array.isArray(activeFilters.brands) && activeFilters.brands.length > 0) {
-          if (!activeFilters.brands.includes(product.brand)) return false;
+        // Status filter
+        if (activeFilters.statusFilter && activeFilters.statusFilter !== '') {
+          if (customer.status.text !== activeFilters.statusFilter) return false;
         }
         
-        // Availability status filter
-        if (activeFilters.availabilityStatus && activeFilters.availabilityStatus !== '') {
-          if (product.status !== activeFilters.availabilityStatus) return false;
-        }
-        
-        // Supplier filter
-        if (activeFilters.supplier && activeFilters.supplier !== '') {
-          if (product.supplier !== activeFilters.supplier) return false;
+        // Department filter
+        if (activeFilters.department && activeFilters.department !== '') {
+          if (customer.department !== activeFilters.department) return false;
         }
         
         return true;
       });
       
       return filtered;
-    }, [comprehensiveProducts, activeFilters, searchQuery]);
+    }, [salesData, activeFilters, searchQuery]);
     
-    // Simulate different states for edge case testing
+    // Table state management
     const getTableState = () => {
       if (tableState === 'loading') return 'loading';
       if (tableState === 'error') return 'error';
@@ -1778,7 +1687,7 @@ export const AdvancedFilters: Story = {
     const currentState = getTableState();
     
     return (
-      <div style={{ padding: '20px' }}>
+      <div style={{ padding: '20px', direction: isRTL ? 'rtl' : 'ltr' }} dir={isRTL ? 'rtl' : 'ltr'}>
         {/* Demo Controls */}
         <div style={{ 
           marginBottom: '24px', 
@@ -1794,10 +1703,11 @@ export const AdvancedFilters: Story = {
             color: '#212529',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '8px',
+            fontFamily: isRTL ? 'var(--t-font-family-arabic, Tajawal)' : 'var(--t-font-family-primary, Outfit)'
           }}>
             <IconFilter size={20} />
-            Advanced Filtering & Status Demo
+            {isRTL ? 'عرض التصفية المتقدمة والحالات' : 'Advanced Filtering & Status Demo'}
           </h3>
           
           <div style={{ 
@@ -1810,19 +1720,25 @@ export const AdvancedFilters: Story = {
               tone={tableState === 'normal' ? 'success' : 'default'}
               onClick={() => setTableState('normal')}
             >
-              Normal State
+              {isRTL ? 'الحالة العادية' : 'Normal State'}
             </Button>
             <Button
               tone={tableState === 'loading' ? 'default' : 'default'}
               onClick={() => setTableState('loading')}
             >
-              Loading State
+              {isRTL ? 'حالة التحميل' : 'Loading State'}
             </Button>
             <Button
               tone={tableState === 'error' ? 'critical' : 'default'}
               onClick={() => setTableState('error')}
             >
-              Error State
+              {isRTL ? 'حالة الخطأ' : 'Error State'}
+            </Button>
+            <Button
+              onClick={() => setIsRTL(!isRTL)}
+              variant="secondary"
+            >
+              {isRTL ? 'English' : 'العربية'}
             </Button>
             <Button
               onClick={() => {
@@ -1831,37 +1747,34 @@ export const AdvancedFilters: Story = {
                 setTableState('normal');
               }}
             >
-              Clear All
+              {isRTL ? 'مسح الكل' : 'Clear All'}
             </Button>
           </div>
           
           <div style={{ 
             fontSize: '14px', 
             color: '#6c757d',
-            lineHeight: 1.5
+            lineHeight: 1.5,
+            fontFamily: isRTL ? 'var(--t-font-family-arabic, Tajawal)' : 'var(--t-font-family-primary, Outfit)'
           }}>
             <p style={{ margin: '0 0 8px 0' }}>
-              <strong>🎯 Filter Types:</strong> PopoverListbox (Category, Supplier), 
-              RangeSlider (Price, Stock), CheckboxGroup (Brands), RadioGroup (Availability)
+              <strong>{isRTL ? '🎯 أنواع التصفية:' : '🎯 Filter Types:'}</strong> {isRTL ? 'قائمة منبثقة (الفئة، القسم)، شريط تمرير (المبلغ)، خانات اختيار (المنطقة)، أزرار راديو (الحالة)' : 'PopoverListbox (Category, Department), RangeSlider (Amount), CheckboxGroup (Region), RadioGroup (Status)'}
             </p>
             <p style={{ margin: '0 0 8px 0' }}>
-              <strong>⚡ Performance:</strong> Debounced range sliders (500ms delay), 
-              optimized for large datasets and API calls
+              <strong>{isRTL ? '⚡ الأداء:' : '⚡ Performance:'}</strong> {isRTL ? 'هوامش صغيرة للمنبثقات، خلايا محددة مسبقاً من عرض المبيعات' : 'Small margins for popovers, predefined cells from Sales Showcase'}
             </p>
             <p style={{ margin: '0' }}>
-              <strong>📊 Results:</strong> Showing <strong>{filteredData.length}</strong> of <strong>{comprehensiveProducts.length}</strong> products
-              {Object.keys(activeFilters).length > 0 && ` (${Object.keys(activeFilters).length} filters active)`}
-            </p>
-            <p style={{ margin: '0', fontSize: '12px', color: '#28a745' }}>
-              <strong>🚀 Performance Optimized:</strong> Reduced to 30 items and efficient action columns for smooth interaction
+              <strong>{isRTL ? '📊 النتائج:' : '📊 Results:'}</strong> {isRTL ? 'عرض' : 'Showing'} <strong>{filteredData.length}</strong> {isRTL ? 'من' : 'of'} <strong>{salesData.length}</strong> {isRTL ? 'عملاء' : 'customers'}
+              {Object.keys(activeFilters).length > 0 && ` (${Object.keys(activeFilters).length} ${isRTL ? 'مرشحات نشطة' : 'filters active'})`}
             </p>
           </div>
         </div>
         
         <Table
           {...args}
+          title={isRTL ? 'إدارة مبيعات العملاء' : 'Customer Sales Management'}
           data={currentState === 'normal' ? filteredData : []}
-          columns={comprehensiveColumns}
+          columns={salesColumns}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           activeFilters={activeFilters}
@@ -1869,11 +1782,11 @@ export const AdvancedFilters: Story = {
           filterOptions={filterOptions}
           badge={currentState === 'normal' ? filteredData.length : undefined}
           state={currentState}
-          errorMessage="Failed to load inventory data. This could be due to server issues or network connectivity problems."
-          emptyMessage="No products found in inventory. Add some products to get started."
-          notFoundMessage={searchQuery ? `No results found for "${searchQuery}"` : "No products match the selected filters"}
-          notFoundSubtitle="Try adjusting your search terms or filter criteria"
-          onRowClick={(row) => console.log('Product selected:', row.original)}
+          errorMessage={isRTL ? "فشل في تحميل بيانات العملاء. قد يكون هذا بسبب مشاكل في الخادم أو الاتصال بالشبكة." : "Failed to load customer data. This could be due to server issues or network connectivity problems."}
+          emptyMessage={isRTL ? "لم يتم العثور على عملاء في النظام. أضف بعض العملاء للبدء." : "No customers found in the system. Add some customers to get started."}
+          notFoundMessage={searchQuery ? (isRTL ? `لم يتم العثور على نتائج لـ "${searchQuery}"` : `No results found for "${searchQuery}"`) : (isRTL ? "لا يوجد عملاء مطابقون للمرشحات المحددة" : "No customers match the selected filters")}
+          notFoundSubtitle={isRTL ? "جرب تعديل مصطلحات البحث أو معايير التصفية" : "Try adjusting your search terms or filter criteria"}
+          onRowClick={(row) => console.log('Customer selected:', row.original)}
         />
       </div>
     );
@@ -1881,7 +1794,7 @@ export const AdvancedFilters: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'This comprehensive story demonstrates the **complete advanced filtering system** with real-world scenarios and edge cases. Features include: **PopoverListbox filters** with zero margins for categories and suppliers, **debounced RangeSlider filters** for price and stock levels, **CheckboxGroup filters** for multi-brand selection, **RadioGroup filters** for availability status, **30 realistic products** optimized for smooth performance, **status showcases** (normal, loading, error, empty, not found), **advanced search** across multiple fields, and **filter performance optimization** with 500ms debouncing to prevent excessive API calls.'
+        story: 'This comprehensive story demonstrates the **complete advanced filtering system** using **predefined cells from Sales Variant Showcase**. Features include: **PopoverListbox filters** with small margins for categories and departments, **RangeSlider filters** for amount ranges, **CheckboxGroup filters** for multi-region selection, **RadioGroup filters** for status, **real sales data** with proper cell variants (textSingleLineWithBadge, textMultiline, badge, badgeMultiple, updatedNumber), **RTL/Arabic language toggle** with translated filter names, **status showcases** (normal, loading, error, empty, not found), and **popover configuration** with small margin variants for optimal spacing.'
       }
     }
   }
