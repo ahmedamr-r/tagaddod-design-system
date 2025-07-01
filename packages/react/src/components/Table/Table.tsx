@@ -523,18 +523,58 @@ export const Table = <T extends object>({
           </div>
           
           <div className={styles.filterItems}>
-            {Object.keys(filterOptions).map((filterKey) => (
-              <FilterItem
-                key={filterKey}
-                name={filterKey}
-                label={filterOptions[filterKey].label}
-                value={activeFilters[filterKey]}
-                options={filterOptions[filterKey].options}
-                onChange={handleFilterChange}
-                removable={true}
-                onRemove={handleFilterRemove}
-              />
-            ))}
+            {Object.keys(filterOptions).map((filterKey) => {
+              const filterOption = filterOptions[filterKey];
+              const filterType = filterOption.type || 'select';
+              
+              // Generate current filters for currentFilters type
+              const getCurrentFilters = () => {
+                if (filterType !== 'currentFilters') return [];
+                
+                return Object.entries(activeFilters)
+                  .filter(([key, value]) => value !== undefined && key !== filterKey)
+                  .map(([key, value]) => {
+                    const relatedFilter = filterOptions[key];
+                    if (!relatedFilter) return { label: `${key}: ${value}`, value: key };
+                    
+                    // Format based on filter type
+                    if (relatedFilter.type === 'rangeSlider' && Array.isArray(value)) {
+                      const config = relatedFilter.rangeConfig;
+                      const formatValue = config?.formatValue || ((val: number) => val.toString());
+                      const prefix = config?.prefix || '';
+                      const suffix = config?.suffix || '';
+                      return {
+                        label: `${relatedFilter.label}: ${prefix}${formatValue(value[0])} - ${prefix}${formatValue(value[1])}${suffix}`,
+                        value: key
+                      };
+                    } else if (relatedFilter.options) {
+                      const selectedOption = relatedFilter.options.find(opt => opt.value === value);
+                      return {
+                        label: `${relatedFilter.label}: ${selectedOption?.label || value}`,
+                        value: key
+                      };
+                    }
+                    
+                    return { label: `${relatedFilter.label}: ${value}`, value: key };
+                  });
+              };
+              
+              return (
+                <FilterItem
+                  key={filterKey}
+                  name={filterKey}
+                  label={filterOption.label}
+                  value={activeFilters[filterKey]}
+                  type={filterType}
+                  options={filterOption.options}
+                  rangeConfig={filterOption.rangeConfig}
+                  currentFilters={getCurrentFilters()}
+                  onChange={handleFilterChange}
+                  removable={true}
+                  onRemove={handleFilterRemove}
+                />
+              );
+            })}
           </div>
         </div>
       )}

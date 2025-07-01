@@ -15,35 +15,16 @@
 .labelContainer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--t-space-100);
-  gap: var(--t-space-200);
+  margin-bottom: var(--t-space-150);
 }
 
 .label {
-  font-family: var(--t-font-family-primary);
-  font-size: var(--t-font-size-350);
-  font-weight: var(--t-font-weight-medium);
+  font: var(--t-typography-body-md-default);
   color: var(--t-color-text-primary);
   position: relative;
   line-height: 1.5;
 }
 
-.selectedValue {
-  font-family: var(--t-font-family-primary);
-  font-size: var(--t-font-size-350);
-  font-weight: var(--t-font-weight-medium);
-  color: var(--t-color-text-brand);
-  line-height: 1.5;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 60%;
-  padding: var(--t-space-100) var(--t-space-150);
-  background-color: var(--t-color-surface-brand-subdued);
-  border-radius: var(--t-border-radius-100);
-  border: 1px solid var(--t-color-border-brand);
-}
 
 /* Line height trim for label */
 .label::before,
@@ -64,23 +45,19 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .label::before {
-  margin-top: 0.09em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .label::after {
   margin-bottom: -0.25em;
 }
 
-.required {
-  color: var(--t-color-fill-critical);
-  margin-inline-start: var(--t-space-50);
-}
 
 .optional {
   color: var(--t-color-text-secondary);
-  margin-inline-start: var(--t-space-100);
   font-size: var(--t-font-size-300);
   font-weight: var(--t-font-weight-regular);
+  margin-inline-start: var(--t-space-100);
 }
 
 /* Select trigger styles */
@@ -88,6 +65,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   border-radius: var(--t-border-radius-200);
   border: 1px solid var(--t-color-border-secondary);
@@ -97,10 +75,10 @@
   cursor: pointer;
   transition: all var(--t-duration-base) var(--t-easing-in-out);
   overflow: hidden;
-  direction: inherit;
+  padding: var(--t-space-300);
 }
 
-/* RTL specific layout */
+/* RTL specific layout - reverse the entire flex direction */
 :global([dir="rtl"]) .trigger {
   flex-direction: row-reverse;
 }
@@ -132,34 +110,60 @@
   cursor: not-allowed;
 }
 
+/* Content wrapper - groups prefix and value together */
+.contentWrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: var(--t-space-100); /* 4px gap between prefix and value */
+  overflow: hidden;
+}
+
+/* RTL content wrapper - ensure prefix comes before value */
+:global([dir="rtl"]) .contentWrapper {
+  flex-direction: row-reverse;
+}
+
 /* Prefix styling */
 .prefix {
   display: flex;
   align-items: center;
   color: var(--t-color-icon-secondary);
-  margin-inline-end: var(--t-space-200);
   flex-shrink: 0;
 }
 
-/* RTL prefix spacing adjustment */
+/* RTL vertical centering for prefix */
 :global([dir="rtl"]) .prefix {
-  margin-inline-end: 0;
-  margin-inline-start: var(--t-space-200);
+  padding-top: 2px;
+  padding-bottom: 0px;
 }
 
-/* Select value styling */
+/* Select value styling - The span inside the trigger */
 .value {
-  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: start;
+  display: block;
+  flex: 1;
+}
+
+/* Target the actual span tag inside the trigger */
+.trigger span[data-radix-select-value] {
   flex: 1;
   text-align: start;
 }
 
-/* RTL text alignment */
+/* RTL styling for the span tag inside trigger */
+:global([dir="rtl"]) .trigger span {
+  padding-top: 2px;
+  padding-bottom: 0px;
+}
+
+/* RTL styling for value span */
 :global([dir="rtl"]) .value {
-  text-align: end;
+  padding-top: 2px;
+  padding-bottom: 0px;
 }
 
 /* Icon styling */
@@ -170,13 +174,14 @@
   color: var(--t-color-icon-secondary);
   transition: transform var(--t-duration-fast) var(--t-easing-in-out);
   flex-shrink: 0;
-  margin-inline-start: auto;
+  width: 1rem;
+  height: 1rem;
 }
 
 /* RTL icon positioning */
 :global([dir="rtl"]) .icon {
-  margin-inline-start: 0;
-  margin-inline-end: auto;
+  padding-top: 2px;
+  padding-bottom: 0px;
 }
 
 .trigger[data-state="open"] .icon {
@@ -185,24 +190,55 @@
 
 /* Size variants */
 .sizeMicro .trigger {
+  height: var(--t-size-700); /* 28px fixed height */
   min-height: var(--t-size-700);
-  padding-block: var(--t-space-50);
-  padding-inline: var(--t-space-300);
-  font-size: var(--t-font-size-300);
+  padding: var(--t-space-300);
+  gap: var(--t-space-100);
+font: var(--t-typography-body-sm-default);
+}
+
+/* RTL vertical centering for micro size */
+:global([dir="rtl"]) .sizeMicro .value {
+  padding-top: calc(var(--t-space-50) + 1px);
+  padding-bottom: calc(var(--t-space-50) - 1px);
+}
+
+.sizeMicro .label {
+  font: var(--t-typography-body-sm-default);
 }
 
 .sizeMedium .trigger {
-  min-height: var(--t-size-1000);
-  padding-block: var(--t-space-150);
-  padding-inline: var(--t-space-300);
-  font-size: var(--t-font-size-350);
+  height: var(--t-size-800); /* 32px fixed height */
+  min-height: var(--t-size-800);
+  padding: var(--t-space-300);
+  gap: var(--t-space-100);
+font: var(--t-typography-body-sm-default);
+}
+
+/* RTL vertical centering for medium size */
+:global([dir="rtl"]) .sizeMedium .value {
+  padding-top: calc(var(--t-space-150) + 2px);
+  padding-bottom: calc(var(--t-space-150) - 2px);
+}
+
+.sizeMedium .label {
+  font: var(--t-typography-body-sm-default);
 }
 
 .sizeLarge .trigger {
-  min-height: var(--t-size-1200);
-  padding-block: var(--t-space-200);
-  padding-inline: var(--t-space-300);
-  font-size: var(--t-font-size-400);
+  height: var(--t-size-1000); /* 40px fixed height */
+  min-height: var(--t-size-1000);
+  padding: var(--t-space-300);
+  gap: var(--t-space-100);
+font: var(--t-typography-body-md-default);
+}
+.sizeLarge .label {
+  font: var(--t-typography-body-md-default);
+}
+/* RTL vertical centering for large size */
+:global([dir="rtl"]) .sizeLarge .value {
+  padding-top: calc(var(--t-space-200) + 3px);
+  padding-bottom: calc(var(--t-space-200) - 3px);
 }
 
 /* Content (dropdown) styles */
@@ -261,6 +297,11 @@
   transition: background-color var(--t-duration-fast) var(--t-easing-in-out);
 }
 
+/* RTL item layout */
+:global([dir="rtl"]) .item {
+  flex-direction: row-reverse;
+}
+
 .item:hover {
   background-color: var(--t-color-surface-hover);
 }
@@ -282,7 +323,7 @@
 
 .itemText {
   flex: 1;
-  text-align: start;
+  text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -290,21 +331,23 @@
 
 /* RTL item text alignment */
 :global([dir="rtl"]) .itemText {
-  text-align: end;
+  text-align: right;
+  direction: rtl;
 }
 
 .itemIndicator {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-inline-start: var(--t-space-200);
+  margin-left: var(--t-space-200);
   color: var(--t-color-icon-brand);
 }
 
 /* RTL item indicator positioning */
 :global([dir="rtl"]) .itemIndicator {
-  margin-inline-start: 0;
-  margin-inline-end: var(--t-space-200);
+  margin-left: 0;
+  margin-right: var(--t-space-200);
+  order: -1;
 }
 
 /* Error state */
@@ -319,10 +362,9 @@
 .errorMessage {
   display: flex;
   align-items: center;
-  gap: var(--t-space-100);
   color: var(--t-color-text-critical);
-  font-size: var(--t-font-size-300);
-  margin-top: var(--t-space-100);
+  font: var(--t-typography-body-sm-default);
+  margin-top: var(--t-space-200);
   position: relative;
   line-height: 1.5;
 }
@@ -346,7 +388,7 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .errorMessage::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .errorMessage::after {
@@ -355,13 +397,15 @@
 
 .errorIcon {
   color: var(--t-color-icon-critical);
+  margin-inline-end: var(--t-space-200);
+  flex-shrink: 0;
 }
 
 /* Help text */
 .helpText {
-  font-size: var(--t-font-size-300);
+  font: var(--t-typography-body-sm-default);
   color: var(--t-color-text-secondary);
-  margin-top: var(--t-space-100);
+  margin-top: var(--t-space-200);
   position: relative;
   line-height: 1.5;
 }
@@ -385,7 +429,7 @@
 
 /* Arabic font adjustment (larger trim) */
 :global([dir="rtl"]) .helpText::before {
-  margin-top: -0.25em;
+  margin-top: 0.1em;
 }
 
 :global([dir="rtl"]) .helpText::after {

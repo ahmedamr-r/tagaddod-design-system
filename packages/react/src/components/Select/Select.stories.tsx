@@ -24,6 +24,16 @@ const countryOptions = [
   { value: 'de', label: 'Germany' },
   { value: 'it', label: 'Italy' },
   { value: 'es', label: 'Spain' },
+  { value: 'jp', label: 'Japan' },
+  { value: 'kr', label: 'South Korea' },
+  { value: 'cn', label: 'China' },
+  { value: 'in', label: 'India' },
+  { value: 'au', label: 'Australia' },
+  { value: 'nz', label: 'New Zealand' },
+  { value: 'za', label: 'South Africa' },
+  { value: 'eg', label: 'Egypt' },
+  { value: 'ng', label: 'Nigeria' },
+  { value: 'ke', label: 'Kenya' },
 ];
 
 const meta = {
@@ -90,6 +100,14 @@ const meta = {
       control: 'text',
       description: 'Placeholder text for search input'
     },
+    maxWidth: {
+      control: 'text',
+      description: 'Maximum width of the select component'
+    },
+    minWidth: {
+      control: 'text',
+      description: 'Minimum width of the select component'
+    },
   },
   args: {
     options: sampleOptions,
@@ -107,6 +125,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Basic Examples
 export const Default: Story = {
   args: {
     label: 'Favorite Fruit',
@@ -114,297 +133,266 @@ export const Default: Story = {
   },
 };
 
-export const WithValue: Story = {
-  args: {
-    label: 'Favorite Fruit',
-    placeholder: 'Select a fruit...',
-    defaultValue: 'banana',
-  },
-};
 
-export const InsideLabel: Story = {
+// Size Variants - Combined into one interactive story
+export const Sizes: Story = {
+  name: 'Size Variants',
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', minWidth: '300px' }}>
+      <Select
+        {...args}
+        label="Micro Size"
+        size="micro"
+        placeholder="Small select..."
+      />
+      <Select
+        {...args}
+        label="Medium Size (Default)"
+        size="medium"
+        placeholder="Medium select..."
+      />
+      <Select
+        {...args}
+        label="Large Size"
+        size="large"
+        placeholder="Large select..."
+      />
+    </div>
+  ),
   args: {
-    label: 'Country',
-    placeholder: 'Select your country...',
-    options: countryOptions,
-    defaultValue: 'us',
-  },
-};
-
-export const WithPrefix: Story = {
-  args: {
-    label: 'User Type',
-    prefix: <IconUser size={18} />,
-    placeholder: 'Select user type...',
-    options: [
-      { value: 'admin', label: 'Administrator' },
-      { value: 'user', label: 'Regular User' },
-      { value: 'guest', label: 'Guest' },
-    ],
-  },
-};
-
-export const WithHelpText: Story = {
-  args: {
-    label: 'Country',
-    placeholder: 'Select your country...',
-    helpText: 'This helps us provide location-specific features.',
-    options: countryOptions,
-  },
-};
-
-export const WithError: Story = {
-  args: {
-    label: 'Required Field',
-    placeholder: 'Please select an option...',
-    errorMessage: 'This field is required.',
     options: sampleOptions,
   },
-};
-
-export const Required: Story = {
-  args: {
-    label: 'Required Selection',
-    placeholder: 'You must select an option...',
-    required: true,
-    options: sampleOptions,
+  parameters: {
+    controls: { exclude: ['size', 'label', 'placeholder'] },
   },
 };
 
-export const Optional: Story = {
+// Component States - Combined
+export const States: Story = {
+  name: 'Component States',
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', minWidth: '300px' }}>
+      <Select
+        {...args}
+        label="Required Field"
+        placeholder="This field is required"
+      />
+      <Select
+        {...args}
+        label="Optional Field"
+        placeholder="This field is optional"
+        optional
+      />
+      <Select
+        {...args}
+        label="Disabled Field"
+        placeholder="Cannot interact with this"
+        disabled
+      />
+      <Select
+        {...args}
+        label="Error State"
+        placeholder="This has an error"
+        errorMessage="This field is required."
+      />
+      <Select
+        {...args}
+        label="With Help Text"
+        placeholder="Select an option..."
+        helpText="This is helpful information about the field."
+      />
+    </div>
+  ),
   args: {
-    label: 'Optional Selection',
-    placeholder: 'Select if you want...',
-    optional: true,
     options: sampleOptions,
+  },
+  parameters: {
+    controls: { exclude: ['label', 'placeholder', 'required', 'optional', 'disabled', 'errorMessage', 'helpText'] },
   },
 };
 
-export const Disabled: Story = {
-  args: {
-    label: 'Disabled Select',
-    placeholder: 'Cannot select...',
-    disabled: true,
-    options: sampleOptions,
+// Prefix & Search Features - Combined
+export const PrefixAndSearch: Story = {
+  name: 'Prefix & Search Features',
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', minWidth: '350px' }}>
+      <Select
+        {...args}
+        label="With Prefix Icon"
+        prefix={<IconUser size={18} />}
+        placeholder="Select user type..."
+        options={[
+          { value: 'admin', label: 'Administrator' },
+          { value: 'user', label: 'Regular User' },
+          { value: 'guest', label: 'Guest' },
+        ]}
+      />
+      <Select
+        {...args}
+        label="Searchable Select"
+        placeholder="Search countries..."
+        searchable
+        searchPlaceholder="Type to search..."
+        options={countryOptions}
+        helpText="Start typing to filter options"
+      />
+      <Select
+        {...args}
+        label="Searchable with Prefix"
+        prefix={<IconSearch size={18} />}
+        placeholder="Search users..."
+        searchable
+        searchPlaceholder="Type to search users..."
+        options={[
+          { value: 'john', label: 'John Smith' },
+          { value: 'jane', label: 'Jane Doe' },
+          { value: 'bob', label: 'Bob Johnson' },
+          { value: 'alice', label: 'Alice Brown' },
+          { value: 'charlie', label: 'Charlie Davis' },
+          { value: 'diana', label: 'Diana Wilson' },
+        ]}
+      />
+    </div>
+  ),
+  parameters: {
+    controls: { exclude: ['label', 'placeholder', 'prefix', 'searchable', 'searchPlaceholder', 'options', 'helpText'] },
   },
 };
 
-export const DisabledWithValue: Story = {
+// Width Control
+export const WidthControl: Story = {
+  name: 'Width Control',
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', minWidth: '100%' }}>
+      <Select
+        {...args}
+        label="Default Width"
+        placeholder="Default width..."
+      />
+      <Select
+        {...args}
+        label="Min Width (200px)"
+        placeholder="Has minimum width..."
+        minWidth={200}
+      />
+      <Select
+        {...args}
+        label="Max Width (300px)"
+        placeholder="Has maximum width..."
+        maxWidth={300}
+      />
+      <Select
+        {...args}
+        label="Full Width"
+        placeholder="Takes full container width..."
+        fullWidth
+      />
+    </div>
+  ),
   args: {
-    label: 'Disabled Select',
-    disabled: true,
-    defaultValue: 'apple',
     options: sampleOptions,
   },
-};
-
-// Size variants
-export const SizeMicro: Story = {
-  args: {
-    label: 'Micro Size',
-    size: 'micro',
-    placeholder: 'Small select...',
-    options: sampleOptions,
-  },
-};
-
-export const SizeMedium: Story = {
-  args: {
-    label: 'Medium Size',
-    size: 'medium',
-    placeholder: 'Medium select...',
-    options: sampleOptions,
-  },
-};
-
-export const SizeLarge: Story = {
-  args: {
-    label: 'Large Size',
-    size: 'large',
-    placeholder: 'Large select...',
-    options: sampleOptions,
-  },
-};
-
-export const FullWidth: Story = {
   parameters: {
     layout: 'padded',
-  },
-  args: {
-    label: 'Full Width Select',
-    placeholder: 'Takes full container width...',
-    fullWidth: true,
-    options: countryOptions,
+    controls: { exclude: ['label', 'placeholder', 'minWidth', 'maxWidth', 'fullWidth'] },
   },
 };
 
-export const Searchable: Story = {
-  args: {
-    label: 'Country',
-    placeholder: 'Select a country...',
-    searchable: true,
-    searchPlaceholder: 'Search countries...',
-    options: [
-      ...countryOptions,
-      { value: 'jp', label: 'Japan' },
-      { value: 'kr', label: 'South Korea' },
-      { value: 'cn', label: 'China' },
-      { value: 'in', label: 'India' },
-      { value: 'au', label: 'Australia' },
-      { value: 'nz', label: 'New Zealand' },
-      { value: 'za', label: 'South Africa' },
-      { value: 'eg', label: 'Egypt' },
-      { value: 'ng', label: 'Nigeria' },
-      { value: 'ke', label: 'Kenya' },
-      { value: 'ma', label: 'Morocco' },
-      { value: 'dz', label: 'Algeria' },
-      { value: 'tn', label: 'Tunisia' },
-      { value: 'sa', label: 'Saudi Arabia' },
-      { value: 'ae', label: 'United Arab Emirates' },
-    ],
-    helpText: 'Start typing to search through the options',
-  },
-};
-
-export const SearchableWithPrefix: Story = {
-  args: {
-    label: 'User Search',
-    prefix: <IconUser size={18} />,
-    placeholder: 'Select a user...',
-    searchable: true,
-    searchPlaceholder: 'Type to search users...',
-    options: [
-      { value: 'john', label: 'John Smith' },
-      { value: 'jane', label: 'Jane Doe' },
-      { value: 'bob', label: 'Bob Johnson' },
-      { value: 'alice', label: 'Alice Brown' },
-      { value: 'charlie', label: 'Charlie Davis' },
-      { value: 'diana', label: 'Diana Wilson' },
-      { value: 'frank', label: 'Frank Miller' },
-      { value: 'grace', label: 'Grace Taylor' },
-      { value: 'henry', label: 'Henry Anderson' },
-      { value: 'iris', label: 'Iris Thompson' },
-    ],
-  },
-};
-
-export const SearchableInsideLabel: Story = {
-  args: {
-    label: 'Select Technology',
-    searchable: true,
-    searchPlaceholder: 'Search technologies...',
-    options: [
-      { value: 'react', label: 'React' },
-      { value: 'vue', label: 'Vue.js' },
-      { value: 'angular', label: 'Angular' },
-      { value: 'svelte', label: 'Svelte' },
-      { value: 'next', label: 'Next.js' },
-      { value: 'nuxt', label: 'Nuxt.js' },
-      { value: 'gatsby', label: 'Gatsby' },
-      { value: 'remix', label: 'Remix' },
-      { value: 'astro', label: 'Astro' },
-      { value: 'solid', label: 'SolidJS' },
-    ],
-  },
-};
-
-export const LongOptionList: Story = {
-  args: {
-    label: 'Many Options',
-    placeholder: 'Select from many options...',
-    options: [
-      ...countryOptions,
-      { value: 'jp', label: 'Japan' },
-      { value: 'kr', label: 'South Korea' },
-      { value: 'cn', label: 'China' },
-      { value: 'in', label: 'India' },
-      { value: 'au', label: 'Australia' },
-      { value: 'nz', label: 'New Zealand' },
-      { value: 'za', label: 'South Africa' },
-      { value: 'eg', label: 'Egypt' },
-      { value: 'ng', label: 'Nigeria' },
-      { value: 'ke', label: 'Kenya' },
-    ],
-  },
-};
-
-export const WithDisabledOptions: Story = {
-  args: {
-    label: 'Select with Some Disabled Options',
-    placeholder: 'Some options are disabled...',
-    options: [
-      { value: 'available1', label: 'Available Option 1' },
-      { value: 'disabled1', label: 'Disabled Option 1', disabled: true },
-      { value: 'available2', label: 'Available Option 2' },
-      { value: 'disabled2', label: 'Disabled Option 2', disabled: true },
-      { value: 'available3', label: 'Available Option 3' },
-    ],
-  },
-};
-
-// RTL Support
-export const RTLExample: Story = {
-  args: {
-    label: 'اختر الفاكهة المفضلة',
-    placeholder: 'اختر فاكهة...',
-    helpText: 'هذا نص المساعدة باللغة العربية',
-    options: [
-      { value: 'apple', label: 'تفاح' },
-      { value: 'banana', label: 'موز' },
-      { value: 'cherry', label: 'كرز' },
-      { value: 'date', label: 'تمر' },
-      { value: 'grape', label: 'عنب' },
-    ],
-  },
+// RTL Support - Combined RTL examples
+export const RTLSupport: Story = {
+  name: 'RTL Support',
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', minWidth: '350px' }}>
+      <Select
+        {...args}
+        label="اختر الفاكهة المفضلة"
+        placeholder="اختر فاكهة..."
+        helpText="هذا نص المساعدة باللغة العربية"
+        options={[
+          { value: 'apple', label: 'تفاح' },
+          { value: 'banana', label: 'موز' },
+          { value: 'cherry', label: 'كرز' },
+          { value: 'date', label: 'تمر' },
+          { value: 'grape', label: 'عنب' },
+        ]}
+      />
+      <Select
+        {...args}
+        label="حقل مطلوب"
+        placeholder="يرجى اختيار خيار..."
+        errorMessage="هذا الحقل مطلوب."
+        options={[
+          { value: 'apple', label: 'تفاح' },
+          { value: 'banana', label: 'موز' },
+          { value: 'cherry', label: 'كرز' },
+        ]}
+      />
+      <Select
+        {...args}
+        label="حقل اختياري"
+        placeholder="اختياري..."
+        optional
+        options={[
+          { value: 'option1', label: 'خيار أول' },
+          { value: 'option2', label: 'خيار ثاني' },
+          { value: 'option3', label: 'خيار ثالث' },
+        ]}
+      />
+    </div>
+  ),
   parameters: {
     globals: {
       direction: 'rtl',
     },
+    controls: { exclude: ['label', 'placeholder', 'helpText', 'errorMessage', 'required', 'optional', 'options'] },
   },
 };
 
-export const RTLInsideLabel: Story = {
-  args: {
-    label: 'اختر الفاكهة المفضلة',
-    placeholder: 'اختر فاكهة...',
-    options: [
-      { value: 'apple', label: 'تفاح' },
-      { value: 'banana', label: 'موز' },
-      { value: 'cherry', label: 'كرز' },
-      { value: 'date', label: 'تمر' },
-      { value: 'grape', label: 'عنب' },
-    ],
-  },
+// Advanced Features
+export const AdvancedFeatures: Story = {
+  name: 'Advanced Features',
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', minWidth: '350px' }}>
+      <Select
+        {...args}
+        label="Long Option List"
+        placeholder="Scroll through many options..."
+        options={countryOptions}
+        helpText="This list has scroll behavior for many options"
+      />
+      <Select
+        {...args}
+        label="Disabled Options"
+        placeholder="Some options are disabled..."
+        options={[
+          { value: 'available1', label: 'Available Option 1' },
+          { value: 'disabled1', label: 'Disabled Option 1', disabled: true },
+          { value: 'available2', label: 'Available Option 2' },
+          { value: 'disabled2', label: 'Disabled Option 2', disabled: true },
+          { value: 'available3', label: 'Available Option 3' },
+        ]}
+      />
+      <Select
+        {...args}
+        label="Hidden Label"
+        placeholder="Label is visually hidden but accessible..."
+        hideLabel
+        options={sampleOptions}
+        helpText="Label exists for screen readers"
+      />
+    </div>
+  ),
   parameters: {
-    globals: {
-      direction: 'rtl',
-    },
+    controls: { exclude: ['label', 'placeholder', 'options', 'helpText', 'hideLabel'] },
   },
 };
 
-export const RTLWithError: Story = {
-  args: {
-    label: 'حقل مطلوب',
-    placeholder: 'يرجى اختيار خيار...',
-    errorMessage: 'هذا الحقل مطلوب.',
-    options: [
-      { value: 'apple', label: 'تفاح' },
-      { value: 'banana', label: 'موز' },
-      { value: 'cherry', label: 'كرز' },
-    ],
-  },
-  parameters: {
-    globals: {
-      direction: 'rtl',
-    },
-  },
-};
-
-// Real-world examples
+// Real-world Examples
 export const ContactForm: Story = {
   name: 'Real-world: Contact Form',
   parameters: {
     layout: 'padded',
+    controls: { hideNoControlsWarning: true },
   },
   render: () => (
     <div style={{ maxWidth: '400px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -429,7 +417,6 @@ export const ContactForm: Story = {
           { value: 'high', label: 'High' },
           { value: 'urgent', label: 'Urgent' },
         ]}
-        required
       />
     </div>
   ),
@@ -439,6 +426,7 @@ export const UserProfile: Story = {
   name: 'Real-world: User Profile',
   parameters: {
     layout: 'padded',
+    controls: { hideNoControlsWarning: true },
   },
   render: () => (
     <div style={{ maxWidth: '500px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -449,19 +437,7 @@ export const UserProfile: Story = {
         placeholder="Search and select your country..."
         searchable={true}
         searchPlaceholder="Type to search countries..."
-        options={[
-          ...countryOptions,
-          { value: 'jp', label: 'Japan' },
-          { value: 'kr', label: 'South Korea' },
-          { value: 'cn', label: 'China' },
-          { value: 'in', label: 'India' },
-          { value: 'au', label: 'Australia' },
-          { value: 'nz', label: 'New Zealand' },
-          { value: 'za', label: 'South Africa' },
-          { value: 'eg', label: 'Egypt' },
-          { value: 'ng', label: 'Nigeria' },
-          { value: 'ke', label: 'Kenya' },
-        ]}
+        options={countryOptions}
         fullWidth
         helpText="We'll use this to show relevant content and pricing."
       />
@@ -489,7 +465,6 @@ export const UserProfile: Story = {
             { value: 'de', label: 'Deutsch' },
             { value: 'ar', label: 'العربية' },
           ]}
-          defaultValue="en"
         />
       </div>
     </div>

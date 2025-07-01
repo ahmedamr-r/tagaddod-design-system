@@ -10,18 +10,22 @@ The Select component provides a dropdown interface for users to choose one optio
 
 ## Overview
 
-The Select component is ideal when you have 4 or more options to avoid cluttering the interface with radio buttons. It supports various states (hover, focus, error, disabled), multiple sizes, flexible label positioning, and full RTL support for Arabic interfaces.
+The Select component is ideal when you have 4 or more options to avoid cluttering the interface with radio buttons. It supports various states (hover, focus, error, disabled), multiple sizes, and full RTL support for Arabic interfaces. Fields are treated as required by default, with optional fields explicitly marked when needed.
 
 **Key Features:**
 - Built with Radix UI Select primitives for accessibility
 - Support for both controlled and uncontrolled modes
-- Flexible label positioning (above field or inside field)
 - Multiple size variants (micro, medium, large)
-- Full RTL support with proper text rendering
+- Full RTL support with proper text rendering and icon positioning
 - Error states with validation messages
 - Help text support
+- Fields required by default, optional when specified
+- Prefix icon support with proper RTL handling
+- Searchable select functionality with RTL-aware search input
 - Keyboard navigation and screen reader support
 - Theme support for both Tagaddod and GreenPan brands
+- Width control with maxWidth and minWidth props
+- Optimized layout with grouped prefix/value positioning
 
 ## Import
 
@@ -52,11 +56,9 @@ const options = [
 />
 ```
 
-## Label and Selection Display
+## Usage Examples
 
-The Select component displays the label above the field and shows the currently selected value when an option is chosen.
-
-### Basic Usage with Label
+The Select component displays a clean interface with labels above the field. All fields are required by default unless explicitly marked as optional.
 
 <Canvas of={SelectStories.Default} />
 
@@ -68,28 +70,13 @@ The Select component displays the label above the field and shows the currently 
 />
 ```
 
-### With Selected Value Display
-
-<Canvas of={SelectStories.InsideLabel} />
-
-```jsx
-<Select
-  label="Country"
-  placeholder="Select your country..."
-  defaultValue="us"
-  options={countryOptions}
-/>
-```
-
-The component automatically displays the selected option's label, making it clear what has been chosen while keeping the original label visible for context.
-
 ## Sizes
 
 The Select component comes in three sizes to match different interface contexts.
 
 ### Micro Size
 
-<Canvas of={SelectStories.SizeMicro} />
+<Canvas of={SelectStories.Sizes} />
 
 ```jsx
 <Select
@@ -101,7 +88,7 @@ The Select component comes in three sizes to match different interface contexts.
 
 ### Medium Size (Default)
 
-<Canvas of={SelectStories.SizeMedium} />
+<Canvas of={SelectStories.Sizes} />
 
 ```jsx
 <Select
@@ -113,7 +100,7 @@ The Select component comes in three sizes to match different interface contexts.
 
 ### Large Size
 
-<Canvas of={SelectStories.SizeLarge} />
+<Canvas of={SelectStories.Sizes} />
 
 ```jsx
 <Select
@@ -125,21 +112,12 @@ The Select component comes in three sizes to match different interface contexts.
 
 ## States
 
-### With Default Value
-
-<Canvas of={SelectStories.WithValue} />
-
-```jsx
-<Select
-  label="Favorite Fruit"
-  defaultValue="banana"
-  options={options}
-/>
-```
 
 ### With Prefix Icon
 
-<Canvas of={SelectStories.WithPrefix} />
+<Canvas of={SelectStories.PrefixAndSearch} />
+
+The Select component supports prefix icons that are properly positioned in both LTR and RTL layouts. The icon is grouped with the value text and maintains a consistent 4px gap.
 
 ```jsx
 import { IconUser } from '@tabler/icons-react';
@@ -152,9 +130,15 @@ import { IconUser } from '@tabler/icons-react';
 />
 ```
 
+**Prefix Icon Features:**
+- Automatically positions correctly in RTL mode (icon appears before text in reading order)
+- Maintains consistent 4px spacing between icon and text
+- Supports any React node as prefix (icons, text, etc.)
+- Properly grouped with value text for optimal layout
+
 ### With Help Text
 
-<Canvas of={SelectStories.WithHelpText} />
+<Canvas of={SelectStories.States} />
 
 ```jsx
 <Select
@@ -165,65 +149,120 @@ import { IconUser } from '@tabler/icons-react';
 />
 ```
 
-### Error State
+### Component States
 
-<Canvas of={SelectStories.WithError} />
+<Canvas of={SelectStories.States} />
+
+The States story demonstrates all component states. Remember that fields are required by default without any visual indicators:
 
 ```jsx
+// Default field (required by default - no asterisk needed)
 <Select
-  label="Required Field"
+  label="Selection"
   placeholder="Please select an option..."
-  errorMessage="This field is required."
   options={options}
 />
-```
 
-### Required Field
-
-<Canvas of={SelectStories.Required} />
-
-```jsx
-<Select
-  label="Required Selection"
-  placeholder="You must select an option..."
-  required
-  options={options}
-/>
-```
-
-### Optional Field
-
-<Canvas of={SelectStories.Optional} />
-
-```jsx
+// Optional field (explicitly marked)
 <Select
   label="Optional Selection"
   placeholder="Select if you want..."
   optional
   options={options}
 />
-```
 
-### Disabled State
+// Error state
+<Select
+  label="Field with Error"
+  placeholder="Please select an option..."
+  errorMessage="This field is required."
+  options={options}
+/>
 
-<Canvas of={SelectStories.Disabled} />
-
-```jsx
+// Disabled state
 <Select
   label="Disabled Select"
   placeholder="Cannot select..."
   disabled
   options={options}
 />
+
+// With help text
+<Select
+  label="Field with Help"
+  placeholder="Select an option..."
+  helpText="This is helpful information about the field."
+  options={options}
+/>
 ```
 
 ## Advanced Features
 
-### Full Width
+### Searchable Select
 
-<Canvas of={SelectStories.FullWidth} />
+<Canvas of={SelectStories.PrefixAndSearch} />
+
+The Select component supports searchable functionality for long option lists. The search input automatically adapts to RTL/LTR text direction.
 
 ```jsx
+import { IconSearch } from '@tabler/icons-react';
+
+<Select
+  label="Search Countries"
+  placeholder="Search countries..."
+  searchable
+  searchPlaceholder="Type to search..."
+  options={countryOptions}
+/>
+
+// Searchable with prefix icon
+<Select
+  label="Search Users"
+  prefix={<IconSearch size={16} />}
+  placeholder="Search users..."
+  searchable
+  searchPlaceholder="Type to filter users..."
+  options={userOptions}
+/>
+```
+
+**Searchable Features:**
+- Real-time filtering as you type
+- Search input with proper RTL support (search icon positions correctly)
+- Custom search placeholder text
+- Combines with prefix icons seamlessly
+- Keyboard navigation works with filtered results
+- "No options found" message when no matches
+
+### Width Control
+
+<Canvas of={SelectStories.WidthControl} />
+
+```jsx
+// Default width
+<Select
+  label="Default Width"
+  placeholder="Default width..."
+  options={options}
+/>
+
+// Minimum width
+<Select
+  label="Min Width (200px)"
+  placeholder="Has minimum width..."
+  minWidth={200}
+  options={options}
+/>
+
+// Maximum width
+<Select
+  label="Max Width (300px)"
+  placeholder="Has maximum width..."
+  maxWidth={300}
+  options={options}
+/>
+
+// Full width
 <Select
   label="Full Width Select"
   placeholder="Takes full container width..."
@@ -234,7 +273,7 @@ import { IconUser } from '@tabler/icons-react';
 
 ### Long Option Lists
 
-<Canvas of={SelectStories.LongOptionList} />
+<Canvas of={SelectStories.AdvancedFeatures} />
 
 ```jsx
 <Select
@@ -246,7 +285,7 @@ import { IconUser } from '@tabler/icons-react';
 
 ### Disabled Options
 
-<Canvas of={SelectStories.WithDisabledOptions} />
+<Canvas of={SelectStories.AdvancedFeatures} />
 
 ```jsx
 const optionsWithDisabled = [
@@ -341,7 +380,7 @@ const UserProfile = () => (
 const [selectedValue, setSelectedValue] = useState();
 
 <Select
-  label="Uncontrolled"
+  label="Uncontrolled Select"
   defaultValue="banana"
   options={options}
   onValueChange={(value) => {
@@ -356,7 +395,7 @@ const [selectedValue, setSelectedValue] = useState();
 const [selectedValue, setSelectedValue] = useState('');
 
 <Select
-  label="Controlled"
+  label="Controlled Select"
   value={selectedValue}
   options={options}
   onValueChange={setSelectedValue}
@@ -365,7 +404,7 @@ const [selectedValue, setSelectedValue] = useState('');
 
 ## Accessibility
 
-<Canvas of={SelectStories.Required} />
+<Canvas of={SelectStories.States} />
 
 The Select component is built with accessibility in mind, using Radix UI's Select primitive which provides:
 
@@ -387,23 +426,23 @@ The Select component is built with accessibility in mind, using Radix UI's Selec
 ### Best Practices
 
 ```jsx
-// Always provide clear labels
+// Always provide clear labels (fields are required by default)
 <Select
   label="Country of Residence"
   options={countryOptions}
-  required
 />
 
-// Use help text for additional context
+// Mark optional fields explicitly
 <Select
   label="Preferred Contact Method"
   helpText="How would you like us to reach you?"
   options={contactOptions}
+  optional
 />
 
 // Provide clear error messages
 <Select
-  label="Required Field"
+  label="Selection Required"
   errorMessage="Please select an option to continue."
   options={options}
 />
@@ -425,7 +464,7 @@ const options = [
 
 ## Internationalization
 
-<Canvas of={SelectStories.RTLExample} />
+<Canvas of={SelectStories.RTLSupport} />
 
 The Select component fully supports Right-to-Left (RTL) languages like Arabic:
 
@@ -445,9 +484,41 @@ The Select component fully supports Right-to-Left (RTL) languages like Arabic:
 </div>
 ```
 
+### RTL with Prefix Icon
+
+```jsx
+import { IconUser } from '@tabler/icons-react';
+
+<div dir="rtl">
+  <Select
+    label="نوع المستخدم"
+    prefix={<IconUser size={18} />}
+    placeholder="اختر نوع المستخدم..."
+    options={arabicUserTypes}
+  />
+</div>
+```
+
+### RTL Searchable Select
+
+```jsx
+import { IconSearch } from '@tabler/icons-react';
+
+<div dir="rtl">
+  <Select
+    label="البحث في البلدان"
+    prefix={<IconSearch size={16} />}
+    placeholder="البحث في البلدان..."
+    searchable
+    searchPlaceholder="اكتب للبحث..."
+    options={arabicCountries}
+  />
+</div>
+```
+
 ### RTL with Inside Label
 
-<Canvas of={SelectStories.RTLInsideLabel} />
+<Canvas of={SelectStories.RTLSupport} />
 
 ```jsx
 <div dir="rtl">
@@ -462,7 +533,7 @@ The Select component fully supports Right-to-Left (RTL) languages like Arabic:
 
 ### RTL with Error Message
 
-<Canvas of={SelectStories.RTLWithError} />
+<Canvas of={SelectStories.RTLSupport} />
 
 ```jsx
 <div dir="rtl">
@@ -478,9 +549,13 @@ The Select component fully supports Right-to-Left (RTL) languages like Arabic:
 **RTL Considerations:**
 - Icons and chevrons automatically flip direction
 - Text alignment adjusts appropriately
-- Label positioning works correctly in both directions
 - Line height is optimized for Arabic fonts
 - Dropdown positioning adapts to RTL layout
+- Prefix icons position correctly before text in reading order
+- Search input within dropdown adapts to RTL direction automatically
+- Optional labels display as "اختياري" in RTL mode instead of "(Optional)"
+- Grouped prefix/value layout maintains proper 4px spacing in RTL
+- All component states work correctly in RTL mode
 
 ## Styling and Customization
 
@@ -633,7 +708,7 @@ interface SelectProps {
   /** Whether to hide the label visually (still accessible to screen readers) */
   hideLabel?: boolean;
   
-  /** Mark the field as optional, displaying "(Optional)" text next to label */
+  /** Mark the field as optional, displaying "(Optional)" or "اختياري" text next to label */
   optional?: boolean;
   
   /** Placeholder text when no option is selected */
@@ -654,11 +729,23 @@ interface SelectProps {
   /** Whether the select is disabled */
   disabled?: boolean;
   
-  /** Whether the field is required */
+  /** Whether the field is required (true by default) */
   required?: boolean;
+  
+  /** Maximum width of the select component */
+  maxWidth?: string | number;
+  
+  /** Minimum width of the select component */
+  minWidth?: string | number;
   
   /** Content to display before the select value (icon or text) */
   prefix?: React.ReactNode;
+  
+  /** Whether to show search input for long lists */
+  searchable?: boolean;
+  
+  /** Placeholder text for search input */
+  searchPlaceholder?: string;
   
   /** Additional class names */
   className?: string;
@@ -819,6 +906,30 @@ test('works within a form', async () => {
 - CSS Grid and Flexbox
 - Modern JavaScript (ES2020)
 - Radix UI primitives
+
+## Recent Improvements
+
+This Select component has been enhanced with several key improvements:
+
+### Layout Optimization
+- **Grouped Prefix/Value Layout**: Prefix icons and text are now properly grouped together with consistent 4px spacing
+- **Improved RTL Support**: Prefix icons automatically position correctly in RTL mode (before text in reading order)
+- **Better Text Alignment**: Enhanced text positioning and alignment for both LTR and RTL layouts
+
+### Searchable Functionality
+- **RTL-Aware Search**: Search input within dropdown properly adapts to document direction
+- **Consistent Icon Positioning**: Search icons position correctly (left in LTR, right in RTL)
+- **Seamless Integration**: Search functionality works seamlessly with prefix icons
+
+### Internationalization
+- **Localized Optional Labels**: Shows "اختياري" in RTL mode instead of "(Optional)"
+- **Enhanced Arabic Support**: Improved font rendering and spacing for Arabic text
+- **Direction-Aware Components**: All sub-components properly inherit text direction
+
+### Technical Improvements
+- **Portal Direction Inheritance**: Dropdown content properly inherits document direction
+- **Re-render Optimization**: Components correctly update when direction changes
+- **Accessibility Enhancements**: Improved screen reader support for RTL layouts
 
 ## Migration Guide
 

@@ -278,7 +278,16 @@ export interface TableProps<T extends object> {
   filterOptions?: {
     [key: string]: {
       label: string;
-      options: Array<{ label: string; value: any }>;
+      type?: 'select' | 'rangeSlider' | 'currentFilters' | 'popoverListbox' | 'checkboxGroup' | 'radioGroup';
+      options?: Array<{ label: string; value: any }>;
+      rangeConfig?: {
+        min: number;
+        max: number;
+        step?: number;
+        prefix?: string;
+        suffix?: string;
+        formatValue?: (value: number) => string;
+      };
     };
   };
   
@@ -452,9 +461,31 @@ export interface FilterItemProps {
   value?: any;
   
   /**
-   * Options for the filter
+   * Filter type
    */
-  options: Array<{ label: string; value: any }>;
+  type?: 'select' | 'rangeSlider' | 'currentFilters' | 'popoverListbox' | 'checkboxGroup' | 'radioGroup';
+  
+  /**
+   * Options for the filter (for select type)
+   */
+  options?: Array<{ label: string; value: any }>;
+  
+  /**
+   * Range configuration (for rangeSlider type)
+   */
+  rangeConfig?: {
+    min: number;
+    max: number;
+    step?: number;
+    prefix?: string;
+    suffix?: string;
+    formatValue?: (value: number) => string;
+  };
+  
+  /**
+   * Current filters for display (for currentFilters type)
+   */
+  currentFilters?: Array<{ label: string; value: string }>;
   
   /**
    * Callback when filter changes

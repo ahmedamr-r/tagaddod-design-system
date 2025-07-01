@@ -240,7 +240,7 @@
 }
 
 .filterInitial {
-  background-color: var(--t-color-bg-surface);
+  background-color: var(--t-color-surface-primary);
   border: 1px dashed var(--t-color-border-primary);
   border-radius: var(--t-border-radius-200);
   color: var(--t-color-text-secondary);

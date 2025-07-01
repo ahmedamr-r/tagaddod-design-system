@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Table } from './Table';
 import { ColumnDef } from '@tanstack/react-table';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconEdit, IconTrash, IconFilter, IconChevronDown } from '@tabler/icons-react';
 import { Button } from '../Button';
+import { Listbox } from '../Listbox';
+import { Popover } from '../Popover';
+import { RangeSlider } from '../RangeSlider';
+import { TextInput } from '../TextInput';
 import { QuickColumns, createCellColumn, createInteractiveCellColumn, createActionCellColumn } from './TableCellHelpers';
 
 // Define product data type
@@ -1323,6 +1327,402 @@ export const ColumnManagement: Story = {
     docs: {
       description: {
         story: 'This story demonstrates the advanced column management features of the Table component. Both **Column Ordering** and **Column Resizing** are enabled, allowing users to customize their data view by reordering columns via drag and drop and adjusting column widths with resize handles. Grid cells are enabled to provide better visual feedback during these operations. These features are disabled by default for performance and must be explicitly enabled via props.'
+      }
+    }
+  }
+};
+
+// Advanced Filters Story
+export const AdvancedFilters: Story = {
+  name: 'Advanced Filters with Real-World Scenarios',
+  args: {
+    title: 'E-Commerce Product Inventory',
+    showSearch: true,
+    showFilters: true,
+    showFilterBar: false, 
+    showPagination: true,
+    striped: false,
+    gridCells: false,
+    state: 'normal',
+  },
+  render: (args) => {
+    // Optimized product data - reduced to 30 items for better performance
+    const comprehensiveProducts = useMemo(() => {
+      const categories = ['electronics', 'clothing', 'home', 'books', 'sports', 'beauty', 'toys'];
+      const brands = ['Apple', 'Samsung', 'Nike', 'Adidas', 'IKEA', 'Sony', 'Canon'];
+      const suppliers = ['Global Tech', 'Fashion Hub', 'Home Solutions', 'Book Central', 'Sports World'];
+      const statuses = ['in-stock', 'low-stock', 'out-of-stock'];
+      
+      // Generate fixed data to prevent Math.random() performance issues
+      const baseProducts = [
+        { price: 899, stock: 45, rating: '4.2', reviews: 234 },
+        { price: 1299, stock: 12, rating: '4.7', reviews: 567 },
+        { price: 89, stock: 156, rating: '3.9', reviews: 89 },
+        { price: 249, stock: 78, rating: '4.1', reviews: 345 },
+        { price: 1899, stock: 3, rating: '4.8', reviews: 123 },
+        { price: 129, stock: 234, rating: '4.0', reviews: 678 },
+        { price: 699, stock: 67, rating: '4.3', reviews: 456 },
+        { price: 349, stock: 89, rating: '3.8', reviews: 234 },
+        { price: 1599, stock: 23, rating: '4.6', reviews: 789 },
+        { price: 199, stock: 145, rating: '4.2', reviews: 345 }
+      ];
+      
+      const products = Array.from({ length: 30 }, (_, i) => {
+        const baseIndex = i % baseProducts.length;
+        const base = baseProducts[baseIndex];
+        
+        return {
+          id: i + 1,
+          name: `Product ${i + 1} - ${categories[i % categories.length]} item`,
+          price: base.price,
+          category: categories[i % categories.length],
+          brand: brands[i % brands.length],
+          supplier: suppliers[i % suppliers.length],
+          stockWarehouse: base.stock,
+          stockCollectors: Math.floor(base.stock * 0.2),
+          status: statuses[
+            i < 3 ? 2 : // First 3 are out of stock
+            i < 8 ? 1 : // Next 5 are low stock
+            0 // Rest are in stock
+          ],
+          rating: base.rating,
+          reviews: base.reviews,
+          tags: i % 3 === 0 ? ['bestseller'] : i % 5 === 0 ? ['new-arrival', 'featured'] : [],
+        };
+      });
+      
+      return products;
+    }, []);
+
+    // Enhanced columns with more realistic data - optimized for performance
+    const comprehensiveColumns: ColumnDef<any, any>[] = useMemo(() => [
+      QuickColumns.number('id', 'ID', 60),
+      {
+        ...QuickColumns.text('name', 'Product Name'),
+        size: 200,
+      },
+      {
+        ...QuickColumns.number('price', 'Price'),
+        size: 100,
+        cell: ({ getValue }: { getValue: () => any }) => `$${getValue()}`,
+      },
+      {
+        ...QuickColumns.text('category', 'Category'),
+        size: 120,
+        cell: ({ getValue }: { getValue: () => any }) => (
+          <span style={{ 
+            textTransform: 'capitalize',
+            padding: '4px 8px',
+            borderRadius: '4px',
+            backgroundColor: '#f8f9fa',
+            fontSize: '12px'
+          }}>
+            {getValue()}
+          </span>
+        ),
+      },
+      {
+        ...QuickColumns.text('brand', 'Brand'),
+        size: 100,
+      },
+      {
+        ...QuickColumns.text('status', 'Status'),
+        size: 120,
+        cell: ({ getValue }: { getValue: () => any }) => {
+          const status = getValue();
+          const colors = {
+            'in-stock': '#28a745',
+            'low-stock': '#ffc107', 
+            'out-of-stock': '#dc3545'
+          };
+          return (
+            <span style={{ 
+              color: colors[status as keyof typeof colors],
+              fontWeight: 500,
+              textTransform: 'capitalize'
+            }}>
+              {status.replace('-', ' ')}
+            </span>
+          );
+        },
+      },
+      QuickColumns.number('stockWarehouse', 'Stock', 80),
+      {
+        ...QuickColumns.text('supplier', 'Supplier'),
+        size: 140,
+      },
+      // Efficient action column without React elements in data
+      {
+        id: 'actions',
+        header: 'Actions',
+        size: 120,
+        cell: ({ row }: { row: any }) => (
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <Button onClick={() => console.log('Edit product:', row.original.id)}>
+              <IconEdit size={16} />
+            </Button>
+            <Button tone="critical" onClick={() => console.log('Delete product:', row.original.id)}>
+              <IconTrash size={16} />
+            </Button>
+          </div>
+        ),
+      },
+    ], []);
+    
+    // Complex filter state including all new types
+    const [activeFilters, setActiveFilters] = useState<Record<string, any>>({});
+    const [searchQuery, setSearchQuery] = useState('');
+    const [tableState, setTableState] = useState<'normal' | 'error' | 'empty' | 'notFound' | 'loading'>('normal');
+    
+    // Comprehensive filter options demonstrating all filter types
+    const filterOptions = useMemo(() => ({
+      category: {
+        label: 'Category', 
+        type: 'popoverListbox' as const,
+        options: [
+          { label: 'All Categories', value: '' },
+          { label: 'Electronics', value: 'electronics' },
+          { label: 'Clothing', value: 'clothing' },
+          { label: 'Home & Garden', value: 'home' },
+          { label: 'Books', value: 'books' },
+          { label: 'Sports', value: 'sports' },
+          { label: 'Beauty', value: 'beauty' },
+          { label: 'Toys', value: 'toys' },
+        ],
+      },
+      priceRange: {
+        label: 'Price Range',
+        type: 'rangeSlider' as const,
+        rangeConfig: {
+          min: 0,
+          max: 2000,
+          step: 50,
+          prefix: '$',
+          formatValue: (value: number) => value.toString(),
+        },
+      },
+      stockLevel: {
+        label: 'Stock Level',
+        type: 'rangeSlider' as const,
+        rangeConfig: {
+          min: 0,
+          max: 500,
+          step: 25,
+          suffix: ' units',
+          formatValue: (value: number) => value.toString(),
+        },
+      },
+      brands: {
+        label: 'Brands',
+        type: 'checkboxGroup' as const,
+        options: [
+          { label: 'Apple', value: 'Apple' },
+          { label: 'Samsung', value: 'Samsung' },
+          { label: 'Nike', value: 'Nike' },
+          { label: 'Adidas', value: 'Adidas' },
+          { label: 'IKEA', value: 'IKEA' },
+          { label: 'Sony', value: 'Sony' },
+          { label: 'Canon', value: 'Canon' },
+        ],
+      },
+      availabilityStatus: {
+        label: 'Availability',
+        type: 'radioGroup' as const,
+        options: [
+          { label: 'All Items', value: '' },
+          { label: 'In Stock', value: 'in-stock' },
+          { label: 'Low Stock', value: 'low-stock' },
+          { label: 'Out of Stock', value: 'out-of-stock' },
+        ],
+      },
+      supplier: {
+        label: 'Supplier',
+        type: 'popoverListbox' as const,
+        options: [
+          { label: 'All Suppliers', value: '' },
+          { label: 'Global Tech', value: 'Global Tech' },
+          { label: 'Fashion Hub', value: 'Fashion Hub' },
+          { label: 'Home Solutions', value: 'Home Solutions' },
+          { label: 'Book Central', value: 'Book Central' },
+          { label: 'Sports World', value: 'Sports World' },
+        ],
+      },
+    }), []);
+    
+    // Advanced filtering with realistic business logic
+    const filteredData = useMemo(() => {
+      let filtered = comprehensiveProducts.filter(product => {
+        // Search filter - search across multiple fields
+        if (searchQuery) {
+          const query = searchQuery.toLowerCase();
+          const searchableFields = [
+            product.name,
+            product.category,
+            product.brand,
+            product.supplier,
+            product.id.toString()
+          ].join(' ').toLowerCase();
+          
+          if (!searchableFields.includes(query)) {
+            return false;
+          }
+        }
+        
+        // Category filter
+        if (activeFilters.category && activeFilters.category !== '') {
+          if (product.category !== activeFilters.category) return false;
+        }
+        
+        // Price range filter with debounced performance
+        if (activeFilters.priceRange && Array.isArray(activeFilters.priceRange)) {
+          const [minPrice, maxPrice] = activeFilters.priceRange;
+          if (product.price < minPrice || product.price > maxPrice) return false;
+        }
+        
+        // Stock level filter
+        if (activeFilters.stockLevel && Array.isArray(activeFilters.stockLevel)) {
+          const [minStock, maxStock] = activeFilters.stockLevel;
+          if (product.stockWarehouse < minStock || product.stockWarehouse > maxStock) return false;
+        }
+        
+        // Multi-select brands filter
+        if (activeFilters.brands && Array.isArray(activeFilters.brands) && activeFilters.brands.length > 0) {
+          if (!activeFilters.brands.includes(product.brand)) return false;
+        }
+        
+        // Availability status filter
+        if (activeFilters.availabilityStatus && activeFilters.availabilityStatus !== '') {
+          if (product.status !== activeFilters.availabilityStatus) return false;
+        }
+        
+        // Supplier filter
+        if (activeFilters.supplier && activeFilters.supplier !== '') {
+          if (product.supplier !== activeFilters.supplier) return false;
+        }
+        
+        return true;
+      });
+      
+      return filtered;
+    }, [comprehensiveProducts, activeFilters, searchQuery]);
+    
+    // Simulate different states for edge case testing
+    const getTableState = () => {
+      if (tableState === 'loading') return 'loading';
+      if (tableState === 'error') return 'error';
+      if (filteredData.length === 0) {
+        return searchQuery || Object.keys(activeFilters).some(key => activeFilters[key]) ? 'notFound' : 'empty';
+      }
+      return 'normal';
+    };
+    
+    const currentState = getTableState();
+    
+    return (
+      <div style={{ padding: '20px' }}>
+        {/* Demo Controls */}
+        <div style={{ 
+          marginBottom: '24px', 
+          padding: '20px', 
+          backgroundColor: '#f8f9fa', 
+          borderRadius: '12px', 
+          border: '1px solid #e9ecef' 
+        }}>
+          <h3 style={{ 
+            margin: '0 0 16px 0', 
+            fontSize: '18px', 
+            fontWeight: 600, 
+            color: '#212529',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <IconFilter size={20} />
+            Advanced Filtering & Status Demo
+          </h3>
+          
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '12px',
+            marginBottom: '16px'
+          }}>
+            <Button
+              tone={tableState === 'normal' ? 'success' : 'default'}
+              onClick={() => setTableState('normal')}
+            >
+              Normal State
+            </Button>
+            <Button
+              tone={tableState === 'loading' ? 'default' : 'default'}
+              onClick={() => setTableState('loading')}
+            >
+              Loading State
+            </Button>
+            <Button
+              tone={tableState === 'error' ? 'critical' : 'default'}
+              onClick={() => setTableState('error')}
+            >
+              Error State
+            </Button>
+            <Button
+              onClick={() => {
+                setActiveFilters({});
+                setSearchQuery('');
+                setTableState('normal');
+              }}
+            >
+              Clear All
+            </Button>
+          </div>
+          
+          <div style={{ 
+            fontSize: '14px', 
+            color: '#6c757d',
+            lineHeight: 1.5
+          }}>
+            <p style={{ margin: '0 0 8px 0' }}>
+              <strong>🎯 Filter Types:</strong> PopoverListbox (Category, Supplier), 
+              RangeSlider (Price, Stock), CheckboxGroup (Brands), RadioGroup (Availability)
+            </p>
+            <p style={{ margin: '0 0 8px 0' }}>
+              <strong>⚡ Performance:</strong> Debounced range sliders (500ms delay), 
+              optimized for large datasets and API calls
+            </p>
+            <p style={{ margin: '0' }}>
+              <strong>📊 Results:</strong> Showing <strong>{filteredData.length}</strong> of <strong>{comprehensiveProducts.length}</strong> products
+              {Object.keys(activeFilters).length > 0 && ` (${Object.keys(activeFilters).length} filters active)`}
+            </p>
+            <p style={{ margin: '0', fontSize: '12px', color: '#28a745' }}>
+              <strong>🚀 Performance Optimized:</strong> Reduced to 30 items and efficient action columns for smooth interaction
+            </p>
+          </div>
+        </div>
+        
+        <Table
+          {...args}
+          data={currentState === 'normal' ? filteredData : []}
+          columns={comprehensiveColumns}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          activeFilters={activeFilters}
+          onFilterChange={setActiveFilters}
+          filterOptions={filterOptions}
+          badge={currentState === 'normal' ? filteredData.length : undefined}
+          state={currentState}
+          errorMessage="Failed to load inventory data. This could be due to server issues or network connectivity problems."
+          emptyMessage="No products found in inventory. Add some products to get started."
+          notFoundMessage={searchQuery ? `No results found for "${searchQuery}"` : "No products match the selected filters"}
+          notFoundSubtitle="Try adjusting your search terms or filter criteria"
+          onRowClick={(row) => console.log('Product selected:', row.original)}
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'This comprehensive story demonstrates the **complete advanced filtering system** with real-world scenarios and edge cases. Features include: **PopoverListbox filters** with zero margins for categories and suppliers, **debounced RangeSlider filters** for price and stock levels, **CheckboxGroup filters** for multi-brand selection, **RadioGroup filters** for availability status, **30 realistic products** optimized for smooth performance, **status showcases** (normal, loading, error, empty, not found), **advanced search** across multiple fields, and **filter performance optimization** with 500ms debouncing to prevent excessive API calls.'
       }
     }
   }

@@ -73,6 +73,12 @@ export interface SelectProps {
   
   /** Placeholder text for search input */
   searchPlaceholder?: string;
+  
+  /** Maximum width of the select component */
+  maxWidth?: string | number;
+  
+  /** Minimum width of the select component */
+  minWidth?: string | number;
 }
 
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(
@@ -97,6 +103,8 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     prefix,
     searchable = false,
     searchPlaceholder = 'Search options...',
+    maxWidth,
+    minWidth,
     ...props
   }, ref) => {
     const uniqueId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
@@ -124,10 +132,13 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     const hasError = !!errorMessage;
     const sizeClass = `size${size.charAt(0).toUpperCase() + size.slice(1)}`;
     
-    // Get current selected option to display label
-    const selectedOption = options.find(option => option.value === value) || 
-                          options.find(option => option.value === defaultValue);
     const shouldShowLabel = label && !hideLabel;
+    
+    // Create style object for width constraints
+    const widthStyle = {
+      ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+      ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    };
     
     return (
       <Form.Root
@@ -138,20 +149,15 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
           fullWidth && styles.fullWidth,
           className
         )}
+        style={widthStyle}
       >
         <Form.Field name={name || 'select-field'}>
           {shouldShowLabel && (
             <div className={styles.labelContainer}>
               <Form.Label className={styles.label} style={lineHeightStyle}>
                 {label}
-                {required && <span className={styles.required}>*</span>}
-                {optional && <span className={styles.optional}>(Optional)</span>}
+                {optional && <span className={styles.optional}>{isRTL ? '(اختياري)' : '(Optional)'}</span>}
               </Form.Label>
-              {selectedOption && (
-                <span className={styles.selectedValue} style={lineHeightStyle}>
-                  {selectedOption.label}
-                </span>
-              )}
             </div>
           )}
           
@@ -175,13 +181,15 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
               aria-describedby={`${uniqueId}-helptext ${uniqueId}-error`}
               {...props}
             >
-              {prefix && <div className={styles.prefix}>{prefix}</div>}
-              
-              <SelectPrimitive.Value
-                className={styles.value}
-                placeholder={placeholder}
-                style={lineHeightStyle}
-              />
+              <div className={styles.contentWrapper}>
+                {prefix && <div className={styles.prefix}>{prefix}</div>}
+                
+                <SelectPrimitive.Value
+                  className={styles.value}
+                  placeholder={placeholder}
+                  style={lineHeightStyle}
+                />
+              </div>
               
               <SelectPrimitive.Icon className={styles.icon}>
                 <IconChevronDown size={18} />
@@ -201,8 +209,9 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
                 
                 <SelectPrimitive.Viewport className={styles.viewport}>
                   {searchable && (
-                    <div className={styles.searchContainer}>
+                    <div className={styles.searchContainer} dir={isRTL ? 'rtl' : 'ltr'}>
                       <TextInput
+                        key={`search-${isRTL ? 'rtl' : 'ltr'}`}
                         placeholder={searchPlaceholder}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -253,7 +262,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
           
           {hasError ? (
             <div id={`${uniqueId}-error`} className={styles.errorMessage} style={lineHeightStyle}>
-              <IconExclamationCircle size={16} className={styles.errorIcon} />
+              <IconExclamationCircle size={20} className={styles.errorIcon} />
               {errorMessage}
             </div>
           ) : helpText ? (
