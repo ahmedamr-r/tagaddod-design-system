@@ -828,12 +828,25 @@
 }
 
 .errorRow:hover {
-  background-color: var(--t-color-fill-critical-secondary) !important;
-  /* Slightly darker on hover for error rows */
-  filter: brightness(0.98);
+  background-color: var(--t-color-fill-critical-secondary-hover) !important;
 }
 
 .errorRow .tableCell {
+  background-color: transparent !important;
+}
+
+/* Override hover effects for error rows - ensure error row hover takes precedence */
+.errorRow:hover .tableCell {
+  background-color: transparent !important;
+}
+
+/* Override striped hover effects for error rows */
+.striped .errorRow:hover .tableCell.striped {
+  background-color: transparent !important;
+}
+
+/* Override clickable row hover effects for error rows */
+.errorRow.clickableRow:hover .tableCell {
   background-color: transparent !important;
 }
 

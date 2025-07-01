@@ -212,13 +212,13 @@ font: var(--t-typography-body-sm-default);
 .errorContainer {
   display: flex;
   align-items: center;
-  gap: var(--range-slider-space-100);
   margin-top: var(--range-slider-space-100);
 }
 
 .errorIcon {
   color: var(--range-slider-color-text-critical);
   flex-shrink: 0;
+  margin-right: var(--range-slider-space-100);
 }
 
 .errorMessage {
@@ -226,6 +226,33 @@ font: var(--t-typography-body-sm-default);
   font-weight: 400;
   color: var(--range-slider-color-text-critical);
   line-height: 1.5;
+  position: relative;
+}
+
+/* Line height trim for error message */
+.errorMessage::before,
+.errorMessage::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.errorMessage::before {
+  margin-top: -0.15em;
+}
+
+.errorMessage::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .errorMessage::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .errorMessage::after {
+  margin-bottom: -0.25em;
 }
 
 /* RTL support */
@@ -241,9 +268,10 @@ font: var(--t-typography-body-sm-default);
   font-family: var(--t-font-family-arabic, 'Tajawal', system-ui, sans-serif);
 }
 
-/* RTL error icon positioning */
-:global([dir="rtl"]) .errorContainer {
-  flex-direction: row-reverse;
+/* RTL error icon positioning - match TextInput pattern */
+:global([dir="rtl"]) .errorIcon {
+  margin-right: 0;
+  margin-left: var(--range-slider-space-100);
 }
 
 /* High contrast mode support */

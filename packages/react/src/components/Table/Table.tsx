@@ -385,7 +385,8 @@ export const Table = <T extends object>({
                     className={clsx(
                       styles.tableRow,
                       onRowClick && styles.clickableRow,
-                      disableRowHover && styles.staticRow
+                      disableRowHover && styles.staticRow,
+                      (row.original as any)?.hasError && styles.errorRow
                     )}
                     onClick={() => onRowClick?.(row)}
                   >
@@ -439,7 +440,8 @@ export const Table = <T extends object>({
                 className={clsx(
                   styles.tableRow,
                   onRowClick && styles.clickableRow,
-                  disableRowHover && styles.staticRow
+                  disableRowHover && styles.staticRow,
+                  (row.original as any)?.hasError && styles.errorRow
                 )}
                 onClick={() => onRowClick?.(row)}
               >

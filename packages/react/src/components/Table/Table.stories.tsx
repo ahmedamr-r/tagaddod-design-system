@@ -1909,9 +1909,6 @@ export const ErrorRowHighlighting: Story = {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            padding: '8px',
-            backgroundColor: row.original.hasError ? 'var(--t-color-fill-critical-secondary)' : 'transparent',
-            borderRadius: '4px',
           }}>
             {row.original.hasError && (
               <IconAlertTriangle size={14} style={{ color: 'var(--t-color-text-critical)' }} />
@@ -1960,7 +1957,7 @@ export const ErrorRowHighlighting: Story = {
             Error Row Highlighting Demo
           </h4>
           <p style={{ margin: '0', fontSize: '13px' }}>
-            Rows with validation errors are highlighted using <code>fill-critical-secondary</code> token.
+            Rows with validation errors are highlighted using <code>fill-critical-secondary</code> token across the entire row.
           </p>
         </div>
 
@@ -1974,6 +1971,7 @@ export const ErrorRowHighlighting: Story = {
           showFilters={false}
           gridCells={true}
           disableRowHover={false}
+          className="error-table-demo"
         />
       </div>
     );
@@ -1981,7 +1979,7 @@ export const ErrorRowHighlighting: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstrates **error row highlighting** using the `fill-critical-secondary` token. Rows with validation errors are visually highlighted to help users identify problematic data.'
+        story: 'Demonstrates **error row highlighting** using the `fill-critical-secondary` token. Rows with validation errors are visually highlighted across the entire row to help users identify problematic data.'
       }
     }
   }
