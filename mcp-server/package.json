@@ -1,0 +1,36 @@
+{
+  "name": "tagaddod-design-system-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for Tagaddod Design System components and tokens",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "build": "tsc",
+    "start": "node dist/src/server.js",
+    "build-docs": "tsx scripts/build-docs.ts",
+    "ingest": "tsx scripts/ingest.ts",
+    "setup": "npm run build-docs && npm run ingest",
+    "test-stdio": "npm run build && node dist/scripts/test-stdio.js",
+    "deploy": "npm run build && npm run build-docs && vercel --prod",
+    "deploy:preview": "npm run build && npm run build-docs && vercel"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "@types/glob": "^8.1.0",
+    "cors": "^2.8.5",
+    "fastmcp": "^3.8.2",
+    "glob": "^11.0.3",
+    "helmet": "^7.1.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/node": "^20.14.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

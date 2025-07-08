@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "name": "tagaddod-design-system-mcp",
+  "builds": [
+    {
+      "src": "dist/src/server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/mcp/(.*)",
+      "dest": "/dist/src/server.js"
+    },
+    {
+      "src": "/health",
+      "dest": "/dist/src/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/src/server.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "SUPABASE_URL": "@supabase-url",
+    "SUPABASE_ANON_KEY": "@supabase-anon-key",
+    "OPENAI_API_KEY": "@openai-api-key"
+  },
+  "functions": {
+    "dist/src/server.js": {
+      "maxDuration": 30
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "tagaddod-design-system": {
+      "command": "node",
+      "args": [
+        "/Users/me-mac/Downloads/t-design-system/tagaddod-design-system/mcp-server/dist/src/server.js"
+      ],
+      "env": {
+        "SUPABASE_URL": "https://ynkrfsaaqhkmoiwyyyqa.supabase.co",
+        "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlua3Jmc2FhcWhrbW9pd3l5eXFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE4ODg3MzAsImV4cCI6MjA2NzQ2NDczMH0.pLo2-Jxm0_r7I6Z-69vHtT68ldNIP8eFR20VkciO1l0"
+      },
+      "description": "Tagaddod Design System MCP Server - provides component search and generation via stdio transport"
+    }
+  }
+}
