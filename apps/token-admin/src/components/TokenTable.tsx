@@ -22,14 +22,17 @@ const formatTokenPath = (path: string) => {
 const renderTokenPreview = (token: Token) => {
   const { type, value } = token;
   
+  // Safe display value for rendering
+  const displayValue = typeof value === 'object' ? JSON.stringify(value) : String(value);
+  
   if (type === 'color') {
     return (
       <div className="flex items-center gap-2">
         <div 
           className="token-color-swatch" 
-          style={{ backgroundColor: value }}
+          style={{ backgroundColor: displayValue }}
         />
-        <span className="token-value">{value}</span>
+        <span className="token-value">{displayValue}</span>
       </div>
     );
   }
@@ -39,9 +42,9 @@ const renderTokenPreview = (token: Token) => {
       <div className="flex items-center gap-2">
         <div 
           className="h-4 bg-gray-300" 
-          style={{ width: value }}
+          style={{ width: displayValue }}
         />
-        <span className="token-value">{value}</span>
+        <span className="token-value">{displayValue}</span>
       </div>
     );
   }
@@ -51,9 +54,9 @@ const renderTokenPreview = (token: Token) => {
       <div className="flex items-center gap-2">
         <div 
           className="w-8 h-8 bg-gray-300" 
-          style={{ borderRadius: value }}
+          style={{ borderRadius: displayValue }}
         />
-        <span className="token-value">{value}</span>
+        <span className="token-value">{displayValue}</span>
       </div>
     );
   }
@@ -63,14 +66,14 @@ const renderTokenPreview = (token: Token) => {
       <div className="flex items-center gap-2">
         <div 
           className="w-8 h-8 bg-white border" 
-          style={{ boxShadow: value }}
+          style={{ boxShadow: displayValue }}
         />
-        <span className="token-value text-xs break-all">{value}</span>
+        <span className="token-value text-xs break-all">{displayValue}</span>
       </div>
     );
   }
   
-  return <span className="token-value">{value}</span>;
+  return <span className="token-value">{displayValue}</span>;
 };
 
 export const TokenTable: React.FC<TokenTableProps> = ({ 
@@ -85,7 +88,7 @@ export const TokenTable: React.FC<TokenTableProps> = ({
   const filteredTokens = Object.entries(tokens).reduce((acc, [category, tokenList]) => {
     const filtered = tokenList.filter(token => 
       token.path.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      token.value.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      String(token.value).toLowerCase().includes(searchQuery.toLowerCase()) ||
       token.description?.toLowerCase().includes(searchQuery.toLowerCase())
     );
     

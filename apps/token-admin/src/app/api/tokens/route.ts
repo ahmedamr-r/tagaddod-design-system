@@ -20,8 +20,8 @@ function parseTokens(jsonContent: any, category: string, fileName: string): any[
           tokens.push({
             path: currentPath.join('.'),
             value: value.$value,
-            type: value.$type || 'unknown',
-            description: value.$description || '',
+            type: (value as any).$type || 'unknown',
+            description: (value as any).$description || '',
             category,
             fileName
           });

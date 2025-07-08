@@ -1,27 +1,27 @@
 {
   "shadow": {
     "1": {
-      "$type": "shadow",
       "$value": {
         "color": "rgba(0, 0, 0, 0.1)",
         "offsetX": "0",
         "offsetY": "0.0625rem",
         "blur": "0.1875rem",
         "spread": "0"
-      }
+      },
+      "$type": "shadow"
     },
     "2": {
-      "$type": "shadow",
       "$value": {
         "color": "rgba(0, 0, 0, 0.15)",
         "offsetX": "0",
         "offsetY": "0.25rem",
         "blur": "0.375rem",
         "spread": "-0.0625rem"
-      }
+      },
+      "$type": "shadow",
+      "$description": "sda"
     },
     "popover": {
-      "$type": "shadow",
       "$value": {
         "color": "rgba(26, 26, 26, 0.2)",
         "offsetX": "0",
@@ -29,6 +29,7 @@
         "blur": "6px",
         "spread": "-2px"
       },
+      "$type": "shadow",
       "$description": "Special shadow for popover components with values X: 0, Y: 4, Blur: 6, Spread: -2, Color: #1A1A1A at 20% opacity"
     }
   }

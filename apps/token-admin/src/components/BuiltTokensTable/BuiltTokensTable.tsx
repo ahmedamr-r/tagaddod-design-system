@@ -13,9 +13,12 @@ interface BuiltTokensTableProps {
 const renderTokenPreview = (token: BuiltToken) => {
   const { name, value, type } = token;
   
+  // Safe display value for rendering
+  const displayValue = typeof value === 'object' ? JSON.stringify(value) : String(value);
+  
   // Determine type from name or value
-  const isColor = type === 'color' || name.includes('color') || value.startsWith('#') || value.startsWith('rgb');
-  const isDimension = type === 'dimension' || name.includes('space') || name.includes('size') || /^\d+px$/.test(value);
+  const isColor = type === 'color' || name.includes('color') || displayValue.startsWith('#') || displayValue.startsWith('rgb');
+  const isDimension = type === 'dimension' || name.includes('space') || name.includes('size') || /^\d+px$/.test(displayValue);
   const isRadius = type === 'borderRadius' || name.includes('radius');
   const isShadow = type === 'boxShadow' || name.includes('shadow');
   
@@ -24,9 +27,9 @@ const renderTokenPreview = (token: BuiltToken) => {
       <div className="flex items-center gap-2">
         <div 
           className="token-color-swatch" 
-          style={{ backgroundColor: value }}
+          style={{ backgroundColor: displayValue }}
         />
-        <span className="token-value">{value}</span>
+        <span className="token-value">{displayValue}</span>
       </div>
     );
   }
@@ -36,9 +39,9 @@ const renderTokenPreview = (token: BuiltToken) => {
       <div className="flex items-center gap-2">
         <div 
           className="h-4 bg-gray-300" 
-          style={{ width: value }}
+          style={{ width: displayValue }}
         />
-        <span className="token-value">{value}</span>
+        <span className="token-value">{displayValue}</span>
       </div>
     );
   }
@@ -48,9 +51,9 @@ const renderTokenPreview = (token: BuiltToken) => {
       <div className="flex items-center gap-2">
         <div 
           className="w-8 h-8 bg-gray-300" 
-          style={{ borderRadius: value }}
+          style={{ borderRadius: displayValue }}
         />
-        <span className="token-value">{value}</span>
+        <span className="token-value">{displayValue}</span>
       </div>
     );
   }
@@ -60,14 +63,14 @@ const renderTokenPreview = (token: BuiltToken) => {
       <div className="flex items-center gap-2">
         <div 
           className="w-8 h-8 bg-white border" 
-          style={{ boxShadow: value }}
+          style={{ boxShadow: displayValue }}
         />
-        <span className="token-value text-xs break-all">{value}</span>
+        <span className="token-value text-xs break-all">{displayValue}</span>
       </div>
     );
   }
   
-  return <span className="token-value">{value}</span>;
+  return <span className="token-value">{displayValue}</span>;
 };
 
 export const BuiltTokensTable: React.FC<BuiltTokensTableProps> = ({ tokens }) => {
@@ -78,7 +81,7 @@ export const BuiltTokensTable: React.FC<BuiltTokensTableProps> = ({ tokens }) =>
   const filteredTokens = Object.entries(tokens).reduce((acc, [category, tokenList]) => {
     const filtered = tokenList.filter(token => 
       token.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      token.value.toLowerCase().includes(searchQuery.toLowerCase())
+      String(token.value).toLowerCase().includes(searchQuery.toLowerCase())
     );
     
     if (filtered.length > 0) {

@@ -2,10 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Import design tokens */
-@import '@tagaddod/tokens/css/tokens.css';
-@import '@tagaddod/tokens/tagaddod';
-@import '@tagaddod/tokens/greenpan';
+/* Design system styles are imported in layout.tsx */
+
 
 /* Base styles */
 body {

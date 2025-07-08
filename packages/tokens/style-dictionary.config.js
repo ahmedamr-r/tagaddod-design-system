@@ -1,11 +1,12 @@
 import StyleDictionary from 'style-dictionary';
 
-// Register a custom format that properly handles prefixes
+// Register a custom format that properly handles prefixes and includes descriptions as comments
 StyleDictionary.registerFormat({
   name: 'css/variables-with-prefix',
   format: function({dictionary, options}) {
     const prefix = options.prefix || '';
     const selector = options.selector || ':root';
+    const includeComments = options.includeComments !== false;
     
     return `/**
  * Do not edit directly, this file was auto-generated.
@@ -15,7 +16,71 @@ ${selector} {
 ${dictionary.allTokens.map(token => {
   // Handle token value correctly - could be token.value or token.$value
   const value = token.value || token.$value || token.original.$value;
-  return `  --${prefix}-${token.name}: ${value};`;
+  const description = token.description || token.$description || token.original?.$description;
+  
+  let output = '';
+  
+  // Add description as comment if available and comments are enabled
+  if (includeComments && description) {
+    const formattedDescription = description
+      .replace(/\*\*(.*?)\*\*/g, '$1') // Remove markdown bold
+      .replace(/\*(.*?)\*/g, '$1')     // Remove markdown italic
+      .replace(/`(.*?)`/g, '$1')       // Remove markdown code
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // Remove markdown links
+    
+    output += `  /* ${formattedDescription} */\n`;
+  }
+  
+  output += `  --${prefix}-${token.name}: ${value};`;
+  return output;
+}).join('\n')}
+}`;
+  }
+});
+
+// Register a custom format specifically for commented CSS
+StyleDictionary.registerFormat({
+  name: 'css/variables-with-comments',
+  format: function({dictionary, options}) {
+    const prefix = options.prefix || '';
+    const selector = options.selector || ':root';
+    
+    return `/**
+ * Design Tokens with Descriptions
+ * Do not edit directly, this file was auto-generated.
+ */
+
+${selector} {
+${dictionary.allTokens.map(token => {
+  const value = token.value || token.$value || token.original.$value;
+  const description = token.description || token.$description || token.original?.$description;
+  const tokenType = token.type || token.$type || token.original?.$type;
+  
+  let output = '';
+  
+  // Add comprehensive comment block for each token
+  if (description || tokenType) {
+    output += `\n  /**\n`;
+    output += `   * Token: ${token.name}\n`;
+    if (tokenType) {
+      output += `   * Type: ${tokenType}\n`;
+    }
+    if (description) {
+      const formattedDescription = description
+        .replace(/\*\*(.*?)\*\*/g, '$1')
+        .replace(/\*(.*?)\*/g, '$1')
+        .replace(/`(.*?)`/g, '$1')
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+      output += `   * Description: ${formattedDescription}\n`;
+    }
+    if (token.path && token.path.length > 0) {
+      output += `   * Path: ${token.path.join('.')}\n`;
+    }
+    output += `   */\n`;
+  }
+  
+  output += `  --${prefix}-${token.name}: ${value};`;
+  return output;
 }).join('\n')}
 }`;
   }
@@ -37,6 +102,15 @@ const config = {
       files: [{
         destination: 'tokens.css',
         format: 'css/variables-with-prefix',
+        options: {
+          outputReferences: true,
+          selector: ':root',
+          prefix: 't',
+          includeComments: false
+        }
+      }, {
+        destination: 'tokens-with-comments.css',
+        format: 'css/variables-with-comments',
         options: {
           outputReferences: true,
           selector: ':root',

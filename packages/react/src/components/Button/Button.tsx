@@ -72,13 +72,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   // Apply specific icon positioning for icon-only buttons
   const iconOnly = isIconOnly ? styles.iconOnly : '';
   
-  // Detect RTL for line height adjustments
-  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
-  
-  // Create lineHeightStyle object for proper text rendering
-  const lineHeightStyle = {
-    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
-  };
+  // Simple line height style
+  const lineHeightStyle = { lineHeight: 1.5 };
   
   // Combine all classes for the button
   const buttonClasses = clsx(

@@ -64,6 +64,11 @@ export interface SidebarProps extends React.ComponentPropsWithoutRef<'aside'> {
    */
   showBottomSection?: boolean;
   /**
+   * Disable fallback to default menu items when arrays are empty
+   * @default false
+   */
+  disableDefaultFallback?: boolean;
+  /**
    * Whether sidebar is in expanded state by default
    * @default false
    */
@@ -101,6 +106,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
     secondaryItems = [],
     bottomItems = [],
     showBottomSection = true,
+    disableDefaultFallback = false,
     defaultExpanded = false,
     expanded: controlledExpanded,
     onExpandedChange,
@@ -293,9 +299,9 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
       }
     ];
 
-    const finalMenuItems = menuItems.length > 0 ? menuItems : defaultMenuItems;
-    const finalSecondaryItems = secondaryItems.length > 0 ? secondaryItems : defaultSecondaryItems;
-    const finalBottomItems = bottomItems.length > 0 ? bottomItems : defaultBottomItems;
+    const finalMenuItems = (menuItems.length > 0 || disableDefaultFallback) ? menuItems : defaultMenuItems;
+    const finalSecondaryItems = (secondaryItems.length > 0 || disableDefaultFallback) ? secondaryItems : defaultSecondaryItems;
+    const finalBottomItems = (bottomItems.length > 0 || disableDefaultFallback) ? bottomItems : defaultBottomItems;
 
     return (
       <aside

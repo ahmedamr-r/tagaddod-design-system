@@ -379,3 +379,13 @@ npx tsc --noEmit --strict
 - Story files follow Storybook v7+ patterns with `Meta` and `StoryObj`
 - CSS Module imports properly typed
 - Radix UI component integration with correct prop forwarding
+```
+
+## Workflow Memory
+
+### Development and Publishing Workflow
+- **When changing local components in `/Users/me-mac/Downloads/t-design-system/tagaddod-design-system/packages/react/src`**:
+  - Build the components
+  - Increment the package version
+  - Publish to npm 
+  - Update the npm package reference in `/Users/me-mac/Downloads/t-design-system/tagaddod-design-system/apps/token-admin/package.json`

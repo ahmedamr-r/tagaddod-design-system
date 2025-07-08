@@ -47,13 +47,8 @@ export const Badge: React.FC<BadgeProps> = ({
   className,
   ...props
 }) => {
-  // Detect if we need to apply RTL text fixes
-  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
-  
-  // Apply line height style based on text direction
-  const lineHeightStyle = {
-    lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
-  };
+  // Simple line height style
+  const lineHeightStyle = { lineHeight: 1.5 };
 
   // Clone icon with proper size based on badge size
   const renderIcon = () => {
