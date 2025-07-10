@@ -3,6 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import clsx from 'clsx';
 import { Button } from '../Button/Button';
 import { IconX } from '@tabler/icons-react';
+import { useDrawerContext } from '../Drawer/Drawer';
 import styles from './Modal.module.css';
 
 export interface ModalProps extends React.ComponentPropsWithoutRef<typeof Dialog.Root> {
@@ -55,6 +56,9 @@ export const Modal = ({
   onSecondary,
   ...props
 }: ModalProps) => {
+  // Check if modal is opened from within a drawer
+  const drawerContext = useDrawerContext();
+  
   // Detect RTL from prop or document direction (for Storybook compatibility)
   const isRTL = rtl || (typeof document !== 'undefined' && 
     (document.dir === 'rtl' || document.documentElement.dir === 'rtl'));
@@ -64,7 +68,7 @@ export const Modal = ({
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
 
-  // Create custom style object for width variants
+  // Create custom style object for width variants and z-index
   const getCustomStyles = () => {
     const customStyles: React.CSSProperties = {};
     
@@ -80,6 +84,11 @@ export const Modal = ({
       customStyles.maxWidth = maxWidth;
     }
     
+    // Apply higher z-index if modal is opened from within a drawer
+    if (drawerContext.isInsideDrawer) {
+      customStyles.zIndex = drawerContext.drawerZIndex;
+    }
+    
     return customStyles;
   };
 
@@ -87,7 +96,10 @@ export const Modal = ({
     <Dialog.Root {...props}>
       {trigger && <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>}
       <Dialog.Portal>
-        <Dialog.Overlay className={styles.overlay} />
+        <Dialog.Overlay 
+          className={styles.overlay} 
+          style={drawerContext.isInsideDrawer ? { zIndex: drawerContext.drawerZIndex - 1 } : undefined}
+        />
         <Dialog.Content 
           className={clsx(styles.content, {
             [styles.fullscreen]: size === 'fullscreen',

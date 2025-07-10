@@ -244,7 +244,7 @@ font: var(--t-typography-body-md-default);
 /* Content (dropdown) styles */
 .content {
   position: relative;
-  z-index: 50;
+  z-index: var(--t-z-dropdown, 1000);
   min-width: var(--radix-select-trigger-width);
   max-height: var(--radix-select-content-available-height);
   border-radius: var(--t-border-radius-200);
@@ -253,6 +253,12 @@ font: var(--t-typography-body-md-default);
   box-shadow: var(--t-shadow-200);
   overflow: hidden;
   animation: fadeIn var(--t-duration-fast) var(--t-easing-in-out);
+}
+
+/* Enhanced z-index for Select content when inside modal */
+.modalContent {
+  z-index: 2147483647 !important;
+  position: fixed !important;
 }
 
 @keyframes fadeIn {

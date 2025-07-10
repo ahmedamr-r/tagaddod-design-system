@@ -4,6 +4,8 @@ import { Drawer } from './Drawer';
 import { Button } from '../Button/Button';
 import { Badge } from '../Badge/Badge';
 import { TextInput } from '../TextInput/TextInput';
+import { Modal } from '../Modal/Modal';
+import { Select } from '../Select/Select';
 
 const meta: Meta<typeof Drawer> = {
   title: 'Components/Drawer',
@@ -1110,5 +1112,364 @@ export const CustomPadding: Story = {
     useSurfaceBackground: true,
     fullHeight: true,
     contentPadding: 'var(--t-space-600)', // 24px padding
+  },
+};
+
+// Ultimate Z-Index Stress Test: Drawer → Modal → Select
+export const UltimateZIndexTest: Story = {
+  render: (args) => {
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [formData, setFormData] = useState({
+      name: '',
+      email: '',
+      company: '',
+      position: '',
+      department: '',
+      experience: '',
+      skills: '',
+      location: ''
+    });
+
+    const handleModalSubmit = () => {
+      console.log('Modal form submitted:', formData);
+      setModalOpen(false);
+    };
+
+    const handleDrawerClose = () => {
+      setDrawerOpen(false);
+      setModalOpen(false); // Close modal when drawer closes
+    };
+
+    // Form options
+    const companyOptions = [
+      { value: 'tech-corp', label: 'TechCorp Inc.' },
+      { value: 'design-studio', label: 'Design Studio Ltd.' },
+      { value: 'startup-inc', label: 'Startup Inc.' },
+      { value: 'enterprise-co', label: 'Enterprise Co.' },
+      { value: 'innovation-labs', label: 'Innovation Labs' },
+    ];
+
+    const positionOptions = [
+      { value: 'frontend', label: 'Frontend Developer' },
+      { value: 'backend', label: 'Backend Developer' },
+      { value: 'fullstack', label: 'Full Stack Developer' },
+      { value: 'designer', label: 'UI/UX Designer' },
+      { value: 'product-manager', label: 'Product Manager' },
+      { value: 'data-scientist', label: 'Data Scientist' },
+    ];
+
+    const departmentOptions = [
+      { value: 'engineering', label: 'Engineering' },
+      { value: 'design', label: 'Design' },
+      { value: 'product', label: 'Product' },
+      { value: 'marketing', label: 'Marketing' },
+      { value: 'sales', label: 'Sales' },
+      { value: 'hr', label: 'Human Resources' },
+    ];
+
+    const experienceOptions = [
+      { value: 'junior', label: 'Junior (0-2 years)' },
+      { value: 'mid', label: 'Mid-level (2-5 years)' },
+      { value: 'senior', label: 'Senior (5-8 years)' },
+      { value: 'lead', label: 'Lead (8+ years)' },
+      { value: 'principal', label: 'Principal (10+ years)' },
+    ];
+
+    const skillsOptions = [
+      { value: 'react', label: 'React' },
+      { value: 'vue', label: 'Vue.js' },
+      { value: 'angular', label: 'Angular' },
+      { value: 'node', label: 'Node.js' },
+      { value: 'python', label: 'Python' },
+      { value: 'typescript', label: 'TypeScript' },
+      { value: 'figma', label: 'Figma' },
+      { value: 'sketch', label: 'Sketch' },
+    ];
+
+    const locationOptions = [
+      { value: 'us-ny', label: 'New York, USA' },
+      { value: 'us-sf', label: 'San Francisco, USA' },
+      { value: 'uk-london', label: 'London, UK' },
+      { value: 'de-berlin', label: 'Berlin, Germany' },
+      { value: 'ca-toronto', label: 'Toronto, Canada' },
+      { value: 'au-sydney', label: 'Sydney, Australia' },
+      { value: 'sg-singapore', label: 'Singapore' },
+      { value: 'jp-tokyo', label: 'Tokyo, Japan' },
+    ];
+
+    return (
+      <div>
+        <div style={{ 
+          padding: 'var(--t-space-400)', 
+          backgroundColor: 'var(--t-color-fill-critical-secondary)', 
+          borderRadius: 'var(--t-border-radius-200)',
+          border: '1px solid var(--t-color-border-critical)',
+          marginBottom: 'var(--t-space-400)'
+        }}>
+          <h3 style={{ margin: '0 0 var(--t-space-200) 0', color: 'var(--t-color-text-critical)' }}>
+            🧪 Ultimate Z-Index Stress Test
+          </h3>
+          <p style={{ margin: '0', fontSize: 'var(--t-font-size-350)' }}>
+            This test creates the most complex layering scenario: <strong>Drawer → Modal → Select dropdowns</strong>
+          </p>
+          <p style={{ margin: 'var(--t-space-200) 0 0 0', fontSize: 'var(--t-font-size-300)', fontStyle: 'italic' }}>
+            All Select dropdowns should appear above both the Modal overlay AND the Drawer overlay.
+          </p>
+        </div>
+
+        <Button onClick={() => setDrawerOpen(true)}>🚀 Start Z-Index Stress Test</Button>
+        
+        <Drawer
+          {...args}
+          open={drawerOpen}
+          onOpenChange={handleDrawerClose}
+          title="Employee Management"
+          showFooter={true}
+          footerVariant="cancelAndActions"
+          cancelLabel="Close"
+          primaryLabel="View All Employees"
+          showPrimaryButton={true}
+          showSecondaryButton={false}
+          onCancel={handleDrawerClose}
+          onPrimary={() => console.log('View all employees')}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--t-space-400)' }}>
+            <div style={{ 
+              backgroundColor: 'var(--t-color-fill-brand-secondary)', 
+              borderRadius: 'var(--t-border-radius-200)',
+              padding: 'var(--t-space-300)'
+            }}>
+              <h3 style={{ margin: '0 0 var(--t-space-200) 0' }}>Employee Management Dashboard</h3>
+              <p style={{ margin: 0 }}>
+                Manage employee information and add new team members to your organization.
+              </p>
+            </div>
+
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-secondary)',
+              borderRadius: 'var(--t-border-radius-200)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <h4 style={{ margin: '0 0 var(--t-space-200) 0' }}>Quick Actions</h4>
+              <div style={{ display: 'flex', gap: 'var(--t-space-200)' }}>
+                <Button variant="secondary" size="medium">
+                  Import Employees
+                </Button>
+                <Button variant="secondary" size="medium">
+                  Export Data
+                </Button>
+                <Modal
+                  trigger={
+                    <Button variant="primary" size="medium">
+                      ➕ Add New Employee
+                    </Button>
+                  }
+                  open={modalOpen}
+                  onOpenChange={setModalOpen}
+                  title="Add New Employee"
+                  width="large"
+                  footerVariant="cancelAndActions"
+                  cancelLabel="Cancel"
+                  primaryLabel="Add Employee"
+                  showPrimaryButton={true}
+                  showSecondaryButton={false}
+                  onCancel={() => setModalOpen(false)}
+                  onPrimary={handleModalSubmit}
+                >
+                  <div style={{ padding: 'var(--t-space-400)', display: 'flex', flexDirection: 'column', gap: 'var(--t-space-400)' }}>
+                    <div style={{ 
+                      backgroundColor: 'var(--t-color-fill-warning-secondary)', 
+                      padding: 'var(--t-space-300)',
+                      borderRadius: 'var(--t-border-radius-200)',
+                      border: '1px solid var(--t-color-border-warning)'
+                    }}>
+                      <h4 style={{ margin: '0 0 var(--t-space-100) 0', color: 'var(--t-color-text-warning)' }}>
+                        ⚡ Z-Index Test in Progress
+                      </h4>
+                      <p style={{ margin: 0, fontSize: 'var(--t-font-size-300)' }}>
+                        This Modal is inside a Drawer. All Select dropdowns below should appear above BOTH overlays.
+                      </p>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--t-space-300)' }}>
+                      <TextInput
+                        label="Full Name"
+                        placeholder="Enter full name"
+                        value={formData.name}
+                        onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                        required
+                      />
+                      
+                      <TextInput
+                        label="Email Address"
+                        type="email"
+                        placeholder="Enter email"
+                        value={formData.email}
+                        onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                        required
+                      />
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--t-space-300)' }}>
+                      <Select
+                        label="Company"
+                        placeholder="Select company..."
+                        options={companyOptions}
+                        value={formData.company}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, company: value }))}
+                        helpText="🎯 Test: Should appear above Drawer + Modal"
+                      />
+                      
+                      <Select
+                        label="Position"
+                        placeholder="Select position..."
+                        options={positionOptions}
+                        value={formData.position}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, position: value }))}
+                        searchable
+                        searchPlaceholder="Search positions..."
+                        helpText="🔍 Searchable dropdown test"
+                      />
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--t-space-300)' }}>
+                      <Select
+                        label="Department"
+                        placeholder="Select department..."
+                        options={departmentOptions}
+                        value={formData.department}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, department: value }))}
+                      />
+                      
+                      <Select
+                        label="Experience Level"
+                        placeholder="Select experience..."
+                        options={experienceOptions}
+                        value={formData.experience}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, experience: value }))}
+                      />
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--t-space-300)' }}>
+                      <Select
+                        label="Primary Skills"
+                        placeholder="Select primary skill..."
+                        options={skillsOptions}
+                        value={formData.skills}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, skills: value }))}
+                        searchable
+                        searchPlaceholder="Search skills..."
+                      />
+                      
+                      <Select
+                        label="Location"
+                        placeholder="Select location..."
+                        options={locationOptions}
+                        value={formData.location}
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, location: value }))}
+                        searchable
+                        searchPlaceholder="Search locations..."
+                      />
+                    </div>
+
+                    <div style={{ 
+                      backgroundColor: 'var(--t-color-fill-success-secondary)', 
+                      padding: 'var(--t-space-300)',
+                      borderRadius: 'var(--t-border-radius-200)',
+                      border: '1px solid var(--t-color-border-success)'
+                    }}>
+                      <h4 style={{ margin: '0 0 var(--t-space-100) 0', color: 'var(--t-color-text-success)' }}>
+                        ✅ Z-Index Hierarchy Test
+                      </h4>
+                      <p style={{ margin: 0, fontSize: 'var(--t-font-size-300)' }}>
+                        Expected layering (bottom to top):
+                      </p>
+                      <ol style={{ margin: 'var(--t-space-100) 0 0 0', paddingLeft: 'var(--t-space-400)', fontSize: 'var(--t-font-size-300)' }}>
+                        <li>Drawer overlay (z-index: ~1000)</li>
+                        <li>Modal overlay (z-index: 1050)</li>
+                        <li>Modal content (z-index: 1051)</li>
+                        <li><strong>Select dropdowns (z-index: 2147483647)</strong></li>
+                      </ol>
+                    </div>
+                  </div>
+                </Modal>
+              </div>
+            </div>
+
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-tertiary)',
+              borderRadius: 'var(--t-border-radius-200)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <h4 style={{ margin: '0 0 var(--t-space-200) 0' }}>Recent Employees</h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--t-space-200)' }}>
+                {[
+                  { name: 'Sarah Johnson', role: 'Frontend Developer', dept: 'Engineering' },
+                  { name: 'Mike Chen', role: 'UI Designer', dept: 'Design' },
+                  { name: 'Alex Rodriguez', role: 'Product Manager', dept: 'Product' },
+                ].map((employee, index) => (
+                  <div key={index} style={{
+                    padding: 'var(--t-space-200)',
+                    backgroundColor: 'var(--t-color-surface-primary)',
+                    borderRadius: 'var(--t-border-radius-100)',
+                    border: '1px solid var(--t-color-border-secondary)',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <div>
+                      <div style={{ fontWeight: 'var(--t-font-weight-medium)' }}>{employee.name}</div>
+                      <div style={{ fontSize: 'var(--t-font-size-300)', color: 'var(--t-color-text-secondary)' }}>
+                        {employee.role} • {employee.dept}
+                      </div>
+                    </div>
+                    <Button variant="plain" size="micro" tone="neutral">
+                      Edit
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{
+              backgroundColor: 'var(--t-color-fill-magic-secondary)',
+              padding: 'var(--t-space-300)',
+              borderRadius: 'var(--t-border-radius-200)',
+              border: '1px solid var(--t-color-border-magic)'
+            }}>
+              <h4 style={{ margin: '0 0 var(--t-space-200) 0', color: 'var(--t-color-text-magic)' }}>
+                🧪 Test Instructions
+              </h4>
+              <ol style={{ margin: 0, paddingLeft: 'var(--t-space-400)', fontSize: 'var(--t-font-size-300)' }}>
+                <li>Click "Add New Employee" to open the Modal</li>
+                <li>Try opening each Select dropdown in the form</li>
+                <li>Verify dropdowns appear above BOTH overlays</li>
+                <li>Test searchable Select components</li>
+                <li>Try scrolling within dropdowns</li>
+              </ol>
+            </div>
+          </div>
+        </Drawer>
+      </div>
+    );
+  },
+  args: {
+    size: 'large',
+    position: 'right',
+    showBackButton: false,
+    showTitle: true,
+    showClose: true,
+    useSurfaceBackground: true,
+    fullHeight: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Ultimate z-index stress test: Drawer → Modal → Select. Tests the most complex layering scenario where Select dropdowns must appear above both Drawer and Modal overlays.',
+      },
+    },
   },
 };

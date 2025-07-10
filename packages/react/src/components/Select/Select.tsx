@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useMemo } from 'react';
+import React, { forwardRef, useState, useMemo, useEffect } from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import * as Form from '@radix-ui/react-form';
 import clsx from 'clsx';
@@ -79,6 +79,9 @@ export interface SelectProps {
   
   /** Minimum width of the select component */
   minWidth?: string | number;
+  
+  /** Portal container for the dropdown (useful for modals) */
+  portalContainer?: HTMLElement | null;
 }
 
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(
@@ -105,13 +108,47 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     searchPlaceholder = 'Search options...',
     maxWidth,
     minWidth,
+    portalContainer,
     ...props
   }, ref) => {
     const uniqueId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
     const [searchTerm, setSearchTerm] = useState('');
+    const [isInModal, setIsInModal] = useState(false);
     
     // Detect RTL for line height adjustments
-    const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+    const isRTL = typeof document !== 'undefined' && (document.dir === 'rtl' || document.documentElement.dir === 'rtl');
+    
+    // Check if Select is inside a modal on mount and when needed
+    useEffect(() => {
+      if (typeof document === 'undefined') return;
+      
+      const checkModalContext = () => {
+        // Look for modal indicators in the DOM
+        const modalExists = document.querySelector('[data-radix-dialog-content]') ||
+                           document.querySelector('[role="dialog"]') ||
+                           document.querySelector('[data-modal]') ||
+                           document.querySelector('[data-state="open"][role="dialog"]');
+        
+        setIsInModal(!!modalExists);
+      };
+      
+      // Check immediately
+      checkModalContext();
+      
+      // Also check when DOM changes (modal opens/closes)
+      const observer = new MutationObserver(checkModalContext);
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['data-state', 'role']
+      });
+      
+      return () => observer.disconnect();
+    }, []);
+    
+    // Calculate z-index based on modal context - use very high value for modal context
+    const selectZIndex = isInModal ? 2147483647 : 'var(--t-z-dropdown, 1000)';
     
     // Create lineHeightStyle object for proper text rendering
     const lineHeightStyle = {
@@ -196,12 +233,13 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
               </SelectPrimitive.Icon>
             </SelectPrimitive.Trigger>
             
-            <SelectPrimitive.Portal>
+            <SelectPrimitive.Portal container={portalContainer}>
               <SelectPrimitive.Content
-                className={styles.content}
+                className={clsx(styles.content, isInModal && styles.modalContent)}
                 position="popper"
                 sideOffset={4}
                 alignOffset={0}
+                style={{ zIndex: selectZIndex }}
               >
                 <SelectPrimitive.ScrollUpButton className={styles.scrollButton}>
                   <IconChevronUp size={16} />

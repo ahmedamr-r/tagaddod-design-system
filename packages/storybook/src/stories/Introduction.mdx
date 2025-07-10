@@ -2,117 +2,400 @@ import { Meta } from '@storybook/blocks';
 
 <Meta title="Introduction" />
 
-# Tagaddod Design System
+# Tagaddod Design System - Developer Integration Guide
 
-Welcome to the Tagaddod Design System documentation!
+Welcome to the comprehensive integration guide for the Tagaddod Design System! This guide will walk you through setting up a modern development environment using AI-powered tools and integrating our design system into your project.
 
 ## Overview
 
-This design system provides a comprehensive set of React components built with:
+The Tagaddod Design System provides:
 
-- **Design Tokens**: W3C-compliant tokens for consistent theming
-- **Tailwind CSS v4**: Automated utility generation from design tokens
-- **TypeScript**: Full type safety
-- **Multi-brand Support**: Tagaddod and GreenPan themes
+- **22+ Production-Ready Components**: Built on Radix UI primitives with full accessibility
+- **Multi-Brand Support**: Tagaddod and GreenPan themes with seamless switching
+- **RTL/LTR Support**: Full Arabic and English language support with proper typography
+- **Design Tokens**: W3C-compliant token system for consistent theming
+- **TypeScript**: Complete type safety and IntelliSense support
+- **AI-Powered Development**: Pre-built rules files for automated setup
 
-## Token-based Utilities
+## Quick Start for AI Developers
 
-Our system uses two types of Tailwind utilities:
+This guide is optimized for developers using AI-powered coding tools like **Cursor AI** or **Claude Code**. Instead of manual commands, you'll download rules files and let AI agents handle the setup automatically.
 
-### Standard Utilities
-These map to common Tailwind class names but use our design tokens:
+---
 
-```jsx
-<div className="p-4 bg-purple-1200 text-white rounded-lg">
-  Content
-</div>
+## Step 1: Development Environment Setup
+
+### Option A: Cursor AI Setup
+
+1. **Download Cursor AI**: Visit [cursor.so](https://cursor.so) and install Cursor
+2. **Create New Project**: Open Cursor and create a new workspace
+3. **Configure AI Settings**: Enable Composer mode for multi-file editing
+
+### Option B: Claude Code + VS Code Setup
+
+1. **Install VS Code**: Download from [code.visualstudio.com](https://code.visualstudio.com)
+2. **Install Claude Code Extension**: Search for "Claude Code" in VS Code marketplace
+3. **Connect to Claude**: Follow the authentication flow to connect your account
+
+---
+
+## Step 2: Project Scaffolding with AI Rules
+
+Instead of running manual commands, download our AI rules files and let your AI agent handle project creation.
+
+### Option A: Next.js Project (Recommended)
+
+**Download**: [`nextjs-setup.rules`](./rules/nextjs-setup.rules)
+
+**AI Instruction**:
+```
+Please use the nextjs-setup.rules file to create a new Next.js 15 project with TypeScript, 
+App Router, and Tailwind CSS. Follow all the specifications in the rules file.
 ```
 
-### Token-specific Utilities
-These use the `t-` prefix for direct token access:
+### Option B: Vite + React Project
 
-```jsx
-<div className="p-t-400 bg-t-surface-background text-t-primary rounded-t-200">
-  Content
-</div>
+**Download**: [`vite-setup.rules`](./rules/vite-setup.rules)
+
+**AI Instruction**:
+```
+Please use the vite-setup.rules file to create a new Vite project with React, TypeScript, 
+and all the configurations specified in the rules file.
 ```
 
-## Component Architecture
+---
 
-All components are built with:
+## Step 3: Design System Installation
 
-1. **Token-based styling**: All visual properties reference design tokens
-2. **Accessibility**: WCAG 2.1 AA compliance
-3. **Responsive design**: Mobile-first approach
-4. **Multi-theme support**: Automatic theme switching
+**Download**: [`tagaddod-installation.rules`](./rules/tagaddod-installation.rules)
 
-## Getting Started
+**AI Instruction**:
+```
+Please use the tagaddod-installation.rules file to install the Tagaddod Design System 
+and all required peer dependencies. Follow the exact specifications in the rules file.
+```
 
-### Using Components
+**What this does**:
+- Installs `@tagaddod-design/react` package
+- Adds all required Radix UI peer dependencies
+- Installs Tabler icons and other required packages
+- Configures package.json properly
+
+---
+
+## Step 4: ThemeProvider Setup
+
+**Download**: [`themeprovider-setup.rules`](./rules/themeprovider-setup.rules)
+
+**AI Instruction**:
+```
+Please use the themeprovider-setup.rules file to set up the ThemeProvider in my project. 
+Configure it for both Tagaddod and GreenPan themes with RTL support.
+```
+
+**What this does**:
+- Wraps your app with ThemeProvider
+- Configures theme switching (Tagaddod/GreenPan)
+- Sets up direction switching (LTR/RTL)
+- Enables locale management (en/ar)
+- Adds theme persistence with localStorage
+
+---
+
+## Step 5: Styles and Fonts Activation
+
+**Download**: [`styles-activation.rules`](./rules/styles-activation.rules)
+
+**AI Instruction**:
+```
+Please use the styles-activation.rules file to activate all design system styles and fonts. 
+Include Google Fonts setup for both English and Arabic typography.
+```
+
+**What this does**:
+- Imports main CSS file: `@tagaddod-design/react/styles.css`
+- Sets up Google Fonts (Outfit for English, Tajawal for Arabic)
+- Configures font loading optimization
+- Adds proper font fallbacks
+
+---
+
+## Step 6: Component Integration
+
+**Download**: [`component-integration.rules`](./rules/component-integration.rules)
+
+**AI Instruction**:
+```
+Please use the component-integration.rules file to set up proper component imports and 
+usage patterns. Create example implementations following the guidelines.
+```
+
+**What this does**:
+- Sets up tree-shakable imports
+- Creates component usage examples
+- Establishes proper import patterns
+- Adds TypeScript configurations for components
+
+---
+
+## Step 7: RTL Support (Optional)
+
+**Download**: [`rtl-support.rules`](./rules/rtl-support.rules)
+
+**AI Instruction**:
+```
+Please use the rtl-support.rules file to enhance my project with full RTL support for Arabic. 
+Configure automatic direction switching and proper Arabic typography.
+```
+
+**What this does**:
+- Enhances ThemeProvider with RTL detection
+- Adds Arabic font configurations
+- Sets up proper line-height adjustments
+- Configures automatic layout mirroring
+
+---
+
+## Step 8: AI Agent Component Usage
+
+### Using Component Documentation with AI
+
+Each component has detailed `.mdx` documentation that your AI agent can reference for perfect implementation.
+
+**AI Instruction Pattern**:
+```
+I want to implement a [COMPONENT_NAME]. Please reference the [COMPONENT_NAME].mdx 
+documentation file to implement this component correctly with all the proper props, 
+variants, and accessibility features.
+```
+
+**Example**:
+```
+I want to implement a Button with loading state and prefix icon. Please reference 
+the Button.mdx documentation file to implement this correctly.
+```
+
+---
+
+## Complete Component Catalog
+
+### Form Controls
+- **Button** → Reference: `Button.mdx` - Primary interactive element with variants, loading states, and icons
+- **TextInput** → Reference: `TextInput.mdx` - Text input with validation, icons, and error states
+- **Select** → Reference: `Select.mdx` - Dropdown selection with search and grouping
+- **Checkbox** → Reference: `Checkbox.mdx` - Binary choice control with indeterminate state
+- **RadioButton** → Reference: `RadioButton.mdx` - Single selection from option groups
+- **Switch** → Reference: `Switch.mdx` - Toggle control for settings and preferences
+- **RangeSlider** → Reference: `RangeSlider.mdx` - Range input for numeric values
+
+### Layout & Structure
+- **AspectRatio** → Reference: `AspectRatio.mdx` - Maintains content proportions
+- **Separator** → Reference: `Separator.mdx` - Visual content dividers
+- **Sidebar** → Reference: `Sidebar.mdx` - Collapsible navigation sidebar with hover-to-expand
+- **TopBar** → Reference: `TopBar.mdx` - Application header with logo and navigation
+
+### Data Display
+- **Avatar** → Reference: `Avatar.mdx` - User profile pictures and initials
+- **Badge** → Reference: `Badge.mdx` - Status indicators and labels
+- **Table** → Reference: `Table.mdx` - Advanced data tables with sorting and filtering
+- **Tooltip** → Reference: `Tooltip.mdx` - Contextual information overlays
+
+### Navigation
+- **Tabs** → Reference: `Tabs.mdx` - Tabbed content organization
+- **Pagination** → Reference: `Pagination.mdx` - Multi-page navigation controls
+
+### Overlays & Feedback
+- **Modal** → Reference: `Modal.mdx` - Focus-grabbing dialog overlays
+- **Drawer** → Reference: `Drawer.mdx` - Sliding panel overlays
+- **Popover** → Reference: `Popover.mdx` - Contextual content overlays
+- **Sonner** → Reference: `Sonner.mdx` - Toast notification system
+
+### Specialized Components
+- **Listbox** → Reference: `Listbox.mdx` - Rich option selection lists
+- **Logo** → Reference: `Logo.mdx` - Tagaddod brand logo component
+
+### AI Usage Instructions for Each Component
+
+When implementing any component, use this pattern:
+
+```
+@ai Please implement a [COMPONENT_NAME] component. Reference the [COMPONENT_NAME].mdx 
+file in the components directory to understand:
+
+1. All available props and their types
+2. Proper usage examples and patterns  
+3. Accessibility requirements
+4. RTL/internationalization support
+5. Common use cases and variants
+
+Make sure to follow the exact specifications in the documentation.
+```
+
+---
+
+## Advanced Features
+
+### Multi-Theme Support
 
 ```jsx
-import { Button } from '@tagaddod/react';
-import '@tagaddod/react/dist/styles.css';
+import { useTheme } from '@tagaddod-design/react';
 
-function App() {
+function ThemeSwitcher() {
+  const { theme, setTheme } = useTheme();
+  
   return (
-    <Button variant="primary" size="md">
-      Click me
+    <Button onClick={() => setTheme(theme === 'tagaddod' ? 'greenpan' : 'tagaddod')}>
+      Switch to {theme === 'tagaddod' ? 'GreenPan' : 'Tagaddod'}
     </Button>
   );
 }
 ```
 
-### Using Tokens
-
-You can reference any design token through utility classes:
+### RTL Language Support
 
 ```jsx
-// Spacing
-<div className="p-t-400 m-t-200">Content</div>
+import { useTheme } from '@tagaddod-design/react';
 
-// Colors
-<div className="bg-t-surface-background text-t-text-primary">Content</div>
-
-// Typography
-<div className="text-t-heading-md font-t-semibold">Heading</div>
-
-// Borders
-<div className="border-t-200 rounded-t-300">Content</div>
+function LanguageSwitcher() {
+  const { direction, setDirection } = useTheme();
+  
+  return (
+    <Button onClick={() => setDirection(direction === 'ltr' ? 'rtl' : 'ltr')}>
+      {direction === 'ltr' ? 'العربية' : 'English'}
+    </Button>
+  );
+}
 ```
 
-## Available Components
+### Component Implementation Example
 
-- **Button**: Primary action component with multiple variants
-- More components coming soon...
+```jsx
+import { Button, TextInput, Select, Modal } from '@tagaddod-design/react';
+import { IconPlus, IconSave } from '@tabler/icons-react';
 
-## Design Tokens
-
-Our design tokens are organized into:
-
-- **Primitives**: Base values (colors, spacing, etc.)
-- **Semantics**: Contextual values (action colors, surface colors, etc.)
-- **Components**: Component-specific tokens
-
-All tokens follow the W3C Design Token format and are available as CSS custom properties with the `--t-` prefix.
-
-## Development
-
-To work on this design system:
-
-```bash
-# Start the development workflow
-yarn dev:workflow
-
-# Build everything
-yarn build
-
-# Run Storybook
-yarn storybook
+function UserForm() {
+  return (
+    <Modal
+      trigger={<Button prefixIcon={<IconPlus />}>Add User</Button>}
+      title="Create New User"
+      confirmLabel="Save User"
+    >
+      <div className="space-y-4">
+        <TextInput 
+          label="Full Name" 
+          placeholder="Enter full name"
+          required
+        />
+        <TextInput 
+          label="Email" 
+          type="email"
+          placeholder="user@example.com"
+          required
+        />
+        <Select 
+          label="Role"
+          placeholder="Select user role"
+          options={[
+            { value: 'admin', label: 'Administrator' },
+            { value: 'user', label: 'Regular User' }
+          ]}
+          required
+        />
+      </div>
+    </Modal>
+  );
+}
 ```
+
+---
+
+## Performance Optimization
+
+**Download**: [`optimization.rules`](./rules/optimization.rules)
+
+**AI Instruction**:
+```
+Please use the optimization.rules file to optimize my project for production. 
+Configure tree-shaking, bundle splitting, and performance enhancements.
+```
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+**CSS Not Loading**:
+- Ensure `@tagaddod-design/react/styles.css` is imported in your root file
+- Check that the import path is correct
+
+**Fonts Not Displaying**:
+- Verify Google Fonts are loaded in your HTML head
+- Check network tab for font loading errors
+
+**Components Not Themed**:
+- Ensure your app is wrapped with `<ThemeProvider>`
+- Verify theme attributes are set on `<html>` element
+
+**RTL Not Working**:
+- Check that `dir` attribute is set on document
+- Verify Arabic fonts are loaded
+- Ensure proper line-height tokens are applied
+
+### Getting Help
+
+1. **Check Component Documentation**: Each `.mdx` file contains comprehensive usage information
+2. **Use AI Agent Debugging**: Ask your AI agent to check configurations against rules files
+3. **Verify Setup**: Use AI agent to validate each setup step was completed correctly
+
+---
+
+## AI Development Best Practices
+
+### Effective AI Prompts
+
+**Component Implementation**:
+```
+Implement a [COMPONENT] following the exact specifications in [COMPONENT].mdx. 
+Include all accessibility features, proper TypeScript types, and RTL support.
+```
+
+**Bug Fixing**:
+```
+I'm having an issue with [COMPONENT]. Please check the [COMPONENT].mdx documentation 
+and help me debug this implementation: [paste your code]
+```
+
+**Feature Enhancement**:
+```
+Enhance this [COMPONENT] implementation by referencing [COMPONENT].mdx to add 
+[specific features]. Maintain all existing functionality.
+```
+
+### Rules File Usage
+
+Always download the latest rules files before starting:
+- Rules files contain up-to-date configurations
+- They include error handling and validation steps
+- AI agents can follow them precisely for consistent results
+- They're updated with each design system release
+
+---
 
 ## Resources
 
-- [Design Tokens Documentation](https://designtokens.org/)
-- [Tailwind CSS v4 Documentation](https://tailwindcss.com/docs)
-- [W3C Design Token Standard](https://www.w3.org/community/design-tokens/)
+- **Component Documentation**: Each component's `.mdx` file contains complete implementation guides
+- **Storybook Examples**: Interactive examples at [your-storybook-url]
+- **GitHub Repository**: [repository-url] for source code and issues
+- **Design Tokens**: Complete token documentation in the design system
+- **AI Rules Files**: Download from the rules directory for automated setup
+
+---
+
+## License
+
+MIT - see [LICENSE](https://github.com/ahmedamr-r/tagaddod-design-system/blob/main/LICENSE) for details.
+
+---
+
+**Ready to build amazing interfaces with AI assistance? Download the rules files and let your AI agent handle the setup while you focus on creating great user experiences!**

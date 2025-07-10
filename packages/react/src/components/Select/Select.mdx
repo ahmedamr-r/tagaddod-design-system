@@ -26,6 +26,8 @@ The Select component is ideal when you have 4 or more options to avoid clutterin
 - Theme support for both Tagaddod and GreenPan brands
 - Width control with maxWidth and minWidth props
 - Optimized layout with grouped prefix/value positioning
+- Automatic z-index management with real-time modal detection
+- Portal container support for complex layouts and modal integration
 
 ## Import
 
@@ -682,6 +684,75 @@ const organizedOptions = [
 ];
 ```
 
+### Using Select in Modals
+
+The Select component automatically detects when it's used inside a modal and adjusts its z-index accordingly to ensure the dropdown appears above the modal overlay.
+
+```jsx
+import { Modal, Select } from '@tagaddod-design/react';
+
+const ModalWithSelect = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState('');
+
+  const options = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    { value: 'option3', label: 'Option 3' },
+  ];
+
+  return (
+    <>
+      <Modal 
+        open={isOpen} 
+        onOpenChange={setIsOpen}
+        trigger={<Button>Open Modal with Select</Button>}
+        title="Select Options"
+      >
+        <div style={{ padding: '16px' }}>
+          <Select
+            label="Choose an option"
+            placeholder="Select an option..."
+            options={options}
+            value={selectedValue}
+            onValueChange={setSelectedValue}
+          />
+        </div>
+      </Modal>
+    </>
+  );
+};
+```
+
+**Modal Integration Features:**
+- **Automatic Z-Index Management**: The Select dropdown automatically uses maximum z-index (`2147483647`) when inside a modal to ensure it appears above modal overlays
+- **Portal Container Support**: Use the `portalContainer` prop to specify where the dropdown should render
+- **Modal Detection**: Uses `MutationObserver` to automatically detect when inside a Radix Dialog, role="dialog", or data-modal element
+- **Real-Time Detection**: Dynamically adjusts z-index when modals are opened/closed without requiring page refresh
+- **No Configuration Required**: Works out of the box without any additional setup
+
+#### Custom Portal Container
+
+For complex layouts or when you need more control over dropdown rendering:
+
+```jsx
+const ModalWithCustomPortal = () => {
+  const [portalContainer, setPortalContainer] = useState(null);
+
+  return (
+    <Modal open={isOpen} onOpenChange={setIsOpen}>
+      <div ref={setPortalContainer}>
+        <Select
+          label="Custom Portal Select"
+          options={options}
+          portalContainer={portalContainer}
+        />
+      </div>
+    </Modal>
+  );
+};
+```
+
 ## Component API Reference
 
 ### Select Props
@@ -755,6 +826,9 @@ interface SelectProps {
   
   /** Name attribute for form submission */
   name?: string;
+  
+  /** Portal container for the dropdown (useful for modals) */
+  portalContainer?: HTMLElement | null;
 }
 
 interface SelectOption {

@@ -11,7 +11,7 @@ const DrawerContext = createContext<{
   drawerZIndex: number;
 }>({
   isInsideDrawer: false,
-  drawerZIndex: 150, // Default z-index for drawer content
+  drawerZIndex: 1070, // Default z-index for modals opened from drawer
 });
 
 // Hook to use drawer context
@@ -337,7 +337,7 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
           <DrawerContext.Provider 
             value={{ 
               isInsideDrawer: true, 
-              drawerZIndex: 200 // Z-index for modals opened from drawer
+              drawerZIndex: 1070 // Z-index for modals opened from drawer (--t-z-drawer-modal)
             }}
           >
             {/* Header */}

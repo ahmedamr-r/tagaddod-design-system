@@ -6,15 +6,35 @@
     },
     "dropdown": {
       "$type": "number",
-      "$value": 10
+      "$value": 1000
+    },
+    "popover": {
+      "$type": "number", 
+      "$value": 1010
+    },
+    "drawer": {
+      "$type": "number",
+      "$value": 1020
     },
     "modal": {
       "$type": "number",
-      "$value": 100
+      "$value": 1050
+    },
+    "modal-dropdown": {
+      "$type": "number",
+      "$value": 1060
+    },
+    "drawer-modal": {
+      "$type": "number",
+      "$value": 1070
     },
     "toast": {
       "$type": "number",
-      "$value": 1000
+      "$value": 1080
+    },
+    "tooltip": {
+      "$type": "number",
+      "$value": 1090
     }
   }
 }

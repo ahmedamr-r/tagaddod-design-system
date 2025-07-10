@@ -56,15 +56,38 @@ The header uses these CSS classes for layout control:
 }
 ```
 
-## Z-Index Management
+## Z-Index Management & Context System
 
-The Drawer component uses a sophisticated z-index hierarchy to ensure proper layering:
+The Drawer component uses a sophisticated z-index hierarchy and provides context to child components for proper layering:
 
-- **Drawer Overlay**: `z-index: 140` - Above all content but below drawer content
-- **Drawer Content**: `z-index: 150` - Above overlay and all page content (including tables)
-- **Modals from Drawer**: `z-index: 200` - For modal components opened from within the drawer
+### Z-Index Hierarchy
+- **Drawer Overlay**: `calc(var(--t-z-drawer, 1020) - 1)` (1019) - Above all content but below drawer
+- **Drawer Content**: `var(--t-z-drawer, 1020)` (1020) - Above overlay and below modals
+- **Regular Modals**: `var(--t-z-modal, 1050)` (1050) - Above drawer content
+- **Modals from Drawer**: `var(--t-z-drawer-modal, 1070)` (1070) - Highest priority for drawer context
 
-This hierarchy ensures the drawer always appears above table content, sticky headers, and other high z-index elements.
+### DrawerContext System
+
+The Drawer provides context to all child components through `DrawerContext`:
+
+```jsx
+import { useDrawerContext } from '@tagaddod/react';
+
+// Access drawer context in any child component
+const { isInsideDrawer, drawerZIndex } = useDrawerContext();
+
+// Example usage
+if (isInsideDrawer) {
+  // Component is inside a drawer
+  // drawerZIndex = 1070 for modal components
+}
+```
+
+**Context Properties:**
+- `isInsideDrawer: boolean` - Indicates if component is inside a drawer
+- `drawerZIndex: number` - Z-index value (1070) for modal components opened from drawer
+
+This context system allows components like Modal and Select to automatically adjust their z-index when used within a drawer, ensuring proper stacking order without manual configuration.
 
 ## Basic Usage
 
@@ -900,11 +923,83 @@ For large content within drawers:
 - **After**: Provides `DrawerContext` for nested components
 - **Migration**: Optional - use `useDrawerContext` for enhanced modal handling
 
+## Complex Component Integration
+
+### Ultimate Z-Index Test: Drawer → Modal → Select
+
+The Drawer component includes an ultimate stress test story that demonstrates the most complex UI layering scenario possible:
+
+<Canvas of={DrawerStories.UltimateZIndexTest} />
+
+```jsx
+import { Drawer, Modal, Select, Button } from '@tagaddod/react';
+
+const UltimateTest = () => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setDrawerOpen(true)}>
+        Ultimate Z-Index Test
+      </Button>
+      
+      <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} title="Employee Management">
+        <div style={{ padding: '20px' }}>
+          <Button onClick={() => setModalOpen(true)}>
+            Add New Employee
+          </Button>
+          
+          <Modal open={modalOpen} onOpenChange={setModalOpen} title="Add New Employee">
+            <div style={{ padding: '16px' }}>
+              <Select
+                label="Company"
+                options={companyOptions}
+                placeholder="Select company..."
+              />
+              <Select
+                label="Position"
+                options={positionOptions}
+                searchable
+                placeholder="Search positions..."
+              />
+              {/* More Select components... */}
+            </div>
+          </Modal>
+        </div>
+      </Drawer>
+    </>
+  );
+};
+```
+
+**Testing Hierarchy:**
+1. **Drawer Opens** → Z-index: 1020
+2. **Modal Opens from Drawer** → Z-index: 1070 (automatic via DrawerContext)
+3. **Select Dropdowns in Modal** → Z-index: 2147483647 (automatic modal detection)
+
+This demonstrates that the z-index system works correctly in the most complex scenario without any manual configuration.
+
+### Component Integration Features
+
+**Automatic Context Detection:**
+- Modal automatically detects it's inside a drawer and uses higher z-index
+- Select automatically detects it's inside a modal and uses maximum z-index
+- No manual props or configuration required
+
+**Supported Combinations:**
+- Drawer + Modal ✅
+- Modal + Select ✅
+- Drawer + Modal + Select ✅ (Ultimate test)
+- Drawer + Select ✅
+- Modal + Multiple Selects ✅
+
 ## Best Practices
 
 1. **Use appropriate sizes**: Choose drawer size based on content complexity
-2. **Handle modal z-index**: Use `useDrawerContext` when opening modals from drawers
+2. **Handle modal z-index**: Use `useDrawerContext` when opening modals from drawers (automatic in provided components)
 3. **Provide clear actions**: Use footer buttons for primary/secondary actions
 4. **Support RTL**: Test drawer behavior in both LTR and RTL languages
 5. **Consider mobile**: Design drawer content for smaller screens
 6. **Accessibility first**: Ensure keyboard navigation and screen reader compatibility
+7. **Test complex scenarios**: Use the Ultimate Z-Index Test story as a reference for complex component nesting
