@@ -154,7 +154,7 @@ const createBottomItems = (isRTL: boolean): SidebarMenuItem[] => [
 
 // Controlled sidebar component for stories
 const ControlledSidebar = (props: any) => {
-  const [selectedItem, setSelectedItem] = useState(props.selectedItem || 'electronics');
+  const [selectedItem, setSelectedItem] = useState(props.selectedItem || 'page1');
   
   // Get direction from Storybook globals or default to LTR
   const direction = props.globals?.direction || 'ltr';
@@ -171,9 +171,6 @@ const ControlledSidebar = (props: any) => {
         {...props}
         selectedItem={selectedItem}
         onItemChange={setSelectedItem}
-        menuItems={createMenuItems(isRTL)}
-        secondaryItems={createSecondaryItems(isRTL)}
-        bottomItems={createBottomItems(isRTL)}
       />
       <div style={{
         flex: 1,
@@ -198,8 +195,8 @@ const ControlledSidebar = (props: any) => {
           direction: direction
         }}>
           {isRTL 
-            ? 'هذه منطقة المحتوى. يوفر الشريط الجانبي التنقل. مرر فوق الشريط الجانبي لتوسيعه ورؤية جميع خيارات القائمة.'
-            : 'This is the content area. The sidebar provides navigation. Hover over the sidebar to expand it and see all menu options.'
+            ? 'هذه منطقة المحتوى. يوفر الشريط الجانبي التنقل البسيط مع صفحتين افتراضيتين.'
+            : 'This is the content area. The sidebar provides simple navigation with two default pages.'
           }
         </p>
         <div style={{
@@ -231,13 +228,15 @@ const ControlledSidebar = (props: any) => {
               <>
                 العنصر المحدد: <strong>{selectedItem}</strong><br/>
                 الموقع: <strong>{props.position === 'right' ? 'يمين' : 'يسار'}</strong><br/>
-                التوسيع عند التمرير: <strong>{props.hoverExpand !== false ? 'مفعل' : 'معطل'}</strong>
+                التوسيع عند التمرير: <strong>{props.hoverExpand !== false ? 'مفعل' : 'معطل'}</strong><br/>
+                الصفحات الافتراضية: <strong>الصفحة 1، الصفحة 2</strong>
               </>
             ) : (
               <>
                 Selected item: <strong>{selectedItem}</strong><br/>
                 Position: <strong>{props.position || 'left'}</strong><br/>
-                Hover expand: <strong>{props.hoverExpand !== false ? 'enabled' : 'disabled'}</strong>
+                Hover expand: <strong>{props.hoverExpand !== false ? 'enabled' : 'disabled'}</strong><br/>
+                Default pages: <strong>Page 1, Page 2</strong>
               </>
             )}
           </p>
@@ -250,9 +249,10 @@ const ControlledSidebar = (props: any) => {
 export const Default: Story = {
   render: (args) => <ControlledSidebar {...args} />,
   args: {
-    selectedItem: 'electronics',
+    selectedItem: 'page1',
     position: 'left',
-    hoverExpand: true
+    hoverExpand: false,
+    defaultExpanded: true
   }
 };
 

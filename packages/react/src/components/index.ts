@@ -71,14 +71,21 @@ export {
   Table,
   TableHeader,
   TableHeaderCell,
-  TableCell
+  TableCell,
+  QuickColumns,
+  createCellColumn,
+  createInteractiveCellColumn,
+  createActionCellColumn,
+  createCustomCellColumn,
+  TableCellVariants
 } from './Table';
 export type { 
   TableProps,
   TableHeaderProps,
   TableHeaderCellProps, 
-  TableCellProps 
+  TableCellProps
 } from './Table/types';
+export type { CellVariantProps } from './Table/TableCellVariants';
 
 // Export the Switch component
 export { Switch } from './Switch';

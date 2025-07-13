@@ -1235,6 +1235,621 @@ const [isFilterBarVisible, setIsFilterBarVisible] = useState(true);
 />
 ```
 
+## Complete Filtering Implementation Guide
+
+### Important: Data Filtering Logic Required
+
+**⚠️ Critical Understanding**: The Table component handles the filter UI (dropdowns, search bar, filter chips) but **does not automatically filter your data**. You must implement the data filtering logic yourself and pass the filtered data to the Table component.
+
+### Step-by-Step Filtering Implementation
+
+Here's a complete example showing how to implement filtering correctly:
+
+```jsx
+import { useState, useMemo } from 'react';
+import { Table, QuickColumns } from '@tagaddod/react';
+
+function ProductTable() {
+  // 1. Raw data (unfiltered)
+  const rawData = [
+    { id: 1, name: 'Coffee Beans', status: { text: 'Active', value: 'active' }, category: 'food', price: 25.99 },
+    { id: 2, name: 'Dish Soap', status: { text: 'Inactive', value: 'inactive' }, category: 'cleaning', price: 3.99 },
+    { id: 3, name: 'Orange Juice', status: { text: 'Active', value: 'active' }, category: 'drinks', price: 4.50 },
+  ];
+
+  // 2. Filter state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState({});
+
+  // 3. Data filtering function
+  const filterData = (data, searchQuery, filters) => {
+    let filtered = [...data];
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(item => 
+        item.name.toLowerCase().includes(query) ||
+        item.id.toString().includes(query)
+      );
+    }
+
+    // Apply status filter
+    if (filters.status && filters.status !== 'all') {
+      filtered = filtered.filter(item => item.status.value === filters.status);
+    }
+
+    // Apply category filter
+    if (filters.category && filters.category !== 'all') {
+      filtered = filtered.filter(item => item.category === filters.category);
+    }
+
+    return filtered;
+  };
+
+  // 4. Get filtered data using useMemo for performance
+  const filteredData = useMemo(() => 
+    filterData(rawData, searchQuery, filters), 
+    [rawData, searchQuery, filters]
+  );
+
+  // 5. Filter options configuration
+  const filterOptions = {
+    status: {
+      label: 'Status',
+      options: [
+        { label: 'All', value: 'all' },
+        { label: 'Active', value: 'active' },
+        { label: 'Inactive', value: 'inactive' },
+      ],
+    },
+    category: {
+      label: 'Category',
+      options: [
+        { label: 'All', value: 'all' },
+        { label: 'Food', value: 'food' },
+        { label: 'Cleaning', value: 'cleaning' },
+        { label: 'Drinks', value: 'drinks' },
+      ],
+    },
+  };
+
+  const columns = [
+    QuickColumns.text('id', 'ID'),
+    QuickColumns.text('name', 'Product Name'),
+    { 
+      accessorKey: 'status',
+      header: 'Status',
+      cell: ({ getValue }) => getValue().text 
+    },
+    QuickColumns.text('category', 'Category'),
+    { 
+      accessorKey: 'price',
+      header: 'Price',
+      cell: ({ getValue }) => `$${getValue()}` 
+    },
+  ];
+
+  // 6. Pass filtered data to Table component
+  return (
+    <Table
+      data={filteredData}  // ← Important: Use filtered data, not raw data
+      columns={columns}
+      title="Product Inventory"
+      showSearch={true}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      showFilters={true}
+      showFilterBar={true}
+      activeFilters={filters}
+      onFilterChange={setFilters}
+      filterOptions={filterOptions}
+    />
+  );
+}
+```
+
+### Key Implementation Points
+
+#### 1. **Separate Data from UI**
+```jsx
+// ✅ Correct: Filter data before passing to Table
+const filteredData = filterData(rawData, searchQuery, filters);
+<Table data={filteredData} ... />
+
+// ❌ Incorrect: Passing raw data without filtering
+<Table data={rawData} ... />
+```
+
+#### 2. **Use useMemo for Performance**
+```jsx
+// ✅ Correct: Memoize filtered data to prevent unnecessary recalculations
+const filteredData = useMemo(() => 
+  filterData(rawData, searchQuery, filters), 
+  [rawData, searchQuery, filters]
+);
+```
+
+#### 3. **Handle All Filter Types**
+Your filter function must handle both search queries and active filters:
+```jsx
+const filterData = (data, searchQuery, filters) => {
+  let filtered = [...data];
+
+  // Search filtering
+  if (searchQuery.trim()) {
+    // Apply search logic
+  }
+
+  // Individual filter processing
+  Object.keys(filters).forEach(filterKey => {
+    if (filters[filterKey] && filters[filterKey] !== 'all') {
+      // Apply specific filter logic
+    }
+  });
+
+  return filtered;
+};
+```
+
+## Data Processing for Filters
+
+### Understanding Filter Data Flow
+
+```
+Raw Data → Search Filter → Category Filters → Filtered Data → Table Component
+```
+
+The Table component receives the final filtered data and handles:
+- ✅ Displaying filtered results
+- ✅ Pagination of filtered data
+- ✅ Filter UI (dropdowns, search bar)
+- ✅ Filter state management
+
+You handle:
+- ✅ Data filtering logic
+- ✅ Search implementation
+- ✅ Filter value mapping
+- ✅ Performance optimization
+
+### Common Data Structures and Filtering Patterns
+
+#### Pattern 1: Simple String/Number Filtering
+```jsx
+// Data structure
+const data = [
+  { id: 1, name: 'Product A', category: 'electronics', active: true },
+  { id: 2, name: 'Product B', category: 'books', active: false },
+];
+
+// Filter function
+const filterData = (data, searchQuery, filters) => {
+  let filtered = [...data];
+
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(item => 
+      item.name.toLowerCase().includes(query) ||
+      item.id.toString().includes(query)
+    );
+  }
+
+  if (filters.category && filters.category !== 'all') {
+    filtered = filtered.filter(item => item.category === filters.category);
+  }
+
+  if (filters.status && filters.status !== 'all') {
+    const isActive = filters.status === 'active';
+    filtered = filtered.filter(item => item.active === isActive);
+  }
+
+  return filtered;
+};
+```
+
+#### Pattern 2: Object-Based Data Filtering
+```jsx
+// Data structure with object properties
+const data = [
+  { 
+    id: 1, 
+    name: 'User A', 
+    status: { text: 'Active', value: 'active' },
+    role: { text: 'Admin', value: 'admin' }
+  }
+];
+
+// Filter function with object property access
+const filterData = (data, searchQuery, filters) => {
+  let filtered = [...data];
+
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(item => 
+      item.name.toLowerCase().includes(query)
+    );
+  }
+
+  if (filters.status && filters.status !== 'all') {
+    filtered = filtered.filter(item => item.status.value === filters.status);
+  }
+
+  if (filters.role && filters.role !== 'all') {
+    filtered = filtered.filter(item => item.role.value === filters.role);
+  }
+
+  return filtered;
+};
+```
+
+#### Pattern 3: Date Range Filtering
+```jsx
+// Data with dates
+const data = [
+  { id: 1, name: 'Order A', createdDate: '2024-01-15', amount: 100 },
+  { id: 2, name: 'Order B', createdDate: '2024-01-20', amount: 250 },
+];
+
+// Filter function with date handling
+const filterData = (data, searchQuery, filters) => {
+  let filtered = [...data];
+
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(item => 
+      item.name.toLowerCase().includes(query)
+    );
+  }
+
+  // Date range filtering
+  if (filters.dateRange && filters.dateRange !== 'all') {
+    const now = new Date();
+    let startDate;
+
+    switch (filters.dateRange) {
+      case 'last7days':
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case 'last30days':
+        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        break;
+      default:
+        startDate = null;
+    }
+
+    if (startDate) {
+      filtered = filtered.filter(item => 
+        new Date(item.createdDate) >= startDate
+      );
+    }
+  }
+
+  // Amount range filtering
+  if (filters.amountRange && filters.amountRange !== 'all') {
+    switch (filters.amountRange) {
+      case 'under100':
+        filtered = filtered.filter(item => item.amount < 100);
+        break;
+      case '100to500':
+        filtered = filtered.filter(item => item.amount >= 100 && item.amount <= 500);
+        break;
+      case 'over500':
+        filtered = filtered.filter(item => item.amount > 500);
+        break;
+    }
+  }
+
+  return filtered;
+};
+```
+
+## Filter Value Mapping
+
+### The Most Common Filtering Issue
+
+**Problem**: Filter option values don't match data structure values.
+
+#### Example Issue
+```jsx
+// Filter options use lowercase values
+const filterOptions = {
+  status: {
+    options: [
+      { label: 'Active', value: 'active' },    // ← lowercase
+      { label: 'Inactive', value: 'inactive' } // ← lowercase
+    ]
+  }
+};
+
+// But data uses object with text property
+const data = [
+  { status: { text: 'Active', tone: 'success' } },  // ← 'Active' not 'active'
+  { status: { text: 'Inactive', tone: 'warning' } } // ← 'Inactive' not 'inactive'
+];
+
+// ❌ This won't work:
+filtered = filtered.filter(item => item.status.value === filters.status);
+// item.status.value is undefined!
+
+// ❌ This won't work either:
+filtered = filtered.filter(item => item.status.text === filters.status);
+// 'Active' !== 'active'
+```
+
+#### Solution: Value Mapping
+```jsx
+const filterData = (data, searchQuery, filters) => {
+  let filtered = [...data];
+
+  if (filters.status && filters.status !== 'all') {
+    // Create mapping from filter values to data values
+    const statusMap = {
+      'active': 'Active',     // filter value → data value
+      'inactive': 'Inactive'  // filter value → data value
+    };
+    
+    const expectedStatusText = statusMap[filters.status];
+    filtered = filtered.filter(item => item.status.text === expectedStatusText);
+  }
+
+  return filtered;
+};
+```
+
+#### Advanced Value Mapping with Locale Support
+```jsx
+const filterData = (data, searchQuery, filters, locale = 'en') => {
+  let filtered = [...data];
+
+  if (filters.status && filters.status !== 'all') {
+    // Locale-aware mapping
+    const statusMap = {
+      'active': locale === 'ar' ? 'نشط' : 'Active',
+      'inactive': locale === 'ar' ? 'غير نشط' : 'Inactive'
+    };
+    
+    const expectedStatusText = statusMap[filters.status];
+    filtered = filtered.filter(item => item.status.text === expectedStatusText);
+  }
+
+  return filtered;
+};
+```
+
+### Multiple Data Structure Patterns
+
+#### Pattern A: Direct String Comparison
+```jsx
+// Data: { category: 'electronics' }
+// Filter: { category: 'electronics' }
+// Solution: Direct comparison
+filtered = filtered.filter(item => item.category === filters.category);
+```
+
+#### Pattern B: Object with Value Property
+```jsx
+// Data: { status: { text: 'Active', value: 'active' } }
+// Filter: { status: 'active' }
+// Solution: Compare with value property
+filtered = filtered.filter(item => item.status.value === filters.status);
+```
+
+#### Pattern C: Object with Text Property (Mapping Required)
+```jsx
+// Data: { status: { text: 'Active', tone: 'success' } }
+// Filter: { status: 'active' }
+// Solution: Map filter value to text value
+const statusMap = { 'active': 'Active', 'inactive': 'Inactive' };
+const expectedText = statusMap[filters.status];
+filtered = filtered.filter(item => item.status.text === expectedText);
+```
+
+#### Pattern D: Array Contains Filtering
+```jsx
+// Data: { tags: ['urgent', 'customer', 'priority'] }
+// Filter: { tag: 'urgent' }
+// Solution: Array includes check
+filtered = filtered.filter(item => item.tags.includes(filters.tag));
+```
+
+## Common Filtering Patterns
+
+### 1. Search + Multiple Filters
+```jsx
+const filterData = (data, searchQuery, filters) => {
+  let filtered = [...data];
+
+  // Step 1: Apply search filter first
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(item => 
+      // Search across multiple fields
+      item.name.toLowerCase().includes(query) ||
+      item.description.toLowerCase().includes(query) ||
+      item.id.toString().includes(query) ||
+      item.email.toLowerCase().includes(query)
+    );
+  }
+
+  // Step 2: Apply each filter
+  Object.keys(filters).forEach(filterKey => {
+    const filterValue = filters[filterKey];
+    
+    if (filterValue && filterValue !== 'all') {
+      switch (filterKey) {
+        case 'status':
+          filtered = filtered.filter(item => item.status.value === filterValue);
+          break;
+        case 'department':
+          filtered = filtered.filter(item => item.department === filterValue);
+          break;
+        case 'role':
+          filtered = filtered.filter(item => item.role.value === filterValue);
+          break;
+        // Add more filter cases as needed
+      }
+    }
+  });
+
+  return filtered;
+};
+```
+
+### 2. Hierarchical/Nested Filtering
+```jsx
+const filterData = (data, searchQuery, filters) => {
+  let filtered = [...data];
+
+  // Search in nested properties
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(item => 
+      item.user.name.toLowerCase().includes(query) ||
+      item.user.email.toLowerCase().includes(query) ||
+      item.company.name.toLowerCase().includes(query) ||
+      item.project.title.toLowerCase().includes(query)
+    );
+  }
+
+  // Filter nested object properties
+  if (filters.userStatus && filters.userStatus !== 'all') {
+    filtered = filtered.filter(item => item.user.status === filters.userStatus);
+  }
+
+  if (filters.companyType && filters.companyType !== 'all') {
+    filtered = filtered.filter(item => item.company.type === filters.companyType);
+  }
+
+  return filtered;
+};
+```
+
+### 3. Numeric Range Filtering
+```jsx
+const filterData = (data, searchQuery, filters) => {
+  let filtered = [...data];
+
+  if (searchQuery.trim()) {
+    // ... search logic
+  }
+
+  // Price range filtering
+  if (filters.priceRange && filters.priceRange !== 'all') {
+    switch (filters.priceRange) {
+      case 'under50':
+        filtered = filtered.filter(item => item.price < 50);
+        break;
+      case '50to100':
+        filtered = filtered.filter(item => item.price >= 50 && item.price <= 100);
+        break;
+      case 'over100':
+        filtered = filtered.filter(item => item.price > 100);
+        break;
+    }
+  }
+
+  // Quantity filtering
+  if (filters.quantity && filters.quantity !== 'all') {
+    const [min, max] = filters.quantity.split('-').map(Number);
+    filtered = filtered.filter(item => 
+      item.quantity >= min && (max ? item.quantity <= max : true)
+    );
+  }
+
+  return filtered;
+};
+```
+
+### 4. Date-Based Filtering
+```jsx
+const filterData = (data, searchQuery, filters) => {
+  let filtered = [...data];
+
+  if (searchQuery.trim()) {
+    // ... search logic
+  }
+
+  // Date range filtering
+  if (filters.dateRange && filters.dateRange !== 'all') {
+    const now = new Date();
+    let filterDate;
+
+    switch (filters.dateRange) {
+      case 'today':
+        filterDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        filtered = filtered.filter(item => 
+          new Date(item.createdAt) >= filterDate
+        );
+        break;
+      case 'thisWeek':
+        filterDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        filtered = filtered.filter(item => 
+          new Date(item.createdAt) >= filterDate
+        );
+        break;
+      case 'thisMonth':
+        filterDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        filtered = filtered.filter(item => 
+          new Date(item.createdAt) >= filterDate
+        );
+        break;
+    }
+  }
+
+  // Status with overdue logic
+  if (filters.status && filters.status !== 'all') {
+    filtered = filtered.filter(item => {
+      if (filters.status === 'overdue') {
+        return new Date(item.dueDate) < now && item.status !== 'completed';
+      }
+      return item.status === filters.status;
+    });
+  }
+
+  return filtered;
+};
+```
+
+### 5. Performance-Optimized Filtering for Large Datasets
+```jsx
+import { useMemo, useCallback } from 'react';
+
+const filterData = useCallback((data, searchQuery, filters) => {
+  // Early return for no filters
+  if (!searchQuery.trim() && Object.keys(filters).length === 0) {
+    return data;
+  }
+
+  let filtered = data; // Don't spread large arrays unnecessarily
+
+  // Apply most selective filters first
+  if (filters.status && filters.status !== 'all') {
+    filtered = filtered.filter(item => item.status.value === filters.status);
+  }
+
+  if (filters.category && filters.category !== 'all') {
+    filtered = filtered.filter(item => item.category === filters.category);
+  }
+
+  // Apply search last (usually least selective)
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(item => 
+      item.name.toLowerCase().includes(query) ||
+      item.id.toString().includes(query)
+    );
+  }
+
+  return filtered;
+}, []);
+
+// In component
+const filteredData = useMemo(() => 
+  filterData(rawData, searchQuery, filters), 
+  [rawData, searchQuery, filters, filterData]
+);
+```
+
 ### Table with Tabs
 
 Create tabbed interfaces to organize different data sets.

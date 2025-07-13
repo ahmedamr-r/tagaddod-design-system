@@ -39,7 +39,7 @@ export interface SidebarProps extends React.ComponentPropsWithoutRef<'aside'> {
   selectedItem?: string;
   /**
    * Default selected menu item ID (used when selectedItem is not provided)
-   * @default 'dashboard'
+   * @default 'page1'
    */
   defaultSelectedItem?: string;
   /**
@@ -60,12 +60,12 @@ export interface SidebarProps extends React.ComponentPropsWithoutRef<'aside'> {
   bottomItems?: SidebarMenuItem[];
   /**
    * Whether to show the bottom section
-   * @default true
+   * @default false
    */
   showBottomSection?: boolean;
   /**
    * Whether sidebar is in expanded state by default
-   * @default false
+   * @default true
    */
   defaultExpanded?: boolean;
   /**
@@ -83,7 +83,7 @@ export interface SidebarProps extends React.ComponentPropsWithoutRef<'aside'> {
   position?: SidebarPosition;
   /**
    * Whether to show hover expand behavior
-   * @default true
+   * @default false
    */
   hoverExpand?: boolean;
   /**
@@ -95,22 +95,22 @@ export interface SidebarProps extends React.ComponentPropsWithoutRef<'aside'> {
 export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
   ({
     selectedItem,
-    defaultSelectedItem = 'dashboard',
+    defaultSelectedItem = 'page1',
     onItemChange,
     menuItems = [],
     secondaryItems = [],
     bottomItems = [],
-    showBottomSection = true,
-    defaultExpanded = false,
+    showBottomSection = false,
+    defaultExpanded = true,
     expanded: controlledExpanded,
     onExpandedChange,
     position = 'left',
-    hoverExpand = true,
+    hoverExpand = false,
     className,
     ...props
   }, ref) => {
     const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
-    const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set(['dashboard']));
+    const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
     
     const isExpanded = controlledExpanded !== undefined ? controlledExpanded : internalExpanded;
     const activeItem = selectedItem || defaultSelectedItem;
@@ -216,65 +216,24 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
     // Default menu items if none provided
     const defaultMenuItems: SidebarMenuItem[] = [
       {
-        id: 'dashboard',
+        id: 'page1',
         icon: IconHome,
-        label: isRTL ? 'لوحة التحكم' : 'Dashboard',
-        labelEn: 'Dashboard',
-        labelAr: 'لوحة التحكم',
-        hasChildren: true,
-        children: [
-          {
-            id: 'electronics',
-            label: isRTL ? 'إلكترونيات' : 'Electronics',
-            labelEn: 'Electronics',
-            labelAr: 'إلكترونيات'
-          },
-          {
-            id: 'clothing',
-            label: isRTL ? 'ملابس' : 'Clothing',
-            labelEn: 'Clothing',
-            labelAr: 'ملابس'
-          },
-          {
-            id: 'tools',
-            label: isRTL ? 'أدوات' : 'Tools',
-            labelEn: 'Tools',
-            labelAr: 'أدوات'
-          }
-        ]
+        label: isRTL ? 'الصفحة 1' : 'Page 1',
+        labelEn: 'Page 1',
+        labelAr: 'الصفحة 1',
+        hasChildren: false
+      },
+      {
+        id: 'page2',
+        icon: IconChartBar,
+        label: isRTL ? 'الصفحة 2' : 'Page 2',
+        labelEn: 'Page 2',
+        labelAr: 'الصفحة 2',
+        hasChildren: false
       }
     ];
 
-    const defaultSecondaryItems: SidebarMenuItem[] = [
-      {
-        id: 'analytics',
-        icon: IconChartBar,
-        label: isRTL ? 'التحليلات' : 'Analytics',
-        labelEn: 'Analytics',
-        labelAr: 'التحليلات'
-      },
-      {
-        id: 'users',
-        icon: IconUsers,
-        label: isRTL ? 'المستخدمون' : 'Users',
-        labelEn: 'Users',
-        labelAr: 'المستخدمون'
-      },
-      {
-        id: 'inventory',
-        icon: IconPackage,
-        label: isRTL ? 'إدارة المخزون' : 'Inventory Management',
-        labelEn: 'Inventory Management',
-        labelAr: 'إدارة المخزون'
-      },
-      {
-        id: 'notifications',
-        icon: IconBell,
-        label: isRTL ? 'الإشعارات' : 'Notifications',
-        labelEn: 'Notifications',
-        labelAr: 'الإشعارات'
-      }
-    ];
+    const defaultSecondaryItems: SidebarMenuItem[] = [];
 
     const defaultBottomItems: SidebarMenuItem[] = [
       {

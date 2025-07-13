@@ -30,9 +30,9 @@ import { Sidebar } from '@tagaddod-design/react';
 // Basic sidebar with default menu items and default active item
 <div style={{ display: 'flex', height: '100vh' }}>
   <Sidebar 
-    selectedItem="analytics"
+    selectedItem="page1"
     onItemChange={setSelectedItem}
-    // Dashboard is active by default when no selectedItem is provided
+    // Page 1 is active by default when no selectedItem is provided
   />
   <main style={{ flex: 1, padding: '24px' }}>
     Your main content here
@@ -42,15 +42,15 @@ import { Sidebar } from '@tagaddod-design/react';
 
 ### Default Active State
 
-The Sidebar automatically shows a default active item (`'dashboard'`) when no `selectedItem` is provided, ensuring a consistent visual state on initial load.
+The Sidebar automatically shows a default active item (`'page1'`) when no `selectedItem` is provided, ensuring a consistent visual state on initial load.
 
 ```jsx
-// Default active item (dashboard)
+// Default active item (page1)
 <Sidebar onItemChange={setSelectedItem} />
 
 // Custom default active item
 <Sidebar 
-  defaultSelectedItem="users"
+  defaultSelectedItem="page2"
   onItemChange={setSelectedItem} 
 />
 ```
@@ -63,7 +63,7 @@ The Sidebar component is designed to work with flexbox layouts, pushing content 
 
 ```jsx
 function AppLayout() {
-  const [selectedItem, setSelectedItem] = useState('dashboard');
+  const [selectedItem, setSelectedItem] = useState('page1');
   
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
@@ -105,29 +105,32 @@ function AppLayout() {
 
 ## Expansion Behavior
 
-### Hover Expand (Default)
+### Always Expanded (Default)
 
-The sidebar automatically expands when hovered and collapses when the mouse leaves.
+The sidebar is expanded by default and does not respond to hover interactions.
 
 <Canvas of={SidebarStories.Default} />
 
 ```jsx
 <Sidebar 
-  hoverExpand={true} // Default behavior
-  selectedItem="electronics"
+  defaultExpanded={true} // Default behavior
+  hoverExpand={false}    // Default behavior
+  selectedItem="page1"
   onItemChange={setSelectedItem}
 />
 ```
 
-### Always Expanded
+### Hover Expand
+
+Enable hover-to-expand behavior for a more compact sidebar.
 
 <Canvas of={SidebarStories.AlwaysExpanded} />
 
 ```jsx
 <Sidebar 
-  defaultExpanded={true}
-  hoverExpand={false}
-  selectedItem="users"
+  defaultExpanded={false}
+  hoverExpand={true}
+  selectedItem="page1"
   onItemChange={setSelectedItem}
 />
 ```
@@ -224,10 +227,27 @@ The sidebar organizes menu items into three logical sections:
 
 ### Main Navigation (`menuItems`)
 
-Primary navigation items with optional hierarchical children.
+Primary navigation items. By default, contains two simple navigation items: Page 1 and Page 2.
 
 ```jsx
-const mainItems = [
+// Default main navigation (non-expandable)
+const defaultMenuItems = [
+  {
+    id: 'page1',
+    icon: IconHome,
+    label: 'Page 1',
+    hasChildren: false
+  },
+  {
+    id: 'page2',
+    icon: IconChartBar,
+    label: 'Page 2',
+    hasChildren: false
+  }
+];
+
+// Custom main navigation with children
+const customMenuItems = [
   {
     id: 'dashboard',
     icon: IconHome,
@@ -243,9 +263,10 @@ const mainItems = [
 
 ### Secondary Navigation (`secondaryItems`)
 
-Additional navigation items separated by a divider.
+Additional navigation items separated by a divider. Hidden by default - pass custom items to show.
 
 ```jsx
+// Enable secondary navigation
 const secondaryItems = [
   {
     id: 'settings',
@@ -253,11 +274,13 @@ const secondaryItems = [
     label: 'Settings'
   }
 ];
+
+<Sidebar secondaryItems={secondaryItems} />
 ```
 
 ### Bottom Navigation (`bottomItems`)
 
-Items displayed at the bottom, typically for settings and logout. The bottom section can be toggled on or off.
+Items displayed at the bottom, typically for settings and logout. Hidden by default - enable with `showBottomSection={true}`.
 
 ```jsx
 const bottomItems = [
@@ -273,10 +296,10 @@ const bottomItems = [
   }
 ];
 
-// Show bottom section (default)
+// Show bottom section
 <Sidebar bottomItems={bottomItems} showBottomSection={true} />
 
-// Hide bottom section
+// Hide bottom section (default)
 <Sidebar bottomItems={bottomItems} showBottomSection={false} />
 ```
 
@@ -343,8 +366,8 @@ const menuItems = [
 When a child item is selected, its parent automatically shows an active state.
 
 ```jsx
-// If selectedItem is "electronics", the "dashboard" parent will show active state
-<Sidebar selectedItem="electronics" />
+// If selectedItem is "page1", it will show active state
+<Sidebar selectedItem="page1" />
 ```
 
 ## Internationalization & RTL Support
@@ -365,7 +388,7 @@ The Sidebar component fully supports Right-to-Left (RTL) languages with automati
 // The component automatically detects RTL from document direction
 // No additional props needed
 <Sidebar 
-  selectedItem="analytics"
+  selectedItem="page1"
   onItemChange={setSelectedItem}
   // RTL behavior is automatic based on document.dir or html[dir]
 />
@@ -400,7 +423,7 @@ The Sidebar component includes comprehensive accessibility features:
 
 ```jsx
 <Sidebar 
-  selectedItem="dashboard"
+  selectedItem="page1"
   onItemChange={setSelectedItem}
   // Component automatically provides:
   // - aria-label for menu items
