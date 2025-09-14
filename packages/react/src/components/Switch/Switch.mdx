@@ -4,6 +4,87 @@ import { Switch } from './Switch';
 
 <Meta of={SwitchStories} />
 
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 15-24)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 25-32)
+- Default implementation (off state)
+
+🔄 STATES (Lines 33-77)
+- Default (Off) (Lines 35-44): Initial state
+- Pressed (On) (Lines 45-54): Active state
+- Disabled (Lines 55-64): Non-interactive state
+- Disabled and Pressed (Lines 65-77): Disabled active state
+
+📏 SIZES (Lines 78-99)
+- Small (Lines 82-91): 20px height for compact interfaces
+- Medium (Lines 92-99): 24px height (default)
+
+⚡ INTERACTIVE EXAMPLE (Lines 100-118)
+- Controlled usage with state management
+- Real-time state display
+
+🌍 INTERNATIONALIZATION (Lines 120-135)
+- RTL language support
+- Automatic direction handling
+- Accessibility in RTL contexts
+
+🎨 ALL VARIANTS (Lines 136-139)
+- Complete overview showcase
+
+🔄 CONTROLLED USAGE (Lines 140-157)
+- Manual state management
+- onPressedChange callback handling
+
+🔄 UNCONTROLLED USAGE (Lines 159-173)
+- defaultPressed configuration
+- Simple event handling
+
+📝 FORM INTEGRATION (Lines 174-191)
+- Radix UI compatibility
+- HTML form attributes (id, name)
+
+♿ ACCESSIBILITY (Lines 192-200)
+- Keyboard navigation (Space/Enter)
+- Focus indicators and ARIA attributes
+- Screen reader support and WCAG compliance
+
+💼 COMMON USE CASES (Lines 201-280)
+- Settings Toggle (Lines 203-213): Basic on/off preferences
+- Feature Enablement (Lines 215-225): Advanced options
+- Notification Preferences (Lines 227-239): User settings
+- Multiple Settings (Lines 241-280): Complex state management
+
+⚙️ TECHNICAL DETAILS (Lines 282-336)
+- CSS Variables (Lines 284-301): Design token reference
+- Animation (Lines 302-309): Transition specifications
+- Architecture (Lines 310-326): Radix UI foundation
+- Browser Support (Lines 327-330): Compatibility
+- Performance (Lines 331-336): Optimization notes
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic switch: Lines 30-31
+- With state: Lines 105-117
+- Small size: Lines 89-90
+- Form integration: Lines 179-190
+- RTL support: Lines 131-134
+- Multiple settings: Lines 254-279
+
+⚠️ SIZE NOTE:
+Switch comes in two sizes - small (20px) for compact interfaces and medium (24px, default) for standard layouts. Choose based on available space and design requirements.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Switch component capabilities and patterns.
+
+
 # Switch Component
 
 The Switch component allows users to toggle between two states, typically "on" and "off". It provides a clear visual indication of the current state and smooth transitions between states.
@@ -117,21 +198,288 @@ function ToggleExample() {
 }
 ```
 
-## Internationalization
+## Internationalization and RTL Support
 
-The Switch component automatically handles Right-to-Left (RTL) languages by:
+The Switch component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching for labels, proper layout positioning, and intuitive thumb animation.
 
-1. Reversing the thumb animation direction
-2. Maintaining proper visual hierarchy in RTL contexts
-3. Ensuring accessible interaction patterns work in all directions
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Switch } from '@tagaddod-design/react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Switch defaultPressed={true} />
+          الوضع المظلم
+        </label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Switch defaultPressed={false} />
+          الإشعارات
+        </label>
+      </div>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Switch component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font for labels
+2. **Thumb Animation**: Reverses the thumb animation direction for natural RTL behavior
+3. **Layout Direction**: Maintains proper visual hierarchy in RTL contexts
+4. **Interaction Patterns**: Ensures accessible interaction works in all directions
+5. **Label Positioning**: Works with RTL text flow and alignment
+
+### Settings Interface in RTL
+
+The Switch component handles Arabic settings with proper styling:
 
 <Canvas of={SwitchStories.RTLSupport} />
 
 ```jsx
-<div dir="rtl">
-  <Switch />
-</div>
+import { useTheme } from '@tagaddod-design/react';
+
+function SettingsPanel() {
+  const { isRTL } = useTheme();
+  const [settings, setSettings] = useState({
+    darkMode: false,
+    notifications: true,
+    autoSave: true,
+    soundEffects: false
+  });
+
+  const updateSetting = (key, value) => {
+    setSettings(prev => ({ ...prev, [key]: value }));
+  };
+
+  const settingsItems = isRTL ? [
+    { key: 'darkMode', label: 'الوضع المظلم' },
+    { key: 'notifications', label: 'الإشعارات' },
+    { key: 'autoSave', label: 'الحفظ التلقائي' },
+    { key: 'soundEffects', label: 'المؤثرات الصوتية' }
+  ] : [
+    { key: 'darkMode', label: 'Dark Mode' },
+    { key: 'notifications', label: 'Notifications' },
+    { key: 'autoSave', label: 'Auto Save' },
+    { key: 'soundEffects', label: 'Sound Effects' }
+  ];
+
+  return (
+    <div style={{ 
+      direction: isRTL ? 'rtl' : 'ltr',
+      padding: '16px'
+    }}>
+      <h3>{isRTL ? 'الإعدادات' : 'Settings'}</h3>
+      {settingsItems.map(item => (
+        <div 
+          key={item.key}
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            padding: '12px 0',
+            borderBottom: '1px solid var(--t-color-border-secondary)'
+          }}
+        >
+          <span>{item.label}</span>
+          <Switch 
+            pressed={settings[item.key]}
+            onPressedChange={(value) => updateSetting(item.key, value)}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
 ```
+
+### Privacy Controls in RTL
+
+For privacy and permission settings in RTL:
+
+```jsx
+function PrivacySettings() {
+  const { isRTL } = useTheme();
+  const [privacy, setPrivacy] = useState({
+    profileVisible: true,
+    showActivity: false,
+    allowMessages: true,
+    shareLocation: false
+  });
+
+  const updatePrivacy = (key, value) => {
+    setPrivacy(prev => ({ ...prev, [key]: value }));
+  };
+
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <h3>{isRTL ? 'إعدادات الخصوصية' : 'Privacy Settings'}</h3>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Switch 
+            pressed={privacy.profileVisible}
+            onPressedChange={(value) => updatePrivacy('profileVisible', value)}
+          />
+          <div>
+            <div>{isRTL ? 'الملف الشخصي مرئي' : 'Profile Visible'}</div>
+            <small style={{ color: 'var(--t-color-text-subtle)' }}>
+              {isRTL ? 'السماح للآخرين برؤية ملفك الشخصي' : 'Allow others to see your profile'}
+            </small>
+          </div>
+        </label>
+
+        <label style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Switch 
+            pressed={privacy.showActivity}
+            onPressedChange={(value) => updatePrivacy('showActivity', value)}
+          />
+          <div>
+            <div>{isRTL ? 'عرض النشاط' : 'Show Activity'}</div>
+            <small style={{ color: 'var(--t-color-text-subtle)' }}>
+              {isRTL ? 'عرض حالة النشاط للأصدقاء' : 'Show activity status to friends'}
+            </small>
+          </div>
+        </label>
+
+        <label style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Switch 
+            pressed={privacy.allowMessages}
+            onPressedChange={(value) => updatePrivacy('allowMessages', value)}
+          />
+          <div>
+            <div>{isRTL ? 'السماح بالرسائل' : 'Allow Messages'}</div>
+            <small style={{ color: 'var(--t-color-text-subtle)' }}>
+              {isRTL ? 'استقبال رسائل من المستخدمين' : 'Receive messages from users'}
+            </small>
+          </div>
+        </label>
+      </div>
+    </div>
+  );
+}
+```
+
+### Feature Toggles in RTL
+
+For feature enablement and experimental features:
+
+```jsx
+function FeatureToggles() {
+  const { isRTL } = useTheme();
+  const [features, setFeatures] = useState({
+    betaFeatures: false,
+    advancedMode: true,
+    analytics: false,
+    feedback: true
+  });
+
+  const updateFeature = (key, value) => {
+    setFeatures(prev => ({ ...prev, [key]: value }));
+  };
+
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <h3>{isRTL ? 'الميزات التجريبية' : 'Experimental Features'}</h3>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between',
+          padding: '16px',
+          backgroundColor: 'var(--t-color-surface-secondary)',
+          borderRadius: '8px'
+        }}>
+          <div>
+            <div style={{ fontWeight: 600 }}>
+              {isRTL ? 'الميزات التجريبية' : 'Beta Features'}
+            </div>
+            <div style={{ fontSize: '14px', color: 'var(--t-color-text-subtle)' }}>
+              {isRTL ? 'تفعيل الميزات الجديدة قيد التطوير' : 'Enable new features in development'}
+            </div>
+          </div>
+          <Switch 
+            pressed={features.betaFeatures}
+            onPressedChange={(value) => updateFeature('betaFeatures', value)}
+          />
+        </div>
+
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between',
+          padding: '16px'
+        }}>
+          <div>
+            <div>{isRTL ? 'الوضع المتقدم' : 'Advanced Mode'}</div>
+            <div style={{ fontSize: '14px', color: 'var(--t-color-text-subtle)' }}>
+              {isRTL ? 'إظهار خيارات إضافية للمستخدمين المتقدمين' : 'Show additional options for power users'}
+            </div>
+          </div>
+          <Switch 
+            pressed={features.advancedMode}
+            onPressedChange={(value) => updateFeature('advancedMode', value)}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Small Switch in Dense Layouts
+
+For compact interfaces with proper RTL support:
+
+```jsx
+function CompactSettings() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {[
+          { key: 'wifi', label: isRTL ? 'واي فاي' : 'Wi-Fi' },
+          { key: 'bluetooth', label: isRTL ? 'بلوتوث' : 'Bluetooth' },
+          { key: 'location', label: isRTL ? 'الموقع' : 'Location' },
+          { key: 'airplane', label: isRTL ? 'وضع الطيران' : 'Airplane Mode' }
+        ].map(item => (
+          <div 
+            key={item.key}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between',
+              padding: '8px 0'
+            }}
+          >
+            <span style={{ fontSize: '14px' }}>{item.label}</span>
+            <Switch size="sm" defaultPressed={item.key === 'wifi'} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test thumb animation** to ensure natural movement in RTL (right to left when turning on)
+3. **Use `useTheme` hook** to access RTL state and theme information
+4. **Consider label placement** - switches work in both label-left and label-right configurations
+5. **Test in settings contexts** where switches are commonly used
+6. **Validate form integration** with Arabic labels and proper alignment
+7. **Test small size** in dense RTL layouts for proper spacing
 
 ## All Variants
 

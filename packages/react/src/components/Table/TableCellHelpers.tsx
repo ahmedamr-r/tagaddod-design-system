@@ -13,6 +13,7 @@ export function createCellColumn<T extends object>(
     headerClassName?: string;
     cellClassName?: string;
     width?: string;
+    pinned?: 'left' | 'right' | false;
   }
 ): ColumnDef<T, any> {
   const CellComponent = TableCellVariants[variant];
@@ -34,6 +35,7 @@ export function createCellColumn<T extends object>(
       headerClassName: options?.headerClassName,
       cellClassName: options?.cellClassName,
       width: options?.width,
+      pinned: options?.pinned,
     },
   };
 }
@@ -51,6 +53,7 @@ export function createInteractiveCellColumn<T extends object>(
     headerClassName?: string;
     cellClassName?: string;
     width?: string;
+    pinned?: 'left' | 'right' | false;
   }
 ): ColumnDef<T, any> {
   const CellComponent = TableCellVariants[variant];
@@ -73,6 +76,7 @@ export function createInteractiveCellColumn<T extends object>(
       headerClassName: options?.headerClassName,
       cellClassName: options?.cellClassName,
       width: options?.width,
+      pinned: options?.pinned,
     },
   };
 }
@@ -89,6 +93,7 @@ export function createActionCellColumn<T extends object>(
     headerClassName?: string;
     cellClassName?: string;
     width?: string;
+    pinned?: 'left' | 'right' | false;
   }
 ): ColumnDef<T, any> {
   const CellComponent = TableCellVariants[variant];
@@ -118,6 +123,7 @@ export function createActionCellColumn<T extends object>(
       headerClassName: options?.headerClassName,
       cellClassName: options?.cellClassName,
       width: options?.width,
+      pinned: options?.pinned ?? 'right', // Default action columns to pinned right
     },
   };
 }
@@ -134,6 +140,7 @@ export function createCustomCellColumn<T extends object>(
     headerClassName?: string;
     cellClassName?: string;
     width?: string;
+    pinned?: 'left' | 'right' | false;
   }
 ): ColumnDef<T, any> {
   return {
@@ -153,6 +160,7 @@ export function createCustomCellColumn<T extends object>(
       headerClassName: options?.headerClassName,
       cellClassName: options?.cellClassName,
       width: options?.width,
+      pinned: options?.pinned,
     },
   };
 }
@@ -177,7 +185,7 @@ export const QuickColumns = {
     createInteractiveCellColumn(key, header, 'select', onChange, { cellProps: { options } }),
     
   actions: <T extends object>(header: string, onClick: (row: T) => void) => 
-    createActionCellColumn(header, 'actionIcon', onClick),
+    createActionCellColumn(header, 'actionIcon', onClick), // Defaults to pinned: 'right'
     
   number: <T extends object>(key: keyof T, header: string) => 
     createCellColumn(key, header, 'updatedNumber'),

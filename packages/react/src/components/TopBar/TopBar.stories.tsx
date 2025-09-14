@@ -12,72 +12,10 @@ const meta: Meta<typeof TopBar> = {
   parameters: {
     layout: 'fullscreen',
     docs: {
-      description: {
-        component: `
-# TopBar Component
-
-A comprehensive top navigation bar component with TAGADDOD logo and highly customizable dropdown functionality. 
-
-## ✨ Key Features
-
-### 🎨 **Visual & Interactive**
-- **TAGADDOD logo** on the left side with optional click functionality
-- **Dropdown selector** with fully customizable Popover and Listbox components
-- **Mobile hamburger menu** with smooth icon transitions (hamburger ↔ X)
-- **Smooth animations** for mobile sidebar with slide-in/out transitions
-- **RTL support** for Arabic layouts with proper text and layout direction
-
-### 📱 **Mobile Experience**
-- **Responsive design** with mobile-optimized dimensions
-- **Overlay sidebar** that slides underneath TopBar (not over it)
-- **Backdrop overlay** with smooth fade transitions
-- **Auto-close behavior** when menu items are selected
-
-### 🔧 **Customization Options**
-
-#### **Listbox Customization**
-- \`customListboxOptions\` - Override default warehouse + logout options
-- \`listboxProps\` - Pass additional props to the listbox component
-- \`listboxClassName\` - Custom CSS classes for styling
-- \`onCustomListboxSelect\` - Custom selection handler
-
-#### **Popover Customization**
-- \`popoverSide\` - Positioning (top/right/bottom/left)
-- \`popoverAlign\` - Alignment (start/center/end)  
-- \`popoverMargin\` - Custom margin in pixels
-- \`showPopoverArrow\` - Toggle arrow visibility
-- \`popoverProps\` - Additional popover properties
-
-#### **Styling Customization**
-- \`warehouseTriggerClassName\` - Custom trigger button styling
-- \`hamburgerButtonClassName\` - Custom hamburger button styling
-- \`warehouseIcon\` - Custom icon for the dropdown trigger
-- \`warehouseIconSize\` - Icon size customization
-
-#### **Behavior Customization**
-- \`showLogoutOption\` - Toggle logout option visibility
-- \`logoutText\` - Custom logout text (supports RTL)
-- \`showHamburgerMenu\` - Toggle mobile menu visibility
-
-## 🎯 **Design System Integration**
-- **Design tokens** for colors, spacing, typography, and transitions
-- **Surface background** token (\`--t-color-surface-primary\`) for TopBar
-- **Critical styling** tokens (\`--t-color-text-critical\`, \`--t-color-icon-critical\`) for logout
-- **4px margin** on Popover using \`--t-space-100\` token
-- **Smooth transitions** using design system easing curves
-
-## 🔄 **Recent Updates**
-- ✅ **Mobile Sidebar Transitions** - Smooth slide-in/out animations (300ms cubic-bezier)
-- ✅ **Proper Positioning** - Sidebar opens underneath TopBar instead of covering it
-- ✅ **Icon Toggle** - Hamburger icon changes to X when sidebar is open
-- ✅ **Full Customization** - Complete listbox, popover, and styling customization
-- ✅ **Backdrop Overlay** - Dark overlay with fade transitions
-- ✅ **RTL Support** - Proper behavior for right-to-left layouts
-        `
-      }
+      page: () => import('./TopBar.mdx')
     }
   },
-  tags: ['autodocs'],
+  tags: [],
   argTypes: {
     selectedWarehouse: {
       control: 'text',

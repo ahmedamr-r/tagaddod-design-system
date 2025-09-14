@@ -4,6 +4,92 @@ import { Separator } from './Separator';
 
 <Meta of={SeparatorStories} />
 
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 15-23)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 25-35)
+- Default horizontal separator
+- Custom props configuration
+
+🔄 ORIENTATIONS (Lines 37-70)
+- Horizontal (Lines 43-56): Full-width content separation
+- Vertical (Lines 58-70): Full-height content separation
+
+♿ ACCESSIBILITY MODES (Lines 72-110)
+- Semantic Separator (Lines 76-93): Meaningful content division
+- Decorative Separator (Lines 94-110): Purely visual
+
+📏 SPACING CONTROL (Lines 112-138)
+- Default spacing (12px): Standard content sections
+- Compact spacing (8px): Dense content areas
+- No spacing: Perfect for lists/menus
+- Custom spacing: Exact pixel values
+
+💼 REAL-WORLD EXAMPLES (Lines 139-219)
+- Navigation Menu (Lines 141-155): Menu item separation
+- Content Sections (Lines 157-182): Article structure
+- Complex Layouts (Lines 184-219): Dashboard-style layouts
+
+🎯 ACCESSIBILITY BEST PRACTICES (Lines 221-259)
+- When to Use Semantic vs Decorative (Lines 225-259)
+- Screen reader considerations
+
+🌍 INTERNATIONALIZATION (Lines 261-280)
+- RTL language support
+- CSS logical properties
+
+🎨 STYLING & CUSTOMIZATION (Lines 281-324)
+- CSS Variables (Lines 283-295): Design tokens
+- Custom Styling (Lines 297-324): CSS overrides
+
+🔧 ADVANCED PATTERNS (Lines 326-380)
+- Conditional Separators (Lines 328-343): Dynamic lists
+- Responsive Separators (Lines 345-369): Screen size adaptation
+- Interactive Separators (Lines 371-380): Hover states
+
+📋 API REFERENCE (Lines 382-415)
+- SeparatorProps interface
+- Available constants
+
+🧪 TESTING (Lines 417-469)
+- Unit Testing Examples (Lines 419-448)
+- Integration Testing (Lines 450-469)
+
+⚡ PERFORMANCE (Lines 471-477)
+- Lightweight implementation
+- CSS-only styling
+
+🌐 BROWSER SUPPORT (Lines 479-492)
+- Compatibility matrix
+- Feature requirements
+
+🔄 MIGRATION GUIDE (Lines 494-526)
+- From Material-UI and Ant Design
+- Upgrading considerations
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic separator: Line 31
+- Vertical navigation: Lines 148-154
+- Content sections: Lines 164-181
+- Spacing control: Lines 120-131
+- RTL support: Lines 268-273
+- Custom styling: Lines 301-324
+
+⚠️ ACCESSIBILITY NOTE:
+Use decorative={false} for meaningful content separation and decorative={true} for visual styling. Choose based on whether screen readers should announce the separator.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Separator component capabilities and patterns.
+
+
 # Separator Component
 
 The Separator component is a versatile UI element that provides visual or semantic separation between content sections. It supports both horizontal and vertical orientations and can be configured as either decorative or semantic for accessibility purposes.
@@ -258,25 +344,248 @@ Separators work well in dashboard-style layouts to create distinct sections.
 </nav>
 ```
 
-## Internationalization
+## Internationalization and RTL Support
 
-The Separator component works seamlessly with Right-to-Left (RTL) languages:
+The Separator component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching for surrounding content, proper positioning, and layout adjustments.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Separator } from '@tagaddod-design/react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <div>
+        <section>
+          <h2>القسم الأول</h2>
+          <p>هذا محتوى القسم الأول من المقال.</p>
+        </section>
+        <Separator decorative={false} />
+        <section>
+          <h2>القسم الثاني</h2>
+          <p>هذا محتوى القسم الثاني من المقال.</p>
+        </section>
+      </div>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Separator component automatically:
+
+1. **Layout Direction**: Maintains proper positioning in RTL layouts
+2. **Spacing Consistency**: Preserves consistent spacing in RTL contexts
+3. **Content Alignment**: Works seamlessly with RTL text content
+4. **CSS Logical Properties**: Uses logical properties for universal support
+5. **Accessibility**: Maintains proper ARIA attributes in RTL mode
+
+### Content Sections in RTL
+
+The Separator component handles Arabic content with proper styling:
 
 <Canvas of={SeparatorStories.RTLExample} />
 
 ```jsx
-// The separator will maintain proper spacing in RTL mode
-<div dir="rtl">
-  <div>محتوى عربي أعلى</div>
-  <Separator />
-  <div>محتوى عربي أسفل</div>
-</div>
+import { useTheme } from '@tagaddod-design/react';
+
+function ArticleContent() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <article style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <header>
+        <h2>{isRTL ? 'عنوان المقال' : 'Article Title'}</h2>
+        <p>{isRTL ? 'نُشر في 15 يناير 2024' : 'Published on January 15, 2024'}</p>
+      </header>
+      
+      <Separator decorative={false} />
+      
+      <main>
+        <p>
+          {isRTL 
+            ? 'هذا مثال على محتوى المقال. يمكن أن يكون المحتوى طويلاً ومفصلاً حسب الحاجة.'
+            : 'This is an example of article content. The content can be long and detailed as needed.'
+          }
+        </p>
+      </main>
+      
+      <Separator decorative={false} />
+      
+      <footer>
+        <p>{isRTL ? 'العلامات: React، TypeScript، نظام التصميم' : 'Tags: React, TypeScript, Design System'}</p>
+      </footer>
+    </article>
+  );
+}
 ```
 
-**RTL Considerations:**
+### Navigation Separators in RTL
+
+For navigation menus and lists in RTL contexts:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+
+function RTLNavigation() {
+  const { isRTL } = useTheme();
+  
+  const menuItems = isRTL 
+    ? ['الرئيسية', 'من نحن', 'الخدمات', 'اتصل بنا']
+    : ['Home', 'About', 'Services', 'Contact'];
+  
+  return (
+    <nav style={{ 
+      display: 'flex', 
+      alignItems: 'center',
+      direction: isRTL ? 'rtl' : 'ltr'
+    }}>
+      {menuItems.map((item, index) => (
+        <React.Fragment key={item}>
+          <a href="#" style={{ 
+            padding: '8px 16px',
+            textDecoration: 'none',
+            color: 'var(--t-color-text-primary)'
+          }}>
+            {item}
+          </a>
+          {index < menuItems.length - 1 && (
+            <Separator orientation="vertical" decorative />
+          )}
+        </React.Fragment>
+      ))}
+    </nav>
+  );
+}
+```
+
+### Dashboard Layout in RTL
+
+For complex layouts with multiple sections in RTL:
+
+```jsx
+function RTLDashboard() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <header style={{ padding: '16px' }}>
+        <h2>{isRTL ? 'لوحة التحكم' : 'Dashboard'}</h2>
+        <p>{isRTL ? 'مرحباً بك مجدداً!' : 'Welcome back!'}</p>
+      </header>
+      
+      <Separator />
+      
+      <main style={{ display: 'flex', minHeight: '400px' }}>
+        <aside style={{ 
+          width: '200px', 
+          padding: '16px',
+          textAlign: isRTL ? 'right' : 'left'
+        }}>
+          <h3>{isRTL ? 'التنقل' : 'Navigation'}</h3>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            <li style={{ padding: '8px 0' }}>
+              {isRTL ? 'النشاطات الحديثة' : 'Recent Activity'}
+            </li>
+            <li style={{ padding: '8px 0' }}>
+              {isRTL ? 'التقارير' : 'Reports'}
+            </li>
+            <li style={{ padding: '8px 0' }}>
+              {isRTL ? 'الإعدادات' : 'Settings'}
+            </li>
+          </ul>
+        </aside>
+        
+        <Separator orientation="vertical" />
+        
+        <section style={{ 
+          flex: 1, 
+          padding: '16px',
+          textAlign: isRTL ? 'right' : 'left'
+        }}>
+          <h3>{isRTL ? 'النشاطات الحديثة' : 'Recent Activity'}</h3>
+          <div>
+            <p>{isRTL ? 'آخر تحديث: قبل ساعتين' : 'Last updated: 2 hours ago'}</p>
+          </div>
+        </section>
+      </main>
+      
+      <Separator />
+      
+      <footer style={{ 
+        padding: '16px',
+        textAlign: isRTL ? 'right' : 'left'
+      }}>
+        <p>{isRTL ? 'آخر تحديث: قبل ساعتين' : 'Last updated: 2 hours ago'}</p>
+      </footer>
+    </div>
+  );
+}
+```
+
+### List Separators with Spacing
+
+For lists and menus with proper RTL spacing:
+
+```jsx
+function RTLList() {
+  const { isRTL } = useTheme();
+  
+  const items = isRTL 
+    ? ['العنصر الأول', 'العنصر الثاني', 'العنصر الثالث', 'العنصر الرابع']
+    : ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
+  
+  return (
+    <div style={{ 
+      padding: '16px',
+      direction: isRTL ? 'rtl' : 'ltr'
+    }}>
+      <h3>{isRTL ? 'قائمة العناصر' : 'Item List'}</h3>
+      {items.map((item, index) => (
+        <React.Fragment key={item}>
+          <div style={{ 
+            padding: '12px 0',
+            textAlign: isRTL ? 'right' : 'left'
+          }}>
+            {item}
+          </div>
+          {index < items.length - 1 && (
+            <Separator spacing="none" decorative />
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+```
+
+### RTL Considerations and Best Practices
+
+**Technical Implementation:**
 - Horizontal separators work identically in RTL mode
 - Vertical separators maintain consistent spacing
 - CSS logical properties ensure proper behavior
+- Spacing options work consistently in both directions
+
+**Design Considerations:**
+- Semantic separators maintain meaning in RTL layouts
+- Decorative separators provide visual structure
+- Spacing adjusts appropriately for Arabic text
+- Component orientation remains intuitive
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test with actual Arabic content** to ensure proper text flow around separators
+3. **Use `useTheme` hook** to access RTL state and theme information
+4. **Consider semantic vs decorative** - meaning doesn't change in RTL
+5. **Test navigation patterns** to ensure separators enhance usability
+6. **Validate spacing options** work well with Arabic text metrics
+7. **Test complex layouts** to ensure separators maintain structure in RTL
 
 ## Styling and Customization
 

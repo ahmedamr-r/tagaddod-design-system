@@ -8,9 +8,10 @@ import styles from './Table.module.css';
 interface SortableHeaderCellProps<T> {
   header: Header<T, unknown>;
   enableColumnOrdering?: boolean;
+  pinningStyles?: React.CSSProperties;
 }
 
-export function SortableHeaderCell<T>({ header, enableColumnOrdering = false }: SortableHeaderCellProps<T>) {
+export function SortableHeaderCell<T>({ header, enableColumnOrdering = false, pinningStyles }: SortableHeaderCellProps<T>) {
   const {
     attributes,
     listeners,
@@ -38,6 +39,7 @@ export function SortableHeaderCell<T>({ header, enableColumnOrdering = false }: 
     zIndex: isDragging ? 1 : 0,
     opacity: isDragging ? 0.8 : 1,
     width: `${header.getSize()}px`,
+    ...pinningStyles,
   };
 
   return (

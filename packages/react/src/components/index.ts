@@ -135,4 +135,14 @@ export { sonnerTypes, sonnerPositions } from './Sonner';
 export { RangeSlider } from './RangeSlider';
 export type { RangeSliderProps } from './RangeSlider';
 
+// Export the Calendar component
+export { Calendar } from './Calendar';
+export type { CalendarProps, CalendarMode, CalendarCaptionLayout } from './Calendar';
+export { calendarModes, calendarCaptionLayouts } from './Calendar';
+
+// Export the DatePicker component
+export { DatePicker } from './DatePicker';
+export type { DatePickerProps, DatePickerMode, DatePickerLayout } from './DatePicker';
+export { datePickerModes, datePickerLayouts } from './DatePicker';
+
 

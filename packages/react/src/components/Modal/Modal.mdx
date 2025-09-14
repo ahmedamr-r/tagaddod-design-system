@@ -5,6 +5,88 @@ import { Button } from '../Button/Button';
 
 <Meta of={ModalStories} />
 
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 16-25)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 26-41)
+- Default modal implementation
+- Trigger and content setup
+
+🎭 MODAL VARIANTS (Lines 43-64)
+- Default modal with all options
+- Title and footer configuration
+
+📐 CONTENT PADDING (Lines 66-116)
+- Default Padding (Lines 70-84): --t-space-500
+- Custom Padding (Lines 86-100): Custom design tokens
+- No Padding (Lines 102-116): Zero padding for custom layouts
+
+📏 WIDTH SIZES (Lines 118-214)
+- Small (Lines 122-138): 424px/26.5rem for confirmations
+- Medium (Lines 140-156): 620px/38.75rem default
+- Large (Lines 158-174): 980px/61.25rem for complex content
+- Custom Width (Lines 176-193): Specific dimensions
+- Min/Max Constraints (Lines 195-214): Responsive behavior
+
+🎛️ HEADER/FOOTER CONTROL (Lines 216-249)
+- Without Title (Lines 216-232): Hide title bar
+- Without Footer (Lines 234-249): Hide action buttons
+
+🦶 FOOTER VARIANTS (Lines 252-375)
+- Cancel and Actions (Lines 256-280): Default layout
+- Swap and Actions (Lines 282-304): Custom left area
+- Actions Only (Lines 306-328): Right-aligned buttons
+- Single Button (Lines 330-352): Show/hide individual buttons
+- Custom Swap Content (Lines 354-375): Custom left content
+
+🌍 INTERNATIONALIZATION & RTL (Lines 379-540)
+- ThemeProvider Integration (Lines 383-400): Complete RTL setup
+- Automatic RTL Adjustments (Lines 402-415): Font switching & layout
+- Directional Icon Handling (Lines 417-442): Header/footer icons
+- Arabic Content Example (Lines 444-462): Complete RTL example
+- RTL Detection Methods (Lines 464-482): Auto/manual methods
+- RTL Best Practices (Lines 484-540): Implementation guidelines
+
+💼 USE CASES (Lines 542-634)
+- Confirmation Dialog (Lines 544-559): Delete confirmations
+- Form Modal (Lines 561-607): User input forms
+- Information Display (Lines 609-634): Read-only content
+
+🔗 COMPONENT INTEGRATION (Lines 636-744)
+- Select Components (Lines 638-684): Z-index management
+- Dynamic Footer Control (Lines 686-714): Runtime configuration
+- Form Integration (Lines 716-744): Multiple form components
+
+♿ ACCESSIBILITY (Lines 746-758)
+- Radix UI foundation
+- Focus management and keyboard navigation
+- ARIA attributes and screen reader support
+
+⚙️ TECHNICAL DETAILS (Lines 760-813)
+- CSS Variables (Lines 762-784): Design tokens and z-index
+- Architecture (Lines 786-799): Radix UI foundation
+- Animations (Lines 801-809): Smooth transitions
+- Browser Support (Lines 811-813)
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic modal: Lines 109-122
+- Different widths: Lines 207-219, 225-237, 243-255
+- Footer variants: Lines 341-361, 367-385, 391-409
+- RTL support: Lines 459-479
+- With Select: Lines 658-675
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Modal component capabilities and patterns.
+
+
 # Modal Component
 
 The Modal component is a dialog that appears on top of the main content to provide critical information or request user input.
@@ -376,20 +458,83 @@ When using the `swapAndActions` variant, you can provide custom content for the 
 
 
 
-## Internationalization & RTL Support
+## Internationalization and RTL Support
 
-The Modal component provides comprehensive Right-to-Left (RTL) support with automatic layout mirroring for Arabic, Hebrew, and other RTL languages. The component adapts both header and footer positioning when the direction changes.
+The Modal component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper close button positioning, header layout adjustment, and directional button handling.
 
-### RTL Layout Behavior
+### Using with ThemeProvider
 
-#### Header RTL Positioning
-- **LTR**: [Title] ←→ [Close Button]
-- **RTL**: [Close Button] ←→ [Title]
+For full RTL support, wrap your application with `ThemeProvider`:
 
-#### Footer RTL Positioning
-- **Cancel & Actions RTL**: [Primary] [Secondary] ←→ [Cancel]
-- **Swap & Actions RTL**: [Primary] [Secondary] ←→ [Swap Content]
-- **Actions Only RTL**: [Primary] [Secondary] (left-aligned)
+```jsx
+import { ThemeProvider, Modal, Button } from '@tagaddod-design/react';
+import { IconX, IconArrowLeft } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Modal
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        title="عنوان النافذة"
+        cancelLabel="إلغاء"
+        primaryLabel="تأكيد"
+      >
+        <p>محتوى النافذة باللغة العربية</p>
+      </Modal>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Modal component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Header Layout**: Adjusts title and close button positioning for RTL flow
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Close Button Position**: Repositions close button from top-right to top-left
+5. **Content Direction**: Ensures modal content follows RTL text direction
+6. **Footer Layout**: Repositions footer buttons for RTL reading patterns
+7. **Animation Direction**: Modal entrance/exit animations respect RTL
+
+### Directional Icon Handling
+
+**Important**: When using directional icons in Modal headers or action buttons, choose appropriate icons based on direction:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+import { IconArrowLeft, IconArrowRight, IconX, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+
+function DirectionalModal() {
+  const { isRTL } = useTheme();
+  
+  // Back/navigation arrows should point in reading direction
+  const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
+  const ForwardIcon = isRTL ? IconArrowLeft : IconArrowRight;
+  
+  return (
+    <Modal
+      title={isRTL ? 'إعدادات المستخدم' : 'User Settings'}
+      primaryLabel={isRTL ? 'التالي' : 'Next'}
+      secondaryLabel={isRTL ? 'رجوع' : 'Back'}
+      // Custom action buttons with proper directional icons
+      onPrimary={() => console.log('Next step')}
+      onSecondary={() => console.log('Previous step')}
+    >
+      <div>
+        <p>{isRTL ? 'محتوى الإعدادات' : 'Settings content'}</p>
+        {/* Use directional icons in content */}
+        <button>
+          <BackIcon size={16} />
+          {isRTL ? 'العودة إلى القائمة' : 'Back to menu'}
+        </button>
+      </div>
+    </Modal>
+  );
+}
+```
 
 ### Arabic Content Example
 
@@ -398,54 +543,56 @@ The Modal component provides comprehensive Right-to-Left (RTL) support with auto
 ```jsx
 <Modal
   trigger={<Button>فتح النافذة</Button>}
-  title="العنوان"
+  title="تأكيد العملية"
   footerVariant="cancelAndActions"
   cancelLabel="إلغاء"
   primaryLabel="تأكيد"
-  secondaryLabel="ثانوي"
+  secondaryLabel="حفظ المسودة"
+  showPrimaryButton={true}
+  showSecondaryButton={true}
 >
   <div style={{ padding: '16px', textAlign: 'right', direction: 'rtl' }}>
-    محتوى النافذة المنبثقة باللغة العربية. يمكنك تبديل الاتجاه من شريط الأدوات لرؤية التخطيط الصحيح.
+    <h3>هل أنت متأكد من أنك تريد حذف هذا العنصر؟</h3>
+    <p>لا يمكن التراجع عن هذا الإجراء. سيتم حذف جميع البيانات المرتبطة بهذا العنصر نهائياً.</p>
   </div>
 </Modal>
 ```
 
-### Using RTL Mode
+### RTL Detection Methods
 
-The Modal automatically detects RTL direction from:
+The Modal automatically detects RTL direction from multiple sources:
 
-1. **Storybook Toolbar**: Use the direction toggle in Storybook
-2. **Document Direction**: Set `document.dir = 'rtl'` or `document.documentElement.dir = 'rtl'`
-3. **RTL Prop**: Explicitly pass `rtl={true}` to the component
+1. **ThemeProvider Context**: Recommended approach using `useTheme()` hook
+2. **Document Direction**: Detects `document.dir = 'rtl'` or `document.documentElement.dir = 'rtl'`
+3. **RTL Prop**: Explicitly pass `rtl={true}` for manual control
+4. **Storybook Toolbar**: Uses direction toggle in development
 
 ```jsx
-// Method 1: Automatic detection from document
+// Method 1: ThemeProvider (Recommended)
+<ThemeProvider defaultDirection="rtl">
+  <Modal title="العنوان">Content</Modal>
+</ThemeProvider>
+
+// Method 2: Document-level
 document.dir = 'rtl';
+<Modal title="العنوان">Content</Modal>
 
-// Method 2: Explicit prop
-<Modal rtl={true} title="العنوان">
-  {/* Content */}
-</Modal>
-
-// Method 3: Storybook toolbar (development)
-// Use the direction toggle in Storybook's toolbar
+// Method 3: Component prop
+<Modal rtl={true} title="العنوان">Content</Modal>
 ```
 
-### RTL Font and Typography
+### RTL Best Practices
 
-The component automatically adjusts line-height and typography settings for RTL languages:
-
-- **Arabic/RTL**: Uses `var(--t-line-height-arabic, 1.2)` for better text rendering
-- **English/LTR**: Uses `var(--t-line-height-english, 1.5)` for optimal readability
-
-### RTL Footer Behavior
-
-In RTL mode, the Modal automatically adjusts footer layouts:
-
-- **Cancel and Actions**: Cancel button moves to the right, actions to the left
-- **Swap and Actions**: Swap area moves to the right, actions to the left  
-- **Actions Only**: Action buttons align to the left side
-- **Button Order**: Within action groups, button order is reversed (primary becomes leftmost)
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Position close button correctly** - automatically handled by Modal component
+3. **Test modal animations** in RTL to ensure smooth transitions
+4. **Use appropriate directional icons** in footer action buttons and content
+5. **Consider modal sizing** - Arabic text may require different width/height adjustments
+6. **Test nested components** - ensure all modal content supports RTL properly
+7. **Verify footer layouts** - different footer variants behave correctly in RTL
+8. **Test form integration** - ensure form elements align properly in RTL modals
+9. **Check z-index behavior** - RTL modals maintain proper layering with other components
+10. **Validate accessibility** - screen readers work correctly with RTL content and navigation
 
 ## Use Cases
 

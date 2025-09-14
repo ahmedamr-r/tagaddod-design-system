@@ -16,7 +16,7 @@ const meta = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['micro', 'medium', 'large'],
+      options: ['xlarge', 'large', 'medium', 'small', 'xsmall'],
     }
   }
 } satisfies Meta<typeof TextInput>;
@@ -228,37 +228,191 @@ export const WithPrefixAndClearable: Story = {
   },
 };
 
+// Stories for Enter key handling
+export const SearchInput: Story = {
+  args: {
+    label: 'Search',
+    placeholder: 'Type and press Enter to search',
+    prefix: <IconSearch size={18} />,
+    isSearchInput: true,
+    onEnterPress: (_, value) => {
+      alert(`Searching for: "${value}"`);
+    },
+  },
+};
+
+export const FormNavigation: Story = {
+  render: () => {
+    const [values, setValues] = useState({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+    });
+
+    const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setValues(prev => ({ ...prev, [field]: e.target.value }));
+    };
+
+    const handleEnterPress = (field: string) => (_: React.KeyboardEvent<HTMLInputElement>, value: string) => {
+      console.log(`Enter pressed in ${field}: "${value}"`);
+    };
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
+        <h3>Form Navigation Demo</h3>
+        <p>Press Enter to move to next field automatically</p>
+        
+        <TextInput
+          label="First Name"
+          placeholder="Enter first name"
+          value={values.firstName}
+          onChange={handleChange('firstName')}
+          onEnterPress={handleEnterPress('firstName')}
+          autoFocusNext={true}
+        />
+        
+        <TextInput
+          label="Last Name"
+          placeholder="Enter last name"
+          value={values.lastName}
+          onChange={handleChange('lastName')}
+          onEnterPress={handleEnterPress('lastName')}
+          autoFocusNext={true}
+        />
+        
+        <TextInput
+          label="Email"
+          placeholder="Enter email"
+          type="email"
+          value={values.email}
+          onChange={handleChange('email')}
+          onEnterPress={handleEnterPress('email')}
+          autoFocusNext={true}
+        />
+        
+        <TextInput
+          label="Phone"
+          placeholder="Enter phone number"
+          type="tel"
+          value={values.phone}
+          onChange={handleChange('phone')}
+          onEnterPress={handleEnterPress('phone')}
+          autoFocusNext={true}
+        />
+        
+        <button type="submit">Submit</button>
+      </div>
+    );
+  },
+};
+
+export const PreventFormSubmit: Story = {
+  render: () => {
+    const [value, setValue] = useState('');
+
+    return (
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        alert('Form submitted!');
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
+          <h3>Prevent Form Submit Demo</h3>
+          <p>Enter key will NOT submit the form</p>
+          
+          <TextInput
+            label="Input with prevented submit"
+            placeholder="Press Enter (won't submit form)"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onEnterPress={(_, value) => {
+              alert(`Enter pressed with value: "${value}"`);
+            }}
+            preventFormSubmit={true}
+          />
+          
+          <button type="submit">Submit Form</button>
+        </div>
+      </form>
+    );
+  },
+};
+
 // Size examples
 export const Sizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
-      <TextInput label="Micro (20px)" placeholder="Micro size input" size="micro" />
-      <TextInput label="Medium (32px)" placeholder="Medium size input (default)" size="medium" />
-      <TextInput label="Large (40px)" placeholder="Large size input" size="large" />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '350px' }}>
+      <TextInput 
+        label="XLarge (56px)" 
+        placeholder="XLarge size input" 
+        size="xlarge"
+        helpText="Uses body-large-default font size with 24px icons"
+      />
+      <TextInput 
+        label="Large (48px)" 
+        placeholder="Large size input" 
+        size="large"
+        helpText="Uses body-md-default font size with 20px icons"
+      />
+      <TextInput 
+        label="Medium (40px)" 
+        placeholder="Medium size input (default)" 
+        size="medium"
+        helpText="Uses body-md-default font size with 16px icons"
+      />
+      <TextInput 
+        label="Small (32px)" 
+        placeholder="Small size input" 
+        size="small"
+        helpText="Uses body-sm-default font size with 16px icons"
+      />
+      <TextInput 
+        label="XSmall (28px)" 
+        placeholder="XSmall size input" 
+        size="xsmall"
+        helpText="Uses caption-lg-default font size with 16px icons"
+      />
     </div>
   ),
 };
 
 export const SizesWithPrefix: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '350px' }}>
       <TextInput
-        label="Micro Search"
+        label="XLarge Search"
         placeholder="Search..."
-        size="micro"
-        prefix={<IconSearch size={14} />}
-      />
-      <TextInput
-        label="Medium Search"
-        placeholder="Search..."
-        size="medium"
-        prefix={<IconSearch size={18} />}
+        size="xlarge"
+        prefix={<IconSearch size={24} />}
+        errorMessage="24px icons in XLarge size"
       />
       <TextInput
         label="Large Search"
         placeholder="Search..."
         size="large"
-        prefix={<IconSearch size={22} />}
+        prefix={<IconSearch size={20} />}
+        errorMessage="20px icons in Large size"
+      />
+      <TextInput
+        label="Medium Search"
+        placeholder="Search..."
+        size="medium"
+        prefix={<IconSearch size={16} />}
+        errorMessage="16px icons in Medium size"
+      />
+      <TextInput
+        label="Small Search"
+        placeholder="Search..."
+        size="small"
+        prefix={<IconSearch size={16} />}
+        errorMessage="16px icons in Small size"
+      />
+      <TextInput
+        label="XSmall Search"
+        placeholder="Search..."
+        size="xsmall"
+        prefix={<IconSearch size={16} />}
+        errorMessage="16px icons in XSmall size"
       />
     </div>
   ),

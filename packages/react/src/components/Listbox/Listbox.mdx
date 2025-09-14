@@ -5,6 +5,91 @@ import { IconSquareCheck, IconSquare } from '@tabler/icons-react';
 
 <Meta of={ListboxStories} />
 
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 16-24)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 26-41)
+- Default implementation with options array
+- selectedValue and onSelect handling
+
+🎨 WITH ICONS (Lines 43-75)
+- Prefix icons for options
+- Suffix content (counts, badges)
+
+📝 WITH HELP TEXT (Lines 77-105)
+- Descriptive text for options
+- helpText prop usage
+
+🔢 MULTIPLE SELECTION (Lines 107-165)
+- Checkbox integration pattern
+- Multi-select state management
+
+🚫 DISABLED OPTIONS (Lines 167-184)
+- Individual option disabling
+
+📏 WITH DIVIDERS (Lines 186-238)
+- Separator component integration
+- spacing="none" for tight lists
+- Spacing comparison examples
+
+🎛️ CUSTOM PADDING (Lines 240-264)
+- itemPaddingVertical and itemPaddingHorizontal
+- Pixel value configuration
+
+📋 IN POPOVER (Lines 266-318)
+- Dropdown menu implementation
+- PopoverRoot integration
+- inPopover prop usage
+
+🌍 INTERNATIONALIZATION (Lines 320-342)
+- RTL language support
+- Arabic text examples
+
+🎨 CUSTOM CONTENT (Lines 344-392)
+- customContent prop for complex layouts
+- Custom tags and formatting
+
+📊 MAX VISIBLE OPTIONS (Lines 394-413)
+- maxVisibleOptions prop
+- Scrolling behavior
+
+💼 USE CASES (Lines 415-479)
+- Dropdown Menus (Lines 417-437): Action menus
+- Filter Selections (Lines 439-462): Task filtering
+- Checkbox Lists (Lines 464-479): Permission selection
+
+♿ ACCESSIBILITY (Lines 481-490)
+- WAI-ARIA listbox pattern
+- Keyboard navigation support
+
+⚙️ TECHNICAL DETAILS (Lines 492-528)
+- CSS Variables (Lines 494-510): Design token reference
+- Architecture (Lines 512-524): Component structure
+- Browser Support (Lines 526-528): Compatibility
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic listbox: Lines 31-40
+- With icons: Lines 53-74
+- Multiple selection: Lines 121-162
+- In popover: Lines 296-316
+- RTL support: Lines 331-341
+- Custom padding: Lines 247-257
+
+⚠️ INTEGRATION NOTE:
+Listbox works seamlessly with Popover component using inPopover prop. Use with Checkbox component for accessible multi-selection patterns.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Listbox component capabilities and patterns.
+
+
 # Listbox Component
 
 The Listbox component displays a list of selectable options, supporting both single and multiple selection modes.
@@ -317,29 +402,209 @@ function DropdownExample() {
 }
 ```
 
-## Internationalization
+## Internationalization and RTL Support
 
-The Listbox component properly handles Right-to-Left (RTL) languages by:
+The Listbox component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper layout alignment, and Arabic text rendering.
 
-1. Adjusting layout direction for RTL text flow
-2. Applying appropriate line height for Arabic text
-3. Correctly aligning text and content in RTL contexts
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Listbox } from '@tagaddod-design/react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Listbox
+        options={[
+          { label: 'الخيار الأول', value: 'option1', helpText: 'نص توضيحي مساعد' },
+          { label: 'الخيار الثاني', value: 'option2' },
+          { label: 'الخيار الثالث', value: 'option3' },
+        ]}
+        selectedValue="option1"
+        onSelect={(value) => console.log('Selected:', value)}
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Listbox component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Layout Direction**: Adjusts alignment and spacing for RTL text flow
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Icon Positioning**: Properly positions prefix and suffix icons for RTL
+5. **Help Text Alignment**: Ensures help text displays correctly in RTL mode
+
+### Arabic Options with Help Text
+
+The Listbox component handles Arabic content with proper styling:
 
 <Canvas of={ListboxStories.ArabicRTL} />
 
 ```jsx
-<div dir="rtl">
-  <Listbox
-    options={[
-      { label: 'الخيار الأول', value: 'option1' },
-      { label: 'الخيار الثاني', value: 'option2' },
-      { label: 'الخيار الثالث', value: 'option3', helpText: 'نص توضيحي للمساعدة' },
-    ]}
-    selectedValue="option1"
-    onSelect={(value) => console.log('Selected:', value)}
-  />
-</div>
+import { useTheme } from '@tagaddod-design/react';
+
+function MenuOptions() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Listbox
+      options={[
+        { 
+          label: isRTL ? 'الصفحة الرئيسية' : 'Home Page', 
+          value: 'home',
+          helpText: isRTL ? 'انتقل إلى الصفحة الرئيسية' : 'Go to the main page'
+        },
+        { 
+          label: isRTL ? 'الملف الشخصي' : 'Profile', 
+          value: 'profile',
+          helpText: isRTL ? 'إدارة معلوماتك الشخصية' : 'Manage your personal information'
+        },
+        { 
+          label: isRTL ? 'الإعدادات' : 'Settings', 
+          value: 'settings',
+          helpText: isRTL ? 'تخصيص تفضيلات التطبيق' : 'Customize app preferences'
+        },
+      ]}
+      selectedValue="home"
+      onSelect={(value) => console.log('Selected:', value)}
+    />
+  );
+}
 ```
+
+### Listbox with Icons in RTL
+
+For options with icons, the component automatically handles RTL icon positioning:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+import { IconHome, IconUser, IconSettings } from '@tabler/icons-react';
+
+function NavigationMenu() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Listbox
+      options={[
+        { 
+          label: isRTL ? 'الرئيسية' : 'Home', 
+          value: 'home',
+          prefix: <IconHome size={16} />,
+          suffix: <span style={{fontSize: '12px', color: 'var(--t-color-text-subtle)'}>5</span>
+        },
+        { 
+          label: isRTL ? 'الملف الشخصي' : 'Profile', 
+          value: 'profile',
+          prefix: <IconUser size={16} />
+        },
+        { 
+          label: isRTL ? 'الإعدادات' : 'Settings', 
+          value: 'settings',
+          prefix: <IconSettings size={16} />,
+          suffix: <span style={{fontSize: '12px', color: 'var(--t-color-text-subtle)'}>New</span>
+        },
+      ]}
+      selectedValue="home"
+      onSelect={(value) => console.log('Selected:', value)}
+    />
+  );
+}
+```
+
+### Multi-Select in RTL
+
+Multi-select functionality with checkboxes works seamlessly in RTL:
+
+```jsx
+import { useState } from 'react';
+import { useTheme, Checkbox } from '@tagaddod-design/react';
+
+function MultiSelectRTL() {
+  const { isRTL } = useTheme();
+  const [selected, setSelected] = useState(['permission1']);
+  
+  const permissions = [
+    { id: 'permission1', name: isRTL ? 'قراءة' : 'Read' },
+    { id: 'permission2', name: isRTL ? 'كتابة' : 'Write' },
+    { id: 'permission3', name: isRTL ? 'حذف' : 'Delete' },
+    { id: 'permission4', name: isRTL ? 'مشاركة' : 'Share' },
+  ];
+  
+  return (
+    <Listbox
+      options={permissions.map(perm => ({
+        label: perm.name,
+        value: perm.id,
+        prefix: (
+          <Checkbox
+            checked={selected.includes(perm.id)}
+            onCheckedChange={(checked) => {
+              if (checked) {
+                setSelected([...selected, perm.id]);
+              } else {
+                setSelected(selected.filter(v => v !== perm.id));
+              }
+            }}
+            hideLabel={true}
+          />
+        )
+      }))}
+      selectedValue={selected}
+      multiple={true}
+      onMultiSelect={setSelected}
+    />
+  );
+}
+```
+
+### Scrollable Lists in RTL
+
+Long lists with scrolling maintain proper RTL behavior:
+
+```jsx
+function ScrollableRTLList() {
+  const { isRTL } = useTheme();
+  
+  const cities = isRTL ? [
+    'الرياض', 'جدة', 'مكة المكرمة', 'المدينة المنورة', 'الدمام', 
+    'الطائف', 'تبوك', 'بريدة', 'الخبر', 'حفر الباطن',
+    'الجبيل', 'الإحساء', 'ينبع', 'نجران', 'الباحة'
+  ] : [
+    'New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix',
+    'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose',
+    'Austin', 'Jacksonville', 'Fort Worth', 'Columbus', 'Charlotte'
+  ];
+  
+  return (
+    <Listbox
+      options={cities.map((city, index) => ({
+        label: city,
+        value: `city-${index}`,
+        helpText: isRTL ? `المدينة رقم ${index + 1}` : `City #${index + 1}`
+      }))}
+      maxVisibleOptions={6}
+      selectedValue="city-0"
+      onSelect={(value) => console.log('Selected city:', value)}
+    />
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test with actual Arabic content** to ensure proper text rendering and alignment
+3. **Use `useTheme` hook** to access RTL state and theme information
+4. **Consider scrolling behavior** in RTL mode - scrollbars appear on the left
+5. **Test multi-select patterns** with Arabic content for proper checkbox alignment
+6. **Verify icon positioning** - prefix/suffix icons adjust automatically in RTL
+7. **Test help text display** to ensure proper alignment in RTL layouts
 
 ## Custom Content
 

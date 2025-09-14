@@ -5,6 +5,86 @@ import { IconSearch, IconMail } from '@tabler/icons-react';
 
 <Meta of={TextInputStories} />
 
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 16-25)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 26-35)
+- Default implementation with label and placeholder
+
+🏷️ LABELS & HELP TEXT (Lines 37-85)
+- Standard Label (Lines 39-43): Basic labeling
+- Optional Fields (Lines 45-57): "(Optional)" indicator
+- Required Fields (Lines 59-71): Default required state
+- Help Text (Lines 73-85): Supplementary information
+
+✅ VALIDATION STATES (Lines 87-130)
+- Error State (Lines 89-102): Validation failures
+- Disabled State (Lines 104-116): Prevent interaction
+- Read-Only State (Lines 118-130): Display-only mode
+
+📏 SIZES (Lines 132-156)
+- Three sizes: micro (20px), medium (32px), large (40px)
+- Size-specific implementations
+
+🎭 SPECIAL FEATURES (Lines 158-260)
+- Prefix and Suffix (Lines 160-230):
+  * Prefix Examples (Lines 164-186): Icons and text
+  * Sizes with Prefix (Lines 188-201): Icon sizing
+  * Suffix (Lines 203-215): Right-side elements
+  * Combined (Lines 217-230): Both prefix and suffix
+- Clearable Input (Lines 232-245): Clear button functionality
+- Password Input (Lines 247-260): Visibility toggle
+
+📐 LAYOUT OPTIONS (Lines 262-281)
+- Standard Width (Lines 264-267): Container-defined
+- Full Width (Lines 269-281): 100% container width
+
+💼 COMMON USE CASES (Lines 283-324)
+- Search, Email, Amount inputs (Lines 287-312)
+- Password with visibility toggle (Lines 314-324)
+
+🌍 INTERNATIONALIZATION & RTL (Lines 326-475)
+- RTL Overview (Lines 328-340): ThemeProvider integration
+- Automatic Adjustments (Lines 342-360): Font, icons, alignment
+- Directional Icons (Lines 362-390): Icon selection patterns
+- RTL Best Practices (Lines 392-420): Implementation guidelines
+- Usage Examples (Lines 422-475): Practical RTL implementations
+
+♿ ACCESSIBILITY (Lines 477-485)
+- Unique IDs and label connections
+- ARIA attributes for states
+- Screen reader support
+
+📋 FORM INTEGRATION (Lines 487-508)
+- Radix UI Form foundation
+- Form library compatibility
+
+⚙️ TECHNICAL DETAILS (Lines 510-560)
+- CSS Variables (Lines 512-531): Design tokens table
+- Input Type Handling (Lines 533-538): Password detection
+- Controlled vs Uncontrolled (Lines 540-557): State management
+- Browser Support (Lines 559-560)
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic input: Lines 31-34
+- With prefix icon: Lines 174-178
+- With error: Lines 96-101
+- Password type: Lines 254-258
+- Clearable: Lines 239-244
+- RTL Arabic: Lines 467-474
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all TextInput component capabilities and patterns.
+
+
 # TextInput Component
 
 The TextInput component is a form element for collecting user text input with support for various states, sizes, and visual treatments.
@@ -323,13 +403,83 @@ import { IconSearch, IconMail } from '@tabler/icons-react';
 />
 ```
 
-## Internationalization
+## Internationalization and RTL Support
 
-The TextInput component properly handles Right-to-Left (RTL) languages automatically by:
+The TextInput component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper icon positioning, line height adjustments, and directional text handling.
 
-1. Adjusting prefix and suffix positioning for RTL text flow
-2. Applying appropriate line height for Arabic text
-3. Correctly aligning text and help text in RTL contexts
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, TextInput } from '@tagaddod-design/react';
+import { IconSearch } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <TextInput 
+        label="البحث"
+        placeholder="ابحث هنا..."
+        prefix={<IconSearch />}
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the TextInput component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font family
+2. **Icon Positioning**: Adjusts prefix/suffix icon placement for RTL text flow - prefix icons appear on the right side in RTL
+3. **Line Height**: Applies appropriate line height for Arabic text rendering (1.2 for Arabic vs 1.5 for English)
+4. **Text Alignment**: Switches text alignment to right for RTL languages
+5. **Placeholder Direction**: Ensures placeholder text renders correctly in RTL
+6. **Error Messages**: Positions error icons and messages appropriately for RTL reading flow
+7. **Clear Button**: Positions the clear button (when `clearable={true}`) on the correct side for RTL
+8. **Password Toggle**: Adjusts password visibility toggle positioning for RTL layouts
+
+### Directional Icon Handling
+
+**Important**: When using directional icons with TextInput (like arrow icons for search actions), choose the appropriate icon based on the current direction:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+import { IconArrowLeft, IconArrowRight, IconSearch, IconSend } from '@tabler/icons-react';
+
+function SearchInput() {
+  const { isRTL } = useTheme();
+  
+  // Use appropriate action icon based on direction
+  const SubmitIcon = isRTL ? IconArrowLeft : IconArrowRight;
+  
+  return (
+    <TextInput
+      label={isRTL ? 'البحث' : 'Search'}
+      placeholder={isRTL ? 'ابحث هنا...' : 'Search here...'}
+      prefix={<IconSearch />}
+      suffix={<SubmitIcon />}
+    />
+  );
+}
+```
+
+### RTL Best Practices for TextInput
+
+1. **Always use ThemeProvider** for proper RTL support and automatic font switching
+2. **Test with Arabic placeholder text** to ensure proper text rendering and line height
+3. **Position icons appropriately** - prefix icons appear at the start of reading direction (right side in RTL)
+4. **Use `useTheme` hook** to access RTL state and adapt content accordingly
+5. **Consider input validation messages** - ensure error messages render properly in RTL with correct icon positioning
+6. **Test clearable inputs** - verify clear button appears on the correct side in RTL
+7. **Validate password inputs** - ensure visibility toggle button positions correctly in RTL
+8. **Use proper Arabic typography** - component automatically applies Arabic line height and font family
+
+### RTL Input Examples
+
+#### Basic RTL Input with Search
 
 <Canvas of={TextInputStories.RTLExample} />
 
@@ -337,11 +487,50 @@ The TextInput component properly handles Right-to-Left (RTL) languages automatic
 <div dir="rtl">
   <TextInput 
     label="البحث" 
-    placeholder="ابحث هنا..." 
+    placeholder="ابحث عن المنتجات..."
     prefix={<IconSearch size={18} />}
     clearable={true}
   />
 </div>
+```
+
+#### RTL Email Input with Validation
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+import { IconMail, IconExclamationCircle } from '@tabler/icons-react';
+
+function RTLEmailInput() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <TextInput
+      label={isRTL ? 'البريد الإلكتروني' : 'Email Address'}
+      placeholder={isRTL ? 'أدخل بريدك الإلكتروني' : 'Enter your email'}
+      type="email"
+      prefix={<IconMail size={18} />}
+      errorMessage={isRTL ? 'البريد الإلكتروني غير صحيح' : 'Invalid email address'}
+      helpText={isRTL ? 'نحن لن نشارك بريدك مع أي شخص آخر' : 'We will never share your email with anyone else'}
+    />
+  );
+}
+```
+
+#### RTL Password Input
+
+```jsx
+function RTLPasswordInput() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <TextInput
+      label={isRTL ? 'كلمة المرور' : 'Password'}
+      placeholder={isRTL ? 'أدخل كلمة المرور' : 'Enter your password'}
+      type="password"
+      errorMessage={isRTL ? 'كلمة المرور يجب أن تكون 8 أحرف على الأقل' : 'Password must be at least 8 characters long'}
+    />
+  );
+}
 ```
 
 ## Accessibility

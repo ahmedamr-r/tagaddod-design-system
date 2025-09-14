@@ -58,6 +58,7 @@ export interface TableTab<T extends object> {
     onPageChange: (pageIndex: number) => void;
     onPageSizeChange?: (pageSize: number) => void;
     pageSizeOptions?: number[];
+    isServerSide?: boolean;
   };
 }
 
@@ -92,11 +93,12 @@ export interface TableProps<T extends object> {
     onPageChange: (pageIndex: number) => void;
     onPageSizeChange?: (pageSize: number) => void;
     pageSizeOptions?: number[];
+    isServerSide?: boolean;
   };
   
   /**
    * Whether to show striped rows
-   * @default true
+   * @default false
    */
   striped?: boolean;
   
@@ -256,6 +258,34 @@ export interface TableProps<T extends object> {
   onSearchChange?: (query: string) => void;
   
   /**
+   * Search configuration for different scenarios
+   */
+  searchConfig?: {
+    /**
+     * Debounce delay in milliseconds
+     * @default 300 (recommended for server-side: 500ms, client-side: 200-300ms)
+     */
+    debounceMs?: number;
+    
+    /**
+     * Whether search data comes from server-side
+     * @default false (client-side)
+     */
+    serverSide?: boolean;
+    
+    /**
+     * Minimum characters before triggering search
+     * @default 0
+     */
+    minLength?: number;
+    
+    /**
+     * Custom placeholder text
+     */
+    placeholder?: string;
+  };
+  
+  /**
    * Callback when export is clicked
    */
   onExport?: () => void;
@@ -342,6 +372,16 @@ export interface TableHeaderProps {
    * Callback when search query changes
    */
   onSearchChange?: (query: string) => void;
+  
+  /**
+   * Search configuration
+   */
+  searchConfig?: {
+    debounceMs?: number;
+    serverSide?: boolean;
+    minLength?: number;
+    placeholder?: string;
+  };
   
   /**
    * Callback when filter button is clicked

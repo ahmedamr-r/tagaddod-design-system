@@ -11,6 +11,7 @@ import {
   VisibilityState,
   ColumnOrderState,
   ColumnSizingState,
+  ColumnPinningState,
   flexRender,
 } from '@tanstack/react-table';
 import {
@@ -36,6 +37,11 @@ declare module '@tanstack/react-table' {
     headerClassName?: string;
     cellClassName?: string;
     width?: string;
+    /** 
+     * Whether this column should be pinned
+     * @default false
+     */
+    pinned?: 'left' | 'right' | false;
   }
 }
 import { FilterItem } from './FilterItem';
@@ -52,7 +58,7 @@ export const Table = <T extends object>({
   title,
   badge,
   pagination,
-  striped = true,
+  striped = false,
   gridCells = false,
   disableRowHover = false,
   enableColumnResizing = false,
@@ -79,6 +85,7 @@ export const Table = <T extends object>({
   notFoundSubtitle,
   searchQuery = '',
   onSearchChange,
+  searchConfig,
   onExport,
   activeFilters = {},
   onFilterChange,
@@ -93,9 +100,10 @@ export const Table = <T extends object>({
   const [globalFilter, setGlobalFilter] = useState<string>(searchQuery);
   const [isFilterBarVisible, setIsFilterBarVisible] = useState<boolean>(defaultShowFilterBar);
   
-  // Column ordering and sizing state
+  // Column ordering, sizing, and pinning state
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([]);
   const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
+  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({ left: [], right: [] });
   
   // Default pagination state for internal use when not provided
   const [internalPagination, setInternalPagination] = useState({
@@ -155,6 +163,28 @@ export const Table = <T extends object>({
       col.id ?? (col as any).accessorKey?.toString() ?? index.toString()
     );
     setColumnOrder(columnIds);
+  }, [activeColumns]);
+
+  // Initialize column pinning state based on column meta.pinned
+  useEffect(() => {
+    const leftPinnedColumns: string[] = [];
+    const rightPinnedColumns: string[] = [];
+
+    activeColumns.forEach((col, index) => {
+      const columnId = col.id ?? (col as any).accessorKey?.toString() ?? index.toString();
+      const pinned = col.meta?.pinned;
+
+      if (pinned === 'left') {
+        leftPinnedColumns.push(columnId);
+      } else if (pinned === 'right') {
+        rightPinnedColumns.push(columnId);
+      }
+    });
+
+    setColumnPinning({
+      left: leftPinnedColumns,
+      right: rightPinnedColumns,
+    });
   }, [activeColumns]);
 
   // Get the current title for the active tab (or default title)
@@ -230,6 +260,7 @@ export const Table = <T extends object>({
       globalFilter,
       columnOrder,
       columnSizing,
+      columnPinning,
       // Use either provided pagination or internal pagination state
       pagination: activePagination ? {
         pageIndex: activePagination.pageIndex,
@@ -240,6 +271,7 @@ export const Table = <T extends object>({
     onColumnVisibilityChange: setColumnVisibility,
     onColumnOrderChange: setColumnOrder,
     onColumnSizingChange: setColumnSizing,
+    onColumnPinningChange: setColumnPinning,
     onGlobalFilterChange: (value) => {
       setGlobalFilter(String(value));
       onSearchChange?.(String(value));
@@ -273,7 +305,8 @@ export const Table = <T extends object>({
     columnResizeMode: 'onChange',
     columnResizeDirection: isRTL ? 'rtl' : 'ltr',
     // Indicate if using manual pagination (e.g., server-side)
-    manualPagination: !!activePagination,
+    // Only use manual pagination if explicitly specified for server-side pagination
+    manualPagination: activePagination?.isServerSide ?? false,
     // Pagination page count
     pageCount: activePagination?.pageCount ?? Math.ceil(activeData.length / (activePagination?.pageSize || internalPagination.pageSize)),
   });
@@ -325,6 +358,27 @@ export const Table = <T extends object>({
   // Helper to determine if there are active filters
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
 
+  // Helper function to get pinning styles based on TanStack Table best practices
+  const getPinningStyles = (column: any): React.CSSProperties => {
+    const isPinned = column.getIsPinned();
+    const isLastLeftPinnedColumn = isPinned === 'left' && column.getIsLastColumn('left');
+    const isFirstRightPinnedColumn = isPinned === 'right' && column.getIsFirstColumn('right');
+    
+    return {
+      boxShadow: isLastLeftPinnedColumn
+        ? '-4px 0 4px -4px rgba(0, 0, 0, 0.1) inset'
+        : isFirstRightPinnedColumn
+        ? '4px 0 4px -4px rgba(0, 0, 0, 0.1) inset'
+        : undefined,
+      left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
+      right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
+      position: isPinned ? 'sticky' : 'relative',
+      width: column.getSize(),
+      zIndex: isPinned ? 10 : 1,
+      backgroundColor: 'var(--t-color-background-primary)',
+    };
+  };
+
   // Get current pagination state (either from props or internal state)
   const currentPagination = activePagination || internalPagination;
 
@@ -369,6 +423,7 @@ export const Table = <T extends object>({
                         key={header.id}
                         header={header}
                         enableColumnOrdering={enableColumnOrdering}
+                        pinningStyles={getPinningStyles(header.column)}
                       />
                     ))}
                   </SortableContext>
@@ -396,7 +451,10 @@ export const Table = <T extends object>({
                         className={`${styles.tableCell} ${cell.column.columnDef.meta?.cellClassName || ''} ${
                           striped && !isEvenRow ? styles.striped : ''
                         } ${gridCells ? styles.gridCell : ''}`}
-                        style={{ width: `${cell.column.getSize()}px` }}
+                        style={{ 
+                          width: `${cell.column.getSize()}px`,
+                          ...getPinningStyles(cell.column)
+                        }}
                         onClick={() => onCellClick?.(cell)}
                       >
                         {flexRender(
@@ -425,6 +483,7 @@ export const Table = <T extends object>({
                   key={header.id}
                   header={header}
                   enableColumnOrdering={enableColumnOrdering}
+                  pinningStyles={getPinningStyles(header.column)}
                 />
               ))}
             </tr>
@@ -451,7 +510,10 @@ export const Table = <T extends object>({
                     className={`${styles.tableCell} ${cell.column.columnDef.meta?.cellClassName || ''} ${
                       striped && !isEvenRow ? styles.striped : ''
                     } ${gridCells ? styles.gridCell : ''}`}
-                    style={{ width: `${cell.column.getSize()}px` }}
+                    style={{ 
+                      width: `${cell.column.getSize()}px`,
+                      ...getPinningStyles(cell.column)
+                    }}
                     onClick={() => onCellClick?.(cell)}
                   >
                     {flexRender(
@@ -512,6 +574,7 @@ export const Table = <T extends object>({
           showExport={showExport}
           searchQuery={searchQuery}
           onSearchChange={onSearchChange}
+          searchConfig={searchConfig}
           onFilterClick={handleFilterClick}
           onExport={onExport}
           isFilterBarVisible={isFilterBarVisible}

@@ -1,0 +1,726 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as TopBarStories from './TopBar.stories';
+import { TopBar } from './TopBar';
+import { IconBuilding, IconBuildingStore, IconHome, IconSettings, IconUsers, IconHelp } from '@tabler/icons-react';
+
+<Meta of={TopBarStories} />
+
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 16-20)
+🎯 BASIC USAGE (Lines 26-37)
+🏢 LOGO CONFIGURATION (Lines 39-67)
+🏭 WAREHOUSE SELECTOR (Lines 69-112)
+🎨 DROPDOWN CUSTOMIZATION (Lines 114-174)
+🚪 LOGOUT OPTIONS (Lines 176-212)
+📱 MOBILE EXPERIENCE (Lines 214-258)
+🌐 INTERNATIONALIZATION (Lines 260-276)
+🔄 INTERACTIVE EXAMPLE (Lines 278-301)
+🎨 DESIGN SYSTEM INTEGRATION (Lines 303-333)
+♿ ACCESSIBILITY (Lines 334-341)
+📝 FORM INTEGRATION (Lines 342-352)
+🔧 IMPLEMENTATION DETAILS (Lines 354-402)
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic TopBar: Lines 30-37
+- Clickable Logo: Lines 47-53
+- Custom Warehouse Options: Lines 89-101
+- Custom Dropdown: Lines 122-160
+- Mobile Layout: Lines 221-227
+- RTL Support: Lines 268-276
+- Full Layout Integration: Lines 235-258
+
+⚠️ MOBILE INTEGRATION NOTE:
+TopBar requires proper mobile state management with isMobileSidebarOpen and 
+onHamburgerMenuClick props for responsive behavior (Lines 221-227).
+
+⚠️ WAREHOUSE SELECTOR NOTE:
+The warehouse selector uses Popover + Listbox components. Custom options 
+support icons, separators, and disabled states (Lines 122-160).
+
+⚠️ LOGO CUSTOMIZATION NOTE:
+Logo can be made clickable with logoClickable prop and styled with logoProps
+for size and color customization (Lines 47-67).
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all TopBar capabilities and integration patterns.
+
+
+# TopBar Component
+
+The TopBar component is a comprehensive top navigation bar with TAGADDOD logo and highly customizable dropdown functionality, designed for modern web applications with multi-platform support.
+
+## Overview
+
+TopBar provides a complete navigation header solution with mobile-optimized hamburger menu, warehouse selector dropdown, and extensive customization options. It integrates seamlessly with the Sidebar component for complete layout solutions.
+
+## Import
+
+```jsx
+import { TopBar } from '@tagaddod/react';
+```
+
+## Props
+
+<ArgTypes of={TopBar} />
+
+## Basic Usage
+
+<Canvas of={TopBarStories.Default} />
+
+```jsx
+<TopBar
+  selectedWarehouse="Al Haram Warehouse"
+  warehouses={["Al Haram Warehouse", "Main Warehouse", "Secondary Warehouse"]}
+  onWarehouseChange={setSelectedWarehouse}
+  onLogoutClick={handleLogout}
+/>
+```
+
+## Logo Configuration
+
+### Clickable Logo
+
+Make the TAGADDOD logo clickable for navigation to home page.
+
+<Canvas of={TopBarStories.ClickableLogo} />
+
+```jsx
+<TopBar
+  logoClickable={true}
+  onLogoClick={() => navigate('/')}
+  selectedWarehouse="Al Haram Warehouse"
+/>
+```
+
+### Logo Props
+
+Pass additional props to customize the Logo component.
+
+```jsx
+<TopBar
+  logoProps={{
+    size: "large",
+    color: "primary"
+  }}
+  selectedWarehouse="Al Haram Warehouse"
+/>
+```
+
+## Warehouse Selector
+
+### Standard Warehouse Selection
+
+The warehouse selector uses a Popover with integrated Listbox for smooth dropdown interactions.
+
+<Canvas of={TopBarStories.Default} />
+
+```jsx
+<TopBar
+  selectedWarehouse="Al Haram Warehouse"
+  warehouses={["Al Haram Warehouse", "Main Warehouse", "Secondary Warehouse"]}
+  onWarehouseChange={setSelectedWarehouse}
+/>
+```
+
+### Custom Warehouse List
+
+<Canvas of={TopBarStories.CustomWarehouses} />
+
+```jsx
+<TopBar
+  selectedWarehouse="Central Distribution Center"
+  warehouses={[
+    "Central Distribution Center",
+    "North Regional Hub", 
+    "South Regional Hub",
+    "East Coast Facility",
+    "West Coast Facility"
+  ]}
+  onWarehouseChange={setSelectedWarehouse}
+/>
+```
+
+### Disabled Warehouse Selector
+
+<Canvas of={TopBarStories.DisabledWarehouse} />
+
+```jsx
+<TopBar
+  selectedWarehouse="Al Haram Warehouse"
+  warehouseDisabled={true}
+/>
+```
+
+## Dropdown Customization
+
+### Complete Listbox Customization
+
+Replace the default warehouse dropdown with completely custom options.
+
+<Canvas of={TopBarStories.CustomizedListbox} />
+
+```jsx
+import { IconHome, IconUsers, IconSettings, IconHelp } from '@tabler/icons-react';
+
+const customOptions = [
+  {
+    label: "Dashboard",
+    value: "dashboard",
+    prefix: <IconHome size={16} />
+  },
+  {
+    label: "User Management",
+    value: "users",
+    prefix: <IconUsers size={16} />
+  },
+  {
+    label: "Settings",
+    value: "settings",
+    prefix: <IconSettings size={16} />
+  },
+  {
+    label: "",
+    value: "separator",
+    disabled: true,
+    customContent: <Separator />
+  },
+  {
+    label: "Help & Support",
+    value: "help",
+    prefix: <IconHelp size={16} />
+  }
+];
+
+<TopBar
+  customListboxOptions={customOptions}
+  warehouseIcon={<IconBuildingStore size={18} />}
+  onCustomListboxSelect={(value, option) => handleSelection(value, option)}
+  showLogoutOption={false}
+/>
+```
+
+### Popover Positioning
+
+<Canvas of={TopBarStories.PopoverCustomization} />
+
+```jsx
+<TopBar
+  popoverSide="top"
+  popoverAlign="center"
+  showPopoverArrow={true}
+  popoverMargin={8}
+  selectedWarehouse="Central Hub"
+/>
+```
+
+## Logout Options
+
+### Standard Logout
+
+<Canvas of={TopBarStories.Default} />
+
+```jsx
+<TopBar
+  selectedWarehouse="Al Haram Warehouse"
+  showLogoutOption={true}
+  onLogoutClick={handleLogout}
+/>
+```
+
+### Custom Logout Text
+
+<Canvas of={TopBarStories.CustomLogoutText} />
+
+```jsx
+<TopBar
+  selectedWarehouse="Main Warehouse"
+  showLogoutOption={true}
+  logoutText="Sign Out"
+  onLogoutClick={handleLogout}
+/>
+```
+
+### Without Logout Option
+
+<Canvas of={TopBarStories.WithoutLogout} />
+
+```jsx
+<TopBar
+  selectedWarehouse="Production Warehouse"
+  showLogoutOption={false}
+/>
+```
+
+## Mobile Experience
+
+### Mobile View
+
+<Canvas of={TopBarStories.MobileView} />
+
+```jsx
+<TopBar
+  selectedWarehouse="Al Haram Warehouse"
+  showHamburgerMenu={true}
+  isMobileSidebarOpen={false}
+  onHamburgerMenuClick={() => toggleSidebar()}
+/>
+```
+
+### Full Layout Integration
+
+The TopBar integrates seamlessly with the Sidebar component for complete layout solutions.
+
+<Canvas of={TopBarStories.FullLayoutExample} />
+
+```jsx
+const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+<div style={{ display: 'flex', height: '100vh', flexDirection: 'column' }}>
+  <TopBar
+    selectedWarehouse={selectedWarehouse}
+    warehouses={warehouses}
+    showHamburgerMenu={true}
+    isMobileSidebarOpen={isMobileSidebarOpen}
+    onHamburgerMenuClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+    onLogoutClick={handleLogout}
+  />
+  
+  <div style={{ display: 'flex', flex: 1 }}>
+    <Sidebar
+      selectedItem={selectedItem}
+      onItemChange={setSelectedItem}
+    />
+    <main style={{ flex: 1 }}>
+      Your content here
+    </main>
+  </div>
+</div>
+```
+
+## Internationalization and RTL Support
+
+The TopBar component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper layout positioning, and directional icon handling.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, TopBar } from '@tagaddod-design/react';
+import { IconBuilding, IconArrowRight } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <TopBar
+        selectedWarehouse="مخزن الحرم الرئيسي"
+        warehouses={[
+          "مخزن الحرم الرئيسي",
+          "المخزن المركزي", 
+          "المخزن الثانوي"
+        ]}
+        onWarehouseChange={setSelectedWarehouse}
+        logoClickable={true}
+        onLogoClick={() => navigate('/')}
+        logoutText="تسجيل الخروج"
+        onLogoutClick={handleLogout}
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the TopBar component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Layout Direction**: Adjusts hamburger menu, logo, and warehouse selector positioning
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Text Alignment**: Ensures proper text alignment in dropdowns and labels
+5. **Icon Positioning**: Maintains proper spacing and alignment in RTL layouts
+6. **Popover Positioning**: Adjusts dropdown alignment for RTL reading direction
+7. **Mobile Menu**: Hamburger menu slides from the correct side in RTL
+
+<Canvas of={TopBarStories.RTLLayout} />
+
+```jsx
+<TopBar
+  selectedWarehouse="مخزن الحرم الرئيسي" 
+  warehouses={["مخزن الحرم الرئيسي", "المخزن المركزي", "المخزن الثانوي"]}
+  onWarehouseChange={setSelectedWarehouse}
+  logoutText="تسجيل الخروج"
+  dir="rtl"
+/>
+```
+
+### Directional Icon Handling
+
+**Important**: When using custom icons in TopBar (warehouse icons, menu icons), you should manually choose the appropriate icon based on the current direction:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+import { IconArrowLeft, IconArrowRight, IconBuilding, IconBuildingWarehouse } from '@tabler/icons-react';
+
+function DirectionalTopBar() {
+  const { isRTL } = useTheme();
+  
+  // For navigation or directional actions in custom listbox
+  const NextIcon = isRTL ? IconArrowLeft : IconArrowRight;
+  const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
+  
+  const customListboxOptions = [
+    {
+      label: isRTL ? 'مخزن الحرم الرئيسي' : 'Al Haram Warehouse',
+      value: 'main',
+      prefix: <IconBuildingWarehouse size={16} />
+    },
+    {
+      label: isRTL ? 'المخزن المركزي' : 'Central Warehouse',
+      value: 'central',
+      prefix: <IconBuilding size={16} />
+    },
+    {
+      label: '',
+      value: 'separator',
+      disabled: true,
+      customContent: <Separator />
+    },
+    {
+      label: isRTL ? 'الانتقال للمخزن التالي' : 'Go to Next Warehouse',
+      value: 'next',
+      prefix: <NextIcon size={16} />
+    },
+    {
+      label: isRTL ? 'العودة للمخزن السابق' : 'Back to Previous Warehouse', 
+      value: 'back',
+      prefix: <BackIcon size={16} />
+    }
+  ];
+  
+  return (
+    <TopBar
+      customListboxOptions={customListboxOptions}
+      onCustomListboxSelect={(value, option) => {
+        if (value === 'next') {
+          navigateToNext();
+        } else if (value === 'back') {
+          navigateToPrevious();
+        } else {
+          setSelectedWarehouse(option.label);
+        }
+      }}
+      warehouseIcon={<IconBuildingWarehouse size={16} />}
+    />
+  );
+}
+```
+
+### Common Directional Icon Patterns
+
+#### Navigation Icons in Custom Listbox
+```jsx
+// For "next" actions in warehouse navigation
+const NextIcon = isRTL ? IconArrowLeft : IconArrowRight;
+
+// For "back" actions  
+const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
+
+<TopBar customListboxOptions={[
+  {
+    label: isRTL ? 'التالي' : 'Next',
+    value: 'next',
+    prefix: <NextIcon size={16} />
+  },
+  {
+    label: isRTL ? 'رجوع' : 'Back',
+    value: 'back', 
+    prefix: <BackIcon size={16} />
+  }
+]} />
+```
+
+#### Warehouse Icons
+```jsx
+// Warehouse and building icons don't typically need direction changes
+<TopBar warehouseIcon={<IconBuildingWarehouse size={16} />} />
+```
+
+#### Mobile Menu Icons
+```jsx
+// Hamburger and close icons are handled automatically by the component
+// They don't require directional changes
+```
+
+### RTL Layout Integration
+
+The TopBar works seamlessly with RTL page layouts:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+
+function RTLAppLayout() {
+  const { isRTL } = useTheme();
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <TopBar
+        selectedWarehouse={isRTL ? 'مخزن الحرم الرئيسي' : 'Al Haram Warehouse'}
+        warehouses={isRTL ? 
+          ['مخزن الحرم الرئيسي', 'المخزن المركزي', 'المخزن الثانوي'] :
+          ['Al Haram Warehouse', 'Main Warehouse', 'Secondary Warehouse']
+        }
+        onWarehouseChange={setSelectedWarehouse}
+        showHamburgerMenu={true}
+        isMobileSidebarOpen={isMobileSidebarOpen}
+        onHamburgerMenuClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+        logoClickable={true}
+        onLogoClick={() => navigate('/')}
+        logoutText={isRTL ? 'تسجيل الخروج' : 'Logout'}
+        onLogoutClick={handleLogout}
+      />
+      
+      <div style={{ 
+        display: 'flex', 
+        height: 'calc(100vh - 64px)', // Account for TopBar height
+        flexDirection: isRTL ? 'row-reverse' : 'row'
+      }}>
+        <Sidebar 
+          position={isRTL ? 'right' : 'left'}
+          selectedItem="dashboard"
+          onItemChange={setSelectedItem}
+        />
+        <main style={{ 
+          flex: 1, 
+          padding: '24px',
+          textAlign: isRTL ? 'right' : 'left'
+        }}>
+          {isRTL ? 'المحتوى الرئيسي للتطبيق' : 'Main application content'}
+        </main>
+      </div>
+    </div>
+  );
+}
+```
+
+### Bilingual TopBar Configuration
+
+For applications supporting multiple languages:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+
+function BilingualTopBar() {
+  const { isRTL, locale } = useTheme();
+  
+  const warehouseNames = {
+    en: {
+      main: 'Al Haram Warehouse',
+      central: 'Main Warehouse', 
+      secondary: 'Secondary Warehouse'
+    },
+    ar: {
+      main: 'مخزن الحرم الرئيسي',
+      central: 'المخزن المركزي',
+      secondary: 'المخزن الثانوي'
+    }
+  };
+  
+  const currentNames = warehouseNames[locale] || warehouseNames.en;
+  
+  return (
+    <TopBar
+      selectedWarehouse={currentNames.main}
+      warehouses={Object.values(currentNames)}
+      onWarehouseChange={setSelectedWarehouse}
+      logoutText={isRTL ? 'تسجيل الخروج' : 'Logout'}
+      onLogoutClick={handleLogout}
+      // Popover positioning adjusts for RTL automatically
+      popoverAlign={isRTL ? 'start' : 'end'}
+    />
+  );
+}
+```
+
+### Mobile RTL Behavior
+
+The TopBar handles mobile interactions properly in RTL:
+
+```jsx
+function MobileRTLTopBar() {
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const { isRTL } = useTheme();
+  
+  return (
+    <>
+      <TopBar
+        selectedWarehouse={isRTL ? 'مخزن الحرم الرئيسي' : 'Al Haram Warehouse'}
+        showHamburgerMenu={true}
+        isMobileSidebarOpen={isMobileSidebarOpen}
+        onHamburgerMenuClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+        // Mobile menu will slide from correct side automatically
+      />
+      
+      {/* Sidebar overlay behavior adjusts for RTL */}
+      {isMobileSidebarOpen && (
+        <div style={{
+          position: 'fixed',
+          top: '64px', // Below TopBar
+          [isRTL ? 'right' : 'left']: 0,
+          width: '280px',
+          height: 'calc(100vh - 64px)',
+          transform: `translateX(${isRTL ? '0' : '0'})`,
+          zIndex: 1000
+        }}>
+          <Sidebar selectedItem="dashboard" />
+        </div>
+      )}
+    </>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and automatic font switching
+2. **Choose directional icons carefully** - use appropriate arrows for navigation actions
+3. **Test dropdown positioning** - ensure popovers align correctly in RTL layouts
+4. **Verify mobile menu behavior** - hamburger menu should slide from the correct side
+5. **Use proper warehouse names** - ensure Arabic warehouse names display correctly
+6. **Consider text length** - Arabic text may be longer/shorter than English equivalents
+7. **Test logo positioning** - ensure logo doesn't interfere with RTL text flow
+8. **Check custom listbox options** - verify all custom icons and text work in RTL
+9. **Validate logout text** - ensure logout appears in the correct language and position
+
+## Interactive Example
+
+<Canvas of={TopBarStories.Interactive} />
+
+```jsx
+const [selectedWarehouse, setSelectedWarehouse] = useState("Al Haram Warehouse");
+const warehouses = [
+  "Al Haram Warehouse",
+  "Main Distribution Center", 
+  "Secondary Storage",
+  "Emergency Depot",
+  "Overflow Facility"
+];
+
+<TopBar
+  selectedWarehouse={selectedWarehouse}
+  warehouses={warehouses}
+  logoClickable={true}
+  onWarehouseChange={setSelectedWarehouse}
+  onLogoClick={() => navigate('/')}
+  onHamburgerMenuClick={() => toggleSidebar()}
+  onLogoutClick={() => handleLogout()}
+/>
+```
+
+## Design System Integration
+
+### Visual Design Features
+
+- **TAGADDOD logo** integration with customizable sizing and click behavior
+- **Smooth transitions** with 300ms cubic-bezier animations
+- **Mobile hamburger menu** with icon transformation (hamburger ↔ X)
+- **Backdrop overlay** with fade animations for mobile sidebar
+- **RTL support** with proper text direction and layout adjustments
+
+### Customization Options
+
+#### Listbox Customization
+- `customListboxOptions` - Complete dropdown option override
+- `listboxClassName` - Custom styling for dropdown container
+- `listboxProps` - Additional props for listbox component
+- `onCustomListboxSelect` - Custom selection handler
+
+#### Popover Customization
+- `popoverSide` - Position (top/right/bottom/left)
+- `popoverAlign` - Alignment (start/center/end)
+- `popoverMargin` - Spacing from trigger
+- `showPopoverArrow` - Arrow visibility toggle
+- `popoverProps` - Additional popover properties
+
+#### Styling Customization
+- `warehouseTriggerClassName` - Custom trigger button styling
+- `hamburgerButtonClassName` - Custom hamburger button styling
+- `warehouseIcon` - Custom dropdown icon
+- `warehouseIconSize` - Icon size adjustment
+
+## Accessibility
+
+- **ARIA Labels**: Proper labeling for screen readers
+- **Keyboard Navigation**: Full keyboard support for all interactive elements
+- **Focus Management**: Clear focus indicators and logical tab order
+- **Screen Reader Support**: Descriptive labels for warehouse selection and logout actions
+- **Mobile Accessibility**: Touch-friendly targets and gesture support
+
+## Form Integration
+
+The TopBar integrates with form systems through its selection handlers:
+
+```jsx
+<TopBar
+  selectedWarehouse={formData.warehouse}
+  onWarehouseChange={(warehouse) => setFormData({...formData, warehouse})}
+  onLogoutClick={() => handleFormReset()}
+/>
+```
+
+## Implementation Details
+
+### CSS Variables
+
+The TopBar uses design system tokens for consistent theming:
+
+| Variable | Purpose |
+|----------|---------|
+| `--t-color-surface-primary` | TopBar background |
+| `--t-color-text-primary` | Primary text color |
+| `--t-color-text-critical` | Logout text color |
+| `--t-color-icon-critical` | Logout icon color |
+| `--t-color-border-secondary` | Border colors |
+| `--t-space-*` | Spacing and padding |
+| `--t-font-family-primary` | Font family |
+| `--t-line-height-arabic` | Arabic text line height |
+| `--t-border-radius-*` | Border radius |
+| `--t-duration-*` | Animation duration |
+
+### Mobile Behavior
+
+1. **Hamburger Menu**: Shows on screens smaller than 768px
+2. **Icon Transformation**: Hamburger changes to X when sidebar is open
+3. **Overlay Sidebar**: Slides in from left (or right in RTL)
+4. **Backdrop**: Dark overlay with click-to-close functionality
+5. **Auto-close**: Sidebar closes when menu items are selected
+
+### RTL Implementation
+
+The TopBar automatically detects RTL direction and applies:
+- Arabic font family for text elements
+- Proper line height for Arabic text
+- Mirrored layout positioning
+- Right-to-left sidebar slide animations
+
+### Browser Support
+
+Compatible with all modern browsers including:
+- Chrome/Edge 88+
+- Firefox 85+
+- Safari 14+
+- Mobile browsers with touch support
+
+## Performance Considerations
+
+- **Lazy Loading**: Popover content is rendered only when needed
+- **Efficient Animations**: CSS transforms for smooth mobile transitions
+- **Minimal Re-renders**: Optimized state management for responsive behavior
+- **Memory Management**: Proper cleanup of event listeners and animations

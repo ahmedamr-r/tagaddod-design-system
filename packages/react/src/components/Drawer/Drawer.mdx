@@ -4,6 +4,115 @@ import { Drawer, useDrawerContext } from './Drawer';
 
 <Meta of={DrawerStories} />
 
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 15-57)
+- Basic import pattern with useDrawerContext
+- Props documentation  
+- Header Props table (Lines 25-35)
+- Header Layout CSS Classes (Lines 36-57)
+
+🎯 Z-INDEX MANAGEMENT (Lines 59-91)
+- Z-Index Hierarchy (Lines 63-68): Complex layering system
+- DrawerContext System (Lines 69-91): Automatic z-index for child components
+
+🎯 BASIC USAGE (Lines 92-123)
+- Default implementation with trigger button
+- Content padding configuration
+
+📐 WIDTH CONFIGURATION (Lines 125-212)
+- Default Width (Lines 129-144): 28.125rem (450px) recommended
+- Custom Width (Lines 146-191): Custom sizes with constraints
+- Width Constraints (Lines 193-198): Min/max rules
+- Legacy Size Props (Lines 200-212): Backward compatibility
+
+📍 POSITIONS (Lines 214-244)
+- Right (Lines 218-231): Default position
+- Left (Lines 233-244): Alternative position
+
+🎛️ HEADER OPTIONS (Lines 246-332)
+- With Back Button (Lines 248-262): Navigation support
+- With Header Components (Lines 264-308): Badge/button integration
+- Interactive Header Areas (Lines 304-308): Demo story
+- Without Title (Lines 309-319): Minimal header
+- Without Close Button (Lines 321-332): Custom close handling
+
+🦶 FOOTER (Lines 334-479)
+- Footer Variants (Lines 338-422):
+  * Cancel and Actions (Lines 340-369): Default pattern
+  * Swap and Actions (Lines 371-398): Custom left content
+  * Actions Only (Lines 400-422): Right-aligned buttons
+- Single Button Footers (Lines 424-464): Primary/secondary only
+- Footer Props Table (Lines 466-479): Complete prop reference
+
+🔗 MODAL INTEGRATION (Lines 481-560)
+- Modal Components Within Drawer (Lines 481-536): Z-index management
+- useDrawerContext Hook (Lines 538-560): Context access pattern
+
+🎨 VISUAL CUSTOMIZATION (Lines 561-614)
+- Custom Padding (Lines 563-587): Design token options
+- Width Testing (Lines 589-599): Interactive testing
+- Full Height (Lines 601-614): Maximum height option
+
+🌍 INTERNATIONALIZATION & RTL SUPPORT (Lines 720-877)
+- ThemeProvider Integration (Lines 724-748): Full RTL setup with Arabic content
+- Automatic RTL Adjustments (Lines 750-760): 7 built-in RTL features
+- Directional Icon Handling (Lines 762-802): Back arrow logic and examples
+- RTL Position Logic (Lines 804-817): Automatic left positioning in RTL
+- Line Height & Typography (Lines 819-833): Arabic text optimization
+- RTL Testing Example (Lines 835-859): Arabic drawer implementation
+- RTL Best Practices (Lines 861-870): 8 implementation guidelines
+- Arabic Typography Notes (Lines 872-877): Font and rendering details
+
+💼 USE CASES (Lines 879-1025)
+- Form Entry (Lines 881-904): User input forms
+- Content with Different Padding (Lines 906-938): Padding strategies
+- Object Details with Table (Lines 940-966): Complex content
+- Multi-step Flows (Lines 968-992): Wizard patterns
+- Settings Panel (Lines 994-1008): Configuration UI
+- Wide Content Drawer (Lines 1010-1025): Large displays
+
+♿ ACCESSIBILITY (Lines 1027-1041)
+- Modal dialog pattern
+- Focus management and keyboard navigation
+
+⚙️ TECHNICAL DETAILS (Lines 1043-1106)
+- Z-Index Architecture (Lines 1045-1062): CSS variable hierarchy
+- CSS Variables (Lines 1064-1085): Design tokens used
+- Architecture (Lines 1087-1103): Vaul foundation
+- Browser Support (Lines 1104-1106)
+- Mobile Behavior (Lines 1108-1115): Responsive design
+
+🔧 TROUBLESHOOTING (Lines 1117-1141)
+- Z-index conflicts resolution
+- Modal visibility issues
+- Performance optimization
+
+🚀 COMPLEX INTEGRATION (Lines 1154-1234)
+- Ultimate Z-Index Test (Lines 1157-1210): Drawer→Modal→Select
+- Component Integration Features (Lines 1212-1224): Automatic detection
+- Best Practices (Lines 1226-1234): Implementation guidelines
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic drawer: Lines 201-226
+- With back button: Lines 355-365
+- Custom width: Lines 254-268
+- With footer: Lines 449-472
+- RTL support: Lines 840-859
+- Modal integration: Lines 589-639
+
+⚠️ Z-INDEX NOTE:
+Drawer provides automatic z-index management through DrawerContext. Use useDrawerContext hook for modal components to ensure proper layering without manual configuration.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Drawer component capabilities and patterns.
+
+
 # Drawer Component
 
 The Drawer component is a side panel that slides in from the edge of the screen, providing additional content or actions without navigating away from the current page. It features proper z-index management to ensure it appears above all other content, including complex table layouts.
@@ -613,14 +722,122 @@ This story provides:
 </Drawer>
 ```
 
-## Internationalization
+## Internationalization and RTL Support
 
-The Drawer component properly handles Right-to-Left (RTL) languages automatically by:
+The Drawer component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper drawer positioning, directional icon handling, and Arabic text optimization.
 
-1. Switching the position (right becomes left and vice versa)
-2. Flipping the direction of the back button icon
-3. Applying appropriate line height for Arabic text
-4. Ensuring correct alignment of text and buttons
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Drawer, Button } from '@tagaddod-design/react';
+import { IconArrowLeft, IconArrowRight, IconX } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Drawer
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        title="درج جانبي"
+        showBackButton={true}
+        headerPrefix={<Badge tone="info">حالة</Badge>}
+        headerSuffix={<Button variant="plain" size="micro">إجراء</Button>}
+      >
+        <p>محتوى الدرج باللغة العربية</p>
+      </Drawer>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider or document direction, the Drawer component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font family
+2. **Drawer Position**: Always opens from left in RTL (following reading direction)  
+3. **Header Layout**: Repositions title, prefix, and suffix elements for RTL reading
+4. **Line Height**: Applies `var(--t-line-height-arabic, 1.5)` for proper Arabic text rendering
+5. **Content Direction**: Sets `dir="rtl"` attribute on drawer content
+6. **Animation Direction**: Slide animations respect RTL reading direction (left-to-right)
+7. **Button Labels**: Automatically applies Arabic aria-labels for back/close buttons
+
+### Directional Icon Handling
+
+**Important**: The Drawer component includes built-in directional icon logic. When using back arrows or navigation icons, the component automatically chooses the correct direction:
+
+```jsx
+import { useEffect, useState } from 'react';
+import { Drawer, Button } from '@tagaddod-design/react';
+import { IconArrowLeft, IconArrowRight, IconX } from '@tabler/icons-react';
+
+function DirectionalDrawer() {
+  const [isRTL, setIsRTL] = useState(false);
+  
+  useEffect(() => {
+    const dir = document.dir || document.documentElement.dir;
+    setIsRTL(dir === 'rtl');
+  }, []);
+  
+  // The drawer automatically handles back arrow direction internally:
+  // In RTL: back arrow points right (→) - IconArrowRight
+  // In LTR: back arrow points left (←) - IconArrowLeft
+  
+  return (
+    <Drawer
+      open={open}
+      onOpenChange={setOpen}
+      title={isRTL ? 'الإعدادات' : 'Settings'}
+      showBackButton={true}
+      onBackClick={() => {
+        // Handle navigation
+      }}
+      showFooter={true}
+      primaryLabel={isRTL ? 'حفظ' : 'Save'}
+      cancelLabel={isRTL ? 'إلغاء' : 'Cancel'}
+    >
+      <div>
+        <p>{isRTL ? 'محتوى الإعدادات' : 'Settings content'}</p>
+      </div>
+    </Drawer>
+  );
+}
+```
+
+### RTL Position Logic
+
+The Drawer automatically adjusts its position based on text direction:
+
+```jsx
+// Component logic (built-in, no manual configuration needed)
+const adjustedPosition = isRTL 
+  ? 'left'    // Always left in RTL (follows reading direction)
+  : position; // Use provided position in LTR
+
+// This means:
+// - In RTL: drawer always slides from left regardless of `position` prop
+// - In LTR: drawer uses the provided `position` prop (default: right)
+```
+
+### Line Height and Typography
+
+The Drawer applies appropriate line height for Arabic text automatically:
+
+```jsx
+// Applied automatically to all text elements in RTL
+const lineHeightStyle = {
+  lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.5)' : 'var(--t-line-height-english, 1.5)'
+};
+
+// Applied to:
+// - Drawer title
+// - Footer button labels
+// - All text content within drawer
+```
+
+### RTL Testing Example
 
 <Canvas of={DrawerStories.RTLDrawer} />
 
@@ -632,21 +849,37 @@ The Drawer component properly handles Right-to-Left (RTL) languages automaticall
     title="عنوان الدرج"
     showBackButton={true}
     showFooter={true}
-    primaryAction={{
-      label: 'حفظ',
-      onClick: () => setOpen(false),
-    }}
-    secondaryAction={{
-      label: 'إلغاء',
-      onClick: () => setOpen(false),
-    }}
+    footerVariant="cancelAndActions"
+    primaryLabel="حفظ"
+    cancelLabel="إلغاء"
+    onPrimary={() => setOpen(false)}
+    onCancel={() => setOpen(false)}
   >
     <div style={{ textAlign: 'right' }}>
       <p>هذا محتوى الدرج باللغة العربية.</p>
+      <p>يتم عرض النص بشكل صحيح مع المحاذاة المناسبة.</p>
     </div>
   </Drawer>
 </div>
 ```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and automatic font switching
+2. **Let drawer handle positioning** - it automatically adjusts slide direction for RTL
+3. **Use appropriate Arabic labels** - provide Arabic text for all user-facing strings
+4. **Test drawer animations** in RTL to ensure smooth left-to-right transitions  
+5. **Consider drawer width** - Arabic text may require different sizing considerations
+6. **Test nested components** - ensure all drawer content (modals, selects, etc.) supports RTL
+7. **Use semantic HTML** - apply `dir="rtl"` to content containers when needed
+8. **Test with real Arabic content** - verify line height and text rendering quality
+
+### Arabic Typography Notes
+
+- The drawer uses `var(--t-line-height-arabic, 1.5)` for optimal Arabic text rendering
+- Arabic fonts (Tajawal) are automatically applied via ThemeProvider
+- Text direction is set via `dir="rtl"` attribute on drawer content
+- All interactive elements (buttons, inputs) inherit proper RTL styling
 
 ## Use Cases
 

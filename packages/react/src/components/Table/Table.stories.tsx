@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Table } from './Table';
 import { ColumnDef } from '@tanstack/react-table';
@@ -429,64 +429,64 @@ export const CellVariants: Story = {
     const [enhancedData] = useState(enhancedVariantsData);
 
     // Handlers for interactive cells
-    const handleCheckboxChange = (checked: boolean, row: any) => {
+    const handleCheckboxChange = useCallback((checked: boolean, row: any) => {
       setInteractiveData(prevData => 
         prevData.map(item => 
           item.id === row.id ? { ...item, checkbox: checked } : item
         )
       );
-    };
+    }, []);
 
-    const handleSelectChange = (value: string, row: any) => {
+    const handleSelectChange = useCallback((value: string, row: any) => {
       setInteractiveData(prevData => 
         prevData.map(item => 
           item.id === row.id ? { ...item, select: value } : item
         )
       );
-    };
+    }, []);
 
-    const handleRadioChange = (value: string, row: any) => {
+    const handleRadioChange = useCallback((value: string, row: any) => {
       setInteractiveData(prevData => 
         prevData.map(item => 
           item.id === row.id ? { ...item, radioButton: value } : item
         )
       );
-    };
+    }, []);
 
-    const handleTextFieldChange = (value: string, row: any) => {
+    const handleTextFieldChange = useCallback((value: string, row: any) => {
       setInteractiveData(prevData => 
         prevData.map(item => 
           item.id === row.id ? { ...item, textField: value } : item
         )
       );
-    };
+    }, []);
 
-         const handleActionClick = (row: any) => {
+         const handleActionClick = useCallback((row: any) => {
        alert(`Action clicked for ID: ${row.id}`);
-     };
+     }, []);
 
-     const handleEditAction = (row: any) => {
+     const handleEditAction = useCallback((row: any) => {
        alert(`Edit clicked for: ${row.id}`);
-     };
+     }, []);
 
-     const handleDeleteAction = (row: any) => {
+     const handleDeleteAction = useCallback((row: any) => {
        alert(`Delete clicked for: ${row.id}`);
-     };
+     }, []);
 
      // Column definitions for each grid
-    const textVariantColumns: ColumnDef<any, any>[] = [
+    const textVariantColumns: ColumnDef<any, any>[] = useMemo(() => [
       { ...createCellColumn('singleLine', 'Single Line Text', 'textSingleLine'), size: 140 },
       { ...createCellColumn('multiLine', 'Multi-line Text', 'textMultiline'), size: 140 },
       { ...createCellColumn('truncated', 'Truncated Text', 'textTruncated'), size: 140 },
       { ...createCellColumn('withBadge', 'Text + Badge', 'textSingleLineWithBadge'), size: 140 }
-    ];
+    ], []);
 
-    const badgeVariantColumns: ColumnDef<any, any>[] = [
+    const badgeVariantColumns: ColumnDef<any, any>[] = useMemo(() => [
       { ...createCellColumn('single', 'Single Badge', 'badge'), size: 120 },
       { ...createCellColumn('multiple', 'Multiple Badges', 'badgeMultiple'), size: 200 }
-    ];
+    ], []);
 
-    const interactiveVariantColumns: ColumnDef<any, any>[] = [
+    const interactiveVariantColumns: ColumnDef<any, any>[] = useMemo(() => [
       { ...createInteractiveCellColumn('checkbox', 'Checkbox', 'checkbox', handleCheckboxChange), size: 90 },
       { ...createInteractiveCellColumn('select', 'Select', 'select', handleSelectChange, {
         cellProps: { 
@@ -512,10 +512,10 @@ export const CellVariants: Story = {
        { ...createCellColumn('number', 'Formatted Number', 'updatedNumber'), size: 130 },
        { ...createCellColumn('complexNumber', 'Complex Number', 'updatedNumber'), size: 130 },
        { ...createActionCellColumn('Actions', 'actionIcon', handleActionClick), size: 80 }
-     ];
+     ], [handleCheckboxChange, handleSelectChange, handleRadioChange, handleTextFieldChange]);
 
      // Enhanced variants columns for Figma designs
-     const enhancedVariantColumns: ColumnDef<any, any>[] = [
+     const enhancedVariantColumns: ColumnDef<any, any>[] = useMemo(() => [
        { ...createCellColumn('textWithBadge', 'Text + Badge (Enhanced)', 'textSingleLineWithBadge'), size: 200 },
        { 
          id: 'enhancedActions',
@@ -547,7 +547,7 @@ export const CellVariants: Story = {
          size: 120 
        },
        { ...createCellColumn('updatedNumbers', 'Updated Numbers', 'updatedNumber'), size: 150 }
-     ];
+     ], [handleEditAction, handleDeleteAction]);
 
     const gridStyle = {
       marginBottom: '40px',
@@ -1893,6 +1893,717 @@ export const ErrorRowHighlighting: Story = {
     docs: {
       description: {
         story: 'Demonstrates **error row highlighting** using the `fill-critical-secondary` token. Rows with validation errors are visually highlighted across the entire row to help users identify problematic data.'
+      }
+    }
+  }
+};
+
+// Fixed Pagination Story - Demonstrates working pagination with API data
+export const FixedPagination: Story = {
+  name: 'Fixed Pagination with API Data',
+  render: () => {
+    const [currentPage, setCurrentPage] = useState(0);
+    const [pageSize, setPageSize] = useState(5);
+    
+    // Simulate API data (in real usage, this would come from an API call)
+    const allData = useMemo(() => {
+      const data = [];
+      for (let i = 1; i <= 50; i++) {
+        data.push({
+          id: i,
+          name: `Product ${i}`,
+          stockCollectors: Math.floor(Math.random() * 500) + 10,
+          stockWarehouse: Math.floor(Math.random() * 1000) + 50,
+        });
+      }
+      return data;
+    }, []);
+
+    const pagination = {
+      pageIndex: currentPage,
+      pageSize: pageSize,
+      pageCount: Math.ceil(allData.length / pageSize),
+      onPageChange: (pageIndex: number) => {
+        setCurrentPage(pageIndex);
+        // In real usage, this would trigger an API call
+        console.log(`Loading page ${pageIndex + 1}`);
+      },
+      onPageSizeChange: (newPageSize: number) => {
+        setPageSize(newPageSize);
+        setCurrentPage(0); // Reset to first page
+        console.log(`Changing page size to ${newPageSize}`);
+      },
+      pageSizeOptions: [5, 10, 25, 50],
+      // isServerSide: false for client-side pagination (default)
+      // isServerSide: true for server-side pagination
+    };
+
+    return (
+      <div style={{ padding: '20px' }}>
+        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+          <h3 style={{ margin: '0 0 12px 0', color: '#28a745' }}>✅ Fixed Pagination</h3>
+          <p style={{ margin: '0', color: '#6c757d' }}>
+            <strong>Issue Fixed:</strong> Pagination now properly slices data and updates content when pages change.
+            <br />
+            <strong>Current Page:</strong> {currentPage + 1} of {pagination.pageCount} | 
+            <strong> Page Size:</strong> {pageSize} | 
+            <strong> Total Items:</strong> {allData.length}
+          </p>
+        </div>
+        
+        <Table
+          data={allData}
+          columns={productColumns}
+          title="Fixed Pagination Demo"
+          pagination={pagination}
+          striped={false}
+          showHeader={true}
+          showSearch={true}
+          showFilters={true}
+          showPagination={true}
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '**Fixed pagination behavior** - Content now properly changes when switching pages. The `manualPagination` setting is now correctly applied only for server-side pagination scenarios.'
+      }
+    }
+  }
+};
+
+// Fast Filters Performance Story
+export const FastFilters: Story = {
+  name: 'Fast Filters Performance',
+  render: () => {
+    const [filters, setFilters] = useState<Record<string, any>>({});
+    const [lastFilterTime, setLastFilterTime] = useState<Date | null>(null);
+    
+    // Generate more data for filter performance testing
+    const filterTestData = useMemo(() => {
+      const data = [];
+      const categories = ['Electronics', 'Clothing', 'Food', 'Books', 'Sports'];
+      const statuses = ['Active', 'Inactive', 'Pending'];
+      
+      for (let i = 1; i <= 100; i++) {
+        data.push({
+          id: i,
+          name: `Product ${i}`,
+          category: categories[Math.floor(Math.random() * categories.length)],
+          status: statuses[Math.floor(Math.random() * statuses.length)],
+          price: Math.floor(Math.random() * 1000) + 10,
+          stockCollectors: Math.floor(Math.random() * 500) + 10,
+          stockWarehouse: Math.floor(Math.random() * 1000) + 50,
+        });
+      }
+      return data;
+    }, []);
+
+    const filterOptions = {
+      category: {
+        label: 'Category',
+        type: 'popoverListbox' as const,
+        options: [
+          { label: 'All Categories', value: '' },
+          { label: 'Electronics', value: 'Electronics' },
+          { label: 'Clothing', value: 'Clothing' },
+          { label: 'Food', value: 'Food' },
+          { label: 'Books', value: 'Books' },
+          { label: 'Sports', value: 'Sports' },
+        ],
+      },
+      status: {
+        label: 'Status',
+        type: 'popoverListbox' as const,
+        options: [
+          { label: 'All Status', value: '' },
+          { label: 'Active', value: 'Active' },
+          { label: 'Inactive', value: 'Inactive' },
+          { label: 'Pending', value: 'Pending' },
+        ],
+      },
+      priceRange: {
+        label: 'Price Range',
+        type: 'rangeSlider' as const,
+        rangeConfig: {
+          min: 0,
+          max: 1000,
+          step: 10,
+          formatValue: (value: number) => `$${value}`,
+          prefix: '$',
+        }
+      }
+    };
+
+    const filterColumns: ColumnDef<any, any>[] = [
+      { ...QuickColumns.number('id', 'ID'), size: 60 },
+      { ...QuickColumns.text('name', 'Product'), size: 200 },
+      { ...QuickColumns.text('category', 'Category'), size: 120 },
+      { ...QuickColumns.text('status', 'Status'), size: 100 },
+      { ...QuickColumns.number('price', 'Price'), size: 100 },
+      { ...QuickColumns.number('stockCollectors', 'Stock'), size: 100 },
+    ];
+
+    const handleFilterChange = (newFilters: Record<string, any>) => {
+      setFilters(newFilters);
+      setLastFilterTime(new Date());
+    };
+
+    // Filter the data based on active filters
+    const filteredData = useMemo(() => {
+      return filterTestData.filter(item => {
+        // Category filter
+        if (filters.category && filters.category !== '') {
+          if (item.category !== filters.category) return false;
+        }
+        
+        // Status filter
+        if (filters.status && filters.status !== '') {
+          if (item.status !== filters.status) return false;
+        }
+        
+        // Price range filter
+        if (filters.priceRange && Array.isArray(filters.priceRange)) {
+          const [minPrice, maxPrice] = filters.priceRange;
+          if (item.price < minPrice || item.price > maxPrice) return false;
+        }
+        
+        return true;
+      });
+    }, [filterTestData, filters]);
+
+    return (
+      <div style={{ padding: '20px' }}>
+        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+          <h3 style={{ margin: '0 0 12px 0', color: '#28a745' }}>⚡ Optimized Filter Performance</h3>
+          <div style={{ color: '#6c757d', fontSize: '14px' }}>
+            <p style={{ margin: '0 0 8px 0' }}>
+              <strong>Performance Improvements:</strong>
+            </p>
+            <ul style={{ margin: '0', paddingLeft: '20px' }}>
+              <li><strong>Dropdown filters:</strong> Immediate response (0ms debounce)</li>
+              <li><strong>Range sliders:</strong> Fast response (100ms debounce)</li>
+              <li><strong>Text inputs:</strong> Quick response (200ms debounce, reduced from 500ms)</li>
+              <li><strong>Memory optimization:</strong> React.memo prevents unnecessary re-renders</li>
+            </ul>
+            <p style={{ margin: '8px 0 0 0', fontWeight: 'bold', color: '#28a745' }}>
+              <strong>Results:</strong> Showing {filteredData.length} of {filterTestData.length} items
+              {Object.keys(filters).length > 0 && ` (${Object.keys(filters).length} filters active)`}
+            </p>
+            {lastFilterTime && (
+              <p style={{ margin: '8px 0 0 0', fontWeight: 'bold', color: '#28a745' }}>
+                Last filter applied: {lastFilterTime.toLocaleTimeString()}
+              </p>
+            )}
+          </div>
+        </div>
+        
+        <Table
+          data={filteredData}
+          columns={filterColumns}
+          title="Fast Filters Performance Demo"
+          badge={filteredData.length}
+          striped={false}
+          showHeader={true}
+          showSearch={true}
+          showFilters={true}
+          showFilterBar={true}
+          activeFilters={filters}
+          onFilterChange={handleFilterChange}
+          filterOptions={filterOptions}
+          showPagination={true}
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '**Optimized filter performance** - Filters now respond immediately with differentiated debounce timing. Try the dropdown filters (immediate), range sliders (100ms), and notice the improved responsiveness.'
+      }
+    }
+  }
+};
+
+// Default Non-Striped Story
+export const DefaultNonStriped: Story = {
+  name: 'Default Non-Striped Rows',
+  render: () => {
+    return (
+      <div style={{ padding: '20px' }}>
+        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+          <h3 style={{ margin: '0 0 12px 0', color: '#28a745' }}>✅ Default Non-Striped</h3>
+          <p style={{ margin: '0', color: '#6c757d' }}>
+            <strong>Issue Fixed:</strong> Table now defaults to non-striped rows (white background) for better interactivity and modern appearance.
+            <br />
+            <strong>When to use striped:</strong> Only for static, read-only data tables. For interactive tables, keep striped=false (default).
+          </p>
+        </div>
+        
+        <div style={{ display: 'grid', gap: '20px', gridTemplateColumns: '1fr 1fr' }}>
+          <div>
+            <h4 style={{ marginBottom: '12px' }}>Default (striped=false)</h4>
+            <Table
+              data={sampleProducts.slice(0, 5)}
+              columns={productColumns.slice(0, 3)}
+              title="Interactive Table"
+              showHeader={true}
+              showPagination={true}
+              onRowClick={(row) => alert(`Clicked row ${row.original.id}`)}
+            />
+          </div>
+          
+          <div>
+            <h4 style={{ marginBottom: '12px' }}>With Striped (striped=true)</h4>
+            <Table
+              data={sampleProducts.slice(0, 5)}
+              columns={productColumns.slice(0, 3)}
+              title="Static Display Table"
+              striped={true}
+              showHeader={true}
+              showPagination={true}
+              disableRowHover={true}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '**Default non-striped behavior** - The table now defaults to non-striped rows for better interactivity. Compare the default vs striped versions side by side.'
+      }
+    }
+  }
+};
+
+// Client-Side Search Story
+export const ClientSideSearch: Story = {
+  name: 'Client-Side Search (Debounced)',
+  render: () => {
+    const [searchQuery, setSearchQuery] = useState('');
+    
+    // Client-side filtering logic
+    const filteredData = useMemo(() => {
+      if (!searchQuery) return sampleProducts;
+      
+      const query = searchQuery.toLowerCase();
+      return sampleProducts.filter(product => 
+        product.name.toLowerCase().includes(query) ||
+        product.id.toString().includes(query)
+      );
+    }, [searchQuery]);
+    
+    return (
+      <div style={{ padding: '20px' }}>
+        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#e7f3ff', borderRadius: '8px' }}>
+          <h3 style={{ margin: '0 0 12px 0', color: '#1976d2' }}>🔍 Client-Side Search</h3>
+          <div style={{ fontSize: '14px', color: '#555', lineHeight: 1.5 }}>
+            <p style={{ margin: '0 0 8px 0' }}>
+              <strong>Configuration:</strong> 300ms debounce, immediate filtering, no minimum length
+            </p>
+            <p style={{ margin: '0 0 8px 0' }}>
+              <strong>Best For:</strong> Small to medium datasets (&lt; 1000 rows), fast user experience
+            </p>
+            <p style={{ margin: '0' }}>
+              <strong>Results:</strong> Showing {filteredData.length} of {sampleProducts.length} products
+              {searchQuery && ` for "${searchQuery}"`}
+            </p>
+          </div>
+        </div>
+        
+        <Table
+          data={filteredData}
+          columns={productColumns}
+          title="Client-Side Search Demo"
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          searchConfig={{
+            debounceMs: 300,
+            serverSide: false,
+            minLength: 0,
+            placeholder: "Search products by name or ID..."
+          }}
+          showHeader={true}
+          showSearch={true}
+          showFilters={false}
+          showPagination={true}
+          badge={filteredData.length}
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '**Client-side search** with 300ms debouncing. Filtering happens immediately in the browser, providing fast search experience for smaller datasets.'
+      }
+    }
+  }
+};
+
+// Server-Side Search Story
+export const ServerSideSearch: Story = {
+  name: 'Server-Side Search (Simulated)',
+  render: () => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [results, setResults] = useState(sampleProducts);
+    
+    // Simulate server-side search
+    const performSearch = useCallback(async (query: string) => {
+      setLoading(true);
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      const filteredResults = query 
+        ? sampleProducts.filter(product => 
+            product.name.toLowerCase().includes(query.toLowerCase()) ||
+            product.id.toString().includes(query)
+          )
+        : sampleProducts;
+      
+      setResults(filteredResults);
+      setLoading(false);
+    }, []);
+    
+    // Trigger search when query changes
+    useEffect(() => {
+      performSearch(searchQuery);
+    }, [searchQuery, performSearch]);
+    
+    return (
+      <div style={{ padding: '20px' }}>
+        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#fff3cd', borderRadius: '8px' }}>
+          <h3 style={{ margin: '0 0 12px 0', color: '#856404' }}>🌐 Server-Side Search</h3>
+          <div style={{ fontSize: '14px', color: '#555', lineHeight: 1.5 }}>
+            <p style={{ margin: '0 0 8px 0' }}>
+              <strong>Configuration:</strong> 500ms debounce, minimum 2 characters, simulated API calls
+            </p>
+            <p style={{ margin: '0 0 8px 0' }}>
+              <strong>Best For:</strong> Large datasets, search indexes, complex queries
+            </p>
+            <p style={{ margin: '0' }}>
+              <strong>Status:</strong> {loading ? 'Searching...' : `Found ${results.length} results`}
+              {searchQuery && ` for "${searchQuery}"`}
+            </p>
+          </div>
+        </div>
+        
+        <Table
+          data={results}
+          columns={productColumns}
+          title="Server-Side Search Demo"
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          searchConfig={{
+            debounceMs: 500,
+            serverSide: true,
+            minLength: 2,
+            placeholder: "Search server data (min 2 chars)..."
+          }}
+          showHeader={true}
+          showSearch={true}
+          showFilters={false}
+          showPagination={true}
+          badge={results.length}
+          state={loading ? 'loading' : 'normal'}
+        />
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '**Server-side search** with 500ms debouncing and 2-character minimum. Simulates API calls with loading states for large dataset searching.'
+      }
+    }
+  }
+};
+
+// Search Configuration Showcase
+export const SearchConfigShowcase: Story = {
+  name: 'Search Configuration Showcase',
+  render: () => {
+    const [config1Query, setConfig1Query] = useState('');
+    const [config2Query, setConfig2Query] = useState('');
+    const [config3Query, setConfig3Query] = useState('');
+    
+    const searchConfigs = [
+      {
+        title: 'Fast Client-Side (100ms)',
+        query: config1Query,
+        setQuery: setConfig1Query,
+        config: {
+          debounceMs: 100,
+          serverSide: false,
+          minLength: 0,
+          placeholder: "Ultra-fast search..."
+        },
+        description: 'Immediate feedback, ideal for small datasets'
+      },
+      {
+        title: 'Balanced (300ms)',
+        query: config2Query,
+        setQuery: setConfig2Query,
+        config: {
+          debounceMs: 300,
+          serverSide: false,
+          minLength: 1,
+          placeholder: "Balanced search (1 char min)..."
+        },
+        description: 'Good balance of performance and UX'
+      },
+      {
+        title: 'Conservative Server (800ms)',
+        query: config3Query,
+        setQuery: setConfig3Query,
+        config: {
+          debounceMs: 800,
+          serverSide: true,
+          minLength: 3,
+          placeholder: "Conservative search (3 chars min)..."
+        },
+        description: 'Reduces server load, good for expensive queries'
+      }
+    ];
+    
+    return (
+      <div style={{ padding: '20px' }}>
+        <div style={{ marginBottom: '30px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+          <h3 style={{ margin: '0 0 16px 0', color: '#28a745' }}>⚙️ Search Configuration Options</h3>
+          <p style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#6c757d' }}>
+            Compare different search configurations to find the best balance for your use case.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '12px' }}>
+            {searchConfigs.map((config, index) => (
+              <div key={index} style={{ padding: '12px', backgroundColor: '#fff', borderRadius: '6px', border: '1px solid #dee2e6' }}>
+                <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#495057' }}>{config.title}</h4>
+                <p style={{ margin: '0', fontSize: '12px', color: '#6c757d' }}>{config.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <div style={{ display: 'grid', gap: '30px' }}>
+          {searchConfigs.map((config, index) => {
+            const filteredData = config.query 
+              ? sampleProducts.filter(product => 
+                  product.name.toLowerCase().includes(config.query.toLowerCase()) ||
+                  product.id.toString().includes(config.query)
+                )
+              : sampleProducts.slice(0, 5);
+            
+            return (
+              <div key={index} style={{ border: '1px solid #e9ecef', borderRadius: '8px', overflow: 'hidden' }}>
+                <div style={{ padding: '12px', backgroundColor: '#f8f9fa', borderBottom: '1px solid #e9ecef' }}>
+                  <h4 style={{ margin: '0', fontSize: '16px', color: '#495057' }}>{config.title}</h4>
+                  <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#6c757d' }}>
+                    Debounce: {config.config.debounceMs}ms | Min Length: {config.config.minLength} | 
+                    Results: {filteredData.length}
+                  </p>
+                </div>
+                <Table
+                  data={filteredData}
+                  columns={productColumns.slice(0, 3)}
+                  title={`${config.title} Demo`}
+                  searchQuery={config.query}
+                  onSearchChange={config.setQuery}
+                  searchConfig={config.config}
+                  showHeader={true}
+                  showSearch={true}
+                  showFilters={false}
+                  showPagination={false}
+                  badge={filteredData.length}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '**Search configuration showcase** - Compare different debounce timings, minimum lengths, and server-side vs client-side configurations to find the optimal setup for your use case.'
+      }
+    }
+  }
+};
+
+// Pinned Columns Stories
+export const PinnedColumns: Story = {
+  render: () => {
+    // Sample data with more columns to demonstrate pinning
+    const wideTableData = [
+      { id: 1, name: 'Product A', category: 'Electronics', status: 'Active', price: 299.99, stock: 50, description: 'High-quality electronics', supplier: 'Supplier A', lastUpdated: '2023-12-01' },
+      { id: 2, name: 'Product B', category: 'Clothing', status: 'Active', price: 89.99, stock: 25, description: 'Comfortable clothing', supplier: 'Supplier B', lastUpdated: '2023-12-02' },
+      { id: 3, name: 'Product C', category: 'Food', status: 'Inactive', price: 15.99, stock: 0, description: 'Organic food products', supplier: 'Supplier C', lastUpdated: '2023-12-03' },
+      { id: 4, name: 'Product D', category: 'Books', status: 'Active', price: 29.99, stock: 100, description: 'Educational books', supplier: 'Supplier D', lastUpdated: '2023-12-04' },
+      { id: 5, name: 'Product E', category: 'Sports', status: 'Pending', price: 199.99, stock: 15, description: 'Sports equipment', supplier: 'Supplier E', lastUpdated: '2023-12-05' },
+    ];
+
+    // Create columns with different pinning configurations
+    const pinnedColumns: ColumnDef<any, any>[] = [
+      // Pinned left - ID column for easy reference
+      { 
+        ...QuickColumns.number('id', 'ID'), 
+        size: 80,
+        meta: { ...QuickColumns.number('id', 'ID').meta, pinned: 'left' }
+      },
+      // Regular unpinned columns in the center
+      { ...QuickColumns.text('name', 'Product Name'), size: 200 },
+      { ...QuickColumns.text('category', 'Category'), size: 120 },
+      { ...QuickColumns.text('status', 'Status'), size: 100 },
+      { ...QuickColumns.number('price', 'Price'), size: 100 },
+      { ...QuickColumns.number('stock', 'Stock'), size: 100 },
+      { ...QuickColumns.text('description', 'Description'), size: 250 },
+      { ...QuickColumns.text('supplier', 'Supplier'), size: 150 },
+      { ...QuickColumns.text('lastUpdated', 'Last Updated'), size: 120 },
+      // Pinned right - Actions column (automatically pinned by default)
+      {
+        ...QuickColumns.actions('Actions', (row) => {
+          alert(`Action clicked for: ${row.name}`);
+        }),
+        size: 100,
+      },
+    ];
+
+    return (
+      <div style={{ padding: '20px' }}>
+        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+          <h3 style={{ margin: '0 0 12px 0', color: '#007bff' }}>📌 Pinned Columns Demo</h3>
+          <div style={{ color: '#6c757d', fontSize: '14px' }}>
+            <p style={{ margin: '0 0 8px 0' }}>
+              <strong>Pinning Configuration:</strong>
+            </p>
+            <ul style={{ margin: '0', paddingLeft: '20px' }}>
+              <li><strong>Left Pinned:</strong> ID column - always visible for easy row identification</li>
+              <li><strong>Center Columns:</strong> Scrollable content columns (Name, Category, Status, etc.)</li>
+              <li><strong>Right Pinned:</strong> Actions column - always accessible for row operations</li>
+            </ul>
+            <p style={{ margin: '8px 0 0 0', fontWeight: 'bold', color: '#007bff' }}>
+              <strong>Try:</strong> Scroll horizontally to see pinned columns stay in place!
+            </p>
+          </div>
+        </div>
+        
+        <div style={{ overflow: 'auto', maxWidth: '800px', border: '1px solid #dee2e6', borderRadius: '8px' }}>
+          <Table
+            data={wideTableData}
+            columns={pinnedColumns}
+            title="Products with Pinned Columns"
+            showHeader={true}
+            showSearch={false}
+            showFilters={false}
+            showPagination={false}
+            badge={wideTableData.length}
+          />
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '**Pinned columns** - Demonstrates left and right column pinning. The ID column is pinned to the left for easy reference, while the Actions column is pinned to the right for consistent access to row operations.'
+      }
+    }
+  }
+};
+
+export const PinnedColumnsCustom: Story = {
+  render: () => {
+    // Sample data for custom pinning demo
+    const customData = [
+      { priority: 'High', task: 'Fix critical bug', assignee: 'John Doe', department: 'Engineering', startDate: '2023-12-01', endDate: '2023-12-15', budget: 5000, status: 'In Progress' },
+      { priority: 'Medium', task: 'Update documentation', assignee: 'Jane Smith', department: 'Product', startDate: '2023-12-05', endDate: '2023-12-20', budget: 2000, status: 'Planning' },
+      { priority: 'Low', task: 'Code cleanup', assignee: 'Bob Johnson', department: 'Engineering', startDate: '2023-12-10', endDate: '2023-12-25', budget: 1000, status: 'Backlog' },
+    ];
+
+    // Create columns with custom pinning - pin priority and status columns
+    const customPinnedColumns: ColumnDef<any, any>[] = [
+      // Left pinned - Priority for immediate visibility
+      { 
+        ...QuickColumns.text('priority', 'Priority'), 
+        size: 100,
+        meta: { ...QuickColumns.text('priority', 'Priority').meta, pinned: 'left' }
+      },
+      // Center scrollable columns
+      { ...QuickColumns.text('task', 'Task Description'), size: 300 },
+      { ...QuickColumns.text('assignee', 'Assignee'), size: 150 },
+      { ...QuickColumns.text('department', 'Department'), size: 120 },
+      { ...QuickColumns.text('startDate', 'Start Date'), size: 120 },
+      { ...QuickColumns.text('endDate', 'End Date'), size: 120 },
+      { ...QuickColumns.number('budget', 'Budget ($)'), size: 120 },
+      // Right pinned - Status and Actions for easy access
+      { 
+        ...QuickColumns.text('status', 'Status'), 
+        size: 120,
+        meta: { ...QuickColumns.text('status', 'Status').meta, pinned: 'right' }
+      },
+      {
+        ...QuickColumns.actions('', (row) => {
+          alert(`Edit task: ${row.task}`);
+        }),
+        size: 80,
+        // Actions are automatically pinned right by default
+      },
+    ];
+
+    return (
+      <div style={{ padding: '20px' }}>
+        <div style={{ marginBottom: '20px', padding: '16px', backgroundColor: '#f0f8ff', borderRadius: '8px' }}>
+          <h3 style={{ margin: '0 0 12px 0', color: '#0056b3' }}>🎯 Custom Pinned Columns</h3>
+          <div style={{ color: '#6c757d', fontSize: '14px' }}>
+            <p style={{ margin: '0 0 8px 0' }}>
+              <strong>Advanced Pinning Strategy:</strong>
+            </p>
+            <ul style={{ margin: '0', paddingLeft: '20px' }}>
+              <li><strong>Priority (Left):</strong> Always visible for quick task prioritization</li>
+              <li><strong>Status + Actions (Right):</strong> Key operational columns for task management</li>
+              <li><strong>Details (Center):</strong> Scrollable task information and metadata</li>
+            </ul>
+            <p style={{ margin: '8px 0 0 0', fontWeight: 'bold', color: '#0056b3' }}>
+              <strong>Usage:</strong> Pin columns based on workflow importance and frequency of access
+            </p>
+          </div>
+        </div>
+        
+        <div style={{ overflow: 'auto', maxWidth: '900px', border: '1px solid #dee2e6', borderRadius: '8px' }}>
+          <Table
+            data={customData}
+            columns={customPinnedColumns}
+            title="Task Management - Custom Pinning"
+            showHeader={true}
+            showSearch={false}
+            showFilters={false}
+            showPagination={false}
+            badge={customData.length}
+          />
+        </div>
+        
+        <div style={{ marginTop: '20px', padding: '12px', backgroundColor: '#fff3cd', borderRadius: '8px', border: '1px solid #ffeaa7' }}>
+          <h4 style={{ margin: '0 0 8px 0', color: '#856404' }}>💡 Best Practices for Column Pinning</h4>
+          <ul style={{ margin: '0', paddingLeft: '20px', color: '#856404', fontSize: '14px' }}>
+            <li><strong>Left pinning:</strong> Use for identifier columns (ID, Priority, Name)</li>
+            <li><strong>Right pinning:</strong> Use for action columns and status indicators</li>
+            <li><strong>Performance:</strong> Pinned columns use sticky positioning with optimized z-index</li>
+            <li><strong>Accessibility:</strong> Maintains keyboard navigation and screen reader compatibility</li>
+          </ul>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '**Custom pinned columns** - Advanced example showing how to pin multiple columns strategically. Priority is pinned left for quick identification, while Status and Actions are pinned right for operational efficiency.'
       }
     }
   }

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Modal } from './Modal';
 import { Button } from '../Button/Button';
 import { Select } from '../Select/Select';
@@ -356,11 +356,17 @@ export const FormWithSelect: Story = {
 export const DynamicFooter: Story = {
   render: (args) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [footerConfig, setFooterConfig] = useState({
+    const [footerConfig, setFooterConfig] = useState<{
+      showCancel: boolean;
+      showSecondary: boolean;
+      showPrimary: boolean;
+      footerVariant: 'cancelAndActions' | 'swapAndActions' | 'actionsOnly';
+      customContent: string;
+    }>({
       showCancel: true,
       showSecondary: true,
       showPrimary: true,
-      footerVariant: 'cancelAndActions' as const,
+      footerVariant: 'cancelAndActions',
       customContent: ''
     });
 

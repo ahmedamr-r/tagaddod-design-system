@@ -4,6 +4,89 @@ import { Sidebar } from './Sidebar';
 
 <Meta of={SidebarStories} />
 
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 15-24)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 25-56)
+- Default implementation with flexbox layout
+- Default active state management
+- Custom default active item
+
+📐 LAYOUT INTEGRATION (Lines 58-104)
+- Recommended Layout Pattern (Lines 62-84): Flexbox setup
+- Right Position (Lines 86-104): Alternative positioning
+
+🔄 EXPANSION BEHAVIOR (Lines 106-154)
+- Always Expanded (Lines 108-121): Default behavior
+- Hover Expand (Lines 123-136): Compact sidebar option
+- Controlled Expansion (Lines 138-154): Manual control
+
+🎛️ MENU CONFIGURATION (Lines 156-262)
+- Custom Menu Items (Lines 158-207): Structure and examples
+- Menu Item Structure (Lines 209-222): TypeScript interface
+
+📊 MENU SECTIONS (Lines 224-327)
+- Main Navigation (Lines 228-262): Primary items
+- Secondary Navigation (Lines 264-279): Additional items with divider
+- Bottom Navigation (Lines 281-304): Settings/logout section
+- Toggle Bottom Section (Lines 306-327): Dynamic visibility
+
+⚡ STATES & STYLING (Lines 329-372)
+- Active State (Lines 331-349): Main/sub-menu styling differences
+- Disabled Items (Lines 351-362): Coming soon features
+- Parent Active State (Lines 364-372): Child selection effects
+
+🌍 INTERNATIONALIZATION (Lines 373-587)
+- RTL Features (Lines 377-384): Automatic adjustments  
+- RTL Usage (Lines 386-395): Automatic detection
+- Bilingual Menu Items (Lines 397-409): Language switching
+- RTL with ThemeProvider (Lines 410-486): Comprehensive RTL support
+- Directional Icon Handling (Lines 487-531): RTL-aware icons
+- RTL Best Practices (Lines 532-587): Implementation guidelines
+
+♿ ACCESSIBILITY (Lines 589-612)
+- Keyboard navigation support
+- ARIA labels and screen reader compatibility
+- Focus management
+
+📏 SIZING & CUSTOMIZATION (Lines 614-662)
+- Default dimensions and CSS variable customization
+- CSS Variables table (Lines 636-650): Design tokens
+- Custom Styling (Lines 652-662): Override examples
+
+💼 COMMON USE CASES (Lines 664-738)
+- Admin Dashboard (Lines 666-708): Complete example with hierarchical menus
+- E-commerce Navigation (Lines 710-738): Product/order management
+
+⚙️ TECHNICAL DETAILS (Lines 740-781)
+- Component Architecture (Lines 742-748): Recursive rendering
+- Performance (Lines 749-754): Optimization details
+- Browser Support (Lines 755-763): Compatibility matrix
+- Migration Guide (Lines 765-781): From fixed layout
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic sidebar: Lines 32-40
+- Custom menu items: Lines 196-206
+- Right position: Lines 98-102
+- Hover expand: Lines 130-135
+- RTL support: Lines 389-394
+- Admin layout: Lines 514-528
+
+⚠️ LAYOUT NOTE:
+Sidebar uses flexbox layout that pushes content instead of overlaying. Use display: flex on parent container and flex: 1 on main content area.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Sidebar component capabilities and patterns.
+
+
 # Sidebar Component
 
 The Sidebar component provides expandable navigation for applications with hierarchical menu structures, RTL support, and flexible layout integration. It supports hover-to-expand behavior, multi-level navigation, and proper content pushing instead of overlaying.
@@ -370,43 +453,210 @@ When a child item is selected, its parent automatically shows an active state.
 <Sidebar selectedItem="page1" />
 ```
 
-## Internationalization & RTL Support
+## Internationalization and RTL Support
 
-The Sidebar component fully supports Right-to-Left (RTL) languages with automatic adjustments:
+The Sidebar component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper border positioning, and directional icon handling.
 
-### RTL Features
+### Using with ThemeProvider
 
-1. **Automatic Border Positioning**: Border switches from right to left in RTL mode
-2. **Text Alignment**: Menu labels align to the right for Arabic text
-3. **Font Family Switching**: Automatically uses Arabic font family (`Tajawal`) in RTL mode
-4. **Line Height Adjustments**: Proper line-height for Arabic text rendering
-5. **Icon Positioning**: Icons maintain proper spacing in RTL layouts
-
-### RTL Usage
+For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-// The component automatically detects RTL from document direction
-// No additional props needed
-<Sidebar 
-  selectedItem="page1"
-  onItemChange={setSelectedItem}
-  // RTL behavior is automatic based on document.dir or html[dir]
-/>
+import { ThemeProvider, Sidebar } from '@tagaddod-design/react';
+import { IconHome, IconChartBar, IconArrowRight } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <div style={{ display: 'flex', height: '100vh' }}>
+        <Sidebar 
+          selectedItem="dashboard"
+          onItemChange={setSelectedItem}
+          menuItems={[
+            {
+              id: 'dashboard',
+              icon: IconHome,
+              label: 'لوحة التحكم',
+              hasChildren: true,
+              children: [
+                { id: 'overview', label: 'نظرة عامة' },
+                { id: 'analytics', label: 'التحليلات' }
+              ]
+            }
+          ]}
+        />
+        <main style={{ flex: 1, padding: '24px' }}>
+          المحتوى الرئيسي
+        </main>
+      </div>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Sidebar component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Border Positioning**: Switches border from right to left in RTL mode
+3. **Text Alignment**: Menu labels align to the right for Arabic text
+4. **Line Height**: Applies appropriate line height for Arabic text rendering
+5. **Icon Positioning**: Icons maintain proper spacing in RTL layouts
+6. **Layout Direction**: Maintains proper positioning when parent uses RTL
+7. **Menu Hierarchy**: Sub-menu indentation adjusts for RTL text flow
+
+### Directional Icon Handling
+
+**Important**: When using directional icons (arrows, chevrons, etc.) in sidebar navigation, you should manually choose the appropriate icon based on the current direction:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+import { IconArrowLeft, IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+
+function DirectionalSidebar() {
+  const { isRTL } = useTheme();
+  
+  // Use chevrons pointing in the correct direction for expansion
+  const ExpandIcon = isRTL ? IconChevronLeft : IconChevronRight;
+  const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
+  
+  const menuItems = [
+    {
+      id: 'navigation',
+      icon: BackIcon,
+      label: isRTL ? 'التنقل' : 'Navigation',
+      hasChildren: true,
+      children: [
+        { 
+          id: 'next-page', 
+          label: isRTL ? 'الصفحة التالية' : 'Next Page',
+          // Note: Child items don't typically need directional icons
+        }
+      ]
+    }
+  ];
+  
+  return (
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <Sidebar 
+        menuItems={menuItems}
+        selectedItem="navigation"
+        onItemChange={setSelectedItem}
+      />
+      <main style={{ flex: 1 }}>
+        {isRTL ? 'المحتوى' : 'Content'}
+      </main>
+    </div>
+  );
+}
+```
+
+### Common Directional Icon Patterns
+
+#### Navigation Icons
+```jsx
+// For "back" navigation in sidebar
+const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
+
+<Sidebar menuItems={[{
+  id: 'back',
+  icon: BackIcon,
+  label: isRTL ? 'رجوع' : 'Back'
+}]} />
+```
+
+#### Expansion Icons
+```jsx
+// For expandable menu sections (handled automatically by Sidebar)
+// The component uses IconChevronRight/IconChevronDown for expansion
+// and handles RTL direction internally
+```
+
+#### Action Icons
+```jsx
+// For "next step" or "proceed" actions
+const NextIcon = isRTL ? IconArrowLeft : IconArrowRight;
+
+<Sidebar menuItems={[{
+  id: 'next',
+  icon: NextIcon,
+  label: isRTL ? 'التالي' : 'Next'
+}]} />
 ```
 
 ### Bilingual Menu Items
 
+For applications supporting multiple languages, you can provide both English and Arabic labels:
+
 ```jsx
-const bilingualItems = [
+const bilingualMenuItems = [
   {
     id: 'dashboard',
     icon: IconHome,
     label: isRTL ? 'لوحة التحكم' : 'Dashboard',
     labelEn: 'Dashboard',
-    labelAr: 'لوحة التحكم'
+    labelAr: 'لوحة التحكم',
+    hasChildren: true,
+    children: [
+      {
+        id: 'overview',
+        label: isRTL ? 'نظرة عامة' : 'Overview',
+        labelEn: 'Overview',
+        labelAr: 'نظرة عامة'
+      }
+    ]
   }
 ];
+
+<Sidebar menuItems={bilingualMenuItems} />
 ```
+
+### RTL Layout Integration
+
+The Sidebar works seamlessly with RTL layouts using flexbox:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+
+function RTLLayout() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ 
+      display: 'flex', 
+      height: '100vh',
+      // Reverse flex direction for RTL to position sidebar on the right
+      flexDirection: isRTL ? 'row-reverse' : 'row'
+    }}>
+      <Sidebar 
+        position={isRTL ? 'right' : 'left'}
+        selectedItem="dashboard"
+        onItemChange={setSelectedItem}
+      />
+      <main style={{ 
+        flex: 1, 
+        padding: '24px',
+        textAlign: isRTL ? 'right' : 'left',
+        direction: isRTL ? 'rtl' : 'ltr'
+      }}>
+        {isRTL ? 'المحتوى الرئيسي للتطبيق' : 'Main application content'}
+      </main>
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Choose directional icons carefully** - arrows should point in the reading direction
+3. **Test with actual Arabic content** to ensure proper menu item rendering
+4. **Use `useTheme` hook** to access RTL state and theme information
+5. **Consider sidebar positioning** - RTL layouts often place navigation on the right
+6. **Verify menu hierarchy** - ensure sub-menu indentation works correctly in RTL
+7. **Test expansion behavior** - hover and click interactions should feel natural
+8. **Check border positioning** - borders should switch sides appropriately
 
 ## Accessibility
 

@@ -4,6 +4,67 @@ import { Avatar } from './Avatar';
 
 <Meta of={AvatarStories} />
 
+ 
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 15-24)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 25-57)
+- With Image (Lines 27-37): Profile pictures
+- With Initial (Lines 39-48): First letter display
+- With Fallback Icon (Lines 50-56): Default user icon
+
+🎭 AVATAR TYPES (Lines 58-98)
+- Image Avatar (Lines 62-74): User profile pictures
+- Initial Avatar (Lines 76-87): Name first letter
+- Icon Avatar (Lines 89-97): Default fallback
+
+📏 SIZES (Lines 99-117)
+- Four sizes: sm (24px), md (32px), lg (40px), xl (64px)
+- Use cases and dimensions table
+
+⚠️ ERROR HANDLING (Lines 119-143)
+- Image loading states and fallbacks
+- Custom delay with delayMs prop
+- Automatic fallback behavior
+
+🌍 INTERNATIONALIZATION (Lines 145-161)
+- RTL language support
+- Arabic text handling
+- Proper alignment for all languages
+
+💼 USE CASES (Lines 163-243)
+- User Profiles (Lines 165-180): Profile displays
+- Comment Sections (Lines 182-196): Discussion threads
+- User Lists (Lines 198-214): Directory listings
+- Avatar Groups (Lines 216-243): Multiple user display
+
+♿ ACCESSIBILITY (Lines 245-251)
+- Alt text requirements
+- Radix UI accessibility features
+- Screen reader support
+
+⚙️ TECHNICAL DETAILS (Lines 253-289)
+- CSS Variables (Lines 255-269): Design tokens used
+- Architecture (Lines 271-285): Radix UI foundation
+- Browser Support (Lines 287-289)
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Image avatar: Lines 32-36 (type="image", src, alt)
+- Initial avatar: Lines 44-47 (type="initial", initial="U")
+- Icon avatar: Line 55 (type="icon")
+- Different sizes: Lines 106-109
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Avatar component capabilities and patterns.
+
+
 # Avatar Component
 
 The Avatar component displays a user's profile picture, initials, or a fallback icon when no image or initial is available.
@@ -142,23 +203,96 @@ You can customize the delay before showing the fallback with the `delayMs` prop:
 />
 ```
 
-## Internationalization
+## Internationalization and RTL Support
 
-The Avatar component properly handles Right-to-Left (RTL) languages automatically for initial-type avatars by:
+The Avatar component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper icon positioning, and Arabic text rendering.
 
-1. Applying appropriate line height for Arabic text
-2. Ensuring correct vertical alignment of initials
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Avatar } from '@tagaddod-design/react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Avatar 
+        type="initial"
+        initial="أ"
+        size="lg"
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Avatar component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font for initial avatars
+2. **Line Height**: Applies appropriate line height for Arabic text rendering in initial display
+3. **Layout Direction**: Maintains proper positioning in RTL mode
+4. **Text Alignment**: Ensures proper vertical centering of Arabic initials
+5. **Fallback Behavior**: Consistent fallback handling in both LTR and RTL modes
+
+### Arabic Initial Handling
+
+The Avatar component handles Arabic initials with proper font and line height adjustments:
 
 <Canvas of={AvatarStories.WithArabicInitial} />
 
 ```jsx
-<div dir="rtl">
-  <Avatar 
-    type="initial"
-    initial="أ"
-  />
-</div>
+import { useTheme } from '@tagaddod-design/react';
+
+function UserAvatar({ user }) {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Avatar 
+      type={user.profileImage ? "image" : "initial"}
+      src={user.profileImage}
+      initial={isRTL ? user.arabicName?.charAt(0) : user.englishName?.charAt(0)}
+      alt={isRTL ? `صورة ${user.arabicName}` : `${user.englishName}'s profile picture`}
+      size="md"
+    />
+  );
+}
 ```
+
+### RTL Layout Examples
+
+For user profiles in RTL layouts:
+
+```jsx
+function UserProfile() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Avatar 
+        type="initial"
+        initial={isRTL ? "م" : "M"}
+        size="lg"
+      />
+      <div style={{ textAlign: isRTL ? 'right' : 'left' }}>
+        <h3>{isRTL ? 'محمد أحمد' : 'Mohamed Ahmed'}</h3>
+        <p>{isRTL ? 'مدير المنتج' : 'Product Manager'}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test with actual Arabic content** to ensure proper text rendering and alignment
+3. **Use `useTheme` hook** to access RTL state and theme information
+4. **Consider context-aware initials** - use Arabic names for Arabic initials in RTL mode
+5. **Provide proper alt text** in the appropriate language for accessibility
+6. **Test avatar groups** in RTL mode to ensure proper spacing and alignment
 
 ## Use Cases
 

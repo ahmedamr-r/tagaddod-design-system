@@ -4,6 +4,77 @@ import { Badge } from './Badge';
 
 <Meta of={BadgeStories} />
 
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 15-24)
+- Basic import pattern
+- Props documentation
+
+🎯 BASIC USAGE (Lines 25-31)
+- Default badge implementation
+
+🌈 TONES (Lines 33-80)
+- All Tones Overview (Lines 37-55)
+- Default (Lines 57-59): Neutral labels
+- Info (Lines 61-63): Informational content
+- Success (Lines 65-67): Positive status
+- Warning (Lines 69-71): Potential issues
+- Critical (Lines 73-75): Errors/critical info
+- Magic (Lines 77-79): Special/premium items
+
+💪 STRONG VARIANT (Lines 81-89)
+- Higher contrast backgrounds
+- More prominent display
+
+📏 SIZES (Lines 91-113)
+- Medium (Lines 103-105): Default compact size
+- Large (Lines 107-109): More prominence
+- X-Large (Lines 111-113): High emphasis
+
+🎭 WITH ICON (Lines 115-127)
+- Icon before label text
+- Custom icon integration
+
+🌍 INTERNATIONALIZATION (Lines 129-145)
+- RTL language support
+- Arabic text handling
+- Icon positioning adjustment
+
+♿ ACCESSIBILITY (Lines 147-152)
+- Non-interactive elements
+- Color contrast requirements
+- Screen reader considerations
+
+💼 COMMON USE CASES (Lines 154-191)
+- Status Indicators (Lines 156-164): Completed/pending/failed
+- Categorization (Lines 166-174): Design/development tags
+- Notification Counts (Lines 176-180): Numeric indicators
+- Information with Icons (Lines 182-191): Enhanced context
+
+🔧 CUSTOMIZATION (Lines 193-204)
+- Custom classes and attributes
+
+⚙️ TECHNICAL DETAILS (Lines 206-231)
+- CSS Variables (Lines 208-220): Design tokens
+- Rendering Logic (Lines 222-227): State handling
+- Browser Support (Lines 229-231)
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic badge: Line 30
+- With tones: Lines 41-46 (default, info, success, warning, critical, magic)
+- Strong variant: Line 88
+- With icon: Lines 122-126
+- Different sizes: Lines 98-100
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Badge component capabilities and patterns.
+
+
 # Badge Component
 
 The Badge component is a visual indicator used to highlight status, count, or categorize content with short text labels. Badges can appear in different tones, sizes, and can include icons.
@@ -126,23 +197,135 @@ Badges can include an icon before the label text.
 </Badge>
 ```
 
-## Internationalization
+## Internationalization and RTL Support
 
-The Badge component properly handles Right-to-Left (RTL) languages automatically by:
+The Badge component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper icon positioning, and Arabic text rendering.
 
-1. Adjusting icon positioning for RTL text flow
-2. Applying appropriate line height for Arabic text
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Badge } from '@tagaddod-design/react';
+import { IconInfo } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Badge 
+        tone="info"
+        icon={<IconInfo />}
+        size="large"
+      >
+        معلومات
+      </Badge>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Badge component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Icon Positioning**: Adjusts icon placement for RTL text flow (icon appears on the right side)
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Layout Direction**: Maintains proper positioning in RTL mode
+5. **Text Alignment**: Ensures proper text rendering in Arabic
+
+### Status Badges in RTL
+
+The Badge component handles Arabic status indicators with proper styling:
 
 <Canvas of={BadgeStories.RTL} />
 
 ```jsx
-// The badge will automatically adjust in RTL contexts
-<div dir="rtl">
-  <Badge tone="info">جداب</Badge>
-  <Badge tone="success">نجاح</Badge>
-  <Badge tone="warning">تحذير</Badge>
-</div>
+import { useTheme } from '@tagaddod-design/react';
+
+function StatusBadges() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ display: 'flex', gap: '8px', direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Badge tone="success">
+        {isRTL ? 'مكتمل' : 'Completed'}
+      </Badge>
+      <Badge tone="warning">
+        {isRTL ? 'في الانتظار' : 'Pending'}
+      </Badge>
+      <Badge tone="critical">
+        {isRTL ? 'فشل' : 'Failed'}
+      </Badge>
+    </div>
+  );
+}
 ```
+
+### Badge with Icons in RTL
+
+For badges with icons, the component automatically handles RTL icon positioning:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+import { IconCheck, IconClock, IconX, IconInfo } from '@tabler/icons-react';
+
+function IconBadges() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ display: 'flex', gap: '8px', direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Badge 
+        tone="success" 
+        icon={<IconCheck />}
+        size="large"
+      >
+        {isRTL ? 'تم بنجاح' : 'Success'}
+      </Badge>
+      <Badge 
+        tone="info" 
+        icon={<IconInfo />}
+        size="large"
+      >
+        {isRTL ? 'معلومة مهمة' : 'Important Info'}
+      </Badge>
+    </div>
+  );
+}
+```
+
+### Category Badges in RTL
+
+For categorization and tagging in RTL contexts:
+
+```jsx
+function CategoryBadges() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ display: 'flex', gap: '8px', direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Badge tone="default">
+        {isRTL ? 'تصميم' : 'Design'}
+      </Badge>
+      <Badge tone="info">
+        {isRTL ? 'تطوير' : 'Development'}
+      </Badge>
+      <Badge tone="magic">
+        {isRTL ? 'تسويق' : 'Marketing'}
+      </Badge>
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Icon positioning is automatic** - icons appear on the right side in RTL mode
+3. **Test with actual Arabic content** to ensure proper text rendering
+4. **Use `useTheme` hook** to access RTL state and theme information
+5. **Consider badge grouping** in RTL layouts - they flow right-to-left
+6. **Keep Arabic text concise** - badges work best with short labels
 
 ## Accessibility
 

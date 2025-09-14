@@ -1,40 +1,40 @@
 {
   "z": {
     "base": {
-      "$type": "number",
-      "$value": 0
+      "$value": 0,
+      "$type": "number"
     },
     "dropdown": {
-      "$type": "number",
-      "$value": 1000
+      "$value": 1000,
+      "$type": "number"
     },
     "popover": {
-      "$type": "number", 
-      "$value": 1010
+      "$value": 1010,
+      "$type": "number"
     },
     "drawer": {
-      "$type": "number",
-      "$value": 1020
+      "$value": 1020,
+      "$type": "number"
     },
     "modal": {
-      "$type": "number",
-      "$value": 1050
+      "$value": 1050,
+      "$type": "number"
     },
     "modal-dropdown": {
-      "$type": "number",
-      "$value": 1060
+      "$value": 1060,
+      "$type": "number"
     },
     "drawer-modal": {
-      "$type": "number",
-      "$value": 1070
+      "$value": 1070,
+      "$type": "number"
     },
     "toast": {
-      "$type": "number",
-      "$value": 1080
+      "$value": 1080,
+      "$type": "number"
     },
     "tooltip": {
-      "$type": "number",
-      "$value": 1090
+      "$value": 1090,
+      "$type": "number"
     }
   }
 }

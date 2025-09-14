@@ -4,6 +4,92 @@ import { RadioGroup, RadioButtonItem } from './RadioButton';
 
 <Meta of={RadioButtonStories} />
 
+ 
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 20-42)
+- Basic import pattern with RadioGroup and RadioButtonItem
+- Component structure explanation
+- Props documentation for both components
+
+🎯 BASIC USAGE (Lines 43-57)
+- Default implementation with RadioGroup container
+- RadioButtonItem configuration
+
+🎯 SINGLE RADIO BUTTON (Lines 59-74)
+- Individual RadioButtonItem with all props
+- ID and label configuration
+
+📝 HELP TEXT (Lines 76-106)
+- Descriptive help text for options
+- showHelpText prop usage
+
+🔄 STATES (Lines 107-151)
+- Disabled State (Lines 110-128): Individual and group disable
+- Hidden Label (Lines 130-151): Screen reader accessibility
+
+🔄 CONTROLLED VS UNCONTROLLED (Lines 153-193)
+- Uncontrolled Mode (Lines 155-164): defaultValue pattern
+- Controlled Mode (Lines 166-193): State management with React
+
+⚡ EVENT HANDLING (Lines 195-210)
+- onValueChange callback implementation
+- Selection change processing
+
+📝 FORM INTEGRATION (Lines 212-259)
+- React Hook Form integration
+- Native HTML form support
+- FormData handling
+
+🌍 INTERNATIONALIZATION (Lines 261-289)
+- RTL language support
+- Arabic text examples
+- Layout direction adjustment
+
+💼 COMMON USE CASES (Lines 291-388)
+- Settings Options (Lines 293-318): Privacy controls
+- Checkout Form Options (Lines 320-351): Shipping methods
+- Survey Questions (Lines 353-388): Rating scales
+
+🎯 BEST PRACTICES (Lines 390-399)
+- Clear labeling and logical ordering
+- Help text usage guidelines
+- Default selection recommendations
+
+♿ ACCESSIBILITY (Lines 400-414)
+- ARIA roles and states
+- Keyboard navigation (Tab, Space, Arrow keys)
+- Screen reader support
+
+⚙️ TECHNICAL DETAILS (Lines 415-514)
+- CSS Variables (Lines 417-437): Design token reference
+- Customizing Style (Lines 439-469): CSS overrides
+- Technical Architecture (Lines 471-488): Radix UI foundation
+- Performance Considerations (Lines 489-495): Optimization notes
+- Browser Support (Lines 496-507): Compatibility matrix
+
+🔗 RELATED COMPONENTS (Lines 508-514)
+- Component alternatives and use cases
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic group: Lines 52-56
+- With help text: Lines 83-105
+- Controlled state: Lines 177-185
+- Form integration: Lines 228-241
+- RTL support: Lines 273-288
+- Settings options: Lines 298-317
+
+⚠️ STRUCTURE NOTE:
+RadioButton requires both RadioGroup (container) and RadioButtonItem (individual buttons). Use RadioGroup for state management and RadioButtonItem for each option.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all RadioButton component capabilities and patterns.
+
+
 # RadioButton Component
 
 The RadioButton component allows users to select a single option from a set of mutually exclusive choices. This component is built on Radix UI's RadioGroup primitive and follows Tagaddod's design system specifications.
@@ -258,35 +344,241 @@ function FormExample() {
 </form>
 ```
 
-## Internationalization
+## Internationalization and RTL Support
 
-The RadioButton component properly handles Right-to-Left (RTL) languages by:
+The RadioButton component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper layout alignment, and Arabic text rendering.
 
-1. Adjusting layout direction for RTL text flow
-2. Placing the radio button on the right side in RTL mode
-3. Applying appropriate line height for Arabic text
-4. Correctly aligning help text in RTL contexts
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, RadioGroup, RadioButtonItem } from '@tagaddod-design/react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <RadioGroup defaultValue="privacy2">
+        <RadioButtonItem 
+          value="privacy1" 
+          id="privacy1" 
+          label="عام" 
+          helpText="يمكن لأي شخص مشاهدة هذا المحتوى"
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="privacy2" 
+          id="privacy2" 
+          label="خاص" 
+          helpText="يمكنك فقط مشاهدة هذا المحتوى"
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="privacy3" 
+          id="privacy3" 
+          label="مشترك" 
+          helpText="يمكنك ومن تختارهم فقط مشاهدة هذا المحتوى"
+          showHelpText={true}
+        />
+      </RadioGroup>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the RadioButton component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Layout Direction**: Adjusts alignment and spacing for RTL text flow
+3. **Radio Button Position**: Places the radio button on the right side in RTL mode
+4. **Line Height**: Applies appropriate line height for Arabic text rendering
+5. **Help Text Positioning**: Correctly aligns help text in RTL contexts
+
+### Form Controls in RTL
+
+The RadioButton component handles Arabic form controls with proper styling:
 
 <Canvas of={RadioButtonStories.RTL} />
 
 ```jsx
-<div dir="rtl">
-  <RadioGroup defaultValue="rtl1">
-    <RadioButtonItem 
-      value="rtl1" 
-      id="rtl1" 
-      label="عربي" 
-    />
-    <RadioButtonItem 
-      value="rtl2" 
-      id="rtl2" 
-      label="رسالة مساعدة" 
-      helpText="تيكست مساعد"
-      showHelpText={true} 
-    />
-  </RadioGroup>
-</div>
+import { useTheme } from '@tagaddod-design/react';
+
+function PrivacySettings() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <h3>{isRTL ? 'إعدادات الخصوصية' : 'Privacy Settings'}</h3>
+      <RadioGroup defaultValue="private">
+        <RadioButtonItem 
+          value="public" 
+          id="privacy1" 
+          label={isRTL ? "عام" : "Public"} 
+          helpText={isRTL ? "يمكن لأي شخص مشاهدة هذا المحتوى" : "Anyone can see this content"}
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="private" 
+          id="privacy2" 
+          label={isRTL ? "خاص" : "Private"} 
+          helpText={isRTL ? "يمكنك فقط مشاهدة هذا المحتوى" : "Only you can see this content"}
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="shared" 
+          id="privacy3" 
+          label={isRTL ? "مشترك" : "Shared"} 
+          helpText={isRTL ? "يمكنك ومن تختارهم فقط مشاهدة هذا المحتوى" : "Only you and people you choose can see this content"}
+          showHelpText={true}
+        />
+      </RadioGroup>
+    </div>
+  );
+}
 ```
+
+### Language Preference in RTL
+
+For language selection interfaces in RTL:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+
+function LanguagePreferences() {
+  const { isRTL } = useTheme();
+  const [selectedLanguage, setSelectedLanguage] = useState('ar');
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <h3>{isRTL ? 'اختر لغة العرض' : 'Choose Display Language'}</h3>
+      <RadioGroup 
+        value={selectedLanguage} 
+        onValueChange={setSelectedLanguage}
+        name="language"
+      >
+        <RadioButtonItem 
+          value="ar" 
+          id="lang-ar" 
+          label={isRTL ? "العربية" : "Arabic"} 
+          helpText={isRTL ? "عرض التطبيق باللغة العربية" : "Display the app in Arabic"}
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="en" 
+          id="lang-en" 
+          label={isRTL ? "الإنجليزية" : "English"} 
+          helpText={isRTL ? "عرض التطبيق باللغة الإنجليزية" : "Display the app in English"}
+          showHelpText={true}
+        />
+      </RadioGroup>
+    </div>
+  );
+}
+```
+
+### Payment Method Selection in RTL
+
+For e-commerce interfaces with RTL support:
+
+```jsx
+function PaymentMethods() {
+  const { isRTL } = useTheme();
+  const [paymentMethod, setPaymentMethod] = useState('card');
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <h3>{isRTL ? 'طريقة الدفع' : 'Payment Method'}</h3>
+      <RadioGroup 
+        value={paymentMethod} 
+        onValueChange={setPaymentMethod}
+        name="payment"
+      >
+        <RadioButtonItem 
+          value="card" 
+          id="payment-card" 
+          label={isRTL ? "بطاقة ائتمان" : "Credit Card"} 
+          helpText={isRTL ? "ادفع باستخدام بطاقتك الائتمانية" : "Pay using your credit card"}
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="cash" 
+          id="payment-cash" 
+          label={isRTL ? "الدفع عند الاستلام" : "Cash on Delivery"} 
+          helpText={isRTL ? "ادفع عند وصول الطلب" : "Pay when the order arrives"}
+          showHelpText={true}
+        />
+        <RadioButtonItem 
+          value="bank" 
+          id="payment-bank" 
+          label={isRTL ? "تحويل بنكي" : "Bank Transfer"} 
+          helpText={isRTL ? "ادفع عن طريق التحويل البنكي" : "Pay via bank transfer"}
+          showHelpText={true}
+        />
+      </RadioGroup>
+    </div>
+  );
+}
+```
+
+### Survey Questions in RTL
+
+For feedback forms and surveys in RTL:
+
+```jsx
+function SatisfactionSurvey() {
+  const { isRTL } = useTheme();
+  const [satisfaction, setSatisfaction] = useState('');
+  
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <h3>{isRTL ? 'كيف تقيم تجربتك؟' : 'How would you rate your experience?'}</h3>
+      <RadioGroup 
+        value={satisfaction} 
+        onValueChange={setSatisfaction}
+        name="satisfaction"
+      >
+        <RadioButtonItem 
+          value="very-satisfied" 
+          id="rating1" 
+          label={isRTL ? "راضي جداً" : "Very Satisfied"} 
+        />
+        <RadioButtonItem 
+          value="satisfied" 
+          id="rating2" 
+          label={isRTL ? "راضي" : "Satisfied"} 
+        />
+        <RadioButtonItem 
+          value="neutral" 
+          id="rating3" 
+          label={isRTL ? "محايد" : "Neutral"} 
+        />
+        <RadioButtonItem 
+          value="dissatisfied" 
+          id="rating4" 
+          label={isRTL ? "غير راضي" : "Dissatisfied"} 
+        />
+        <RadioButtonItem 
+          value="very-dissatisfied" 
+          id="rating5" 
+          label={isRTL ? "غير راضي إطلاقاً" : "Very Dissatisfied"} 
+        />
+      </RadioGroup>
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test with actual Arabic content** to ensure proper text rendering and alignment
+3. **Use `useTheme` hook** to access RTL state and theme information
+4. **Consider form layout** - radio buttons appear on the right in RTL
+5. **Test help text display** to ensure proper alignment in RTL layouts
+6. **Validate fieldset structure** with Arabic legends and labels
+7. **Test keyboard navigation** to ensure it works intuitively in RTL mode
 
 ## Common Use Cases
 

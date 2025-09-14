@@ -2,7 +2,8 @@
   "borderRadius": {
     "0": {
       "$value": "{size.0}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "test"
     },
     "50": {
       "$value": "{size.50}",

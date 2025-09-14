@@ -1,0 +1,504 @@
+/* Calendar Component Styles */
+
+.calendar {
+  position: relative;
+  font-family: var(--t-font-family-primary);
+  background: var(--t-color-surface-primary);
+  border-radius: var(--t-border-radius-300);
+  padding: var(--t-space-300);
+  width: fit-content;
+}
+
+/* RTL font family support */
+:global([dir="rtl"]) .calendar {
+  font-family: var(--t-font-family-arabic);
+}
+
+/* Months container */
+.months {
+  display: flex;
+  gap: var(--t-space-400);
+  position: relative;
+}
+
+.monthWrapper {
+  position: relative;
+}
+
+.month {
+  width: 100%;
+}
+
+/* Month caption - Header group container */
+.monthCaption {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between; /* Align prev/next buttons to edges, center the title */
+  gap: var(--t-space-200);
+  margin-bottom: var(--t-space-300);
+  padding: 0 var(--t-space-100);
+  position: relative;
+}
+
+/* Multiple months now handled by custom header - no special padding needed */
+
+/* Dropdown caption layout - Force horizontal layout */
+.monthCaption:has(.captionDropdowns) {
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  padding: 0 var(--t-space-200) !important;
+  position: relative !important;
+}
+
+.captionLabel {
+  font: var(--t-typography-body-lg-default);
+  font-weight: var(--t-font-weight-medium);
+  color: var(--t-color-text-primary);
+  position: relative;
+  line-height: 1.5;
+  text-align: center;
+  order: 2;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Line height trim for caption label */
+.captionLabel::before,
+.captionLabel::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.captionLabel::before {
+  margin-top: -0.15em;
+}
+
+.captionLabel::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for caption */
+:global([dir="rtl"]) .captionLabel::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .captionLabel::after {
+  margin-bottom: -0.25em;
+}
+
+/* Caption dropdowns - Force horizontal flex layout */
+.captionDropdowns {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: var(--t-space-200) !important;
+  align-items: center !important;
+  justify-content: center !important;
+  order: 2 !important;
+  flex: 1 !important;
+}
+
+/* Custom dropdown styling */
+.monthDropdown,
+.yearDropdown {
+  min-width: auto;
+}
+
+.monthDropdown {
+  width: 120px;
+}
+
+.yearDropdown {
+  width: 80px;
+}
+
+.dropdownRoot {
+  position: relative;
+}
+
+/* Custom header for dropdown layout */
+.customHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--t-space-300);
+  padding: 0 var(--t-space-100);
+  position: relative;
+}
+
+.dropdownGroup {
+  display: flex;
+  gap: var(--t-space-200);
+  align-items: center;
+  justify-content: center;
+}
+
+.labelGroup {
+  display: flex;
+  gap: var(--t-space-200);
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Month labels group for multiple months */
+.monthLabelsGroup {
+  display: flex;
+  gap: var(--t-space-400);
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+/* Hide default DayPicker caption and nav when using custom header */
+.hiddenCaption {
+  display: none !important;
+}
+
+.hiddenNav {
+  display: none !important;
+}
+
+/* Legacy dropdown styles removed - using Select component instead */
+
+/* Navigation - Horizontal layout for label captions */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--t-space-200);
+  order: 3;
+}
+
+/* Multiple months now use custom header layout - no absolute positioning needed */
+
+/* Force navigation buttons to be positioned around dropdowns */
+.monthCaption:has(.captionDropdowns) .buttonPrevious {
+  position: absolute !important;
+  left: 0 !important;
+  order: 0 !important;
+}
+
+.monthCaption:has(.captionDropdowns) .buttonNext {
+  position: absolute !important;
+  right: 0 !important;
+  order: 3 !important;
+}
+
+.buttonPrevious,
+.buttonNext {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--t-size-800); /* 32px */
+  height: var(--t-size-800); /* 32px */
+  background: transparent;
+  border: none;
+  border-radius: var(--t-border-radius-200);
+  color: var(--t-color-icon-secondary);
+  cursor: pointer;
+  transition: all var(--t-duration-fast) var(--t-easing-in-out);
+  padding: 0;
+}
+
+.buttonPrevious {
+  order: 0;
+}
+
+.buttonNext {
+  order: 3;
+}
+
+.buttonPrevious:hover,
+.buttonNext:hover {
+  background: var(--t-color-surface-hover);
+  color: var(--t-color-icon-primary);
+}
+
+.buttonPrevious:active,
+.buttonNext:active {
+  background: var(--t-color-surface-active);
+}
+
+.buttonPrevious:disabled,
+.buttonNext:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: transparent;
+}
+
+.chevron {
+  width: var(--t-size-400); /* 16px */
+  height: var(--t-size-400); /* 16px */
+}
+
+/* Calendar content group - separated from header */
+.weekdays {
+  display: flex;
+  gap: var(--t-space-50); /* 2px gap between weekday labels */
+  margin-bottom: var(--t-space-200);
+}
+
+.weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--t-size-1000); /* 40px */
+  min-height: var(--t-size-1000); /* 40px */
+  width: var(--t-size-1000); /* 40px */
+  height: var(--t-size-1000); /* 40px */
+  box-sizing: border-box;
+  border: 1px solid transparent; /* Match day button border space */
+  font: var(--t-typography-caption-lg-default);
+  font-weight: var(--t-font-weight-medium);
+  color: var(--t-color-text-secondary);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for weekday */
+.weekday::before,
+.weekday::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.weekday::before {
+  margin-top: -0.15em;
+}
+
+.weekday::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for weekday */
+:global([dir="rtl"]) .weekday::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .weekday::after {
+  margin-bottom: -0.25em;
+}
+
+/* Week row */
+.week {
+  display: flex;
+}
+
+
+/* Day cell */
+.day {
+  position: relative;
+}
+
+.dayButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--t-size-1000); /* 40px */
+  height: var(--t-size-1000); /* 40px */
+  background: transparent;
+  border: none;
+  border-radius: var(--t-border-radius-200);
+  font: var(--t-typography-body-sm-default);
+  color: var(--t-color-text-primary);
+  cursor: pointer;
+  transition: all var(--t-duration-fast) var(--t-easing-in-out);
+  position: relative;
+  line-height: 1.5;
+}
+
+.dayButton:hover {
+  background: var(--t-color-surface-hover);
+}
+
+.dayButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--t-color-fill-brand);
+}
+
+/* Line height trim for day button */
+.dayButton::before,
+.dayButton::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.dayButton::before {
+  margin-top: -0.15em;
+}
+
+.dayButton::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for day button */
+:global([dir="rtl"]) .dayButton::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .dayButton::after {
+  margin-bottom: -0.25em;
+}
+
+/* Day states */
+.today .dayButton {
+  background: var(--t-color-fill-brand-secondary);
+  color: var(--t-color-text-link);
+  font-weight: var(--t-font-weight-medium);
+}
+
+.selected .dayButton {
+  background: var(--t-color-fill-brand);
+  color: var(--t-color-text-on-fill);
+}
+
+.selected.today .dayButton {
+  background: var(--t-color-fill-brand);
+  color: var(--t-color-text-on-fill);
+}
+
+.outside .dayButton {
+  color: var(--t-color-text-disabled);
+  background: transparent;
+  cursor: default;
+  pointer-events: none;
+}
+
+.disabled .dayButton {
+  color: var(--t-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.disabled .dayButton:hover {
+  background: transparent;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+/* Ensure empty day cells maintain grid structure */
+.day:empty::before {
+  content: '';
+  display: block;
+  width: var(--t-size-1000); /* 40px */
+  height: var(--t-size-1000); /* 40px */
+  visibility: hidden;
+}
+
+/* Range selection states */
+.rangeStart .dayButton,
+.rangeEnd .dayButton {
+  background: var(--t-color-fill-brand);
+  color: var(--t-color-text-on-fill);
+}
+
+.rangeMiddle .dayButton {
+  background: var(--t-color-fill-brand-secondary);
+  color: var(--t-color-text-link);
+}
+
+.rangeMiddle .dayButton:hover {
+  background: var(--t-color-fill-brand-secondary-hover);
+}
+
+/* Today in range middle should use secondary color, not primary */
+.rangeMiddle.today .dayButton {
+  background: var(--t-color-fill-brand-secondary);
+  color: var(--t-color-text-link);
+  font-weight: var(--t-font-weight-medium);
+}
+
+.rangeMiddle.today .dayButton:hover {
+  background: var(--t-color-fill-brand-secondary-hover);
+}
+
+/* Multiple selection */
+.selected.multiple .dayButton {
+  background: var(--t-color-fill-brand);
+  color: var(--t-color-text-on-fill);
+}
+
+/* Footer */
+.footer {
+  margin-top: var(--t-space-300);
+  padding-top: var(--t-space-300);
+  border-top: 1px solid var(--t-color-border-secondary);
+  font: var(--t-typography-body-sm-default);
+  color: var(--t-color-text-secondary);
+  text-align: center;
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for footer */
+.footer::before,
+.footer::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.footer::before {
+  margin-top: -0.15em;
+}
+
+.footer::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment for footer */
+:global([dir="rtl"]) .footer::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .footer::after {
+  margin-bottom: -0.25em;
+}
+
+/* Screen reader only content */
+.vhidden {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .calendar {
+    padding: var(--t-space-200);
+  }
+  
+  .dayButton,
+  .weekday {
+    width: var(--t-size-900); /* 36px */
+    height: var(--t-size-900); /* 36px */
+  }
+  
+  .weekday {
+    border: 1px solid transparent; /* Match day button border space on mobile */
+  }
+  
+  .dayButton {
+    font: var(--t-typography-caption-lg-default);
+  }
+  
+  .captionLabel {
+    font: var(--t-typography-body-md-default);
+  }
+}

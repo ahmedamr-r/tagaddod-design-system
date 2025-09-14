@@ -1,0 +1,324 @@
+/* DatePicker Component Styles */
+
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.triggerWrapper {
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Calendar button styling */
+.calendarButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--t-color-icon-secondary);
+  cursor: pointer;
+  padding: var(--t-space-50);
+  border-radius: var(--t-border-radius-100);
+  transition: all var(--t-duration-fast) var(--t-easing-in-out);
+}
+
+.calendarButton:hover {
+  background-color: var(--t-color-surface-hover);
+  color: var(--t-color-icon-primary);
+}
+
+.calendarButton:active {
+  background-color: var(--t-color-surface-active);
+}
+
+.calendarButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--t-color-fill-brand);
+}
+
+/* Calendar container within popover */
+.calendarContainer {
+  position: relative;
+  background: var(--t-color-surface-primary);
+  border: 1px solid var(--t-color-border-secondary);
+  border-radius: var(--t-border-radius-300);
+  box-shadow: var(--t-shadow-300);
+  overflow: hidden;
+}
+
+/* RTL support for calendar container */
+:global([dir="rtl"]) .calendarContainer {
+  font-family: var(--t-font-family-arabic);
+}
+
+/* Focus styles for keyboard navigation */
+.container:focus-within .calendarContainer {
+  border-color: var(--t-color-fill-brand);
+  box-shadow: 0 0 0 1px var(--t-color-fill-brand-hover), var(--t-shadow-300);
+}
+
+/* Animation for calendar appearance */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply animations based on popover position */
+.calendarContainer[data-side="bottom"] {
+  animation: slideDown 0.2s ease-out;
+}
+
+.calendarContainer[data-side="top"] {
+  animation: slideUp 0.2s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .calendarContainer {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100vw - var(--t-space-400));
+    max-width: 320px;
+    z-index: 1000;
+  }
+  
+  .calendarContainer[data-side="bottom"],
+  .calendarContainer[data-side="top"] {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .calendarContainer {
+    border-width: 2px;
+    border-color: var(--t-color-border-primary);
+  }
+  
+  .calendarButton {
+    border: 1px solid var(--t-color-border-secondary);
+  }
+  
+  .calendarButton:hover {
+    border-color: var(--t-color-border-primary);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .calendarContainer,
+  .calendarContainer[data-side="bottom"],
+  .calendarContainer[data-side="top"] {
+    animation: none;
+  }
+
+  .calendarButton {
+    transition: none;
+  }
+}
+
+/* DateRangePicker Component Styles */
+
+.dateRangeContainer {
+  position: relative;
+  width: 100%;
+}
+
+/* Invisible trigger positioned at center for popover positioning */
+.centerTrigger {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.rangeInputs {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--t-space-200);
+  width: 100%;
+}
+
+/* Gap variations */
+.gap-sm .rangeInputs {
+  gap: var(--t-space-100);
+}
+
+.gap-md .rangeInputs {
+  gap: var(--t-space-200);
+}
+
+.gap-lg .rangeInputs {
+  gap: var(--t-space-300);
+}
+
+.rangeInputWrapper {
+  flex: 1;
+  min-width: 0; /* Prevent overflow */
+}
+
+.rangeLabel {
+  display: block;
+  margin-bottom: var(--t-space-100);
+  font-size: var(--t-font-size-75);
+  font-weight: var(--t-font-weight-medium);
+  color: var(--t-color-text-secondary);
+  line-height: var(--t-line-height-tight);
+}
+
+.rangeSeparator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: var(--t-space-50); /* Align with input bottom */
+  color: var(--t-color-icon-secondary);
+  flex-shrink: 0;
+}
+
+.separatorIcon {
+  transition: transform var(--t-duration-fast) var(--t-easing-in-out);
+}
+
+/* RTL support for separator icon */
+:global([dir="rtl"]) .separatorIcon {
+  transform: scaleX(-1);
+}
+
+/* RTL label alignment */
+:global([dir="rtl"]) .rangeLabel {
+  text-align: right;
+  font-family: var(--t-font-family-arabic);
+  line-height: var(--t-line-height-arabic, 1.2);
+}
+
+/* Focus states for range inputs */
+.rangeInputWrapper:focus-within .rangeLabel {
+  color: var(--t-color-text-link);
+}
+
+/* Active state styling */
+.dateRangeContainer[data-active="start"] .rangeInputWrapper:first-child .rangeLabel,
+.dateRangeContainer[data-active="end"] .rangeInputWrapper:last-child .rangeLabel {
+  color: var(--t-color-text-link);
+}
+
+/* Range separator hover state */
+.rangeInputs:hover .separatorIcon {
+  color: var(--t-color-icon-primary);
+  transform: translateX(2px);
+}
+
+:global([dir="rtl"]) .rangeInputs:hover .separatorIcon {
+  transform: scaleX(-1) translateX(2px);
+}
+
+/* Responsive layout for mobile */
+@media (max-width: 640px) {
+  .rangeInputs {
+    flex-direction: column;
+    gap: var(--t-space-300);
+  }
+
+  .gap-sm .rangeInputs {
+    gap: var(--t-space-200);
+  }
+
+  .gap-md .rangeInputs {
+    gap: var(--t-space-300);
+  }
+
+  .gap-lg .rangeInputs {
+    gap: var(--t-space-400);
+  }
+
+  .rangeSeparator {
+    order: 1;
+    padding: 0;
+    transform: rotate(90deg);
+  }
+
+  .rangeInputWrapper:last-child {
+    order: 2;
+  }
+
+  :global([dir="rtl"]) .rangeSeparator {
+    transform: rotate(90deg) scaleX(-1);
+  }
+}
+
+/* Error state for range inputs */
+.dateRangeContainer[data-error="true"] .rangeLabel {
+  color: var(--t-color-text-danger);
+}
+
+/* Disabled state for range inputs */
+.dateRangeContainer[data-disabled="true"] .rangeLabel {
+  color: var(--t-color-text-disabled);
+}
+
+.dateRangeContainer[data-disabled="true"] .rangeSeparator {
+  color: var(--t-color-icon-disabled);
+}
+
+/* Animation for state transitions */
+.rangeLabel,
+.separatorIcon {
+  transition: color var(--t-duration-fast) var(--t-easing-in-out);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .rangeLabel {
+    font-weight: var(--t-font-weight-semibold);
+  }
+
+  .rangeSeparator {
+    background-color: var(--t-color-surface-secondary);
+    border-radius: var(--t-border-radius-full);
+    padding: var(--t-space-50);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .rangeLabel,
+  .separatorIcon,
+  .separatorIcon:hover {
+    transition: none;
+    transform: none;
+  }
+
+  :global([dir="rtl"]) .separatorIcon {
+    transform: scaleX(-1);
+  }
+
+  :global([dir="rtl"]) .rangeInputs:hover .separatorIcon {
+    transform: scaleX(-1);
+  }
+}

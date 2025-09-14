@@ -276,10 +276,42 @@ export const TextFieldCell: React.FC<CellVariantProps<string>> = ({
   className,
   placeholder = ''
 }) => {
+  const [localValue, setLocalValue] = useState(value || '');
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Sync local state with prop value when it changes externally
+  useEffect(() => {
+    setLocalValue(value || '');
+  }, [value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setLocalValue(newValue);
+
+    // Clear existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // Set new timeout for debounced update
+    timeoutRef.current = setTimeout(() => {
+      onChange?.(newValue, row);
+    }, 300);
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <TextInput
-      value={value || ''}
-      onChange={(e) => onChange?.(e.target.value, row)}
+      value={localValue}
+      onChange={handleChange}
       placeholder={placeholder}
       className={className}
     />

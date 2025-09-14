@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import { IconLoader2 } from '@tabler/icons-react';
 import styles from './Button.module.css';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'plain';
+export type ButtonVariant = 'primary' | 'tonal' | 'outlined' | 'plain';
 export type ButtonTone = 'default' | 'critical' | 'success' | 'neutral' | 'magic';
-export type ButtonSize = 'large' | 'medium' | 'micro';
+export type ButtonSize = 'xLarge' | 'large' | 'medium' | 'small' | 'xSmall';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
@@ -49,9 +49,26 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   suffixIcon?: React.ReactNode;
 }
 
-export const buttonVariants = ['primary', 'secondary', 'tertiary', 'plain'] as const;
+export const buttonVariants = ['primary', 'tonal', 'outlined', 'plain'] as const;
 export const buttonTones = ['default', 'critical', 'success', 'neutral', 'magic'] as const;
-export const buttonSizes = ['large', 'medium', 'micro'] as const;
+export const buttonSizes = ['xLarge', 'large', 'medium', 'small', 'xSmall'] as const;
+
+// Icon size mapping for each button size
+const iconSizeMap: Record<ButtonSize, number> = {
+  xLarge: 20,
+  large: 16, 
+  medium: 16,
+  small: 14,
+  xSmall: 12
+};
+
+// Helper function to clone icon with correct size
+const cloneIconWithSize = (icon: React.ReactNode, size: number): React.ReactNode => {
+  if (React.isValidElement(icon)) {
+    return React.cloneElement(icon, { size } as any);
+  }
+  return icon;
+};
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   children,
@@ -66,14 +83,22 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   className = '',
   ...props
 }, ref) => {
+  // Get the correct icon size for the current button size
+  const iconSize = iconSizeMap[size];
+  
+  // Clone icons with correct size
+  const sizedPrefixIcon = prefixIcon ? cloneIconWithSize(prefixIcon, iconSize) : null;
+  const sizedSuffixIcon = suffixIcon ? cloneIconWithSize(suffixIcon, iconSize) : null;
+  
   // Determine if this is an icon-only button (no text content)
-  const isIconOnly = !children && (prefixIcon || suffixIcon);
+  const isIconOnly = !children && (sizedPrefixIcon || sizedSuffixIcon);
   
   // Apply specific icon positioning for icon-only buttons
   const iconOnly = isIconOnly ? styles.iconOnly : '';
   
   // Detect RTL for line height adjustments
-  const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+  const isRTL = typeof document !== 'undefined' && 
+    (document.dir === 'rtl' || document.documentElement.dir === 'rtl');
   
   // Create lineHeightStyle object for proper text rendering
   const lineHeightStyle = {
@@ -99,9 +124,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
         <>
           {/* Hidden content to maintain width */}
           <span style={{ visibility: 'hidden', position: 'absolute' }}>
-            {prefixIcon && <span className={styles.prefixIcon}>{prefixIcon}</span>}
+            {sizedPrefixIcon && <span className={styles.prefixIcon}>{sizedPrefixIcon}</span>}
             {children && <span className={styles.label} style={lineHeightStyle}>{children}</span>}
-            {suffixIcon && <span className={styles.suffixIcon}>{suffixIcon}</span>}
+            {sizedSuffixIcon && <span className={styles.suffixIcon}>{sizedSuffixIcon}</span>}
           </span>
           {/* Visible spinner */}
           <span className={styles.loadingWrapper}>
@@ -113,9 +138,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     
     return (
       <>
-        {prefixIcon && <span className={styles.prefixIcon}>{prefixIcon}</span>}
+        {sizedPrefixIcon && <span className={styles.prefixIcon}>{sizedPrefixIcon}</span>}
         {children && <span className={styles.label} style={lineHeightStyle}>{children}</span>}
-        {suffixIcon && <span className={styles.suffixIcon}>{suffixIcon}</span>}
+        {sizedSuffixIcon && <span className={styles.suffixIcon}>{sizedSuffixIcon}</span>}
       </>
     );
   };

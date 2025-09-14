@@ -4,6 +4,111 @@ import { Table } from './Table';
 
 <Meta of={TableStories} />
 
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 28-50)
+- Basic import pattern  
+- Cell variants imports
+- Props documentation
+
+🎯 BASIC USAGE (Lines 51-133)
+- Default implementation with columns and data
+- Action buttons setup
+
+⚡ PERFORMANCE IMPROVEMENTS (Lines 134-278)
+- Fixed Pagination Behavior (Lines 236-261): Content changes correctly when switching pages
+- Optimized Filter Performance (Lines 263-271): Differentiated debounce timing for filter types
+- Default Non-Striped Behavior (Lines 273-276): Modern interactive table appearance
+
+🎨 TABLE VARIANTS (Lines 279-300)
+- Striped Table: Alternating row colors
+- Grid Table: Cell borders
+- Tabbed Table: Multiple data sets
+- Static Table: Read-only display
+
+🔄 COLUMN MANAGEMENT (Lines 302-456)
+- Column Ordering (Lines 162-209): Drag and drop reordering (disabled by default)
+- Column Resizing (Lines 210-282): Interactive width adjustment (disabled by default)
+- Advanced Configuration (Lines 284-312): Combining features
+
+🔧 CELL VARIANTS (Lines 320-1162)
+- Quick Creation Methods (Lines 326-371): QuickColumns, createCellColumn, createCustomCellColumn
+- Available Cell Types (Lines 373-392): 13 predefined variants
+- Quick Usage (Lines 393-411): Helper functions
+- Advanced Usage (Lines 413-460): Detailed configuration
+- Data Structures (Lines 462-483): Expected data formats
+- Custom Cell Creation (Lines 485-1087): Complete examples with progress bars, avatars, ratings
+- Component Integration (Lines 747-885): Using other design system components
+- Best Practices (Lines 915-1005): RTL, design tokens, performance
+- Troubleshooting (Lines 1007-1085): Common issues and solutions
+
+⚡ FEATURES (Lines 1164-2212)
+- Pagination (Lines 1166-1189): Page controls
+- Enhanced Search/Filters (Lines 1191-2212): 
+  * Complete Implementation Guide (Lines 1238-1350): Critical filtering setup
+  * Data Processing (Lines 1395-1543): Filter patterns
+  * Common Issues & Solutions (Lines 1853-2145): Comprehensive troubleshooting
+
+📊 TABLE STATES (Lines 2333-2398)
+- Empty State (Lines 2335-2346): No data display
+- Loading State (Lines 2348-2360): Data fetching
+- Error State (Lines 2362-2374): Failed requests
+- Not Found State (Lines 2376-2398): Search results
+
+🌍 INTERNATIONALIZATION (Lines 2399-2413)
+- RTL language support
+- Arabic text handling
+
+⚙️ COLUMN CONFIGURATION (Lines 2415-2459)
+- TanStack Table ColumnDef interface
+- Custom cell rendering
+- Column styling via meta
+
+🔧 ADVANCED USAGE (Lines 2461-2553)
+- Controlled Table (Lines 2463-2493): Full state management
+- Server-Side Data (Lines 2495-2553): Pagination, sorting, filtering
+
+💼 COMMON USE CASES (Lines 2555-2691)
+- Data Grid with Actions (Lines 2557-2599): CRUD operations
+- Dashboard Analytics (Lines 2601-2641): Metrics display
+- Record Selection (Lines 2643-2691): Batch operations
+
+♿ ACCESSIBILITY (Lines 2693-2705)
+- Semantic HTML structure
+- ARIA attributes and keyboard navigation
+
+⚙️ TECHNICAL DETAILS (Lines 2707-2796)
+- CSS Variables (Lines 2709-2732): Design tokens
+- Architecture (Lines 2734-2744): TanStack foundation
+- Performance (Lines 2746-2755): Large dataset optimization
+- Integration (Lines 2757-2766): Other components
+- Browser Support (Lines 2768-2777): Compatibility
+- Dependencies (Lines 2779-2796): dnd-kit for column management
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic table: Lines 220-229
+- Fixed pagination: Lines 236-261
+- Fast filters: Lines 263-271
+- Non-striped default: Lines 273-276
+- With pagination: Lines 1320-1332
+- With filters: Lines 1340-1379
+- Complete filtering: Lines 1478-1492
+- Cell variants: Lines 542-554, 568-603
+- Custom cells: Lines 678-801
+- RTL support: Lines 2548-2556
+
+⚠️ CRITICAL FILTERING NOTE:
+Table component handles filter UI but NOT data filtering. You must implement filtering logic yourself and pass filtered data to the component. See Lines 1238-1350 for complete implementation guide.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Table component capabilities and patterns.
+
+
 # Table Component
 
 The Table component is a powerful, feature-rich data display component built on TanStack Table, offering extensive customization options including sorting, filtering, pagination, tabbed interfaces, column ordering, and column resizing.
@@ -125,12 +230,58 @@ const data = [
   data={data}
   columns={columns}
   title="Inventory Stock"
-  striped={true}
+  striped={false} // Default: false for interactive tables
   gridCells={false}
   showHeader={true}
   onRowClick={(row) => console.log('Row clicked:', row.original)}
 />
 ```
+
+## Recent Performance Improvements ⚡
+
+The Table component has been optimized with significant performance improvements and bug fixes:
+
+### Fixed Pagination Behavior
+<Canvas of={TableStories.FixedPagination} />
+
+**Issue Fixed:** Pagination content now properly changes when switching pages. The `manualPagination` setting is correctly applied only for server-side pagination scenarios.
+
+```jsx
+// Client-side pagination (default)
+const pagination = {
+  pageIndex: currentPage,
+  pageSize: pageSize,
+  pageCount: Math.ceil(data.length / pageSize),
+  onPageChange: (pageIndex) => setCurrentPage(pageIndex),
+  onPageSizeChange: (pageSize) => setPageSize(pageSize),
+  // isServerSide: false (default for client-side)
+};
+
+// Server-side pagination
+const serverPagination = {
+  pageIndex: currentPage,
+  pageSize: pageSize,
+  pageCount: totalPages, // From API
+  onPageChange: (pageIndex) => fetchPage(pageIndex),
+  onPageSizeChange: (pageSize) => fetchWithNewPageSize(pageSize),
+  isServerSide: true // Enables manual pagination mode
+};
+```
+
+### Optimized Filter Performance
+<Canvas of={TableStories.FastFilters} />
+
+**Performance Improvements:**
+- **Dropdown filters:** Immediate response (0ms debounce)
+- **Range sliders:** Fast response (100ms debounce) 
+- **Text inputs:** Quick response (200ms debounce, reduced from 500ms)
+- **Memory optimization:** React.memo prevents unnecessary re-renders
+- **onBlur handlers:** Immediate filter application when users tab away
+
+### Default Non-Striped Behavior
+<Canvas of={TableStories.DefaultNonStriped} />
+
+**Issue Fixed:** Table now defaults to non-striped rows (white background) for better interactivity and modern appearance. Use `striped={true}` only for static, read-only data tables.
 
 ## Error Row Highlighting Demo
 
@@ -1850,6 +2001,367 @@ const filteredData = useMemo(() =>
 );
 ```
 
+## Filtering Troubleshooting
+
+### Common Issues and Solutions
+
+#### 1. "Filters are not working / no effect when I change filters"
+
+**Symptoms**: Filter dropdowns appear and can be changed, but table data doesn't update.
+
+**Most Likely Cause**: Missing data filtering implementation.
+
+**Solution**: Implement data filtering logic and pass filtered data to Table:
+```jsx
+// ❌ Problem: Passing raw data without filtering
+<Table data={rawData} activeFilters={filters} onFilterChange={setFilters} />
+
+// ✅ Solution: Filter data before passing to Table
+const filteredData = useMemo(() => 
+  filterData(rawData, searchQuery, filters), 
+  [rawData, searchQuery, filters]
+);
+<Table data={filteredData} activeFilters={filters} onFilterChange={setFilters} />
+```
+
+#### 2. "Filter shows 'No results' but data should match"
+
+**Symptoms**: Filter is applied but returns no results when data should match.
+
+**Most Likely Cause**: Filter value doesn't match data structure.
+
+**Diagnosis**: Check filter values vs. actual data values:
+```jsx
+// Debug by logging filter values and data structure
+console.log('Filter value:', filters.status); // e.g., 'active'
+console.log('Data structure:', data[0].status); // e.g., { text: 'Active', tone: 'success' }
+```
+
+**Solution**: Implement value mapping:
+```jsx
+const filterData = (data, searchQuery, filters) => {
+  if (filters.status && filters.status !== 'all') {
+    // Map filter values to data values
+    const statusMap = {
+      'active': 'Active',    // filter value → data text value
+      'inactive': 'Inactive'
+    };
+    const expectedText = statusMap[filters.status];
+    filtered = filtered.filter(item => item.status.text === expectedText);
+  }
+};
+```
+
+#### 3. "Search works but filters don't" or "Filters work but search doesn't"
+
+**Symptoms**: One filtering mechanism works but the other doesn't.
+
+**Most Likely Cause**: Incomplete filtering logic or state management issues.
+
+**Solution**: Ensure both search and filters are handled in the same function:
+```jsx
+const filterData = (data, searchQuery, filters) => {
+  let filtered = [...data];
+
+  // Both search and filters must be implemented
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(item => 
+      item.name.toLowerCase().includes(query)
+    );
+  }
+
+  // AND apply filters
+  if (filters.status && filters.status !== 'all') {
+    filtered = filtered.filter(item => item.status.value === filters.status);
+  }
+
+  return filtered;
+};
+```
+
+#### 4. "Filters reset when I search" or "Search clears when I filter"
+
+**Symptoms**: Using one filter type clears the other.
+
+**Most Likely Cause**: State management conflict or missing dependencies in useMemo.
+
+**Solution**: Ensure both states are preserved and dependencies are correct:
+```jsx
+// ✅ Correct: Both states maintained separately
+const [searchQuery, setSearchQuery] = useState('');
+const [filters, setFilters] = useState({});
+
+// ✅ Correct: Both dependencies in useMemo
+const filteredData = useMemo(() => 
+  filterData(rawData, searchQuery, filters), 
+  [rawData, searchQuery, filters] // Both dependencies included
+);
+```
+
+#### 5. "Performance issues with filtering"
+
+**Symptoms**: Slow response when typing in search or changing filters.
+
+**Solutions**:
+
+**A. Debounce search input:**
+```jsx
+import { useMemo, useState, useEffect } from 'react';
+import { debounce } from 'lodash'; // or implement your own
+
+const [searchQuery, setSearchQuery] = useState('');
+const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+
+const debouncedSearch = useMemo(
+  () => debounce((query) => setDebouncedSearchQuery(query), 300),
+  []
+);
+
+useEffect(() => {
+  debouncedSearch(searchQuery);
+}, [searchQuery, debouncedSearch]);
+
+// Use debouncedSearchQuery in filtering
+const filteredData = useMemo(() => 
+  filterData(rawData, debouncedSearchQuery, filters), 
+  [rawData, debouncedSearchQuery, filters]
+);
+```
+
+**B. Optimize filter function for large datasets:**
+```jsx
+const filterData = useCallback((data, searchQuery, filters) => {
+  // Early return if no filters
+  if (!searchQuery.trim() && Object.keys(filters).length === 0) {
+    return data;
+  }
+
+  // Apply most selective filters first
+  let filtered = data;
+  
+  // Apply exact match filters first (more selective)
+  if (filters.status && filters.status !== 'all') {
+    filtered = filtered.filter(item => item.status.value === filters.status);
+  }
+  
+  // Apply search last (usually least selective)
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(item => 
+      item.name.toLowerCase().includes(query)
+    );
+  }
+
+  return filtered;
+}, []);
+```
+
+#### 6. "Filter dropdown options not showing"
+
+**Symptoms**: Filter button appears but clicking doesn't show filter options.
+
+**Possible Causes & Solutions**:
+
+**A. Missing `showFilterBar` prop:**
+```jsx
+<Table
+  showFilters={true}
+  showFilterBar={true}  // ← Add this
+  filterOptions={filterOptions}
+/>
+```
+
+**B. Invalid filter options structure:**
+```jsx
+// ❌ Incorrect structure
+const filterOptions = {
+  status: ['Active', 'Inactive'] // Wrong format
+};
+
+// ✅ Correct structure
+const filterOptions = {
+  status: {
+    label: 'Status',
+    options: [
+      { label: 'All', value: 'all' },
+      { label: 'Active', value: 'active' },
+      { label: 'Inactive', value: 'inactive' }
+    ]
+  }
+};
+```
+
+#### 7. "TypeScript errors with filter functions"
+
+**Symptoms**: TypeScript compilation errors related to filter implementation.
+
+**Solution**: Proper typing for filter functions:
+```tsx
+interface FilterState {
+  [key: string]: string | undefined;
+}
+
+interface DataItem {
+  id: number;
+  name: string;
+  status: { text: string; value: string };
+  // ... other properties
+}
+
+const filterData = (
+  data: DataItem[], 
+  searchQuery: string, 
+  filters: FilterState
+): DataItem[] => {
+  let filtered = [...data];
+  
+  // Implementation with proper typing
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(item => 
+      item.name.toLowerCase().includes(query)
+    );
+  }
+
+  return filtered;
+};
+```
+
+#### 8. "Pagination not updating with filtered data"
+
+**Symptoms**: Page count or pagination doesn't reflect filtered results.
+
+**Most Likely Cause**: Pagination using raw data length instead of filtered data length.
+
+**Solution**: Use filtered data for pagination calculations:
+```jsx
+// ❌ Wrong: Using raw data length
+pageCount: Math.ceil(rawData.length / pageSize)
+
+// ✅ Correct: Using filtered data length
+pageCount: Math.ceil(filteredData.length / pageSize)
+```
+
+### Debugging Filtering Issues
+
+#### Step-by-Step Debugging Process
+
+1. **Log filter state changes:**
+```jsx
+useEffect(() => {
+  console.log('Filters changed:', filters);
+}, [filters]);
+
+useEffect(() => {
+  console.log('Search query changed:', searchQuery);
+}, [searchQuery]);
+```
+
+2. **Log filtered data:**
+```jsx
+const filteredData = useMemo(() => {
+  const result = filterData(rawData, searchQuery, filters);
+  console.log('Filtered data:', result.length, 'items out of', rawData.length);
+  return result;
+}, [rawData, searchQuery, filters]);
+```
+
+3. **Test filter function in isolation:**
+```jsx
+// Test your filter function directly
+const testFilters = { status: 'active' };
+const testResult = filterData(rawData, '', testFilters);
+console.log('Test filter result:', testResult);
+```
+
+4. **Verify data structure:**
+```jsx
+// Log first item to verify structure
+console.log('Data structure sample:', rawData[0]);
+console.log('Expected filter value:', filters.status);
+```
+
+#### Quick Checklist for Filter Implementation
+
+- [ ] ✅ Filter function implemented and handles both search and filters
+- [ ] ✅ Filtered data passed to Table component (not raw data)
+- [ ] ✅ useMemo used with correct dependencies
+- [ ] ✅ Filter options structure is correct (label + options array)
+- [ ] ✅ `showFilterBar={true}` prop added to Table
+- [ ] ✅ Value mapping implemented if data structure doesn't match filter values
+- [ ] ✅ Pagination uses filtered data length
+- [ ] ✅ State management preserves both search and filter states
+- [ ] ✅ Performance optimizations applied for large datasets
+
+### Best Practices for Filtering
+
+#### 1. **Consistent Filter Function Pattern**
+```jsx
+const filterData = (data, searchQuery, filters) => {
+  let filtered = [...data];
+
+  // 1. Apply search first
+  if (searchQuery.trim()) {
+    // search logic
+  }
+
+  // 2. Apply filters in logical order
+  Object.keys(filters).forEach(key => {
+    if (filters[key] && filters[key] !== 'all') {
+      // filter logic
+    }
+  });
+
+  return filtered;
+};
+```
+
+#### 2. **Reusable Filter Utilities**
+```jsx
+// Create reusable filter utilities
+const createTextFilter = (searchFields) => (data, query) => {
+  if (!query.trim()) return data;
+  
+  const lowerQuery = query.toLowerCase();
+  return data.filter(item => 
+    searchFields.some(field => 
+      String(item[field]).toLowerCase().includes(lowerQuery)
+    )
+  );
+};
+
+const createSelectFilter = (field, valueMapping = {}) => (data, value) => {
+  if (!value || value === 'all') return data;
+  
+  const expectedValue = valueMapping[value] || value;
+  return data.filter(item => {
+    const itemValue = typeof item[field] === 'object' ? item[field].text : item[field];
+    return itemValue === expectedValue;
+  });
+};
+
+// Usage
+const nameFilter = createTextFilter(['name', 'email']);
+const statusFilter = createSelectFilter('status', { 'active': 'Active' });
+```
+
+#### 3. **Comprehensive Filter Options**
+```jsx
+const filterOptions = {
+  status: {
+    label: 'Status',
+    type: 'select', // explicit type
+    options: [
+      { label: 'All Statuses', value: 'all' },
+      { label: 'Active', value: 'active' },
+      { label: 'Inactive', value: 'inactive' }
+    ]
+  },
+  // More filter configurations...
+};
+```
+
 ### Table with Tabs
 
 Create tabbed interfaces to organize different data sets.
@@ -2035,21 +2547,704 @@ Indicate when a search yields no results. The not found state features a title/s
 - **Customizable**: Both title and subtitle messages can be customized
 - **Defaults**: Provides sensible default messages if not specified
 
-## Internationalization
+## Internationalization and RTL Support
 
-The Table component properly handles Right-to-Left (RTL) languages automatically.
+The Table component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper text alignment, table layout mirroring, and Arabic text rendering throughout all table elements including headers, cells, filters, pagination, and states.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-<div dir="rtl" style={{ width: '100%' }}>
-  <Table
-    data={data}
-    columns={columns}
-    title="مخزون المنتجات"
-    striped={true}
-    gridCells={false}
-  />
-</div>
+import { ThemeProvider, Table, QuickColumns } from '@tagaddod-design/react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Table
+        data={arabicData}
+        columns={arabicColumns}
+        title="إدارة المخزون"
+        showSearch={true}
+        showFilters={true}
+        pagination={{
+          pageIndex: 0,
+          pageSize: 10,
+          pageCount: Math.ceil(arabicData.length / 10),
+        }}
+      />
+    </ThemeProvider>
+  );
+}
 ```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Table component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Layout Mirroring**: Mirrors table layout, column alignment, and interactive elements
+3. **Text Alignment**: Changes text alignment to right-aligned for Arabic content
+4. **Icon Positioning**: Adjusts sort icons, filter icons, and action buttons for RTL flow
+5. **Pagination Controls**: Mirrors pagination layout and navigation flow
+
+### Basic Table in RTL
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+
+function RTLInventoryTable() {
+  const { isRTL } = useTheme();
+  
+  const inventoryData = isRTL ? [
+    { id: 1, name: 'زيت الزيتون 500 مل', category: 'طعام', stock: 150, price: 25.50 },
+    { id: 2, name: 'صابون غسيل الأطباق', category: 'تنظيف', stock: 85, price: 12.00 },
+    { id: 3, name: 'عصير برتقال طبيعي', category: 'مشروبات', stock: 200, price: 8.75 }
+  ] : [
+    { id: 1, name: 'Olive Oil 500ml', category: 'Food', stock: 150, price: 25.50 },
+    { id: 2, name: 'Dish Soap', category: 'Cleaning', stock: 85, price: 12.00 },
+    { id: 3, name: 'Orange Juice Natural', category: 'Drinks', stock: 200, price: 8.75 }
+  ];
+
+  const columns = [
+    QuickColumns.text('id', isRTL ? 'المعرف' : 'ID'),
+    QuickColumns.text('name', isRTL ? 'اسم المنتج' : 'Product Name'),
+    QuickColumns.text('category', isRTL ? 'الفئة' : 'Category'),
+    QuickColumns.number('stock', isRTL ? 'المخزون' : 'Stock'),
+    {
+      accessorKey: 'price',
+      header: isRTL ? 'السعر' : 'Price',
+      cell: ({ getValue }) => `${getValue()} ${isRTL ? 'ر.س' : 'SAR'}`
+    }
+  ];
+
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Table
+        data={inventoryData}
+        columns={columns}
+        title={isRTL ? 'إدارة المخزون' : 'Inventory Management'}
+        showSearch={true}
+        searchPlaceholder={isRTL ? 'البحث في المنتجات...' : 'Search products...'}
+      />
+    </div>
+  );
+}
+```
+
+### Advanced Table with Filters in RTL
+
+```jsx
+function RTLAdvancedTable() {
+  const { isRTL } = useTheme();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState({});
+  
+  const productData = isRTL ? [
+    { 
+      id: 1, 
+      name: 'حليب كامل الدسم', 
+      status: { text: 'متوفر', value: 'available', tone: 'success' },
+      category: 'منتجات الألبان',
+      supplier: { name: 'مزارع الخير', city: 'الرياض' },
+      price: 15.50,
+      lastUpdated: '2024-01-15'
+    },
+    { 
+      id: 2, 
+      name: 'خبز أسمر طازج', 
+      status: { text: 'منخفض', value: 'low', tone: 'warning' },
+      category: 'المخبوزات',
+      supplier: { name: 'مخبز الفجر', city: 'جدة' },
+      price: 3.25,
+      lastUpdated: '2024-01-14'
+    }
+  ] : [
+    {
+      id: 1,
+      name: 'Whole Milk',
+      status: { text: 'Available', value: 'available', tone: 'success' },
+      category: 'Dairy',
+      supplier: { name: 'Fresh Farms', city: 'Riyadh' },
+      price: 15.50,
+      lastUpdated: '2024-01-15'
+    },
+    {
+      id: 2,
+      name: 'Brown Bread Fresh',
+      status: { text: 'Low Stock', value: 'low', tone: 'warning' },
+      category: 'Bakery',
+      supplier: { name: 'Dawn Bakery', city: 'Jeddah' },
+      price: 3.25,
+      lastUpdated: '2024-01-14'
+    }
+  ];
+
+  const columns = [
+    QuickColumns.text('id', isRTL ? 'المعرف' : 'ID'),
+    QuickColumns.text('name', isRTL ? 'اسم المنتج' : 'Product Name'),
+    {
+      accessorKey: 'status',
+      header: isRTL ? 'الحالة' : 'Status',
+      cell: ({ getValue }) => {
+        const status = getValue();
+        return (
+          <Badge variant={status.tone}>
+            {status.text}
+          </Badge>
+        );
+      }
+    },
+    QuickColumns.text('category', isRTL ? 'الفئة' : 'Category'),
+    {
+      accessorKey: 'supplier',
+      header: isRTL ? 'المورد' : 'Supplier',
+      cell: ({ getValue }) => {
+        const supplier = getValue();
+        return (
+          <div style={{
+            fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+            lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+          }}>
+            <div style={{ fontWeight: 600 }}>{supplier.name}</div>
+            <div style={{ fontSize: '12px', color: 'var(--t-color-text-subtle)' }}>
+              {supplier.city}
+            </div>
+          </div>
+        );
+      }
+    },
+    {
+      accessorKey: 'price',
+      header: isRTL ? 'السعر' : 'Price',
+      cell: ({ getValue }) => `${getValue()} ${isRTL ? 'ر.س' : 'SAR'}`
+    }
+  ];
+
+  const filterOptions = {
+    status: {
+      label: isRTL ? 'الحالة' : 'Status',
+      options: isRTL ? [
+        { label: 'جميع الحالات', value: 'all' },
+        { label: 'متوفر', value: 'available' },
+        { label: 'منخفض', value: 'low' },
+        { label: 'نفذ', value: 'out' }
+      ] : [
+        { label: 'All Statuses', value: 'all' },
+        { label: 'Available', value: 'available' },
+        { label: 'Low Stock', value: 'low' },
+        { label: 'Out of Stock', value: 'out' }
+      ]
+    },
+    category: {
+      label: isRTL ? 'الفئة' : 'Category',
+      options: isRTL ? [
+        { label: 'جميع الفئات', value: 'all' },
+        { label: 'منتجات الألبان', value: 'dairy' },
+        { label: 'المخبوزات', value: 'bakery' },
+        { label: 'اللحوم', value: 'meat' }
+      ] : [
+        { label: 'All Categories', value: 'all' },
+        { label: 'Dairy', value: 'dairy' },
+        { label: 'Bakery', value: 'bakery' },
+        { label: 'Meat', value: 'meat' }
+      ]
+    }
+  };
+
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Table
+        data={productData}
+        columns={columns}
+        title={isRTL ? 'إدارة المنتجات المتقدمة' : 'Advanced Product Management'}
+        showSearch={true}
+        showFilters={true}
+        showFilterBar={true}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        activeFilters={filters}
+        onFilterChange={setFilters}
+        filterOptions={filterOptions}
+        searchPlaceholder={isRTL ? 'البحث في المنتجات والموردين...' : 'Search products and suppliers...'}
+        pagination={{
+          pageIndex: 0,
+          pageSize: 10,
+          pageCount: Math.ceil(productData.length / 10),
+        }}
+      />
+    </div>
+  );
+}
+```
+
+### Tabbed Table in RTL
+
+```jsx
+function RTLTabbedTable() {
+  const { isRTL } = useTheme();
+  const [activeTab, setActiveTab] = useState('inventory');
+
+  const inventoryData = isRTL ? [
+    { id: 1, name: 'أرز بسمتي 5 كيلو', stock: 45, price: 28.50 },
+    { id: 2, name: 'زيت دوار الشمس 1 لتر', stock: 30, price: 18.00 }
+  ] : [
+    { id: 1, name: 'Basmati Rice 5kg', stock: 45, price: 28.50 },
+    { id: 2, name: 'Sunflower Oil 1L', stock: 30, price: 18.00 }
+  ];
+
+  const ordersData = isRTL ? [
+    { id: 101, customer: 'أحمد الشمري', total: 245.50, status: 'مكتمل' },
+    { id: 102, customer: 'فاطمة العتيبي', total: 189.25, status: 'قيد المعالجة' }
+  ] : [
+    { id: 101, customer: 'Ahmed Al-Shammari', total: 245.50, status: 'Completed' },
+    { id: 102, customer: 'Fatima Al-Otaibi', total: 189.25, status: 'Processing' }
+  ];
+
+  const tabItems = isRTL ? [
+    { id: 'inventory', label: 'المخزون', active: activeTab === 'inventory', badge: inventoryData.length },
+    { id: 'orders', label: 'الطلبات', active: activeTab === 'orders', badge: ordersData.length },
+    { id: 'reports', label: 'التقارير', active: activeTab === 'reports', badge: 0 }
+  ] : [
+    { id: 'inventory', label: 'Inventory', active: activeTab === 'inventory', badge: inventoryData.length },
+    { id: 'orders', label: 'Orders', active: activeTab === 'orders', badge: ordersData.length },
+    { id: 'reports', label: 'Reports', active: activeTab === 'reports', badge: 0 }
+  ];
+
+  const getCurrentData = () => {
+    switch (activeTab) {
+      case 'inventory': return inventoryData;
+      case 'orders': return ordersData;
+      default: return [];
+    }
+  };
+
+  const getCurrentColumns = () => {
+    const baseColumns = activeTab === 'inventory' 
+      ? [
+          QuickColumns.text('id', isRTL ? 'المعرف' : 'ID'),
+          QuickColumns.text('name', isRTL ? 'اسم المنتج' : 'Product Name'),
+          QuickColumns.number('stock', isRTL ? 'الكمية' : 'Stock'),
+          {
+            accessorKey: 'price',
+            header: isRTL ? 'السعر' : 'Price',
+            cell: ({ getValue }) => `${getValue()} ${isRTL ? 'ر.س' : 'SAR'}`
+          }
+        ]
+      : [
+          QuickColumns.text('id', isRTL ? 'رقم الطلب' : 'Order ID'),
+          QuickColumns.text('customer', isRTL ? 'العميل' : 'Customer'),
+          {
+            accessorKey: 'total',
+            header: isRTL ? 'الإجمالي' : 'Total',
+            cell: ({ getValue }) => `${getValue()} ${isRTL ? 'ر.س' : 'SAR'}`
+          },
+          QuickColumns.text('status', isRTL ? 'الحالة' : 'Status')
+        ];
+    
+    return baseColumns;
+  };
+
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Table
+        data={getCurrentData()}
+        columns={getCurrentColumns()}
+        title={isRTL ? 'إدارة النظام المتكاملة' : 'Integrated System Management'}
+        showTabs={true}
+        tabItems={tabItems}
+        onTabChange={setActiveTab}
+        showSearch={true}
+        searchPlaceholder={isRTL ? 'البحث...' : 'Search...'}
+      />
+    </div>
+  );
+}
+```
+
+### Cell Variants in RTL
+
+```jsx
+function RTLCellVariantsTable() {
+  const { isRTL } = useTheme();
+
+  const employeeData = isRTL ? [
+    {
+      id: 1,
+      employee: {
+        name: 'سارة أحمد',
+        email: 'sara.ahmed@company.com',
+        avatar: '/avatars/sara.jpg'
+      },
+      department: 'التطوير',
+      status: { text: 'نشط', tone: 'success' },
+      skills: [
+        { text: 'React', tone: 'info' },
+        { text: 'TypeScript', tone: 'default' }
+      ],
+      rating: 4,
+      notes: 'موظفة متميزة في الفريق',
+      active: true,
+      completion: 85
+    }
+  ] : [
+    {
+      id: 1,
+      employee: {
+        name: 'Sarah Ahmed',
+        email: 'sara.ahmed@company.com',
+        avatar: '/avatars/sara.jpg'
+      },
+      department: 'Development',
+      status: { text: 'Active', tone: 'success' },
+      skills: [
+        { text: 'React', tone: 'info' },
+        { text: 'TypeScript', tone: 'default' }
+      ],
+      rating: 4,
+      notes: 'Outstanding team member',
+      active: true,
+      completion: 85
+    }
+  ];
+
+  const columns = [
+    QuickColumns.text('id', isRTL ? 'المعرف' : 'ID'),
+    createCustomCellColumn('employee', isRTL ? 'الموظف' : 'Employee', ({ value }) => {
+      return (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Avatar 
+            src={value.avatar} 
+            fallback={value.name.charAt(0)}
+            size="small"
+          />
+          <div>
+            <div style={{
+              fontWeight: 600,
+              fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+              lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+            }}>
+              {value.name}
+            </div>
+            <div style={{
+              fontSize: '12px',
+              color: 'var(--t-color-text-subtle)',
+              fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+              lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+            }}>
+              {value.email}
+            </div>
+          </div>
+        </div>
+      );
+    }),
+    QuickColumns.text('department', isRTL ? 'القسم' : 'Department'),
+    createCellColumn('status', isRTL ? 'الحالة' : 'Status', 'badge'),
+    createCellColumn('skills', isRTL ? 'المهارات' : 'Skills', 'badgeMultiple'),
+    createInteractiveCellColumn('rating', isRTL ? 'التقييم' : 'Rating', 'custom', (rating, row) => {
+      console.log('Rating changed for', row.employee.name, ':', rating);
+    }, {
+      cellProps: {
+        CustomComponent: ({ value, onChange, row }) => (
+          <div style={{ display: 'flex', gap: '2px' }}>
+            {[1, 2, 3, 4, 5].map(star => (
+              <IconStar
+                key={star}
+                size={16}
+                style={{
+                  cursor: 'pointer',
+                  color: star <= (value || 0) ? 'var(--t-color-fill-warning-primary)' : 'var(--t-color-border-secondary)',
+                  fill: star <= (value || 0) ? 'var(--t-color-fill-warning-primary)' : 'transparent'
+                }}
+                onClick={() => onChange?.(star, row)}
+              />
+            ))}
+          </div>
+        )
+      }
+    }),
+    createInteractiveCellColumn('notes', isRTL ? 'الملاحظات' : 'Notes', 'textField', (notes, row) => {
+      console.log('Notes updated for', row.employee.name, ':', notes);
+    }),
+    createInteractiveCellColumn('active', isRTL ? 'مفعل' : 'Active', 'custom', (active, row) => {
+      console.log('Status toggled for', row.employee.name, ':', active);
+    }, {
+      cellProps: {
+        CustomComponent: ({ value, onChange, row }) => (
+          <Switch
+            checked={value || false}
+            onCheckedChange={(checked) => onChange?.(checked, row)}
+            onClick={(e) => e.stopPropagation()}
+          />
+        )
+      }
+    })
+  ];
+
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Table
+        data={employeeData}
+        columns={columns}
+        title={isRTL ? 'إدارة الموظفين' : 'Employee Management'}
+        showSearch={true}
+        searchPlaceholder={isRTL ? 'البحث في الموظفين...' : 'Search employees...'}
+      />
+    </div>
+  );
+}
+```
+
+### Empty and Error States in RTL
+
+```jsx
+function RTLTableStates() {
+  const { isRTL } = useTheme();
+  const [currentState, setCurrentState] = useState('normal');
+
+  const columns = [
+    QuickColumns.text('id', isRTL ? 'المعرف' : 'ID'),
+    QuickColumns.text('name', isRTL ? 'الاسم' : 'Name'),
+    QuickColumns.text('status', isRTL ? 'الحالة' : 'Status')
+  ];
+
+  const getStateConfig = () => {
+    switch (currentState) {
+      case 'empty':
+        return {
+          state: 'empty',
+          emptyMessage: isRTL ? 'لا توجد سجلات للعرض.' : 'There are no records to display.',
+          data: []
+        };
+      case 'loading':
+        return {
+          state: 'loading',
+          data: []
+        };
+      case 'error':
+        return {
+          state: 'error',
+          errorMessage: isRTL 
+            ? 'حدث خطأ في استرجاع البيانات. لا تقلق، إنها مشكلة من جانبنا. يرجى المحاولة مرة أخرى لاحقاً.' 
+            : 'Error in data retrieving. Don\'t worry, it\'s our fault. Please try again later.',
+          data: []
+        };
+      case 'notFound':
+        return {
+          state: 'notFound',
+          notFoundMessage: isRTL ? 'لا توجد نتائج متاحة لـ "البحث المطلوب"' : 'No available results for "search term"',
+          notFoundSubtitle: isRTL 
+            ? 'جرب استخدام كلمات بحث مختلفة أو تحقق من الإملاء' 
+            : 'Try using different search terms or check your spelling',
+          searchQuery: isRTL ? 'البحث المطلوب' : 'search term',
+          data: []
+        };
+      default:
+        return {
+          state: 'normal',
+          data: [
+            { id: 1, name: isRTL ? 'أحمد محمد' : 'Ahmed Mohamed', status: isRTL ? 'نشط' : 'Active' },
+            { id: 2, name: isRTL ? 'فاطمة أحمد' : 'Fatima Ahmed', status: isRTL ? 'غير نشط' : 'Inactive' }
+          ]
+        };
+    }
+  };
+
+  const stateConfig = getStateConfig();
+
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <div style={{ marginBottom: '16px', display: 'flex', gap: '8px' }}>
+        {['normal', 'empty', 'loading', 'error', 'notFound'].map(state => (
+          <Button
+            key={state}
+            variant={currentState === state ? 'primary' : 'outlined'}
+            size="sm"
+            onClick={() => setCurrentState(state)}
+          >
+            {isRTL ? {
+              normal: 'عادي',
+              empty: 'فارغ',
+              loading: 'تحميل',
+              error: 'خطأ',
+              notFound: 'غير موجود'
+            }[state] : {
+              normal: 'Normal',
+              empty: 'Empty',
+              loading: 'Loading',
+              error: 'Error',
+              notFound: 'Not Found'
+            }[state]}
+          </Button>
+        ))}
+      </div>
+      
+      <Table
+        data={stateConfig.data}
+        columns={columns}
+        title={isRTL ? 'حالات الجدول المختلفة' : 'Different Table States'}
+        state={stateConfig.state}
+        emptyMessage={stateConfig.emptyMessage}
+        errorMessage={stateConfig.errorMessage}
+        notFoundMessage={stateConfig.notFoundMessage}
+        notFoundSubtitle={stateConfig.notFoundSubtitle}
+        searchQuery={stateConfig.searchQuery}
+        showSearch={true}
+      />
+    </div>
+  );
+}
+```
+
+### Column Management in RTL
+
+```jsx
+function RTLColumnManagement() {
+  const { isRTL } = useTheme();
+
+  const projectData = isRTL ? [
+    {
+      id: 'PRJ001',
+      name: 'تطبيق التجارة الإلكترونية',
+      manager: 'أحمد الزهراني',
+      status: 'قيد التطوير',
+      priority: 'عالية',
+      deadline: '2024-03-15',
+      budget: 150000
+    },
+    {
+      id: 'PRJ002', 
+      name: 'نظام إدارة المحتوى',
+      manager: 'سارة المالكي',
+      status: 'مكتمل',
+      priority: 'متوسطة',
+      deadline: '2024-02-28',
+      budget: 95000
+    }
+  ] : [
+    {
+      id: 'PRJ001',
+      name: 'E-commerce Application',
+      manager: 'Ahmed Al-Zahrani',
+      status: 'In Development',
+      priority: 'High',
+      deadline: '2024-03-15',
+      budget: 150000
+    },
+    {
+      id: 'PRJ002',
+      name: 'Content Management System',
+      manager: 'Sarah Al-Malki', 
+      status: 'Completed',
+      priority: 'Medium',
+      deadline: '2024-02-28',
+      budget: 95000
+    }
+  ];
+
+  const columns = [
+    {
+      id: 'projectId',
+      accessorKey: 'id',
+      header: isRTL ? 'معرف المشروع' : 'Project ID',
+      size: 120
+    },
+    {
+      id: 'projectName',
+      accessorKey: 'name',
+      header: isRTL ? 'اسم المشروع' : 'Project Name',
+      size: 250,
+      minSize: 150,
+      maxSize: 400
+    },
+    {
+      id: 'projectManager',
+      accessorKey: 'manager',
+      header: isRTL ? 'مدير المشروع' : 'Project Manager',
+      size: 180,
+      cell: ({ getValue }) => (
+        <div style={{
+          fontFamily: isRTL ? 'var(--t-font-family-arabic)' : 'var(--t-font-family-primary)',
+          lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
+        }}>
+          {getValue()}
+        </div>
+      )
+    },
+    {
+      id: 'projectStatus',
+      accessorKey: 'status',
+      header: isRTL ? 'حالة المشروع' : 'Status',
+      size: 150,
+      cell: ({ getValue }) => {
+        const status = getValue();
+        const getStatusTone = (status) => {
+          if (isRTL) {
+            return status === 'مكتمل' ? 'success' : status === 'قيد التطوير' ? 'info' : 'default';
+          }
+          return status === 'Completed' ? 'success' : status === 'In Development' ? 'info' : 'default';
+        };
+        
+        return (
+          <Badge variant={getStatusTone(status)}>
+            {status}
+          </Badge>
+        );
+      }
+    },
+    {
+      id: 'projectPriority',
+      accessorKey: 'priority',
+      header: isRTL ? 'الأولوية' : 'Priority',
+      size: 120
+    },
+    {
+      id: 'projectDeadline',
+      accessorKey: 'deadline',
+      header: isRTL ? 'الموعد النهائي' : 'Deadline',
+      size: 130
+    },
+    {
+      id: 'projectBudget',
+      accessorKey: 'budget',
+      header: isRTL ? 'الميزانية' : 'Budget',
+      size: 130,
+      cell: ({ getValue }) => `${getValue().toLocaleString()} ${isRTL ? 'ر.س' : 'SAR'}`
+    }
+  ];
+
+  return (
+    <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Table
+        data={projectData}
+        columns={columns}
+        title={isRTL ? 'إدارة المشاريع مع تخصيص الأعمدة' : 'Project Management with Column Customization'}
+        enableColumnOrdering={true}
+        enableColumnResizing={true}
+        gridCells={true}
+        showSearch={true}
+        searchPlaceholder={isRTL ? 'البحث في المشاريع...' : 'Search projects...'}
+        pagination={{
+          pageIndex: 0,
+          pageSize: 10,
+          pageCount: Math.ceil(projectData.length / 10),
+        }}
+      />
+    </div>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Test with actual Arabic content** to ensure proper text rendering and alignment
+3. **Use `useTheme` hook** to access RTL state and theme information
+4. **Consider column widths** - Arabic text may require different spacing than English
+5. **Test interactive elements** like filters, pagination, and cell variants in RTL
+6. **Validate search functionality** with Arabic search terms and proper text matching
+7. **Ensure proper data structures** for bilingual content in tables
+8. **Test complex layouts** like tabbed tables and column management in RTL contexts
 
 ## Column Configuration
 

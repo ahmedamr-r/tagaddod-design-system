@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { IconX, IconExclamationCircle, IconEye, IconEyeOff } from '@tabler/icons-react';
 import styles from './TextInput.module.css';
 
-export type TextInputSize = 'micro' | 'medium' | 'large';
+export type TextInputSize = 'xlarge' | 'large' | 'medium' | 'small' | 'xsmall';
 
 export interface TextInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'> {
   /** Text label displayed above the input */
@@ -42,6 +42,31 @@ export interface TextInputProps extends Omit<React.InputHTMLAttributes<HTMLInput
   
   /** Whether the field is read-only */
   readOnly?: boolean;
+  
+  /** 
+   * Callback when Enter key is pressed
+   * @param event - The keyboard event
+   * @param value - Current input value
+   */
+  onEnterPress?: (event: React.KeyboardEvent<HTMLInputElement>, value: string) => void;
+  
+  /** 
+   * Whether this input is used for search purposes
+   * When true, Enter key will blur the input after triggering onEnterPress
+   */
+  isSearchInput?: boolean;
+  
+  /** 
+   * Whether to automatically focus next focusable element on Enter key press
+   * When true, pressing Enter will move focus to the next input in tab order
+   */
+  autoFocusNext?: boolean;
+  
+  /** 
+   * Whether to prevent default form submission on Enter key press
+   * @default false
+   */
+  preventFormSubmit?: boolean;
 }
 
 export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
@@ -68,6 +93,11 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     onClear,
     type = 'text',
     onChange,
+    onEnterPress,
+    isSearchInput = false,
+    autoFocusNext = false,
+    preventFormSubmit = false,
+    onKeyDown,
     ...props 
   }, ref) => {
     const [inputValue, setInputValue] = useState<string>('');
@@ -111,8 +141,72 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       setPasswordVisible(!passwordVisible);
     };
     
+    // Helper function to find next focusable element
+    const findNextFocusableElement = (currentElement: HTMLElement): HTMLElement | null => {
+      const focusableElements = document.querySelectorAll(
+        'input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      
+      const elements = Array.from(focusableElements) as HTMLElement[];
+      const currentIndex = elements.indexOf(currentElement);
+      
+      // Return next element or null if current is last
+      return elements[currentIndex + 1] || null;
+    };
+    
+    // Handle Enter key press
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        const currentValue = value !== undefined ? String(value) : inputValue;
+        
+        // Prevent default form submission if specified
+        if (preventFormSubmit) {
+          event.preventDefault();
+        }
+        
+        // Call the onEnterPress callback if provided
+        if (onEnterPress) {
+          onEnterPress(event, currentValue);
+        }
+        
+        // Handle search input behavior
+        if (isSearchInput) {
+          // Blur the input to remove focus from search field
+          event.currentTarget.blur();
+        }
+        
+        // Handle auto focus next behavior
+        if (autoFocusNext && !isSearchInput) {
+          event.preventDefault(); // Prevent form submission when navigating
+          const nextElement = findNextFocusableElement(event.currentTarget);
+          if (nextElement) {
+            nextElement.focus();
+          }
+        }
+      }
+      
+      // Call any additional onKeyDown handler passed via props
+      if (onKeyDown) {
+        onKeyDown(event);
+      }
+    };
+    
     // Determine the actual input type for password fields
     const actualType = type === 'password' && passwordVisible ? 'text' : type;
+    
+    // Get appropriate icon size based on the size prop
+    const getIconSize = (size: TextInputSize): number => {
+      switch (size) {
+        case 'xlarge': return 24;
+        case 'large': return 20;
+        case 'medium': return 16;
+        case 'small': return 16;
+        case 'xsmall': return 16;
+        default: return 16;
+      }
+    };
+    
+    const iconSize = getIconSize(size);
     
     // For password fields, provide visibility toggle
     const passwordSuffix = type === 'password' ? (
@@ -123,7 +217,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         aria-label={passwordVisible ? "Hide password" : "Show password"}
         tabIndex={-1}
       >
-        {passwordVisible ? <IconEyeOff size={18} /> : <IconEye size={18} />}
+        {passwordVisible ? <IconEyeOff size={iconSize} /> : <IconEye size={iconSize} />}
       </button>
     ) : null;
     
@@ -136,7 +230,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         aria-label="Clear input"
         tabIndex={-1}
       >
-        <IconX size={18} />
+        <IconX size={iconSize} />
       </button>
     ) : null;
     
@@ -199,6 +293,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                 readOnly={readOnly}
                 type={actualType}
                 onChange={handleChange}
+                onKeyDown={handleKeyDown}
                 aria-invalid={hasError}
                 aria-describedby={`${uniqueId}-helptext ${uniqueId}-error`}
                 {...props}
@@ -212,7 +307,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           
           {hasError && (
             <div id={`${uniqueId}-error`} className={styles.errorMessage} style={lineHeightStyle}>
-              <IconExclamationCircle size={20} className={styles.errorIcon} />
+              <IconExclamationCircle size={iconSize} className={styles.errorIcon} />
               {errorMessage}
             </div>
           )}
@@ -230,4 +325,4 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 TextInput.displayName = 'TextInput';
 
 // Export size arrays for documentation
-export const textInputSizes = ['micro', 'medium', 'large'] as const;
+export const textInputSizes = ['xlarge', 'large', 'medium', 'small', 'xsmall'] as const;

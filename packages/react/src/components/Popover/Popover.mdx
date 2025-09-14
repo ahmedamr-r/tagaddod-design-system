@@ -5,6 +5,104 @@ import { Button } from '../Button/Button';
 
 <Meta of={PopoverStories} />
 
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 16-36)
+- Basic import pattern (simple Popover)
+- Advanced imports (PopoverRoot, PopoverTrigger, etc.)
+- Props documentation
+
+🎯 BASIC USAGE (Lines 38-53)
+- Default implementation with content and positioning
+- Button trigger example
+
+🎨 TYPES (Lines 55-94)
+- Default Type (Lines 57-68): Standard popover
+- With Scrollbar (Lines 70-94): Overflow handling for long content
+
+📍 POSITIONS (Lines 96-138)
+- Top, Right, Bottom, Left positioning
+- side and align prop usage
+
+🏹 ARROW (Lines 140-160)
+- showArrow prop configuration
+- With/without arrow examples
+
+⚡ ANIMATION (Lines 162-182)
+- animationDuration customization
+- Performance considerations
+
+🔧 ADVANCED COMPOSITION (Lines 184-233)
+- PopoverRoot, PopoverTrigger, PopoverContent usage
+- Custom button integration
+- PopoverClose implementation
+
+📋 LISTBOX INTEGRATION (Lines 235-515)
+- Basic Listbox (Lines 237-257): Dropdown menu functionality
+- Listbox with Icons (Lines 259-279): Visual indicators
+- Mixed Icon Configuration (Lines 281-300): Selective icon display
+- Scrollable Listbox (Lines 302-320): Long lists with overflow
+- Enhanced Scrollable Dropdown (Lines 322-354): Complex file manager
+- Multiple Selection (Lines 356-376): Multi-select capability
+
+📏 MARGIN CUSTOMIZATION (Lines 377-441)
+- Predefined margins (none, small, medium, large)
+- Custom pixel values
+- Listbox margin configuration
+
+🎛️ ITEM PADDING (Lines 443-516)
+- Vertical and horizontal padding customization
+- Compact, spacious, and custom shapes
+- Scrollable list padding
+
+🔄 CONTROLLED MODE (Lines 518-544)
+- open and onOpenChange props
+- External state management
+
+💼 USE CASES (Lines 546-777)
+- Tooltips (Lines 548-558): Information display
+- Dropdown Menus (Lines 560-589): Action menus with listbox
+- Information Cards (Lines 591-607): Detailed content
+- Color Picker (Lines 609-633): Grid-based selection
+- File Manager Dropdown (Lines 635-657): Complex menu with dividers
+- User Profile Menu (Lines 659-678): Account management
+- Language Selector (Lines 680-702): Multi-language support
+
+🌍 INTERNATIONALIZATION (Lines 704-722)
+- RTL language support
+- Arabic content examples
+
+♿ ACCESSIBILITY (Lines 724-735)
+- Radix UI foundation
+- Focus management and keyboard navigation
+
+⚙️ TECHNICAL DETAILS (Lines 737-777)
+- CSS Variables (Lines 739-755): Design token reference
+- Architecture (Lines 757-773): Radix UI primitives
+- Browser Support (Line 775-777): Compatibility
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic popover: Lines 42-52
+- With scrollbar: Lines 77-93
+- Different positions: Lines 103-137
+- Listbox dropdown: Lines 244-256
+- With icons: Lines 268-278
+- Multiple selection: Lines 361-375
+- Custom margins: Lines 385-421
+- Controlled mode: Lines 525-543
+
+⚠️ LISTBOX NOTE:
+Popover includes powerful listbox integration with useListbox prop for creating accessible dropdown menus with icons, help text, multiple selection, and scrolling support.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Popover component capabilities and patterns.
+
+
 # Popover Component
 
 The Popover component displays floating content that appears when a user interacts with a trigger element.
@@ -701,25 +799,279 @@ function ControlledPopover() {
 </Popover>
 ```
 
-## Internationalization
+## Internationalization and RTL Support
 
-The Popover component properly handles Right-to-Left (RTL) languages by:
+The Popover component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper positioning, and Arabic text rendering.
 
-1. Adjusting the layout and positioning for RTL text flow
-2. Applying appropriate line height for Arabic text
-3. Supporting RTL content alignment
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
 
 ```jsx
-<div dir="rtl">
-  <Popover
-    content="محتوى منبثق باللغة العربية"
-    side="bottom"
-    align="start"
-  >
-    <Button>افتح المنبثقة</Button>
-  </Popover>
-</div>
+import { ThemeProvider, Popover, Button } from '@tagaddod-design/react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Popover
+        content="محتوى منبثق باللغة العربية مع دعم كامل للغة العربية"
+        side="bottom"
+        align="start"
+        showArrow={true}
+      >
+        <Button>افتح المنبثقة</Button>
+      </Popover>
+    </ThemeProvider>
+  );
+}
 ```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Popover component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Layout Direction**: Adjusts positioning and alignment for RTL text flow
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Content Alignment**: Ensures proper text alignment within the popover
+5. **Positioning Logic**: Maintains proper popover placement in RTL layouts
+
+### Popover with Arabic Content
+
+The Popover component handles Arabic content with proper styling:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+
+function InfoPopover() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Popover
+      content={
+        <div style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+          <h4 style={{ margin: '0 0 8px', textAlign: isRTL ? 'right' : 'left' }}>
+            {isRTL ? 'تفاصيل المنتج' : 'Product Details'}
+          </h4>
+          <p style={{ margin: '0', textAlign: isRTL ? 'right' : 'left' }}>
+            {isRTL 
+              ? 'هذا المنتج متوفر بعدة ألوان وأحجام مختلفة. يمكنك اختيار المناسب لك.' 
+              : 'This product is available in multiple colors and sizes. You can choose what suits you best.'
+            }
+          </p>
+        </div>
+      }
+      side="bottom"
+      align="center"
+      showArrow={true}
+    >
+      <Button variant="secondary">
+        {isRTL ? 'عرض التفاصيل' : 'View Details'}
+      </Button>
+    </Popover>
+  );
+}
+```
+
+### Listbox Integration in RTL
+
+The powerful listbox integration works seamlessly in RTL:
+
+```jsx
+function RTLDropdownMenu() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Popover
+      useListbox
+      listboxShowIcons
+      listboxOptions={[
+        { 
+          label: isRTL ? 'تحرير' : 'Edit', 
+          value: 'edit', 
+          icon: '✏️' 
+        },
+        { 
+          label: isRTL ? 'نسخ' : 'Duplicate', 
+          value: 'duplicate', 
+          icon: '📋' 
+        },
+        { 
+          label: isRTL ? 'مشاركة' : 'Share', 
+          value: 'share', 
+          icon: '📤' 
+        },
+        { 
+          label: isRTL ? 'حذف' : 'Delete', 
+          value: 'delete', 
+          icon: '🗑️' 
+        },
+      ]}
+      onListboxSelect={(value) => console.log('Selected:', value)}
+      side="bottom"
+      align={isRTL ? "end" : "start"}
+    >
+      <Button>
+        {isRTL ? 'الإجراءات' : 'Actions'}
+      </Button>
+    </Popover>
+  );
+}
+```
+
+### Multi-Level Popover Content in RTL
+
+For complex content with multiple sections:
+
+```jsx
+function ComplexRTLPopover() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Popover
+      content={
+        <div style={{ 
+          direction: isRTL ? 'rtl' : 'ltr',
+          padding: '4px 0'
+        }}>
+          <div style={{ 
+            padding: '8px 16px',
+            borderBottom: '1px solid var(--t-color-border-subtle)',
+            marginBottom: '8px'
+          }}>
+            <h4 style={{ 
+              margin: '0 0 4px',
+              textAlign: isRTL ? 'right' : 'left' 
+            }}>
+              {isRTL ? 'ملف المستخدم' : 'User Profile'}
+            </h4>
+            <p style={{ 
+              margin: '0',
+              fontSize: '14px',
+              color: 'var(--t-color-text-subtle)',
+              textAlign: isRTL ? 'right' : 'left'
+            }}>
+              {isRTL ? 'أحمد محمد' : 'Ahmed Mohamed'}
+            </p>
+          </div>
+          
+          <div style={{ padding: '0 8px' }}>
+            {[
+              { key: 'settings', ar: 'الإعدادات', en: 'Settings' },
+              { key: 'profile', ar: 'الملف الشخصي', en: 'Profile' },
+              { key: 'help', ar: 'المساعدة', en: 'Help' },
+              { key: 'logout', ar: 'تسجيل الخروج', en: 'Logout' }
+            ].map(item => (
+              <button
+                key={item.key}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  padding: '8px',
+                  textAlign: isRTL ? 'right' : 'left',
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer'
+                }}
+              >
+                {isRTL ? item.ar : item.en}
+              </button>
+            ))}
+          </div>
+        </div>
+      }
+      type="with-scrollbar"
+      side="bottom"
+      align="end"
+    >
+      <Button variant="secondary">
+        {isRTL ? 'القائمة' : 'Menu'}
+      </Button>
+    </Popover>
+  );
+}
+```
+
+### Form Popovers in RTL
+
+For forms and input validation in RTL:
+
+```jsx
+function FormPopoverRTL() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Popover
+      content={
+        <div style={{ 
+          direction: isRTL ? 'rtl' : 'ltr',
+          minWidth: '200px'
+        }}>
+          <h4 style={{ 
+            margin: '0 0 12px',
+            textAlign: isRTL ? 'right' : 'left'
+          }}>
+            {isRTL ? 'تصفية النتائج' : 'Filter Results'}
+          </h4>
+          
+          <div style={{ marginBottom: '12px' }}>
+            <label style={{ 
+              display: 'block',
+              marginBottom: '4px',
+              textAlign: isRTL ? 'right' : 'left'
+            }}>
+              {isRTL ? 'الفئة' : 'Category'}
+            </label>
+            <select style={{ 
+              width: '100%',
+              padding: '6px',
+              direction: isRTL ? 'rtl' : 'ltr'
+            }}>
+              <option>{isRTL ? 'جميع الفئات' : 'All Categories'}</option>
+              <option>{isRTL ? 'تقنية' : 'Technology'}</option>
+              <option>{isRTL ? 'تصميم' : 'Design'}</option>
+            </select>
+          </div>
+          
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: isRTL ? 'flex-start' : 'flex-end',
+            gap: '8px'
+          }}>
+            <PopoverClose asChild>
+              <Button variant="secondary" size="small">
+                {isRTL ? 'إلغاء' : 'Cancel'}
+              </Button>
+            </PopoverClose>
+            <PopoverClose asChild>
+              <Button size="small">
+                {isRTL ? 'تطبيق' : 'Apply'}
+              </Button>
+            </PopoverClose>
+          </div>
+        </div>
+      }
+      type="default"
+      side="bottom"
+      align="start"
+    >
+      <Button variant="outlined">
+        {isRTL ? 'تصفية' : 'Filter'}
+      </Button>
+    </Popover>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Set proper direction** on content containers using `direction` style
+3. **Adjust alignment** - use `align="end"` in RTL for natural positioning
+4. **Test with actual Arabic content** to ensure proper text rendering
+5. **Use `useTheme` hook** to access RTL state and theme information
+6. **Consider button placement** - adjust action button order for RTL
+7. **Test scrollable content** to ensure proper scrollbar positioning in RTL
 
 ## Accessibility
 

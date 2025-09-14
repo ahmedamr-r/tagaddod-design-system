@@ -14,7 +14,7 @@
 .labelContainer {
   display: flex;
   align-items: center;
-  margin-bottom: var(--t-space-150);
+  margin-bottom: var(--t-space-200); /* Default 8px, overridden by size variants */
 }
 
 .label {
@@ -38,7 +38,7 @@
 }
 
 .label::after {
-  margin-bottom: -0.15em;
+  margin-bottom: -0.25em;
 }
 
 /* Arabic font adjustment (larger trim) */
@@ -47,7 +47,7 @@
 }
 
 :global([dir="rtl"]) .label::after {
-  margin-bottom: -0.25em;
+  margin-bottom: -0.4em;
 }
 
 .required {
@@ -195,123 +195,248 @@
 
 /* Add padding adjustments for input with prefix/suffix */
 .input.withPrefix {
-  padding-inline-start: 0;
+  padding-inline-start: var(--t-space-150); /* 6px gap */
 }
 
 .input.withSuffix {
-  padding-inline-end: 0;
+  padding-inline-end: var(--t-space-100); /* 6px gap */
 }
 
 /* Size variants with adjusted spacing */
-.sizeMicro .inputWrapper {
-  height: var(--t-size-700); /* 28px fixed height */
-  min-height: var(--t-size-700);
+
+/* XLarge - 56px height */
+.sizeXlarge .inputWrapper {
+  height: var(--t-size-1400); /* 56px */
+  min-height: var(--t-size-1400);
 }
 
-.sizeMicro .input {
-  font-size: var(--t-font-size-300);
-  padding-block: var(--t-space-50);
-  padding-inline: var(--t-space-300);
+.sizeXlarge .input {
+  font: var(--t-typography-body-lg-default);
+  padding-block: var(--t-space-400);
+  padding-inline: var(--t-space-400);
 }
 
-/* RTL vertical centering for micro size */
-:global([dir="rtl"]) .sizeMicro .input {
-  padding-top: calc(var(--t-space-50) + 1px);
-  padding-bottom: calc(var(--t-space-50) - 1px);
+.sizeXlarge .input.withPrefix {
+  padding-inline-start: var(--t-space-150); /* 6px gap */
 }
 
-.sizeMicro .prefix,
-.sizeMicro .suffix {
-  font-size: var(--t-font-size-300);
+.sizeXlarge .input.withSuffix {
+  padding-inline-end: var(--t-space-150); /* 6px gap */
 }
 
-.sizeMicro .prefix {
-  padding-inline-start: var(--t-space-300);
+.sizeXlarge .labelContainer {
+  margin-bottom: var(--t-space-250); /* 10px */
 }
 
-.sizeMicro .suffix {
-  padding-inline-end: var(--t-space-200);
+.sizeXlarge .label {
+  font: var(--t-typography-body-md-default);
 }
 
-/* RTL vertical centering for micro prefix/suffix */
-:global([dir="rtl"]) .sizeMicro .prefix,
-:global([dir="rtl"]) .sizeMicro .suffix {
-  padding-top: 1px;
-  padding-bottom: 0px;
+.sizeXlarge .helpText,
+.sizeXlarge .errorMessage {
+  font: var(--t-typography-body-sm-default);
+  margin-top: var(--t-space-250); /* 10px */
 }
 
-.sizeMicro .label {
+.sizeXlarge .prefix svg,
+.sizeXlarge .suffix svg,
+.sizeXlarge .prefix .iconButton svg {
+  width: var(--t-size-600); /* 24px */
+  height: var(--t-size-600); /* 24px */
+}
+
+/* RTL vertical centering for xlarge size */
+:global([dir="rtl"]) .sizeXlarge .input {
+  padding-top: calc(var(--t-space-400) + 2px);
+  padding-bottom: calc(var(--t-space-400) - 2px);
+}
+
+/* Large - 48px height */
+.sizeLarge .inputWrapper {
+  height: var(--t-size-1200); /* 48px */
+  min-height: var(--t-size-1200);
+}
+
+.sizeLarge .input {
+  font: var(--t-typography-body-md-default);
+  padding-block: var(--t-space-300);
+  padding-inline: var(--t-space-400);
+}
+
+.sizeLarge .input.withPrefix {
+  padding-inline-start: var(--t-space-150); /* 6px gap */
+}
+
+.sizeLarge .input.withSuffix {
+  padding-inline-end: var(--t-space-150); /* 6px gap */
+}
+
+.sizeLarge .labelContainer {
+  margin-bottom: var(--t-space-250); /* 10px */
+}
+
+.sizeLarge .label {
   font: var(--t-typography-body-sm-default);
 }
 
+.sizeLarge .helpText,
+.sizeLarge .errorMessage {
+  font: var(--t-typography-body-sm-default);
+  margin-top: var(--t-space-250); /* 10px */
+}
+
+.sizeLarge .prefix svg,
+.sizeLarge .suffix svg,
+.sizeLarge .prefix .iconButton svg {
+  width: var(--t-size-500); /* 20px */
+  height: var(--t-size-500); /* 20px */
+}
+
+/* RTL vertical centering for large size */
+:global([dir="rtl"]) .sizeLarge .input {
+  padding-top: calc(var(--t-space-300) + 2px);
+  padding-bottom: calc(var(--t-space-300) - 2px);
+}
+
+/* Medium - 40px height */
 .sizeMedium .inputWrapper {
-  height: var(--t-size-800); /* 32px fixed height */
-  min-height: var(--t-size-800);
+  height: var(--t-size-1000); /* 40px */
+  min-height: var(--t-size-1000);
 }
 
 .sizeMedium .input {
-  font-size: var(--t-font-size-350);
-  padding-block: var(--t-space-150);
+  font: var(--t-typography-body-md-default);
+  padding-block: var(--t-space-200);
   padding-inline: var(--t-space-300);
 }
 
-/* RTL vertical centering for medium size */
-:global([dir="rtl"]) .sizeMedium .input {
-  padding-top: calc(var(--t-space-150) + 2px);
-  padding-bottom: calc(var(--t-space-150) - 2px);
+.sizeMedium .input.withPrefix {
+  padding-inline-start: var(--t-space-150); /* 6px gap */
 }
 
-.sizeMedium .prefix,
-.sizeMedium .suffix {
-  font-size: var(--t-font-size-350);
+.sizeMedium .input.withSuffix {
+  padding-inline-end: var(--t-space-150); /* 6px gap */
 }
 
-/* RTL vertical centering for medium prefix/suffix */
-:global([dir="rtl"]) .sizeMedium .prefix,
-:global([dir="rtl"]) .sizeMedium .suffix {
-  padding-top: var(--t-space-50);
-  padding-bottom: 0px;
+.sizeMedium .labelContainer {
+  margin-bottom: var(--t-space-200); /* 8px */
 }
 
 .sizeMedium .label {
   font: var(--t-typography-body-sm-default);
 }
 
-.sizeLarge .inputWrapper {
-  height: var(--t-size-1000); /* 40px fixed height */
-  min-height: var(--t-size-1000);
+.sizeMedium .helpText,
+.sizeMedium .errorMessage {
+  font: var(--t-typography-caption-lg-default);
+  margin-top: var(--t-space-200); /* 8px */
 }
 
-.sizeLarge .input {
-  font-size: var(--t-font-size-400);
-  padding-block: var(--t-space-200);
+.sizeMedium .prefix svg,
+.sizeMedium .suffix svg,
+.sizeMedium .prefix .iconButton svg {
+  width: var(--t-size-400); /* 16px */
+  height: var(--t-size-400); /* 16px */
+}
+
+/* RTL vertical centering for medium size */
+:global([dir="rtl"]) .sizeMedium .input {
+  padding-top: calc(var(--t-space-200) + 2px);
+  padding-bottom: calc(var(--t-space-200) - 2px);
+}
+
+/* Small - 32px height */
+.sizeSmall .inputWrapper {
+  height: var(--t-size-800); /* 32px */
+  min-height: var(--t-size-800);
+}
+
+.sizeSmall .input {
+  font: var(--t-typography-body-sm-default);
+  padding-block: var(--t-space-150);
   padding-inline: var(--t-space-300);
 }
 
-/* RTL vertical centering for large size */
-:global([dir="rtl"]) .sizeLarge .input {
-  padding-top: calc(var(--t-space-200) + 3px);
-  padding-bottom: calc(var(--t-space-200) - 3px);
+.sizeSmall .input.withPrefix {
+  padding-inline-start: var(--t-space-150); /* 6px gap */
 }
 
-.sizeLarge .prefix {
-  padding-inline-start: var(--t-space-300);
+.sizeSmall .input.withSuffix {
+  padding-inline-end: var(--t-space-150); /* 6px gap */
 }
 
-.sizeLarge .suffix {
-  padding-inline-end: var(--t-space-400);
+.sizeSmall .labelContainer {
+  margin-bottom: var(--t-space-200); /* 8px */
 }
 
-/* RTL vertical centering for large prefix/suffix */
-:global([dir="rtl"]) .sizeLarge .prefix,
-:global([dir="rtl"]) .sizeLarge .suffix {
-  padding-top: 3px;
-  padding-bottom: 0px;
+.sizeSmall .label {
+  font: var(--t-typography-caption-lg-default);
 }
 
-.sizeLarge .prefix,
-.sizeLarge .suffix {
-  font-size: var(--t-font-size-400);
+.sizeSmall .helpText,
+.sizeSmall .errorMessage {
+  font: var(--t-typography-caption-lg-default);
+  margin-top: var(--t-space-200); /* 8px */
+}
+
+.sizeSmall .prefix svg,
+.sizeSmall .suffix svg,
+.sizeSmall .prefix .iconButton svg {
+  width: var(--t-size-400); /* 16px */
+  height: var(--t-size-400); /* 16px */
+}
+
+/* RTL vertical centering for small size */
+:global([dir="rtl"]) .sizeSmall .input {
+  padding-top: calc(var(--t-space-150) + 1px);
+  padding-bottom: calc(var(--t-space-150) - 1px);
+}
+
+/* XSmall - 28px height */
+.sizeXsmall .inputWrapper {
+  height: var(--t-size-700); /* 28px */
+  min-height: var(--t-size-700);
+}
+
+.sizeXsmall .input {
+  font: var(--t-typography-caption-lg-default);
+  padding-block: var(--t-space-100);
+  padding-inline: var(--t-space-300);
+}
+
+.sizeXsmall .input.withPrefix {
+  padding-inline-start: var(--t-space-150); /* 6px gap */
+}
+
+.sizeXsmall .input.withSuffix {
+  padding-inline-end: var(--t-space-150); /* 6px gap */
+}
+
+.sizeXsmall .labelContainer {
+  margin-bottom: var(--t-space-200); /* 8px */
+}
+
+.sizeXsmall .label {
+  font: var(--t-typography-caption-lg-default);
+}
+
+.sizeXsmall .helpText,
+.sizeXsmall .errorMessage {
+  font: var(--t-typography-caption-lg-default);
+  margin-top: var(--t-space-200); /* 8px */
+}
+
+.sizeXsmall .prefix svg,
+.sizeXsmall .suffix svg,
+.sizeXsmall .prefix .iconButton svg {
+  width: var(--t-size-400); /* 16px */
+  height: var(--t-size-400); /* 16px */
+}
+
+/* RTL vertical centering for xsmall size */
+:global([dir="rtl"]) .sizeXsmall .input {
+  padding-top: calc(var(--t-space-100) + 1px);
+  padding-bottom: calc(var(--t-space-100) - 1px);
 }
 
 /* Icon button (for clear, password toggle, etc.) */
@@ -339,6 +464,12 @@
 /* Error state */
 .error .inputWrapper {
   border-color: var(--t-color-fill-critical);
+  background-color: var(--t-color-fill-critical-secondary);
+}
+
+.error .inputWrapper:hover {
+  background-color: var(--t-color-fill-critical-secondary-hover);
+  border-color: var(--t-color-border-critical-hover);
 }
 
 .error .inputWrapper:focus-within {
@@ -350,7 +481,7 @@
   align-items: center;
   color: var(--t-color-text-critical);
   font: var(--t-typography-body-sm-default);
-  margin-top: var(--t-space-200);
+  margin-top: var(--t-space-200); /* Default 8px, overridden by size variants */
   position: relative;
   line-height: 1.5;
 }
@@ -383,21 +514,83 @@
 
 .errorIcon {
   color: var(--t-color-icon-critical);
-  margin-right: var(--t-space-200);
+  margin-right: var(--t-space-200); /* Default 8px */
   flex-shrink: 0;
 }
 
 /* RTL support for error icon */
 :global([dir="rtl"]) .errorIcon {
   margin-right: 0;
-  margin-left: var(--t-space-200);
+  margin-left: var(--t-space-200); /* Default 8px */
+}
+
+/* Size-specific error icon margins */
+
+/* XLarge - 8px margin, 20px icon */
+.sizeXlarge .errorIcon {
+  margin-right: var(--t-space-200); /* 8px */
+  width: var(--t-size-500); /* 20px */
+  height: var(--t-size-500); /* 20px */
+}
+
+:global([dir="rtl"]) .sizeXlarge .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-200); /* 8px */
+}
+
+/* Large - 6px margin, 20px icon */
+.sizeLarge .errorIcon {
+  margin-right: var(--t-space-150); /* 6px */
+  width: var(--t-size-500); /* 20px */
+  height: var(--t-size-500); /* 20px */
+}
+
+:global([dir="rtl"]) .sizeLarge .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-150); /* 6px */
+}
+
+/* Medium - 6px margin, 16px icon */
+.sizeMedium .errorIcon {
+  margin-right: var(--t-space-150); /* 6px */
+  width: var(--t-size-400); /* 16px */
+  height: var(--t-size-400); /* 16px */
+}
+
+:global([dir="rtl"]) .sizeMedium .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-150); /* 6px */
+}
+
+/* Small - 6px margin, 16px icon */
+.sizeSmall .errorIcon {
+  margin-right: var(--t-space-150); /* 6px */
+  width: var(--t-size-400); /* 16px */
+  height: var(--t-size-400); /* 16px */
+}
+
+:global([dir="rtl"]) .sizeSmall .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-150); /* 6px */
+}
+
+/* XSmall - 6px margin, 16px icon */
+.sizeXsmall .errorIcon {
+  margin-right: var(--t-space-150); /* 6px */
+  width: var(--t-size-400); /* 16px */
+  height: var(--t-size-400); /* 16px */
+}
+
+:global([dir="rtl"]) .sizeXsmall .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-150); /* 6px */
 }
 
 /* Help text */
 .helpText {
   font: var(--t-typography-body-sm-default);
   color: var(--t-color-text-secondary);
-  margin-top: var(--t-space-200);
+  margin-top: var(--t-space-200); /* Default 8px, overridden by size variants */
   position: relative;
   line-height: 1.5;
 }

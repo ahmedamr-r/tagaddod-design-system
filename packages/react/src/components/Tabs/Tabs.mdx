@@ -4,6 +4,96 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';
 
 <Meta of={TabsStories} />
 
+
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📦 IMPORT & SETUP (Lines 21-48)
+- Basic import pattern with all sub-components
+- Component structure explanation
+- Props documentation for Tabs, TabsTrigger, TabsContent
+
+🎯 BASIC USAGE (Lines 50-80)
+- Default implementation with TabsList and TabsContent
+- Basic structure pattern
+
+🎨 VARIANTS (Lines 81-126)
+- Primary Tabs (Lines 83-103): Default with underline indicator
+- Secondary Tabs (Lines 105-125): Subtle background highlighting
+
+📐 LAYOUT OPTIONS (Lines 127-187)
+- Standard Tabs (Lines 129-134): Auto-sizing
+- Fitted Tabs (Lines 135-155): Full-width distribution
+- Vertical Orientation (Lines 157-187): Settings/navigation panels
+
+🎛️ TAB FEATURES (Lines 189-261)
+- With Badge (Lines 191-206): Count/status indicators
+- With Icon (Lines 208-225): Visual representation
+- With Icon and Badge (Lines 227-244): Rich indicators
+- Disabled Tab (Lines 246-261): Unavailable states
+
+🔢 TAB COUNT OPTIONS (Lines 263-313)
+- Two Tabs (Lines 267-279): Optimized styling
+- Four Tabs (Lines 281-295): Balanced layout
+- Six Tabs (Lines 297-313): Maximum supported
+
+🌍 INTERNATIONALIZATION & RTL SUPPORT (Lines 315-450)
+- RTL language support with ThemeProvider integration
+- Arabic text examples with proper direction and font switching  
+- Directional icon handling and best practices
+- Tab order adjustment for RTL reading patterns
+- Line height optimization for Arabic text rendering
+
+🔄 CONTROLLED VS UNCONTROLLED (Lines 452-497)
+- Uncontrolled (Lines 454-462): defaultValue pattern
+- Controlled (Lines 464-497): Manual state management
+
+💼 COMMON USE CASES (Lines 499-600)
+- Navigation Tabs (Lines 501-523): Main application navigation
+- Form Sections (Lines 525-553): Multi-step forms
+- Settings Panel (Lines 555-578): Vertical navigation
+- Dashboard Metrics (Lines 580-600): Data visualization
+
+♿ ACCESSIBILITY (Lines 602-670)
+- WAI-ARIA Compliance (Lines 608-615): Roles and attributes
+- Keyboard Navigation (Lines 616-621): Arrow keys, Space/Enter
+- Focus Management (Lines 622-626): Automatic panel focus
+- Screen Reader Support (Lines 627-631): Descriptions and labels
+- Motion Sensitivity (Lines 632-635): Reduced motion support
+- RTL Support (Lines 636-639): Bidirectional navigation
+
+⚙️ TECHNICAL DETAILS (Lines 672-750)
+- CSS Variables (Lines 674-694): Design token reference
+- Animations (Lines 695-706): Transitions and effects
+- Badge States (Lines 709-713): State-based styling
+- Technical Architecture (Lines 715-725): Radix UI foundation
+- Browser Support (Lines 726-737): Compatibility matrix
+
+🎯 BEST PRACTICES (Lines 738-750)
+- Clear labeling and logical ordering
+- Icon usage and responsive considerations
+- Badge usage guidelines
+
+QUICK IMPLEMENTATION EXAMPLES:
+- Basic tabs: Lines 57-78
+- Primary variant: Lines 90-102
+- Fitted layout: Lines 142-154
+- With badges: Lines 198-205
+- With icons: Lines 217-224
+- Vertical orientation: Lines 164-186
+- Controlled state: Lines 356-381
+- RTL support: Lines 322-334
+
+⚠️ ACCESSIBILITY NOTE:
+Tabs component includes comprehensive ARIA attributes, keyboard navigation, and screen reader support. Use ariaLabel prop for tab lists and description prop for individual tabs to enhance accessibility.
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all Tabs component capabilities and patterns.
+
+
 # Tabs Component
 
 The Tabs component allows users to navigate between related sections of content, displaying one section at a time while keeping all options visible and accessible.
@@ -312,9 +402,57 @@ The Tabs component supports 2-6 tabs with optimized styling for each configurati
 </Tabs>
 ```
 
-## Internationalization
+## Internationalization and RTL Support
 
-The Tabs component properly handles Right-to-Left (RTL) languages.
+The Tabs component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper icon positioning, tab order adjustment, and directional icon handling.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Tabs, TabsList, TabsTrigger, TabsContent } from '@tagaddod-design/react';
+import { IconUser, IconSettings } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Tabs defaultValue="profile" ariaLabel="Navigation tabs">
+        <TabsList>
+          <TabsTrigger value="profile" icon={<IconUser size={18} />}>
+            الملف الشخصي
+          </TabsTrigger>
+          <TabsTrigger value="settings" icon={<IconSettings size={18} />}>
+            الإعدادات
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="profile">
+          <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+            محتوى الملف الشخصي
+          </div>
+        </TabsContent>
+        <TabsContent value="settings">
+          <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+            محتوى الإعدادات
+          </div>
+        </TabsContent>
+      </Tabs>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider or the `dir` prop, the Tabs component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Tab Order**: Adjusts visual order of tabs for RTL reading direction
+3. **Icon Positioning**: Positions tab icons correctly in RTL layouts
+4. **Line Height**: Applies appropriate line height for Arabic text rendering (`--t-line-height-arabic`)
+5. **Content Direction**: Ensures tab content follows RTL text direction
+6. **Active Indicator**: Adjusts active tab indicator positioning for RTL
+7. **Badge Positioning**: Properly positions badges in RTL tab layouts
 
 <Canvas of={TabsStories.RTL} />
 
@@ -333,6 +471,141 @@ The Tabs component properly handles Right-to-Left (RTL) languages.
   {/* Other tab contents */}
 </Tabs>
 ```
+
+### Directional Icon Handling
+
+**Important**: When using directional icons in tabs (like navigation arrows, chevrons), choose appropriate icons based on direction:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+import { IconArrowLeft, IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+
+function DirectionalTabs() {
+  const { isRTL } = useTheme();
+  
+  const NextIcon = isRTL ? IconChevronLeft : IconChevronRight;
+  const PrevIcon = isRTL ? IconChevronRight : IconChevronLeft;
+  
+  return (
+    <Tabs defaultValue="current" ariaLabel="Navigation tabs">
+      <TabsList>
+        <TabsTrigger value="previous" icon={<PrevIcon size={18} />}>
+          {isRTL ? 'السابق' : 'Previous'}
+        </TabsTrigger>
+        <TabsTrigger value="current">
+          {isRTL ? 'الحالي' : 'Current'}
+        </TabsTrigger>
+        <TabsTrigger value="next" icon={<NextIcon size={18} />}>
+          {isRTL ? 'التالي' : 'Next'}
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="previous">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          {isRTL ? 'محتوى الصفحة السابقة' : 'Previous page content'}
+        </div>
+      </TabsContent>
+      <TabsContent value="current">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          {isRTL ? 'محتوى الصفحة الحالية' : 'Current page content'}
+        </div>
+      </TabsContent>
+      <TabsContent value="next">
+        <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          {isRTL ? 'محتوى الصفحة التالية' : 'Next page content'}
+        </div>
+      </TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### RTL Tab Navigation Patterns
+
+For complex tab navigation with multiple levels:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+import { IconFolder, IconFile, IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+
+function RTLNavigationTabs() {
+  const { isRTL } = useTheme();
+  
+  return (
+    <Tabs defaultValue="files" variant="secondary" ariaLabel="File browser tabs">
+      <TabsList>
+        <TabsTrigger 
+          value="folders" 
+          icon={<IconFolder size={18} />}
+          description={isRTL ? 'عرض المجلدات' : 'View folders'}
+        >
+          {isRTL ? 'المجلدات' : 'Folders'}
+        </TabsTrigger>
+        <TabsTrigger 
+          value="files" 
+          icon={<IconFile size={18} />}
+          badge="12"
+          description={isRTL ? 'عرض الملفات' : 'View files'}
+        >
+          {isRTL ? 'الملفات' : 'Files'}
+        </TabsTrigger>
+        <TabsTrigger 
+          value="recent"
+          description={isRTL ? 'العناصر الأخيرة' : 'Recently accessed items'}
+        >
+          {isRTL ? 'الأخيرة' : 'Recent'}
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="folders">
+        <div style={{ 
+          padding: '16px', 
+          backgroundColor: '#f9fafb', 
+          borderRadius: '8px',
+          textAlign: isRTL ? 'right' : 'left',
+          direction: isRTL ? 'rtl' : 'ltr'
+        }}>
+          <h4>{isRTL ? 'إدارة المجلدات' : 'Folder Management'}</h4>
+          <p>{isRTL ? 'عرض وتنظيم المجلدات الخاصة بك.' : 'View and organize your folders.'}</p>
+        </div>
+      </TabsContent>
+      <TabsContent value="files">
+        <div style={{ 
+          padding: '16px', 
+          backgroundColor: '#f9fafb', 
+          borderRadius: '8px',
+          textAlign: isRTL ? 'right' : 'left',
+          direction: isRTL ? 'rtl' : 'ltr'
+        }}>
+          <h4>{isRTL ? 'إدارة الملفات' : 'File Management'}</h4>
+          <p>{isRTL ? 'عرض وتحرير ملفاتك المحفوظة.' : 'View and edit your saved files.'}</p>
+        </div>
+      </TabsContent>
+      <TabsContent value="recent">
+        <div style={{ 
+          padding: '16px', 
+          backgroundColor: '#f9fafb', 
+          borderRadius: '8px',
+          textAlign: isRTL ? 'right' : 'left',
+          direction: isRTL ? 'rtl' : 'ltr'
+        }}>
+          <h4>{isRTL ? 'العناصر الأخيرة' : 'Recent Items'}</h4>
+          <p>{isRTL ? 'العناصر التي تم الوصول إليها مؤخراً.' : 'Items you\'ve accessed recently.'}</p>
+        </div>
+      </TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and automatic font switching
+2. **Consider tab order** - tabs should follow RTL reading direction when appropriate
+3. **Use appropriate directional icons** in tab labels and avoid purely decorative arrows
+4. **Test tab navigation** - ensure keyboard navigation (arrow keys) works correctly in RTL
+5. **Verify content alignment** - tab content should align properly and respect RTL text direction
+6. **Consider tab width** - Arabic labels may require different spacing due to character width
+7. **Badge positioning** - ensure badges don't interfere with RTL text flow
+8. **Icon spacing** - verify proper spacing between icons and text in RTL layouts
 
 ## Controlled vs Uncontrolled
 

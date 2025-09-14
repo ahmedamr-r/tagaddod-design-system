@@ -10,18 +10,42 @@ import { RadioGroup, RadioButtonItem } from '../RadioButton';
 import styles from './Table.module.css';
 import { FilterItemProps } from './types';
 
-// Custom debounce hook for performance optimization
-const useDebounce = (callback: (...args: any[]) => void, delay: number) => {
+// Custom debounce hook for performance optimization with differentiated timing
+const useOptimizedDebounce = (callback: (...args: any[]) => void, filterType: string) => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Differentiated debounce timing based on filter type
+  const getDebounceDelay = (type: string) => {
+    switch (type) {
+      case 'select':
+      case 'checkboxGroup':
+      case 'radioGroup':
+        return 0; // Immediate for dropdowns and selections
+      case 'rangeSlider':
+        return 100; // Fast for range sliders
+      case 'text':
+      case 'popoverListbox':
+        return 200; // Reduced from 500ms for better responsiveness
+      default:
+        return 200;
+    }
+  };
+
+  const delay = getDebounceDelay(filterType);
 
   const debouncedCallback = useCallback((...args: any[]) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     
-    timeoutRef.current = setTimeout(() => {
+    if (delay === 0) {
+      // Immediate execution for select/dropdown filters
       callback(...args);
-    }, delay);
+    } else {
+      timeoutRef.current = setTimeout(() => {
+        callback(...args);
+      }, delay);
+    }
   }, [callback, delay]);
 
   const cancelDebounce = useCallback(() => {
@@ -43,7 +67,7 @@ const useDebounce = (callback: (...args: any[]) => void, delay: number) => {
   return { debouncedCallback, cancelDebounce };
 };
 
-export const FilterItem: React.FC<FilterItemProps> = ({
+export const FilterItem: React.FC<FilterItemProps> = React.memo(({
   name,
   label,
   value,
@@ -68,12 +92,12 @@ export const FilterItem: React.FC<FilterItemProps> = ({
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
 
-  // Debounced filter update (500ms delay for optimal UX)
-  const { debouncedCallback: debouncedFilterUpdate, cancelDebounce } = useDebounce(
+  // Optimized debounced filter update with differentiated timing
+  const { debouncedCallback: debouncedFilterUpdate, cancelDebounce } = useOptimizedDebounce(
     (filterName: string, filterValue: any) => {
       onChange(filterName, filterValue);
     },
-    500
+    type
   );
 
   // Get current range value (local state takes priority for immediate feedback)
@@ -465,4 +489,6 @@ export const FilterItem: React.FC<FilterItemProps> = ({
       {filterTrigger}
     </Popover>
   );
-};
+});
+
+FilterItem.displayName = 'FilterItem';

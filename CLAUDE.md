@@ -283,6 +283,135 @@ const isRTL = direction === 'rtl';
 - [ ] Check layout positioning (left/right borders, margins, positioning)
 - [ ] Ensure text alignment switches correctly
 - [ ] Add RTL-specific content in Storybook stories
+- [ ] **Document ThemeProvider integration and directional icons** (see RTL Documentation Template below)
+
+### STANDARD RTL DOCUMENTATION TEMPLATE
+
+**IMPORTANT**: When writing component documentation (.mdx files), ALWAYS include this RTL section template. This ensures consistent RTL guidance across all components. Based on the comprehensive RTL documentation pattern established in the Button component.
+
+#### Template for RTL Documentation Section:
+
+```markdown
+## Internationalization and RTL Support
+
+The [ComponentName] component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper icon positioning, and directional icon handling.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, [ComponentName] } from '@tagaddod-design/react';
+import { IconArrowRight } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <[ComponentName] prefixIcon={<IconArrowRight />}>
+        زر عربي
+      </[ComponentName]>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the [ComponentName] component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Icon Positioning**: Adjusts icon placement for RTL text flow
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Layout Direction**: Maintains proper positioning in RTL mode
+5. **Gap Spacing**: Uses flexbox gap for consistent spacing in all directions
+
+### Directional Icon Handling
+
+**Important**: When using directional icons (arrows, chevrons, etc.) in multilingual applications, you should manually choose the appropriate icon based on the current direction:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+
+function DirectionalComponent() {
+  const { isRTL } = useTheme();
+  
+  // Use arrow pointing in the correct direction for the language
+  const ArrowIcon = isRTL ? IconArrowLeft : IconArrowRight;
+  
+  return (
+    <[ComponentName] suffixIcon={<ArrowIcon />}>
+      {isRTL ? 'التالي' : 'Next'}
+    </[ComponentName]>
+  );
+}
+```
+
+### Common Directional Icon Patterns
+
+#### "Next" Action
+```jsx
+// English: Next → (arrow points right)
+// Arabic: التالي ← (arrow points left, matching RTL reading direction)
+const NextIcon = isRTL ? IconArrowLeft : IconArrowRight;
+
+<[ComponentName] variant="primary" suffixIcon={<NextIcon />}>
+  {isRTL ? 'التالي' : 'Next'}
+</[ComponentName]>
+```
+
+#### "Back" Action  
+```jsx
+// English: ← Back (arrow points left)
+// Arabic: رجوع → (arrow points right, matching RTL reading direction)
+const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
+
+<[ComponentName] variant="outlined" prefixIcon={<BackIcon />}>
+  {isRTL ? 'رجوع' : 'Back'}
+</[ComponentName]>
+```
+
+#### "More Info" or "Expand" Action
+```jsx
+// For expand/collapse or "more info" actions
+const ExpandIcon = isRTL ? IconChevronLeft : IconChevronRight;
+
+<[ComponentName] variant="plain" suffixIcon={<ExpandIcon />}>
+  {isRTL ? 'المزيد' : 'More'}
+</[ComponentName]>
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Choose directional icons carefully** - arrows should point in the reading direction
+3. **Test with actual Arabic content** to ensure proper text rendering
+4. **Use `useTheme` hook** to access RTL state and theme information
+5. **Consider icon semantics** - "next" in RTL should point left (←) not right (→)
+6. **Direction follows reading flow** - not physical direction on screen
+```
+
+#### Usage Instructions:
+1. Replace `[ComponentName]` with the actual component name
+2. Adapt examples to match the component's specific props and use cases
+3. Include relevant Canvas examples from the component's stories
+4. Add component-specific RTL considerations if any
+5. Update navigation index line numbers accordingly
+
+This template ensures consistent RTL documentation across all components in the design system.
+
+### RTL Documentation Application
+
+**When editing any component documentation (.mdx files)**, apply the RTL Documentation Template above to ensure:
+- Consistent ThemeProvider integration guidance
+- Proper directional icon handling examples
+- Complete RTL best practices
+- Standardized documentation structure
+
+Components that should include this RTL section:
+- TextInput, Select, Tabs, Modal, Drawer, Pagination
+- Any component with icons or directional elements
+- All interactive components that users interact with
 
 ## Recent Component Additions
 
@@ -379,3 +508,22 @@ npx tsc --noEmit --strict
 - Story files follow Storybook v7+ patterns with `Meta` and `StoryObj`
 - CSS Module imports properly typed
 - Radix UI component integration with correct prop forwarding
+
+## Component Documentation
+
+For comprehensive component documentation (.mdx files), use the specialized **component-docs-writer agent**:
+
+```bash
+# Create or update component documentation
+/ask component-docs-writer "Create complete documentation for the Button component following design system standards"
+```
+
+The component-docs-writer agent handles:
+- Complete RTL implementation templates
+- Component interaction patterns 
+- Accessibility documentation
+- Real-world usage examples
+- AI-friendly documentation standards
+- Integration with other design system components
+
+This ensures consistent, comprehensive documentation that serves both human developers and AI agents.

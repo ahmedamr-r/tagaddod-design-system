@@ -1,27 +1,32 @@
 {
   "duration": {
     "fast": {
-      "$type": "duration",
-      "$value": "150ms"
+      "$value": "150ms",
+      "$type": "duration"
     },
     "base": {
-      "$type": "duration",
-      "$value": "300ms"
+      "$value": "300ms",
+      "$type": "duration"
     }
   },
   "easing": {
     "inOut": {
-      "$type": "cubicBezier",
-      "$value": [0.4, 0.0, 0.2, 1.0]
+      "$value": [
+        0.4,
+        0,
+        0.2,
+        1
+      ],
+      "$type": "cubicBezier"
     }
   },
   "transition": {
     "soft": {
-      "$type": "transition",
       "$value": {
         "duration": "{duration.base}",
         "timingFunction": "{easing.inOut}"
-      }
+      },
+      "$type": "transition"
     }
   }
 }

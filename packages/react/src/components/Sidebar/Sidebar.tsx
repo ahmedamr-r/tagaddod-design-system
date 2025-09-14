@@ -3,9 +3,6 @@ import clsx from 'clsx';
 import { 
   IconHome,
   IconChartBar,
-  IconUsers,
-  IconPackage,
-  IconBell,
   IconSettings,
   IconLogout,
   IconChevronDown,

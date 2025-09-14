@@ -1,6 +1,6 @@
 {
   "name": "@tagaddod-design/react",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "description": "Modern, accessible React component library for building consistent UI at scale.",
   "homepage": "https://tagaddod-design-system.vercel.app/",
   "repository": {
@@ -87,7 +87,9 @@
     "@radix-ui/react-tooltip": "^1.2.1",
     "@tabler/icons-react": "^3.33.0",
     "@tanstack/react-table": "^8.0.0",
+    "date-fns": "^4.1.0",
     "react": ">=17.0.0",
+    "react-day-picker": "^9.9.0",
     "react-dom": ">=17.0.0"
   },
   "devDependencies": {
@@ -110,6 +112,7 @@
     "@tabler/icons-react": "^3.33.0",
     "@tanstack/react-table": "^8.0.0",
     "@testing-library/jest-dom": "^6.6.3",
+    "date-fns": "^4.1.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^29.5.14",
@@ -129,6 +132,7 @@
     "postcss-nesting": "^13.0.1",
     "postcss-preset-env": "^10.1.6",
     "react": "^18.3.1",
+    "react-day-picker": "^9.9.0",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.5.1",
     "remark-mdx": "^3.1.0",

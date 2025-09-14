@@ -5,7 +5,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--t-space-100);
   position: relative;
   cursor: pointer;
   font-family: var(--t-font-family-primary);
@@ -33,26 +32,44 @@
 }
 
 /* Size variants */
+.sizeXLarge {
+  min-height: var(--t-size-1400);  
+  padding: 0 var(--t-space-600);
+  font: var(--t-typography-body-lg-medium);
+  border-radius: var(--t-border-radius-200);
+  gap: var(--t-space-150); /* 6px */
+}
+
 .sizeLarge {
   min-height: var(--t-size-1200);  
-  padding: 0 var(--t-space-400);
+  padding: 0 var(--t-space-500);
   font: var(--t-typography-body-md-medium);
   border-radius: var(--t-border-radius-200);
+  gap: var(--t-space-150); /* 6px */
 }
 
 .sizeMedium {
   min-height: var(--t-size-1000);  
+  padding: 0 var(--t-space-400);
+  font: var(--t-typography-body-md-medium);
+  border-radius: var(--t-border-radius-200);
+  gap: var(--t-space-100); /* 4px */
+}
+
+.sizeSmall {
+  min-height: var(--t-size-800);  
   padding: 0 var(--t-space-300);
   font: var(--t-typography-body-sm-medium);
   border-radius: var(--t-border-radius-200);
+  gap: var(--t-space-100); /* 4px */
 }
 
-.sizeMicro {
-  min-height: var(--t-size-800);  
-  min-width:   var(--t-size-800);  ;
-  padding: 0 var(--t-space-200);
-  font: var(--t-typography-body-sm-medium);
+.sizeXSmall {
+  min-height: var(--t-size-700);  
+  padding: 0 var(--t-space-250);
+  font: var(--t-typography-caption-lg-medium);
   border-radius: var(--t-border-radius-200);
+  gap: var(--t-space-100); /* 4px */
 }
 
 /* Full width variant */
@@ -61,6 +78,11 @@
 }
 
 /* Icon-only button (square) */
+.iconOnly.sizeXLarge {
+  width: var(--t-size-1400);
+  padding: 0;
+}
+
 .iconOnly.sizeLarge {
   width: var(--t-size-1200);
   padding: 0;
@@ -71,8 +93,13 @@
   padding: 0;
 }
 
-.iconOnly.sizeMicro {
+.iconOnly.sizeSmall {
   width: var(--t-size-800);
+  padding: 0;
+}
+
+.iconOnly.sizeXSmall {
+  width: var(--t-size-700);
   padding: 0;
 }
 
@@ -93,37 +120,37 @@
   color: var(--t-color-text-on-fill-active);
 }
 
-/* Variant: Secondary */
-.variantSecondary {
+/* Variant: Tonal */
+.variantTonal {
   background-color: var(--t-color-fill-brand-secondary);
   color: var(--t-color-text-link);
   border-color: transparent;
 }
 
-.variantSecondary:hover:not(:disabled) {
+.variantTonal:hover:not(:disabled) {
   background-color: var(--t-color-fill-brand-secondary-hover);
   color: var(--t-color-text-link-hover);
 }
 
-.variantSecondary:active:not(:disabled) {
+.variantTonal:active:not(:disabled) {
   background-color: var(--t-color-fill-brand-secondary-active);
   color: var(--t-color-text-link-active);
 }
 
-/* Variant: Tertiary */
-.variantTertiary {
+/* Variant: Outlined */
+.variantOutlined {
   background-color: transparent;
   color: var(--t-color-text-link);
   border-color: var(--t-color-border-brand);
 }
 
-.variantTertiary:hover:not(:disabled) {
+.variantOutlined:hover:not(:disabled) {
   background-color: var(--t-color-fill-brand-secondary);
   border-color: var(--t-color-border-brand-hover);
   color: var(--t-color-text-link-hover);
 }
 
-.variantTertiary:active:not(:disabled) {
+.variantOutlined:active:not(:disabled) {
   background-color: var(--t-color-fill-brand-secondary-active);
   border-color: var(--t-color-border-brand-active);
   color: var(--t-color-text-link-active);
@@ -167,38 +194,37 @@
   color: var(--t-color-text-on-fill-active);
 }
 
-.toneCritical.variantSecondary {
+.toneCritical.variantTonal {
   background-color: var(--t-color-fill-critical-secondary);
   color: var(--t-color-text-critical);
 }
 
-.toneCritical.variantSecondary:hover:not(:disabled) {
+.toneCritical.variantTonal:hover:not(:disabled) {
   background-color: var(--t-color-fill-critical-secondary-hover);
   color: var(--t-color-text-critical-hover);
 }
 
-.toneCritical.variantSecondary:active:not(:disabled) {
+.toneCritical.variantTonal:active:not(:disabled) {
   background-color: var(--t-color-fill-critical-secondary-active);
   color: var(--t-color-text-critical-active);
 }
 
-.toneCritical.variantTertiary,
+.toneCritical.variantOutlined,
 .toneCritical.variantPlain {
   color: var(--t-color-text-critical);
   border-color: var(--t-color-border-critical);
 }
 
-.toneCritical.variantTertiary:hover:not(:disabled) {
-  background-color: var(  --t-color-fill-critical-secondary);
-    border-color: var(--t-color-border-critical-hover);
-          color: var(--t-color-text-critical-hover);
-
+.toneCritical.variantOutlined:hover:not(:disabled) {
+  background-color: var(--t-color-fill-critical-secondary);
+  border-color: var(--t-color-border-critical-hover);
+  color: var(--t-color-text-critical-hover);
 }
-.toneCritical.variantTertiary:active:not(:disabled) {
-  background-color: var( --t-color-fill-critical-secondary-active);
-    border-color: var(--t-color-border-critical-active);
-      color: var(--t-color-text-critical-active);
 
+.toneCritical.variantOutlined:active:not(:disabled) {
+  background-color: var(--t-color-fill-critical-secondary-active);
+  border-color: var(--t-color-border-critical-active);
+  color: var(--t-color-text-critical-active);
 }
 
 
@@ -233,34 +259,34 @@
   color: var(--t-color-text-on-fill-active);
 }
 
-.toneSuccess.variantSecondary {
+.toneSuccess.variantTonal {
   background-color: var(--t-color-fill-success-secondary);
   color: var(--t-color-text-success);
 }
 
-.toneSuccess.variantSecondary:hover:not(:disabled) {
+.toneSuccess.variantTonal:hover:not(:disabled) {
   background-color: var(--t-color-fill-success-secondary-hover);
   color: var(--t-color-text-success-hover);
 }
 
-.toneSuccess.variantSecondary:active:not(:disabled) {
+.toneSuccess.variantTonal:active:not(:disabled) {
   background-color: var(--t-color-fill-success-secondary-active);
   color: var(--t-color-text-success-active);
 }
 
-.toneSuccess.variantTertiary,
+.toneSuccess.variantOutlined,
 .toneSuccess.variantPlain {
   color: var(--t-color-text-success);
   border-color: var(--t-color-border-success);
 }
 
-.toneSuccess.variantTertiary:hover:not(:disabled) {
+.toneSuccess.variantOutlined:hover:not(:disabled) {
   background-color: var(--t-color-fill-success-secondary);
   border-color: var(--t-color-border-success-hover);
   color: var(--t-color-text-success-hover);
 }
 
-.toneSuccess.variantTertiary:active:not(:disabled) {
+.toneSuccess.variantOutlined:active:not(:disabled) {
   background-color: var(--t-color-fill-success-secondary-active);
   border-color: var(--t-color-border-success-active);
   color: var(--t-color-text-success-active);
@@ -296,34 +322,34 @@
   color: var(--t-color-text-on-fill-active);
 }
 
-.toneNeutral.variantSecondary {
-  background-color: var( --t-color-surface-secondary);
+.toneNeutral.variantTonal {
+  background-color: var(--t-color-surface-secondary);
   color: var(--t-color-text-primary);
 }
 
-.toneNeutral.variantSecondary:hover:not(:disabled) {
-  background-color: var( --t-color-surface-secondary-hover);
+.toneNeutral.variantTonal:hover:not(:disabled) {
+  background-color: var(--t-color-surface-secondary-hover);
   color: var(--t-color-text-primary);
 }
 
-.toneNeutral.variantSecondary:active:not(:disabled) {
+.toneNeutral.variantTonal:active:not(:disabled) {
   background-color: var(--t-color-surface-secondary-active);
   color: var(--t-color-text-primary);
 }
 
-.toneNeutral.variantTertiary {
-  background-color: var( --t-color-fill-primary);
+.toneNeutral.variantOutlined {
+  background-color: var(--t-color-fill-primary);
   color: var(--t-color-text-primary);
-  border-color: var( --t-color-border-primary);
+  border-color: var(--t-color-border-primary);
 }
 
-.toneNeutral.variantTertiary:hover:not(:disabled) {
-    background-color: var( --t-color-fill-hover);
-  border-color: var(   --t-color-border-hover);
+.toneNeutral.variantOutlined:hover:not(:disabled) {
+  background-color: var(--t-color-fill-hover);
+  border-color: var(--t-color-border-hover);
   color: var(--t-color-text-primary);
 }
 
-.toneNeutral.variantTertiary:active:not(:disabled) {
+.toneNeutral.variantOutlined:active:not(:disabled) {
   background-color: var(--t-color-fill-active);
   border-color: var(--t-color-border-active);
   color: var(--t-color-text-primary);
@@ -363,39 +389,37 @@
   color: var(--t-color-text-on-fill-active);
 }
 
-.toneMagic.variantSecondary {
+.toneMagic.variantTonal {
   background-color: var(--t-color-fill-magic-secondary);
   color: var(--t-color-text-magic);
 }
 
-
-
-.toneMagic.variantSecondary:hover:not(:disabled) {
+.toneMagic.variantTonal:hover:not(:disabled) {
   background-color: var(--t-color-fill-magic-secondary-hover);
-      color: var(--t-color-text-magic-hover);
-
+  color: var(--t-color-text-magic-hover);
 }
 
-.toneMagic.variantSecondary:active:not(:disabled) {
+.toneMagic.variantTonal:active:not(:disabled) {
   background-color: var(--t-color-fill-magic-secondary-active);
-      color: var(--t-color-text-magic-active);
-
+  color: var(--t-color-text-magic-active);
 }
 
-.toneMagic.variantTertiary,
+.toneMagic.variantOutlined,
 .toneMagic.variantPlain {
   color: var(--t-color-text-magic);
   border-color: var(--t-color-border-magic);
 }
-.toneMagic.variantTertiary:hover:not(:disabled) {
+
+.toneMagic.variantOutlined:hover:not(:disabled) {
   background-color: var(--t-color-fill-magic-secondary-hover);
-  border-color: var(   --t-color-border-magic-hover);
-    color: var(--t-color-text-magic-hover);
+  border-color: var(--t-color-border-magic-hover);
+  color: var(--t-color-text-magic-hover);
 }
-.toneMagic.variantTertiary:active:not(:disabled) {
-    background-color: var(--t-color-fill-magic-secondary-active);
-  border-color: var(   --t-color-border-magic-active);
-    color: var(--t-color-text-magic-active);
+
+.toneMagic.variantOutlined:active:not(:disabled) {
+  background-color: var(--t-color-fill-magic-secondary-active);
+  border-color: var(--t-color-border-magic-active);
+  color: var(--t-color-text-magic-active);
 }
 .toneMagic.variantPlain {
   border-color: transparent;
@@ -482,40 +506,15 @@
   margin-bottom: -0.25em;
 }
 
-/* Icon positioning */
+/* Icon positioning - using flexbox gap for spacing */
 .prefixIcon {
   display: flex;
   align-items: center;
-  margin-inline-end: var(--t-space-100);
 }
 
 .suffixIcon {
   display: flex;
   align-items: center;
-  margin-inline-start: var(--t-space-100);
-}
-
-/* Remove margins for icon-only buttons */
-.iconOnly .prefixIcon,
-.iconOnly .suffixIcon {
-  margin-inline: 0;
-}
-
-/* RTL Handling */
-[dir="rtl"] .prefixIcon {
-  margin-inline-end: 0;
-  margin-inline-start: var(--t-space-100);
-}
-
-[dir="rtl"] .suffixIcon {
-  margin-inline-start: 0;
-  margin-inline-end: var(--t-space-100);
-}
-
-/* RTL also respects icon-only rule */
-[dir="rtl"] .iconOnly .prefixIcon,
-[dir="rtl"] .iconOnly .suffixIcon {
-  margin-inline: 0;
 }
 
 /* Focus states */
@@ -541,15 +540,15 @@
   border-color: transparent;
 }
 
-/* Secondary disabled state */
-.variantSecondary:disabled {
+/* Tonal disabled state */
+.variantTonal:disabled {
   background-color: var(--t-color-bg-primary);
   color: var(--t-color-text-disabled);
   border-color: transparent;
 }
 
-/* Tertiary disabled state */
-.variantTertiary:disabled {
+/* Outlined disabled state */
+.variantOutlined:disabled {
   background-color: transparent;
   color: var(--t-color-text-disabled);
   border-color: var(--t-color-border-disabled);
