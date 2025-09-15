@@ -6,7 +6,7 @@ import { IconChevronDown, IconChevronUp, IconCheck, IconExclamationCircle, IconS
 import { TextInput } from '../TextInput/TextInput';
 import styles from './Select.module.css';
 
-export type SelectSize = 'micro' | 'medium' | 'large';
+export type SelectSize = 'xlarge' | 'large' | 'medium' | 'small' | 'xsmall';
 export interface SelectOption {
   value: string;
   label: string;
@@ -156,11 +156,38 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     };
     
     // Filter options based on search term
+    // Get appropriate icon size based on the size prop
+    const getIconSize = (size: SelectSize): number => {
+      switch (size) {
+        case 'xlarge': return 24;
+        case 'large': return 20;
+        case 'medium': return 16;
+        case 'small': return 16;
+        case 'xsmall': return 16;
+        default: return 16;
+      }
+    };
+
+    // Get appropriate error icon size based on the size prop (matches TextInput)
+    const getErrorIconSize = (size: SelectSize): number => {
+      switch (size) {
+        case 'xlarge': return 20;
+        case 'large': return 20;
+        case 'medium': return 16;
+        case 'small': return 16;
+        case 'xsmall': return 16;
+        default: return 16;
+      }
+    };
+
+    const iconSize = getIconSize(size);
+    const errorIconSize = getErrorIconSize(size);
+
     const filteredOptions = useMemo(() => {
       if (!searchable || !searchTerm.trim()) {
         return options;
       }
-      return options.filter(option => 
+      return options.filter(option =>
         option.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
         option.value.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -229,7 +256,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
               </div>
               
               <SelectPrimitive.Icon className={styles.icon}>
-                <IconChevronDown size={18} />
+                <IconChevronDown size={iconSize} />
               </SelectPrimitive.Icon>
             </SelectPrimitive.Trigger>
             
@@ -242,7 +269,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
                 style={{ zIndex: selectZIndex }}
               >
                 <SelectPrimitive.ScrollUpButton className={styles.scrollButton}>
-                  <IconChevronUp size={16} />
+                  <IconChevronUp size={iconSize} />
                 </SelectPrimitive.ScrollUpButton>
                 
                 <SelectPrimitive.Viewport className={styles.viewport}>
@@ -253,8 +280,8 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
                         placeholder={searchPlaceholder}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        prefix={<IconSearch size={16} />}
-                        size="micro"
+                        prefix={<IconSearch size={iconSize} />}
+                        size="xsmall"
                         hideLabel
                         className={styles.searchInput}
                       />
@@ -284,7 +311,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
                         </SelectPrimitive.ItemText>
                         
                         <SelectPrimitive.ItemIndicator className={styles.itemIndicator}>
-                          <IconCheck size={16} />
+                          <IconCheck size={iconSize} />
                         </SelectPrimitive.ItemIndicator>
                       </SelectPrimitive.Item>
                     ))
@@ -292,7 +319,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
                 </SelectPrimitive.Viewport>
                 
                 <SelectPrimitive.ScrollDownButton className={styles.scrollButton}>
-                  <IconChevronDown size={16} />
+                  <IconChevronDown size={iconSize} />
                 </SelectPrimitive.ScrollDownButton>
               </SelectPrimitive.Content>
             </SelectPrimitive.Portal>
@@ -300,7 +327,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
           
           {hasError ? (
             <div id={`${uniqueId}-error`} className={styles.errorMessage} style={lineHeightStyle}>
-              <IconExclamationCircle size={20} className={styles.errorIcon} />
+              <IconExclamationCircle size={errorIconSize} className={styles.errorIcon} />
               {errorMessage}
             </div>
           ) : helpText ? (
@@ -317,4 +344,4 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 Select.displayName = 'Select';
 
 // Export type and size arrays for documentation
-export const selectSizes = ['micro', 'medium', 'large'] as const;
+export const selectSizes = ['xlarge', 'large', 'medium', 'small', 'xsmall'] as const;

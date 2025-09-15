@@ -1,0 +1,50 @@
+/* ScrollArea Component Styles - Radix Default Styling */
+
+.root {
+  overflow: hidden;
+}
+
+.viewport {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.scrollbar {
+  display: flex;
+  user-select: none;
+  touch-action: none;
+  padding: 2px;
+}
+
+.scrollbar[data-orientation="vertical"] {
+  width: 10px;
+}
+
+.scrollbar[data-orientation="horizontal"] {
+  flex-direction: column;
+  height: 10px;
+}
+
+.thumb {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  position: relative;
+}
+
+.thumb::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.corner {
+  background: rgba(0, 0, 0, 0.1);
+}

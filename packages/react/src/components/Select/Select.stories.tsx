@@ -49,7 +49,7 @@ const meta = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['micro', 'medium', 'large'],
+      options: ['xlarge', 'large', 'medium', 'small', 'xsmall'],
       description: 'Size of the select field'
     },
     label: {
@@ -138,24 +138,41 @@ export const Default: Story = {
 export const Sizes: Story = {
   name: 'Size Variants',
   render: (args) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', minWidth: '300px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', minWidth: '350px' }}>
       <Select
         {...args}
-        label="Micro Size"
-        size="micro"
-        placeholder="Small select..."
+        label="XLarge (56px)"
+        size="xlarge"
+        placeholder="XLarge select..."
+        helpText="Uses body-large-default font size with 24px icons"
       />
       <Select
         {...args}
-        label="Medium Size (Default)"
-        size="medium"
-        placeholder="Medium select..."
-      />
-      <Select
-        {...args}
-        label="Large Size"
+        label="Large (48px)"
         size="large"
         placeholder="Large select..."
+        helpText="Uses body-md-default font size with 20px icons"
+      />
+      <Select
+        {...args}
+        label="Medium (40px)"
+        size="medium"
+        placeholder="Medium select (default)..."
+        helpText="Uses body-md-default font size with 16px icons"
+      />
+      <Select
+        {...args}
+        label="Small (32px)"
+        size="small"
+        placeholder="Small select..."
+        helpText="Uses body-sm-default font size with 16px icons"
+      />
+      <Select
+        {...args}
+        label="XSmall (28px)"
+        size="xsmall"
+        placeholder="XSmall select..."
+        helpText="Uses caption-lg-default font size with 16px icons"
       />
     </div>
   ),
@@ -165,6 +182,54 @@ export const Sizes: Story = {
   parameters: {
     controls: { exclude: ['size', 'label', 'placeholder'] },
   },
+};
+
+export const SizesWithPrefix: Story = {
+  name: 'Sizes with Prefix Icons',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '350px' }}>
+      <Select
+        label="XLarge with Icon"
+        placeholder="Search..."
+        size="xlarge"
+        prefix={<IconSearch size={24} />}
+        options={sampleOptions}
+        errorMessage="24px icons in XLarge size"
+      />
+      <Select
+        label="Large with Icon"
+        placeholder="Search..."
+        size="large"
+        prefix={<IconSearch size={20} />}
+        options={sampleOptions}
+        errorMessage="20px icons in Large size"
+      />
+      <Select
+        label="Medium with Icon"
+        placeholder="Search..."
+        size="medium"
+        prefix={<IconSearch size={16} />}
+        options={sampleOptions}
+        errorMessage="16px icons in Medium size"
+      />
+      <Select
+        label="Small with Icon"
+        placeholder="Search..."
+        size="small"
+        prefix={<IconSearch size={16} />}
+        options={sampleOptions}
+        errorMessage="16px icons in Small size"
+      />
+      <Select
+        label="XSmall with Icon"
+        placeholder="Search..."
+        size="xsmall"
+        prefix={<IconSearch size={16} />}
+        options={sampleOptions}
+        errorMessage="16px icons in XSmall size"
+      />
+    </div>
+  ),
 };
 
 // Component States - Combined
@@ -432,8 +497,8 @@ export const UserProfile: Story = {
     <div style={{ maxWidth: '500px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <Select
         label="Country"
-        size="large"
-        prefix={<IconSearch size={20} />}
+        size="medium"
+        prefix={<IconSearch size={16} />}
         placeholder="Search and select your country..."
         searchable={true}
         searchPlaceholder="Type to search countries..."
@@ -445,7 +510,7 @@ export const UserProfile: Story = {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
         <Select
           label="Time Zone"
-          size="medium"
+          size="small"
           options={[
             { value: 'est', label: 'Eastern Time (EST)' },
             { value: 'cst', label: 'Central Time (CST)' },
@@ -457,7 +522,7 @@ export const UserProfile: Story = {
         
         <Select
           label="Language"
-          size="medium"
+          size="small"
           options={[
             { value: 'en', label: 'English' },
             { value: 'es', label: 'Español' },

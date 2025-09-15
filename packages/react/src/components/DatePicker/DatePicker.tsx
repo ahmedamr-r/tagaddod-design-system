@@ -1,5 +1,5 @@
 import React, { forwardRef, useState, useEffect, useRef } from 'react';
-import { format, parse, isValid } from 'date-fns';
+import { format, parse, isValid, startOfDay, endOfDay, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter, startOfYear, endOfYear } from 'date-fns';
 import { IconCalendar, IconArrowRight } from '@tabler/icons-react';
 import { TextInput, TextInputProps } from '../TextInput/TextInput';
 import * as RadixPopover from '@radix-ui/react-popover';
@@ -8,7 +8,20 @@ import clsx from 'clsx';
 import styles from './DatePicker.module.css';
 
 export type DatePickerMode = 'single' | 'multiple' | 'range';
-export type DatePickerLayout = 'single' | 'dual';
+export type DatePickerLayout = 'single' | 'dual' | 'analytics';
+export type DateRangeType = 'between' | 'last' | 'since' | 'this';
+
+export interface DatePreset {
+  id: string;
+  label: string;
+  getValue: () => { from: Date; to: Date };
+}
+
+export interface DateRangeConfig {
+  type: DateRangeType;
+  value?: string | number;
+  customDates?: { from?: Date; to?: Date };
+}
 
 export interface DatePickerProps extends Omit<TextInputProps, 'value' | 'onChange' | 'type' | 'prefix' | 'suffix'> {
   /**
@@ -138,6 +151,51 @@ export interface DatePickerProps extends Omit<TextInputProps, 'value' | 'onChang
    * @default 1
    */
   numberOfMonths?: number;
+
+  /**
+   * Array of preset options for analytics layout
+   */
+  presets?: DatePreset[];
+
+  /**
+   * Current range type for analytics layout
+   */
+  rangeType?: DateRangeType;
+
+  /**
+   * Callback when range type changes
+   */
+  onRangeTypeChange?: (type: DateRangeType) => void;
+
+  /**
+   * Whether to show time selection option
+   */
+  showTimeSelection?: boolean;
+
+  /**
+   * Callback to save custom preset
+   */
+  onSavePreset?: (name: string, config: DateRangeConfig) => void;
+
+  /**
+   * Callback when Apply button is clicked
+   */
+  onApply?: (config: DateRangeConfig) => void;
+
+  /**
+   * Callback when Cancel button is clicked
+   */
+  onCancel?: () => void;
+
+  /**
+   * Timezone display string
+   */
+  timezone?: string;
+
+  /**
+   * Whether to show timezone information
+   */
+  showTimezone?: boolean;
 }
 
 export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
@@ -167,11 +225,20 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     endPlaceholder,
     gap = 'md',
     numberOfMonths = 1,
+    presets,
+    rangeType = 'between',
+    onRangeTypeChange,
+    showTimeSelection = false,
+    onSavePreset,
+    onApply,
+    onCancel,
+    timezone,
+    showTimezone = false,
     className,
     onFocus,
     onBlur,
     onKeyDown,
-    readOnly = true, // Default to read-only for date picker
+    readOnly = false, // Allow typing by default
     ...props
   }, ref) => {
     const [internalOpen, setInternalOpen] = useState(false);
@@ -182,10 +249,15 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     const startInputRef = useRef<HTMLInputElement>(null);
     const endInputRef = useRef<HTMLInputElement>(null);
 
+    // Analytics layout state
+    const [selectedPreset, setSelectedPreset] = useState<string>('last30');
+    const [currentRangeType, setCurrentRangeType] = useState<DateRangeType>(rangeType);
+    const [customDates, setCustomDates] = useState<{ from?: Date; to?: Date }>({});
+
     // Use controlled or internal open state
     const isOpen = open !== undefined ? open : internalOpen;
     const setIsOpen = onOpenChange || setInternalOpen;
-    
+
     // Detect RTL direction for line height adjustments
     const isRTL = typeof document !== 'undefined' && 
       (document.dir === 'rtl' || document.documentElement.dir === 'rtl');
@@ -194,6 +266,48 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     const lineHeightStyle = {
       lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
     };
+
+    // Default presets for analytics layout
+    const defaultPresets: DatePreset[] = [
+      {
+        id: 'last30',
+        label: 'Last 30 Days',
+        getValue: () => ({ from: startOfDay(subDays(new Date(), 29)), to: endOfDay(new Date()) })
+      },
+      {
+        id: 'last60',
+        label: 'Last 60 Days',
+        getValue: () => ({ from: startOfDay(subDays(new Date(), 59)), to: endOfDay(new Date()) })
+      },
+      {
+        id: 'last90',
+        label: 'Last 90 Days',
+        getValue: () => ({ from: startOfDay(subDays(new Date(), 89)), to: endOfDay(new Date()) })
+      },
+      {
+        id: 'thisWeek',
+        label: 'This Week',
+        getValue: () => ({ from: startOfWeek(new Date()), to: endOfWeek(new Date()) })
+      },
+      {
+        id: 'thisMonth',
+        label: 'This Month',
+        getValue: () => ({ from: startOfMonth(new Date()), to: endOfMonth(new Date()) })
+      },
+      {
+        id: 'thisQuarter',
+        label: 'This Quarter',
+        getValue: () => ({ from: startOfQuarter(new Date()), to: endOfQuarter(new Date()) })
+      },
+      {
+        id: 'thisYear',
+        label: 'This Year',
+        getValue: () => ({ from: startOfYear(new Date()), to: endOfYear(new Date()) })
+      }
+    ];
+
+    // Use provided presets or defaults
+    const availablePresets = presets || defaultPresets;
 
     // Generate appropriate placeholder text
     const placeholderText = placeholder || (() => {
@@ -394,10 +508,13 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
           className={clsx(styles.dateRangeContainer, styles[`gap-${gap}`], className)}
           style={lineHeightStyle}
         >
-          <RadixPopover.Root open={isOpen} onOpenChange={setIsOpen}>
-            {/* Invisible trigger positioned at the center for popover positioning */}
+          <RadixPopover.Root
+            open={isOpen}
+            onOpenChange={setIsOpen}
+          >
+            {/* Hidden trigger - Radix UI requires a trigger element */}
             <RadixPopover.Trigger asChild>
-              <div className={styles.centerTrigger} />
+              <button className={styles.centerTrigger} tabIndex={-1} />
             </RadixPopover.Trigger>
 
             <div className={styles.rangeInputs}>
@@ -408,9 +525,15 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                     {startLabel || (isRTL ? 'من' : 'From')}
                   </label>
                 )}
-                <div className={styles.triggerWrapper}>
+                <div
+                  className={styles.triggerWrapper}
+                  onClick={() => {
+                    setActiveInput('start');
+                    setIsOpen(true);
+                  }}
+                >
                   <TextInput
-                      ref={startInputRef}
+                    ref={startInputRef}
                       value={formatSingleDate(typeof value === 'object' && value && 'from' in value ? value.from : undefined)}
                       placeholder={startPlaceholder || (isRTL ? 'تاريخ البداية' : 'Start date')}
                       onFocus={(e) => {
@@ -418,10 +541,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                         setIsOpen(true);
                         onFocus?.(e);
                       }}
-                      onClick={() => {
-                        setActiveInput('start');
-                        setIsOpen(true);
-                      }}
+                      onBlur={onBlur}
                       readOnly={readOnly}
                       suffix={
                         showCalendarIcon ? (
@@ -430,7 +550,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                             className={styles.calendarButton}
                             onClick={() => {
                               setActiveInput('start');
-                              setIsOpen(!isOpen);
+                              handleCalendarIconClick();
                             }}
                             aria-label="Open calendar for start date"
                             tabIndex={-1}
@@ -456,9 +576,15 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                     {endLabel || (isRTL ? 'إلى' : 'To')}
                   </label>
                 )}
-                <div className={styles.triggerWrapper}>
+                <div
+                  className={styles.triggerWrapper}
+                  onClick={() => {
+                    setActiveInput('end');
+                    setIsOpen(true);
+                  }}
+                >
                   <TextInput
-                      ref={endInputRef}
+                    ref={endInputRef}
                       value={formatSingleDate(typeof value === 'object' && value && 'to' in value ? value.to : undefined)}
                       placeholder={endPlaceholder || (isRTL ? 'تاريخ النهاية' : 'End date')}
                       onFocus={(e) => {
@@ -466,10 +592,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                         setIsOpen(true);
                         onFocus?.(e);
                       }}
-                      onClick={() => {
-                        setActiveInput('end');
-                        setIsOpen(true);
-                      }}
+                      onBlur={onBlur}
                       readOnly={readOnly}
                       suffix={
                         showCalendarIcon ? (
@@ -478,7 +601,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                             className={styles.calendarButton}
                             onClick={() => {
                               setActiveInput('end');
-                              setIsOpen(!isOpen);
+                              handleCalendarIconClick();
                             }}
                             aria-label="Open calendar for end date"
                             tabIndex={-1}
@@ -498,11 +621,258 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                 className={styles.calendarContainer}
                 side="bottom"
                 align="center"
-                sideOffset={5}
+                sideOffset={40}
+                collisionPadding={10}
+                onOpenAutoFocus={(e) => e.preventDefault()}
+                onFocusOutside={(e) => {
+                  // Prevent closing when focusing on our inputs or their containers
+                  const target = e.target as Element;
+                  if (startInputRef.current === target || startInputRef.current?.contains(target)) {
+                    e.preventDefault();
+                    return;
+                  }
+                  if (endInputRef.current === target || endInputRef.current?.contains(target)) {
+                    e.preventDefault();
+                    return;
+                  }
+                  // Also check if target is within our range inputs container
+                  const rangeContainer = target.closest('.' + styles.rangeInputs);
+                  if (rangeContainer) {
+                    e.preventDefault();
+                    return;
+                  }
+                }}
+                onPointerDownOutside={(e) => {
+                  // Prevent closing when clicking on our inputs or their containers
+                  const target = e.target as Element;
+                  if (startInputRef.current === target || startInputRef.current?.contains(target)) {
+                    e.preventDefault();
+                    return;
+                  }
+                  if (endInputRef.current === target || endInputRef.current?.contains(target)) {
+                    e.preventDefault();
+                    return;
+                  }
+                  // Also check if target is within our range inputs container
+                  const rangeContainer = target.closest('.' + styles.rangeInputs);
+                  if (rangeContainer) {
+                    e.preventDefault();
+                    return;
+                  }
+                }}
+              >
+                <Calendar {...mergedCalendarProps} />
+              </RadixPopover.Content>
+            </RadixPopover.Portal>
+          </RadixPopover.Root>
+        </div>
+      );
+    }
+
+    // Analytics layout for range mode with presets
+    if (mode === 'range' && layout === 'analytics') {
+      const displayValue = value && typeof value === 'object' && 'from' in value && value.from && value.to
+        ? `${format(value.from, dateFormat)} - ${format(value.to, dateFormat)}`
+        : '';
+
+      return (
+        <div className={clsx(styles.container, className)} style={lineHeightStyle}>
+          <RadixPopover.Root open={isOpen} onOpenChange={setIsOpen}>
+            <RadixPopover.Trigger asChild>
+              <div className={styles.triggerWrapper}>
+                <TextInput
+                  ref={ref}
+                  value={displayValue}
+                  placeholder={placeholderText}
+                  onFocus={(e) => {
+                    setIsOpen(true);
+                    onFocus?.(e);
+                  }}
+                  onClick={() => setIsOpen(true)}
+                  onBlur={onBlur}
+                  onKeyDown={onKeyDown}
+                  readOnly={readOnly}
+                  suffix={
+                    showCalendarIcon ? (
+                      <button
+                        type="button"
+                        className={styles.calendarButton}
+                        onClick={() => setIsOpen(true)}
+                        aria-label="Open calendar"
+                        tabIndex={-1}
+                      >
+                        <IconCalendar size={16} />
+                      </button>
+                    ) : undefined
+                  }
+                  {...props}
+                />
+              </div>
+            </RadixPopover.Trigger>
+
+            <RadixPopover.Portal>
+              <RadixPopover.Content
+                className={styles.analyticsContainer}
+                side={popoverSide}
+                align={popoverAlign}
+                sideOffset={12}
                 collisionPadding={10}
                 onOpenAutoFocus={(e) => e.preventDefault()}
               >
-                <Calendar {...mergedCalendarProps} />
+                <div className={styles.analyticsLayout}>
+                  {/* Left Sidebar - Presets */}
+                  <div className={styles.presetSidebar}>
+                    <div className={styles.sidebarHeader}>
+                      <h3 className={styles.sidebarTitle}>Presets</h3>
+                    </div>
+
+                    <div className={styles.presetList}>
+                      {availablePresets.map((preset) => (
+                        <button
+                          key={preset.id}
+                          className={clsx(
+                            styles.presetButton,
+                            selectedPreset === preset.id && styles.presetButtonActive
+                          )}
+                          onClick={() => {
+                            setSelectedPreset(preset.id);
+                            const range = preset.getValue();
+                            onChange?.({ from: range.from, to: range.to });
+                          }}
+                        >
+                          {preset.label}
+                        </button>
+                      ))}
+
+                      <button
+                        className={clsx(
+                          styles.presetButton,
+                          selectedPreset === 'custom' && styles.presetButtonActive
+                        )}
+                        onClick={() => setSelectedPreset('custom')}
+                      >
+                        Custom
+                      </button>
+                    </div>
+
+                    {showTimezone && (
+                      <div className={styles.timezoneInfo}>
+                        {timezone || '(UTC+00:00) UTC'}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Right Content Area */}
+                  <div className={styles.contentArea}>
+                    {selectedPreset === 'custom' ? (
+                      <div className={styles.customRangeContainer}>
+                        {/* Range Type Dropdown - placeholder for now */}
+                        <div className={styles.rangeTypeSection}>
+                          <select
+                            value={currentRangeType}
+                            onChange={(e) => {
+                              const newType = e.target.value as DateRangeType;
+                              setCurrentRangeType(newType);
+                              onRangeTypeChange?.(newType);
+                            }}
+                            className={styles.rangeTypeSelect}
+                          >
+                            <option value="between">Between</option>
+                            <option value="last">Last</option>
+                            <option value="since">Since</option>
+                            <option value="this">This</option>
+                          </select>
+                        </div>
+
+                        {/* Custom Date Inputs */}
+                        <div className={styles.customDateInputs}>
+                          <TextInput
+                            placeholder="Start date"
+                            value={customDates.from ? format(customDates.from, dateFormat) : ''}
+                            readOnly
+                          />
+                          <span className={styles.dateConnector}>and</span>
+                          <TextInput
+                            placeholder="End date"
+                            value={customDates.to ? format(customDates.to, dateFormat) : ''}
+                            readOnly
+                          />
+                          {showTimeSelection && (
+                            <button className={styles.addTimeButton}>+ Add time</button>
+                          )}
+                        </div>
+
+                        {/* Calendar for custom selection */}
+                        <div className={styles.calendarContainer}>
+                          <Calendar
+                            mode="range"
+                            numberOfMonths={numberOfMonths}
+                            selected={value as { from?: Date; to?: Date }}
+                            onSelect={(range) => {
+                              if (range && typeof range === 'object' && 'from' in range) {
+                                setCustomDates(range);
+                                onChange?.(range);
+                              }
+                            }}
+                            {...calendarProps}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className={styles.calendarContainer}>
+                        <Calendar
+                          mode="range"
+                          numberOfMonths={numberOfMonths}
+                          selected={value as { from?: Date; to?: Date }}
+                          onSelect={onChange}
+                          {...calendarProps}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Bottom Actions */}
+                <div className={styles.analyticsActions}>
+                  {selectedPreset === 'custom' && onSavePreset && (
+                    <button
+                      className={styles.savePresetButton}
+                      onClick={() => {
+                        const config: DateRangeConfig = {
+                          type: currentRangeType,
+                          customDates
+                        };
+                        onSavePreset('Custom Range', config);
+                      }}
+                    >
+                      Save as Preset
+                    </button>
+                  )}
+                  <div className={styles.actionGroup}>
+                    <button
+                      className={styles.cancelButton}
+                      onClick={() => {
+                        setIsOpen(false);
+                        onCancel?.();
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className={styles.applyButton}
+                      onClick={() => {
+                        const config: DateRangeConfig = {
+                          type: currentRangeType,
+                          customDates: selectedPreset === 'custom' ? customDates : undefined
+                        };
+                        setIsOpen(false);
+                        onApply?.(config);
+                      }}
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </div>
               </RadixPopover.Content>
             </RadixPopover.Portal>
           </RadixPopover.Root>

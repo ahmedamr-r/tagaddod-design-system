@@ -15,7 +15,7 @@
 .labelContainer {
   display: flex;
   align-items: center;
-  margin-bottom: var(--t-space-150);
+  margin-bottom: var(--t-space-200); /* Default 8px, overridden by size variants */
 }
 
 .label {
@@ -75,7 +75,7 @@
   cursor: pointer;
   transition: all var(--t-duration-base) var(--t-easing-in-out);
   overflow: hidden;
-  padding: var(--t-space-300);
+  /* Padding is set by size variants */
 }
 
 /* RTL specific layout - reverse the entire flex direction */
@@ -189,56 +189,155 @@
 }
 
 /* Size variants */
-.sizeMicro .trigger {
-  height: var(--t-size-700); /* 28px fixed height */
-  min-height: var(--t-size-700);
-  padding: var(--t-space-300);
-  gap: var(--t-space-100);
-font: var(--t-typography-body-sm-default);
+
+/* XLarge - 56px height */
+.sizeXlarge .trigger {
+  height: var(--t-size-1400); /* 56px */
+  min-height: var(--t-size-1400);
+  padding-block: var(--t-space-400); /* 16px */
+  padding-inline: var(--t-space-400); /* 16px */
+  gap: var(--t-space-150); /* 6px gap */
+  font: var(--t-typography-body-lg-default);
 }
 
-/* RTL vertical centering for micro size */
-:global([dir="rtl"]) .sizeMicro .value {
-  padding-top: calc(var(--t-space-50) + 1px);
-  padding-bottom: calc(var(--t-space-50) - 1px);
+/* RTL vertical centering for xlarge size */
+:global([dir="rtl"]) .sizeXlarge .value {
+  padding-top: calc(var(--t-space-400) + 2px);
+  padding-bottom: calc(var(--t-space-400) - 2px);
 }
 
-.sizeMicro .label {
+.sizeXlarge .label {
+  font: var(--t-typography-body-md-default);
+}
+
+.sizeXlarge .labelContainer {
+  margin-bottom: var(--t-space-250); /* 10px */
+}
+
+.sizeXlarge .helpText,
+.sizeXlarge .errorMessage {
+  font: var(--t-typography-body-sm-default);
+  margin-top: var(--t-space-250); /* 10px */
+}
+
+/* Large - 48px height */
+.sizeLarge .trigger {
+  height: var(--t-size-1200); /* 48px */
+  min-height: var(--t-size-1200);
+  padding-block: var(--t-space-300); /* 12px */
+  padding-inline: var(--t-space-400); /* 16px */
+  gap: var(--t-space-150); /* 6px gap */
+  font: var(--t-typography-body-md-default);
+}
+
+/* RTL vertical centering for large size */
+:global([dir="rtl"]) .sizeLarge .value {
+  padding-top: calc(var(--t-space-300) + 2px);
+  padding-bottom: calc(var(--t-space-300) - 2px);
+}
+
+.sizeLarge .label {
   font: var(--t-typography-body-sm-default);
 }
 
+.sizeLarge .labelContainer {
+  margin-bottom: var(--t-space-250); /* 10px */
+}
+
+.sizeLarge .helpText,
+.sizeLarge .errorMessage {
+  font: var(--t-typography-body-sm-default);
+  margin-top: var(--t-space-250); /* 10px */
+}
+
+/* Medium - 40px height */
 .sizeMedium .trigger {
-  height: var(--t-size-800); /* 32px fixed height */
-  min-height: var(--t-size-800);
-  padding: var(--t-space-300);
-  gap: var(--t-space-100);
-font: var(--t-typography-body-sm-default);
+  height: var(--t-size-1000); /* 40px */
+  min-height: var(--t-size-1000);
+  padding-block: var(--t-space-200); /* 8px */
+  padding-inline: var(--t-space-300); /* 12px */
+  gap: var(--t-space-150); /* 6px gap */
+  font: var(--t-typography-body-md-default);
 }
 
 /* RTL vertical centering for medium size */
 :global([dir="rtl"]) .sizeMedium .value {
-  padding-top: calc(var(--t-space-150) + 2px);
-  padding-bottom: calc(var(--t-space-150) - 2px);
+  padding-top: calc(var(--t-space-200) + 2px);
+  padding-bottom: calc(var(--t-space-200) - 2px);
 }
 
 .sizeMedium .label {
   font: var(--t-typography-body-sm-default);
 }
 
-.sizeLarge .trigger {
-  height: var(--t-size-1000); /* 40px fixed height */
-  min-height: var(--t-size-1000);
-  padding: var(--t-space-300);
-  gap: var(--t-space-100);
-font: var(--t-typography-body-md-default);
+.sizeMedium .labelContainer {
+  margin-bottom: var(--t-space-200); /* 8px */
 }
-.sizeLarge .label {
-  font: var(--t-typography-body-md-default);
+
+.sizeMedium .helpText,
+.sizeMedium .errorMessage {
+  font: var(--t-typography-caption-lg-default);
+  margin-top: var(--t-space-200); /* 8px */
 }
-/* RTL vertical centering for large size */
-:global([dir="rtl"]) .sizeLarge .value {
-  padding-top: calc(var(--t-space-200) + 3px);
-  padding-bottom: calc(var(--t-space-200) - 3px);
+
+/* Small - 32px height */
+.sizeSmall .trigger {
+  height: var(--t-size-800); /* 32px */
+  min-height: var(--t-size-800);
+  padding-block: var(--t-space-150); /* 6px */
+  padding-inline: var(--t-space-300); /* 12px */
+  gap: var(--t-space-150); /* 6px gap */
+  font: var(--t-typography-body-sm-default);
+}
+
+/* RTL vertical centering for small size */
+:global([dir="rtl"]) .sizeSmall .value {
+  padding-top: calc(var(--t-space-150) + 1px);
+  padding-bottom: calc(var(--t-space-150) - 1px);
+}
+
+.sizeSmall .label {
+  font: var(--t-typography-caption-lg-default);
+}
+
+.sizeSmall .labelContainer {
+  margin-bottom: var(--t-space-200); /* 8px */
+}
+
+.sizeSmall .helpText,
+.sizeSmall .errorMessage {
+  font: var(--t-typography-caption-lg-default);
+  margin-top: var(--t-space-200); /* 8px */
+}
+
+/* XSmall - 28px height */
+.sizeXsmall .trigger {
+  height: var(--t-size-700); /* 28px */
+  min-height: var(--t-size-700);
+  padding-block: var(--t-space-100); /* 4px */
+  padding-inline: var(--t-space-300); /* 12px */
+  gap: var(--t-space-150); /* 6px gap */
+  font: var(--t-typography-caption-lg-default);
+}
+
+/* RTL vertical centering for xsmall size */
+:global([dir="rtl"]) .sizeXsmall .value {
+  padding-top: calc(var(--t-space-100) + 1px);
+  padding-bottom: calc(var(--t-space-100) - 1px);
+}
+
+.sizeXsmall .label {
+  font: var(--t-typography-caption-lg-default);
+}
+
+.sizeXsmall .labelContainer {
+  margin-bottom: var(--t-space-200); /* 8px */
+}
+
+.sizeXsmall .helpText,
+.sizeXsmall .errorMessage {
+  font: var(--t-typography-caption-lg-default);
+  margin-top: var(--t-space-200); /* 8px */
 }
 
 /* Content (dropdown) styles */
@@ -359,6 +458,12 @@ font: var(--t-typography-body-md-default);
 /* Error state */
 .error .trigger {
   border-color: var(--t-color-fill-critical);
+  background-color: var(--t-color-fill-critical-secondary);
+}
+
+.error .trigger:hover {
+  background-color: var(--t-color-fill-critical-secondary-hover);
+  border-color: var(--t-color-border-critical-hover);
 }
 
 .error .trigger:focus {
@@ -370,7 +475,7 @@ font: var(--t-typography-body-md-default);
   align-items: center;
   color: var(--t-color-text-critical);
   font: var(--t-typography-body-sm-default);
-  margin-top: var(--t-space-200);
+  margin-top: var(--t-space-200); /* Default 8px, overridden by size variants */
   position: relative;
   line-height: 1.5;
 }
@@ -403,15 +508,83 @@ font: var(--t-typography-body-md-default);
 
 .errorIcon {
   color: var(--t-color-icon-critical);
-  margin-inline-end: var(--t-space-200);
+  margin-right: var(--t-space-200); /* Default 8px */
   flex-shrink: 0;
+}
+
+/* RTL support for error icon */
+:global([dir="rtl"]) .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-200); /* Default 8px */
+}
+
+/* Size-specific error icon margins and sizes */
+
+/* XLarge - 8px margin, 20px icon */
+.sizeXlarge .errorIcon {
+  margin-right: var(--t-space-200); /* 8px */
+  width: var(--t-size-500); /* 20px */
+  height: var(--t-size-500); /* 20px */
+}
+
+:global([dir="rtl"]) .sizeXlarge .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-200); /* 8px */
+}
+
+/* Large - 6px margin, 20px icon */
+.sizeLarge .errorIcon {
+  margin-right: var(--t-space-150); /* 6px */
+  width: var(--t-size-500); /* 20px */
+  height: var(--t-size-500); /* 20px */
+}
+
+:global([dir="rtl"]) .sizeLarge .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-150); /* 6px */
+}
+
+/* Medium - 6px margin, 16px icon */
+.sizeMedium .errorIcon {
+  margin-right: var(--t-space-150); /* 6px */
+  width: var(--t-size-400); /* 16px */
+  height: var(--t-size-400); /* 16px */
+}
+
+:global([dir="rtl"]) .sizeMedium .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-150); /* 6px */
+}
+
+/* Small - 6px margin, 16px icon */
+.sizeSmall .errorIcon {
+  margin-right: var(--t-space-150); /* 6px */
+  width: var(--t-size-400); /* 16px */
+  height: var(--t-size-400); /* 16px */
+}
+
+:global([dir="rtl"]) .sizeSmall .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-150); /* 6px */
+}
+
+/* XSmall - 6px margin, 16px icon */
+.sizeXsmall .errorIcon {
+  margin-right: var(--t-space-150); /* 6px */
+  width: var(--t-size-400); /* 16px */
+  height: var(--t-size-400); /* 16px */
+}
+
+:global([dir="rtl"]) .sizeXsmall .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-150); /* 6px */
 }
 
 /* Help text */
 .helpText {
   font: var(--t-typography-body-sm-default);
   color: var(--t-color-text-secondary);
-  margin-top: var(--t-space-200);
+  margin-top: var(--t-space-200); /* Default 8px, overridden by size variants */
   position: relative;
   line-height: 1.5;
 }

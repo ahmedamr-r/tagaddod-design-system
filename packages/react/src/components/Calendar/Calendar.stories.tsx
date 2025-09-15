@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Calendar } from './Calendar';
 import { useState } from 'react';
+import { Button } from '../Button/Button';
 
 const meta: Meta<typeof Calendar> = {
   title: 'Components/Calendar',
@@ -290,6 +291,128 @@ export const Responsive: Story = {
           {...args}
           selected={selected}
           onSelect={(date) => setSelected(date as Date | undefined)}
+        />
+      </div>
+    );
+  }
+};
+
+// Analytics Range - Amplitude-style date picker with presets
+export const AnalyticsRange: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: `
+**Analytics Range Calendar** - A sophisticated date range picker inspired by Amplitude's design.
+
+**Features:**
+- **Fixed Left Panel**: Preset options with 15rem fixed width
+- **Dynamic Header**: Changes based on selected range type (Between, Last, Since, This)
+- **Dual Calendar**: Two-month calendar display for range selection
+- **Smart Inputs**: Editable date inputs and number inputs based on selection type
+- **Auto-Custom Preset**: Automatically appears and gets selected when user modifies header controls
+- **Professional Actions**: Apply and Cancel buttons
+
+**Custom Preset Behavior:**
+- **Auto-Appearance**: "Custom" preset appears below "This Year" when user changes any header selection
+- **Auto-Selection**: Automatically becomes active when user modifies range type, values, or dates
+- **Smart Detection**: Triggers on changes to Between dates, Last value, Since date, or This period
+
+**Range Types:**
+- **Between**: Two date inputs with "and" separator
+- **Last**: Number input + "complete days and today" label
+- **Since**: Single date input
+- **This**: Period dropdown (Week/Month/Quarter/Year)
+
+**Interactive Demo:**
+Try changing any dropdown or date input in the header - notice how "Custom" preset appears and becomes active automatically.
+
+**Use Cases:**
+- Analytics dashboards
+- Reporting interfaces
+- Data visualization controls
+- Business intelligence tools
+        `
+      }
+    }
+  },
+  render: () => {
+    const [selectedRange, setSelectedRange] = useState<{ from?: Date; to?: Date }>({
+      from: new Date(new Date().setDate(new Date().getDate() - 30)),
+      to: new Date()
+    });
+    const [selectedPreset, setSelectedPreset] = useState<string>('last30');
+    const [rangeType, setRangeType] = useState<'between' | 'last' | 'since' | 'this'>('between');
+    const [rangeValue, setRangeValue] = useState<string | number>(30);
+    const [periodType, setPeriodType] = useState<string>('week');
+    const [startDate, setStartDate] = useState<Date | undefined>(new Date(new Date().setDate(new Date().getDate() - 30)));
+    const [endDate, setEndDate] = useState<Date | undefined>(new Date());
+    const [showCustomPreset, setShowCustomPreset] = useState<boolean>(false);
+
+    const handleApply = () => {
+      console.log('Applied:', { rangeType, rangeValue, periodType, startDate, endDate, selectedRange });
+    };
+
+    const handleCancel = () => {
+      console.log('Cancelled');
+    };
+
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '600px',
+        padding: '20px',
+        backgroundColor: 'var(--t-color-surface-secondary)'
+      }}>
+        <Calendar
+          variant="analytics"
+          mode="range"
+          numberOfMonths={2}
+          selected={selectedRange}
+          onSelect={(range) => setSelectedRange(range as { from?: Date; to?: Date })}
+          selectedPreset={selectedPreset}
+          onPresetChange={(preset) => {
+            setSelectedPreset(preset);
+            // Show custom preset when it gets selected
+            if (preset === 'custom') {
+              setShowCustomPreset(true);
+            }
+          }}
+          rangeType={rangeType}
+          onRangeTypeChange={(type) => {
+            setRangeType(type);
+            // Auto-show custom preset when user changes header controls
+            setShowCustomPreset(true);
+          }}
+          rangeValue={rangeValue}
+          onRangeValueChange={(value) => {
+            setRangeValue(value);
+            // Auto-show custom preset when user changes header controls
+            setShowCustomPreset(true);
+          }}
+          periodType={periodType}
+          onPeriodTypeChange={(period) => {
+            setPeriodType(period);
+            // Auto-show custom preset when user changes header controls
+            setShowCustomPreset(true);
+          }}
+          startDate={startDate}
+          endDate={endDate}
+          onStartDateChange={(date) => {
+            setStartDate(date);
+            // Auto-show custom preset when user changes header controls
+            setShowCustomPreset(true);
+          }}
+          onEndDateChange={(date) => {
+            setEndDate(date);
+            // Auto-show custom preset when user changes header controls
+            setShowCustomPreset(true);
+          }}
+          showCustomPreset={showCustomPreset}
+          onApply={handleApply}
+          onCancel={handleCancel}
         />
       </div>
     );

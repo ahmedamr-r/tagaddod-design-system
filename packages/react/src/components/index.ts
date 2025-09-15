@@ -137,12 +137,17 @@ export type { RangeSliderProps } from './RangeSlider';
 
 // Export the Calendar component
 export { Calendar } from './Calendar';
-export type { CalendarProps, CalendarMode, CalendarCaptionLayout } from './Calendar';
+export type { CalendarProps, CalendarMode, CalendarCaptionLayout, CalendarVariant, DatePreset } from './Calendar';
 export { calendarModes, calendarCaptionLayouts } from './Calendar';
 
 // Export the DatePicker component
 export { DatePicker } from './DatePicker';
 export type { DatePickerProps, DatePickerMode, DatePickerLayout } from './DatePicker';
 export { datePickerModes, datePickerLayouts } from './DatePicker';
+
+// Export the ScrollArea component
+export { ScrollArea } from './ScrollArea';
+export type { ScrollAreaProps, ScrollAreaType } from './ScrollArea';
+export { scrollAreaTypes } from './ScrollArea';
 
 

@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import styles from './Avatar.module.css';
 
 export type AvatarType = 'image' | 'initial' | 'icon';
-export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
+export type AvatarSize = 'xSmall' | 'small' | 'medium' | 'large' | 'xLarge';
 
 export interface AvatarProps {
   /**
@@ -16,7 +16,7 @@ export interface AvatarProps {
 
   /**
    * Avatar size
-   * @default 'md'
+   * @default 'medium'
    */
   size?: AvatarSize;
 
@@ -46,19 +46,26 @@ export interface AvatarProps {
    * @default 600
    */
   delayMs?: number;
+
+  /**
+   * Stroke width for the icon (only applies when type is 'icon')
+   * If not provided, defaults based on size: xSmall=1, small=1.5, medium=2, large=2, xLarge=3
+   */
+  iconStroke?: number;
 }
 
 export const avatarTypes = ['image', 'initial', 'icon'] as const;
-export const avatarSizes = ['sm', 'md', 'lg', 'xl'] as const;
+export const avatarSizes = ['xSmall', 'small', 'medium', 'large', 'xLarge'] as const;
 
 export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
   type = 'icon',
-  size = 'md',
+  size = 'medium',
   src,
   alt,
   initial,
   className,
   delayMs = 600,
+  iconStroke,
 }, ref) => {
   // Detect RTL for line height adjustments
   const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
@@ -67,6 +74,21 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
   const lineHeightStyle = {
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
+
+  // Calculate default stroke width based on size
+  const getDefaultStrokeWidth = (size: AvatarSize): number => {
+    const strokeMap: Record<AvatarSize, number> = {
+      xSmall: 1,
+      small: 1.5,
+      medium: 2,
+      large: 2,
+      xLarge: 3,
+    };
+    return strokeMap[size];
+  };
+
+  // Use provided stroke width or calculate default based on size
+  const effectiveStroke = iconStroke ?? getDefaultStrokeWidth(size);
 
   // Process initial to get first letter if a full name is given
   const displayInitial = initial ? initial.trim().charAt(0).toUpperCase() : '';
@@ -99,7 +121,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
             {displayInitial}
           </span>
         ) : (
-          <IconUser className={styles.icon} />
+          <IconUser className={styles.icon} stroke={effectiveStroke} />
         )}
       </RadixAvatar.Fallback>
     </RadixAvatar.Root>

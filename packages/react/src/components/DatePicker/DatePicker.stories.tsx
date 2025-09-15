@@ -646,3 +646,98 @@ export const VacationPlanning: Story = {
     );
   }
 };
+
+// Analytics layout with presets (Amplitude-style)
+export const AnalyticsRange: Story = {
+  args: {
+    mode: 'range',
+    layout: 'analytics',
+    numberOfMonths: 2,
+    showTimezone: true,
+    timezone: '(UTC+00:00) UTC',
+    showTimeSelection: true,
+    placeholder: 'Select date range'
+  },
+  render: (args) => {
+    const [value, setValue] = useState<{ from?: Date; to?: Date } | undefined>({
+      from: new Date(2025, 7, 15), // Aug 15, 2025
+      to: new Date(2025, 8, 14)    // Sep 14, 2025
+    });
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+      <div style={{ width: '300px' }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+          Analytics Date Range
+        </h3>
+        <p style={{ margin: '0 0 24px 0', fontSize: '14px', color: 'var(--t-color-text-secondary)' }}>
+          Professional analytics date picker with presets, custom ranges, and timezone support - similar to Amplitude, Mixpanel, and other analytics platforms.
+        </p>
+
+        <DatePicker
+          {...args}
+          value={value}
+          onChange={setValue}
+          open={isOpen}
+          onOpenChange={setIsOpen}
+          onApply={(config) => {
+            console.log('Applied date range config:', config);
+            setIsOpen(false);
+          }}
+          onCancel={() => {
+            console.log('Cancelled date range selection');
+            setIsOpen(false);
+          }}
+          onSavePreset={(name, config) => {
+            console.log('Save preset:', name, config);
+          }}
+          onRangeTypeChange={(type) => {
+            console.log('Range type changed:', type);
+          }}
+          label="Date Range"
+          helpText="Click to open the analytics date picker"
+        />
+
+        {value?.from && value?.to && (
+          <div style={{
+            marginTop: '24px',
+            padding: '16px',
+            backgroundColor: 'var(--t-color-surface-secondary)',
+            border: '1px solid var(--t-color-border-secondary)',
+            borderRadius: 'var(--t-border-radius-200)',
+            fontSize: '14px'
+          }}>
+            <strong>Selected Range:</strong>
+            <br />
+            <strong>From:</strong> {value.from.toLocaleDateString()}
+            <br />
+            <strong>To:</strong> {value.to.toLocaleDateString()}
+            <br />
+            <strong>Duration:</strong> {Math.ceil((value.to.getTime() - value.from.getTime()) / (1000 * 60 * 60 * 24))} days
+          </div>
+        )}
+
+        <div style={{
+          marginTop: '16px',
+          padding: '12px',
+          backgroundColor: 'var(--t-color-fill-info-secondary)',
+          border: '1px solid var(--t-color-border-info)',
+          borderRadius: 'var(--t-border-radius-200)',
+          fontSize: '13px'
+        }}>
+          <strong>Features:</strong>
+          <ul style={{ margin: '8px 0', paddingLeft: '20px' }}>
+            <li>Preset date ranges (Last 30/60/90 Days, This Week/Month/Quarter/Year)</li>
+            <li>Custom range types (Between, Last, Since, This)</li>
+            <li>Two-month calendar view</li>
+            <li>Save custom presets functionality</li>
+            <li>Timezone display</li>
+            <li>Apply/Cancel actions</li>
+            <li>Time selection option</li>
+            <li>Professional analytics UI</li>
+          </ul>
+        </div>
+      </div>
+    );
+  }
+};

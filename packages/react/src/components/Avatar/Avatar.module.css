@@ -13,22 +13,27 @@
 }
 
 /* Size Variants */
-.sizeSm {
+.sizeXSmall {
   width: var(--t-size-600);  /* 24px = 1.5rem */
   height: var(--t-size-600);
 }
 
-.sizeMd {
+.sizeSmall {
   width: var(--t-size-800);  /* 32px = 2rem */
   height: var(--t-size-800);
 }
 
-.sizeLg {
+.sizeMedium {
   width: var(--t-size-1000);  /* 40px = 2.5rem */
   height: var(--t-size-1000);
 }
 
-.sizeXl {
+.sizeLarge {
+  width: var(--t-size-1200);  /* 48px = 3rem */
+  height: var(--t-size-1200);
+}
+
+.sizeXLarge {
   width: var(--t-size-1600);  /* 64px = 4rem */
   height: var(--t-size-1600);
 }
@@ -58,22 +63,27 @@
 }
 
 /* Icon size variants */
-.sizeSm .icon {
+.sizeXSmall .icon {
   width: var(--t-size-300);  /* 12px = 0.75rem */
   height: var(--t-size-300);
 }
 
-.sizeMd .icon {
+.sizeSmall .icon {
   width: var(--t-size-450);  /* 18px = 1.125rem */
   height: var(--t-size-450);
 }
 
-.sizeLg .icon {
+.sizeMedium .icon {
   width: var(--t-size-500);  /* 20px = 1.25rem */
   height: var(--t-size-500);
 }
 
-.sizeXl .icon {
+.sizeLarge .icon {
+  width: var(--t-size-600);  /* 24px = 1.5rem */
+  height: var(--t-size-600);
+}
+
+.sizeXLarge .icon {
   width: var(--t-size-800);  /* 32px = 2rem */
   height: var(--t-size-800);
 }
@@ -89,19 +99,23 @@
 }
 
 /* Initial text size variants */
-.sizeSm .initial {
+.sizeXSmall .initial {
   font: var(--t-typography-caption-lg-default);
 }
 
-.sizeMd .initial {
+.sizeSmall .initial {
   font: var(--t-typography-body-sm-default);
 }
 
-.sizeLg .initial {
+.sizeMedium .initial {
   font: var(--t-typography-body-md-default);
 }
 
-.sizeXl .initial {
+.sizeLarge .initial {
+  font: var(--t-typography-body-lg-semibold);
+}
+
+.sizeXLarge .initial {
   font: var(--t-typography-heading-sm);
 }
 

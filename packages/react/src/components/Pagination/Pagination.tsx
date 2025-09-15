@@ -246,8 +246,8 @@ export const Pagination: React.FC<PaginationProps> = ({
             <>
               {/* RTL: Next button first (left arrow pointing left) */}
               <Button
-                size="micro"
-                variant="tertiary"
+                size="xSmall"
+                variant="outlined"
                 tone="neutral"
                 onClick={handleNext}
                 disabled={currentPage === totalPages}
@@ -267,8 +267,8 @@ export const Pagination: React.FC<PaginationProps> = ({
                 return (
                   <Button
                     key={`page-rtl-${page}`}
-                    size="micro"
-                    variant="tertiary"
+                    size="xSmall"
+                    variant={isCurrentPage ? "primary" : "outlined"}
                     tone={isCurrentPage ? "default" : "neutral"}
                     onClick={() => handlePageChange(page)}
                     aria-current={isCurrentPage ? 'page' : undefined}
@@ -280,8 +280,8 @@ export const Pagination: React.FC<PaginationProps> = ({
               
               {/* RTL: Previous button last (right arrow pointing right) */}
               <Button
-                size="micro"
-                variant="tertiary"
+                size="xSmall"
+                variant="outlined"
                 tone="neutral"
                 onClick={handlePrev}
                 disabled={currentPage === 1}
@@ -293,8 +293,8 @@ export const Pagination: React.FC<PaginationProps> = ({
             <>
               {/* LTR: Previous button first */}
               <Button
-                size="micro"
-                variant="tertiary"
+                size="xSmall"
+                variant="outlined"
                 tone="neutral"
                 onClick={handlePrev}
                 disabled={currentPage === 1}
@@ -314,8 +314,8 @@ export const Pagination: React.FC<PaginationProps> = ({
                 return (
                   <Button
                     key={`page-${page}`}
-                    size="micro"
-                    variant="tertiary"
+                    size="xSmall"
+                    variant={isCurrentPage ? "primary" : "outlined"}
                     tone={isCurrentPage ? "default" : "neutral"}
                     onClick={() => handlePageChange(page)}
                     aria-current={isCurrentPage ? 'page' : undefined}
@@ -327,8 +327,8 @@ export const Pagination: React.FC<PaginationProps> = ({
               
               {/* LTR: Next button last */}
               <Button
-                size="micro"
-                variant="tertiary"
+                size="xSmall"
+                variant="outlined"
                 tone="neutral"
                 onClick={handleNext}
                 disabled={currentPage === totalPages}
