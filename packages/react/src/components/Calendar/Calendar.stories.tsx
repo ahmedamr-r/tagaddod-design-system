@@ -371,44 +371,65 @@ Try changing any dropdown or date input in the header - notice how "Custom" pres
           mode="range"
           numberOfMonths={2}
           selected={selectedRange}
-          onSelect={(range) => setSelectedRange(range as { from?: Date; to?: Date })}
+          onSelect={(range) => {
+            const newRange = range as { from?: Date; to?: Date };
+            setSelectedRange(newRange);
+            // Sync the start and end dates with the selected range
+            if (newRange) {
+              setStartDate(newRange.from);
+              setEndDate(newRange.to);
+            } else {
+              setStartDate(undefined);
+              setEndDate(undefined);
+            }
+          }}
           selectedPreset={selectedPreset}
           onPresetChange={(preset) => {
             setSelectedPreset(preset);
-            // Show custom preset when it gets selected
+            // Show custom preset only when 'custom' is selected
             if (preset === 'custom') {
               setShowCustomPreset(true);
+            } else {
+              // Hide custom preset when any other preset is selected
+              setShowCustomPreset(false);
             }
           }}
           rangeType={rangeType}
-          onRangeTypeChange={(type) => {
+          onRangeTypeChange={(type, fromPreset) => {
             setRangeType(type);
-            // Auto-show custom preset when user changes header controls
-            setShowCustomPreset(true);
+            // Only show custom preset if this is a manual change, not from preset
+            if (!fromPreset) {
+              setShowCustomPreset(true);
+              setSelectedPreset('custom');
+            }
           }}
           rangeValue={rangeValue}
-          onRangeValueChange={(value) => {
+          onRangeValueChange={(value, fromPreset) => {
             setRangeValue(value);
-            // Auto-show custom preset when user changes header controls
-            setShowCustomPreset(true);
+            // Only show custom preset if this is a manual change, not from preset
+            if (!fromPreset) {
+              setShowCustomPreset(true);
+              setSelectedPreset('custom');
+            }
           }}
           periodType={periodType}
-          onPeriodTypeChange={(period) => {
+          onPeriodTypeChange={(period, fromPreset) => {
             setPeriodType(period);
-            // Auto-show custom preset when user changes header controls
-            setShowCustomPreset(true);
+            // Only show custom preset if this is a manual change, not from preset
+            if (!fromPreset) {
+              setShowCustomPreset(true);
+              setSelectedPreset('custom');
+            }
           }}
           startDate={startDate}
           endDate={endDate}
           onStartDateChange={(date) => {
             setStartDate(date);
-            // Auto-show custom preset when user changes header controls
-            setShowCustomPreset(true);
+            // Don't show custom preset here as this gets triggered by presets too
           }}
           onEndDateChange={(date) => {
             setEndDate(date);
-            // Auto-show custom preset when user changes header controls
-            setShowCustomPreset(true);
+            // Don't show custom preset here as this gets triggered by presets too
           }}
           showCustomPreset={showCustomPreset}
           onApply={handleApply}

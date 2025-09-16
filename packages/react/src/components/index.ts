@@ -150,4 +150,9 @@ export { ScrollArea } from './ScrollArea';
 export type { ScrollAreaProps, ScrollAreaType } from './ScrollArea';
 export { scrollAreaTypes } from './ScrollArea';
 
+// Export the Number component
+export { Number } from './Number';
+export type { NumberProps, NumberFormatOptions, NumberSize } from './Number';
+export { numberSizes } from './Number';
+
 

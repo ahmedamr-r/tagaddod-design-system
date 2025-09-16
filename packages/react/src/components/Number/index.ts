@@ -1,0 +1,1 @@
+export { Number, type NumberProps, type NumberFormatOptions, type NumberSize, numberSizes } from './Number';

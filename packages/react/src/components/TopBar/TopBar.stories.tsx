@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { IconBuilding, IconBuildingStore, IconHome, IconSettings, IconUsers, IconHelp } from '@tabler/icons-react';
+import { IconBuilding, IconBuildingStore, IconHome, IconSettings, IconUsers, IconHelp, IconSearch } from '@tabler/icons-react';
 import { TopBar } from './TopBar';
 import { Sidebar } from '../Sidebar';
+import { TextInput } from '../TextInput';
+import { Button } from '../Button';
 import styles from './TopBar.module.css';
 import clsx from 'clsx';
 
@@ -78,6 +80,30 @@ const meta: Meta<typeof TopBar> = {
     onLogoutClick: {
       action: 'logout-clicked',
       description: 'Callback when logout is clicked'
+    },
+    centerContent: {
+      control: 'text',
+      description: 'Content to display in the center section'
+    },
+    showCenterSection: {
+      control: 'boolean',
+      description: 'Whether to show the center section'
+    },
+    centerSectionMinWidth: {
+      control: 'text',
+      description: 'Minimum width for the center section (default: 16.25rem)'
+    },
+    centerSectionMaxWidth: {
+      control: 'text',
+      description: 'Maximum width for the center section (default: 50rem)'
+    },
+    endContent: {
+      control: 'text',
+      description: 'Content to display in the end section'
+    },
+    showEndSection: {
+      control: 'boolean',
+      description: 'Whether to show the end section'
     }
   }
 };
@@ -498,6 +524,231 @@ export const MobileView: Story = {
     docs: {
       description: {
         story: 'Top bar optimized for mobile screens with hamburger menu and responsive Popover positioning. The hamburger icon transforms to an X when the sidebar is open.'
+      }
+    }
+  }
+};
+
+export const ThreeSectionLayout: Story = {
+  render: () => {
+    const [selectedWarehouse, setSelectedWarehouse] = useState("Al Haram Warehouse");
+    const [searchValue, setSearchValue] = useState("");
+
+    const warehouses = [
+      "Al Haram Warehouse",
+      "Main Distribution Center",
+      "Secondary Storage"
+    ];
+
+    return (
+      <div>
+        <TopBar
+          selectedWarehouse={selectedWarehouse}
+          warehouses={warehouses}
+          showCenterSection={true}
+          centerContent={
+            <TextInput
+              placeholder="Search products, orders, or customers..."
+              value={searchValue}
+              onChange={setSearchValue}
+              prefixIcon={<IconSearch size={18} />}
+              style={{ width: '100%' }}
+            />
+          }
+          centerSectionMinWidth="20rem"
+          centerSectionMaxWidth="40rem"
+          onWarehouseChange={setSelectedWarehouse}
+          onLogoClick={() => alert('Navigate to home')}
+          onLogoutClick={() => alert('User logged out')}
+        />
+        <div style={{
+          padding: '2rem',
+          backgroundColor: 'var(--t-color-bg-primary)',
+          minHeight: '400px'
+        }}>
+          <h2 style={{ color: 'var(--t-color-text-primary)', marginBottom: '1rem' }}>
+            Three-Section Layout Demo
+          </h2>
+          <div style={{ marginBottom: '1rem' }}>
+            <p style={{ color: 'var(--t-color-text-secondary)', margin: '0 0 0.5rem 0' }}>
+              <strong>Start Section:</strong> Logo + hamburger (mobile)
+            </p>
+            <p style={{ color: 'var(--t-color-text-secondary)', margin: '0 0 0.5rem 0' }}>
+              <strong>Center Section:</strong> Search input (min: 20rem, max: 40rem)
+            </p>
+            <p style={{ color: 'var(--t-color-text-secondary)', margin: '0 0 0.5rem 0' }}>
+              <strong>End Section:</strong> Warehouse dropdown (default content)
+            </p>
+          </div>
+          <p style={{ color: 'var(--t-color-text-secondary)' }}>
+            Search query: <strong>{searchValue || "No search entered"}</strong>
+          </p>
+          <p style={{ color: 'var(--t-color-text-secondary)' }}>
+            Selected warehouse: <strong>{selectedWarehouse}</strong>
+          </p>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Demonstrates the new three-section layout with a search bar in the center section, maintaining proper spacing and preventing overlap between sections.'
+      }
+    }
+  }
+};
+
+export const CustomEndSection: Story = {
+  render: () => {
+    const [activeTab, setActiveTab] = useState("products");
+
+    const endContent = (
+      <div style={{ display: 'flex', gap: 'var(--t-space-200)' }}>
+        <Button
+          variant={activeTab === 'products' ? 'filled' : 'outlined'}
+          size="small"
+          onClick={() => setActiveTab('products')}
+        >
+          Products
+        </Button>
+        <Button
+          variant={activeTab === 'orders' ? 'filled' : 'outlined'}
+          size="small"
+          onClick={() => setActiveTab('orders')}
+        >
+          Orders
+        </Button>
+      </div>
+    );
+
+    return (
+      <div>
+        <TopBar
+          showEndSection={true}
+          endContent={endContent}
+          onLogoClick={() => alert('Navigate to home')}
+        />
+        <div style={{
+          padding: '2rem',
+          backgroundColor: 'var(--t-color-bg-primary)',
+          minHeight: '400px'
+        }}>
+          <h2 style={{ color: 'var(--t-color-text-primary)', marginBottom: '1rem' }}>
+            Custom End Section Demo
+          </h2>
+          <p style={{ color: 'var(--t-color-text-secondary)' }}>
+            Active tab: <strong>{activeTab}</strong>
+          </p>
+          <p style={{ color: 'var(--t-color-text-secondary)' }}>
+            The end section now contains custom buttons instead of the default warehouse dropdown.
+            The warehouse dropdown is completely hidden when custom endContent is provided.
+          </p>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows how to replace the default warehouse dropdown with custom content in the end section, such as navigation tabs or action buttons.'
+      }
+    }
+  }
+};
+
+export const FlexibleSections: Story = {
+  render: () => {
+    const [showCenter, setShowCenter] = useState(true);
+    const [showEnd, setShowEnd] = useState(true);
+    const [searchValue, setSearchValue] = useState("");
+    const [selectedWarehouse, setSelectedWarehouse] = useState("Main Warehouse");
+
+    return (
+      <div>
+        <TopBar
+          selectedWarehouse={selectedWarehouse}
+          warehouses={["Main Warehouse", "Secondary Warehouse"]}
+          showCenterSection={showCenter}
+          centerContent={
+            <TextInput
+              placeholder="Search everything..."
+              value={searchValue}
+              onChange={setSearchValue}
+              prefixIcon={<IconSearch size={16} />}
+              style={{ width: '100%' }}
+            />
+          }
+          showEndSection={showEnd}
+          onWarehouseChange={setSelectedWarehouse}
+          onLogoClick={() => alert('Navigate to home')}
+          onLogoutClick={() => alert('User logged out')}
+        />
+        <div style={{
+          padding: '2rem',
+          backgroundColor: 'var(--t-color-bg-primary)',
+          minHeight: '500px'
+        }}>
+          <h2 style={{ color: 'var(--t-color-text-primary)', marginBottom: '1rem' }}>
+            Flexible Section Control
+          </h2>
+
+          <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <label style={{ color: 'var(--t-color-text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <input
+                type="checkbox"
+                checked={showCenter}
+                onChange={(e) => setShowCenter(e.target.checked)}
+              />
+              Show Center Section
+            </label>
+            <label style={{ color: 'var(--t-color-text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <input
+                type="checkbox"
+                checked={showEnd}
+                onChange={(e) => setShowEnd(e.target.checked)}
+              />
+              Show End Section
+            </label>
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <h3 style={{ color: 'var(--t-color-text-primary)', margin: '0 0 0.5rem 0' }}>
+              Current State:
+            </h3>
+            <p style={{ color: 'var(--t-color-text-secondary)', margin: '0 0 0.25rem 0' }}>
+              <strong>Start Section:</strong> Always visible (Logo)
+            </p>
+            <p style={{ color: 'var(--t-color-text-secondary)', margin: '0 0 0.25rem 0' }}>
+              <strong>Center Section:</strong> {showCenter ? 'Visible (Search)' : 'Hidden'}
+            </p>
+            <p style={{ color: 'var(--t-color-text-secondary)', margin: '0 0 1rem 0' }}>
+              <strong>End Section:</strong> {showEnd ? 'Visible (Warehouse Dropdown)' : 'Hidden'}
+            </p>
+
+            {searchValue && (
+              <p style={{ color: 'var(--t-color-text-secondary)' }}>
+                Search query: <strong>{searchValue}</strong>
+              </p>
+            )}
+
+            <p style={{ color: 'var(--t-color-text-secondary)' }}>
+              Selected warehouse: <strong>{selectedWarehouse}</strong>
+            </p>
+          </div>
+
+          <p style={{ color: 'var(--t-color-text-secondary)' }}>
+            Use the checkboxes above to toggle sections on/off and see how the layout adapts.
+            The flexible design prevents overlap while maintaining proper spacing.
+          </p>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Interactive demo showing how sections can be toggled on/off dynamically, demonstrating the flexible nature of the three-section layout system.'
       }
     }
   }

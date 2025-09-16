@@ -5,6 +5,7 @@ import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { Select } from '../Select/Select';
 import { Button } from '../Button/Button';
 import { DatePicker } from '../DatePicker/DatePicker';
+import { Number } from '../Number/Number';
 import { startOfDay, endOfDay, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter, startOfYear, endOfYear, addMonths } from 'date-fns';
 import styles from './Calendar.module.css';
 
@@ -108,7 +109,7 @@ export interface CalendarProps extends Omit<DayPickerProps, 'mode' | 'captionLay
   /**
    * Callback when range type changes
    */
-  onRangeTypeChange?: (type: DateRangeType) => void;
+  onRangeTypeChange?: (type: DateRangeType, fromPreset?: boolean) => void;
 
   /**
    * Current range value (number for 'last', date for 'since', etc.)
@@ -118,7 +119,7 @@ export interface CalendarProps extends Omit<DayPickerProps, 'mode' | 'captionLay
   /**
    * Callback when range value changes
    */
-  onRangeValueChange?: (value: string | number) => void;
+  onRangeValueChange?: (value: string | number, fromPreset?: boolean) => void;
 
   /**
    * Current period for 'this' type (week, month, quarter, year)
@@ -128,7 +129,7 @@ export interface CalendarProps extends Omit<DayPickerProps, 'mode' | 'captionLay
   /**
    * Callback when period type changes
    */
-  onPeriodTypeChange?: (period: string) => void;
+  onPeriodTypeChange?: (period: string, fromPreset?: boolean) => void;
 
   /**
    * Start date for 'between' range type
@@ -211,6 +212,8 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
 
     // State to track which DatePicker input is currently focused
     const [focusedInput, setFocusedInput] = useState<'start' | 'end' | null>(null);
+    // State to track if the selection is from a preset
+    const [isPresetSelection, setIsPresetSelection] = useState(false);
     // Detect RTL direction for line height adjustments
     const isRTL = typeof document !== 'undefined' &&
       (document.dir === 'rtl' || document.documentElement.dir === 'rtl');
@@ -391,8 +394,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                 const newRangeType = value as DateRangeType;
                 onRangeTypeChange?.(newRangeType);
 
-                // Auto-select custom preset when user changes range type
-                onPresetChange?.('custom');
+                // Don't auto-select custom preset here - let the parent decide
 
                 // Auto-update calendar dates based on range type selection
                 if (newRangeType === 'last' && rangeValue) {
@@ -442,8 +444,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                   value={startDate}
                   onChange={(date) => {
                     onStartDateChange?.(date as Date);
-                    // Auto-select custom preset when user changes start date
-                    onPresetChange?.('custom');
+                    // Don't auto-select custom preset here - let the parent decide
 
                     // Also update the main selected range if we have both dates
                     if (date && endDate) {
@@ -460,14 +461,14 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                   showCalendarIcon={false}
                   onOpenChange={() => {}}
                   open={false}
+                  fullWidth={false}
                 />
                 <span className={styles.betweenLabel}>and</span>
                 <DatePicker
                   value={endDate}
                   onChange={(date) => {
                     onEndDateChange?.(date as Date);
-                    // Auto-select custom preset when user changes end date
-                    onPresetChange?.('custom');
+                    // Don't auto-select custom preset here - let the parent decide
 
                     // Also update the main selected range if we have both dates
                     if (startDate && date) {
@@ -484,24 +485,23 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                   showCalendarIcon={false}
                   onOpenChange={() => {}}
                   open={false}
+                  fullWidth={false}
                 />
               </>
             )}
 
             {rangeType === 'last' && (
               <>
-                <input
-                  type="number"
-                  value={rangeValue}
-                  onChange={(e) => {
-                    const newValue = e.target.value;
+                <Number
+                  value={typeof rangeValue === 'number' ? rangeValue : parseInt(rangeValue?.toString() || '30')}
+                  onChange={(value) => {
+                    const newValue = value || 30;
                     onRangeValueChange?.(newValue);
-                    // Auto-select custom preset when user changes range value
-                    onPresetChange?.('custom');
+                    // Don't auto-select custom preset here - let the parent decide
 
                     // Auto-update calendar dates when range value changes
                     if (rangeType === 'last' && newValue) {
-                      const days = parseInt(newValue);
+                      const days = newValue;
                       if (!isNaN(days) && days > 0) {
                         const range = {
                           from: startOfDay(subDays(new Date(), days - 1)),
@@ -511,9 +511,11 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                       }
                     }
                   }}
-                  className={styles.numberInput}
-                  min="1"
+                  size="small"
+                  min={1}
                   placeholder="30"
+                  fullWidth={false}
+                  hideSteppers={true}
                 />
                 <span className={styles.lastLabel}>complete days and today</span>
               </>
@@ -524,8 +526,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                 value={startDate}
                 onChange={(date) => {
                   onStartDateChange?.(date as Date);
-                  // Auto-select custom preset when user changes since date
-                  onPresetChange?.('custom');
+                  // Don't auto-select custom preset here - let the parent decide
 
                   // For 'since' mode, update the range from the selected date to today
                   if (date) {
@@ -540,6 +541,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                 showCalendarIcon={false}
                 onOpenChange={() => {}}
                 open={false}
+                fullWidth={false}
               />
             )}
 
@@ -548,8 +550,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                 value={periodType}
                 onValueChange={(value) => {
                   onPeriodTypeChange?.(value);
-                  // Auto-select custom preset when user changes period type
-                  onPresetChange?.('custom');
+                  // Don't auto-select custom preset here - let the parent decide
 
                   // Auto-update calendar dates when period type changes
                   if (rangeType === 'this') {
@@ -587,8 +588,8 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
         );
       };
 
-      // Check if we should show custom preset based on prop or if custom is selected
-      const shouldShowCustom = showCustomPreset || selectedPreset === 'custom';
+      // Check if we should show custom preset - only show if explicitly set to true (and hide when another preset is selected)
+      const shouldShowCustom = showCustomPreset;
 
       return (
         <div
@@ -610,24 +611,28 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                       selectedPreset === preset.id && styles.active
                     )}
                     onClick={() => {
+                      // Mark this as a preset selection
+                      setIsPresetSelection(true);
                       onPresetChange?.(preset.id);
                       const range = preset.getValue();
                       onSelect?.({ from: range.from, to: range.to });
 
                       // Auto-sync dropdown with preset selection
                       if (preset.label.startsWith('Last ')) {
-                        onRangeTypeChange?.('last');
+                        onRangeTypeChange?.('last', true); // true = from preset
                         // Extract number from preset label (e.g., "Last 30 Days" -> 30)
                         const match = preset.label.match(/Last (\d+)/);
                         if (match) {
-                          onRangeValueChange?.(parseInt(match[1]));
+                          onRangeValueChange?.(parseInt(match[1]), true); // true = from preset
                         }
                       } else if (preset.label.startsWith('This ')) {
-                        onRangeTypeChange?.('this');
+                        onRangeTypeChange?.('this', true); // true = from preset
                         // Extract period from preset label (e.g., "This Week" -> "week")
                         const period = preset.label.replace('This ', '').toLowerCase();
-                        onPeriodTypeChange?.(period);
+                        onPeriodTypeChange?.(period, true); // true = from preset
                       }
+                      // Reset the flag after a short delay
+                      setTimeout(() => setIsPresetSelection(false), 100);
                     }}
                   >
                     {preset.label}
@@ -707,11 +712,14 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                   mode="range"
                   numberOfMonths={2}
                   selected={selected as any}
-                  onSelect={(range: any) => {
-                    // If a specific input is focused, assign the clicked date to that input
-                    if (focusedInput && range && typeof range === 'object' && 'from' in range && range.from) {
-                      const clickedDate = range.from; // The most recently clicked date
+                  onDayClick={(clickedDate: Date) => {
+                    // Skip custom preset selection if this is from a preset button
+                    if (isPresetSelection) {
+                      return;
+                    }
 
+                    // If a specific input is focused, assign the clicked date to that input
+                    if (focusedInput) {
                       if (focusedInput === 'start') {
                         onStartDateChange?.(clickedDate);
                         // Update range with new start date, keeping existing end date
@@ -727,19 +735,37 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                       return;
                     }
 
-                    // Default behavior when no input is focused
-                    // Call the parent's onSelect callback
-                    onSelect?.(range);
+                    // Custom range selection logic
+                    const currentSelection = selected as { from?: Date; to?: Date };
 
-                    // Also update startDate and endDate for header DatePickers
-                    if (range && typeof range === 'object' && 'from' in range) {
-                      onStartDateChange?.(range.from);
-                      onEndDateChange?.(range.to);
-                    } else if (!range) {
-                      // Clear dates when no range is selected
-                      onStartDateChange?.(undefined);
+                    if (currentSelection && currentSelection.from && currentSelection.to) {
+                      // A complete range exists - start new range with clicked date
+                      const newRange = { from: clickedDate, to: undefined };
+                      onSelect?.(newRange);
+                      onStartDateChange?.(clickedDate);
+                      onEndDateChange?.(undefined);
+                    } else if (currentSelection && currentSelection.from && !currentSelection.to) {
+                      // Only start date exists - complete the range
+                      const newRange = {
+                        from: currentSelection.from,
+                        to: clickedDate
+                      };
+                      onSelect?.(newRange);
+                      onStartDateChange?.(currentSelection.from);
+                      onEndDateChange?.(clickedDate);
+                    } else {
+                      // No selection or incomplete - start new range
+                      const newRange = { from: clickedDate, to: undefined };
+                      onSelect?.(newRange);
+                      onStartDateChange?.(clickedDate);
                       onEndDateChange?.(undefined);
                     }
+
+                    // Auto-select custom preset when user manually selects dates
+                    onPresetChange?.('custom');
+                  }}
+                  onSelect={() => {
+                    // Disable the default onSelect to prevent conflicts with onDayClick
                   }}
                   showOutsideDays={showOutsideDays}
                   fixedWeeks={fixedWeeks}

@@ -132,7 +132,7 @@ export interface TopBarProps extends React.ComponentPropsWithoutRef<'header'> {
    * Custom class name for the top bar
    */
   className?: string;
-  
+
   /* ===== LOGO CONFIGURATION ===== */
   /**
    * Logo props to pass to the Logo component
@@ -147,6 +147,38 @@ export interface TopBarProps extends React.ComponentPropsWithoutRef<'header'> {
    * Callback when the logo is clicked
    */
   onLogoClick?: () => void;
+
+  /* ===== CENTER SECTION CONFIGURATION ===== */
+  /**
+   * Content to display in the center section (typically TextInput/search)
+   */
+  centerContent?: React.ReactNode;
+  /**
+   * Whether to show the center section
+   * @default false
+   */
+  showCenterSection?: boolean;
+  /**
+   * Minimum width for the center section
+   * @default "16.25rem" (260px)
+   */
+  centerSectionMinWidth?: string;
+  /**
+   * Maximum width for the center section
+   * @default "50rem" (800px)
+   */
+  centerSectionMaxWidth?: string;
+
+  /* ===== END SECTION CONFIGURATION ===== */
+  /**
+   * Content to display in the end section (replaces warehouse dropdown if provided)
+   */
+  endContent?: React.ReactNode;
+  /**
+   * Whether to show the end section
+   * @default true
+   */
+  showEndSection?: boolean;
   
   /* ===== WAREHOUSE SELECTOR CONFIGURATION ===== */
   /**
@@ -265,12 +297,20 @@ export interface TopBarProps extends React.ComponentPropsWithoutRef<'header'> {
 }
 
 export const TopBar = forwardRef<HTMLElement, TopBarProps>(
-  ({ 
-    className, 
+  ({
+    className,
     // Logo props
     logoProps,
     logoClickable = false,
     onLogoClick,
+    // Center section props
+    centerContent,
+    showCenterSection = false,
+    centerSectionMinWidth = "16.25rem",
+    centerSectionMaxWidth = "50rem",
+    // End section props
+    endContent,
+    showEndSection = true,
     // Warehouse selector props
     selectedWarehouse = "Al Haram Warehouse",
     warehouses = ["Al Haram Warehouse", "Main Warehouse", "Secondary Warehouse"],
@@ -299,7 +339,7 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
     hamburgerButtonClassName,
     warehouseIcon,
     warehouseIconSize = 16,
-    ...props 
+    ...props
   }, ref) => {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
@@ -383,6 +423,44 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
       ...popoverProps
     };
 
+    // Create default end content (warehouse dropdown) if no endContent provided
+    const defaultEndContent = !endContent ? (
+      !warehouseDisabled ? (
+        <Popover {...mergedPopoverProps}>
+          <button
+            className={clsx(styles.warehouseTrigger, warehouseTriggerClassName)}
+            style={lineHeightStyle}
+            aria-label={`Select warehouse. Current: ${selectedWarehouse}`}
+          >
+            {warehouseIcon || <IconBuilding size={warehouseIconSize} className={styles.warehouseIcon} />}
+            <span className={styles.warehouseText}>{selectedWarehouse}</span>
+            <IconChevronDown
+              size={16}
+              className={clsx(
+                styles.warehouseChevron,
+                isPopoverOpen && styles.warehouseChevronOpen
+              )}
+            />
+          </button>
+        </Popover>
+      ) : (
+        <button
+          className={clsx(
+            styles.warehouseTrigger,
+            styles.warehouseTriggerDisabled,
+            warehouseTriggerClassName
+          )}
+          disabled={true}
+          style={lineHeightStyle}
+          aria-label={`Warehouse selector disabled. Current: ${selectedWarehouse}`}
+        >
+          {warehouseIcon || <IconBuilding size={warehouseIconSize} className={styles.warehouseIcon} />}
+          <span className={styles.warehouseText}>{selectedWarehouse}</span>
+          <IconChevronDown size={16} className={styles.warehouseChevron} />
+        </button>
+      )
+    ) : null;
+
     return (
       <header
         ref={ref}
@@ -391,8 +469,8 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
         {...props}
       >
         <div className={styles.topBarContent}>
-          {/* Left Section - Hamburger and Logo grouped together */}
-          <div className={styles.leftSection}>
+          {/* Start Section - Hamburger and Logo */}
+          <div className={styles.startSection}>
             {/* Hamburger/Close Menu - visible on small devices */}
             {showHamburgerMenu && (
               <Button
@@ -400,13 +478,13 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
                 tone="neutral"
                 size="micro"
                 className={clsx(
-                  styles.hamburgerButton, 
+                  styles.hamburgerButton,
                   styles.mobileOnly,
                   hamburgerButtonClassName
                 )}
                 onClick={onHamburgerMenuClick}
                 aria-label={
-                  isMobileSidebarOpen 
+                  isMobileSidebarOpen
                     ? (isRTL ? 'إغلاق القائمة' : 'Close menu')
                     : (isRTL ? 'فتح القائمة' : 'Open menu')
                 }
@@ -431,43 +509,26 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
             </div>
           </div>
 
-          {/* Warehouse Selector Section */}
-          <div className={styles.warehouseSection}>
-            {!warehouseDisabled ? (
-              <Popover {...mergedPopoverProps}>
-                <button 
-                  className={clsx(styles.warehouseTrigger, warehouseTriggerClassName)}
-                  style={lineHeightStyle}
-                  aria-label={`Select warehouse. Current: ${selectedWarehouse}`}
-                >
-                  {warehouseIcon || <IconBuilding size={warehouseIconSize} className={styles.warehouseIcon} />}
-                  <span className={styles.warehouseText}>{selectedWarehouse}</span>
-                  <IconChevronDown 
-                    size={16} 
-                    className={clsx(
-                      styles.warehouseChevron,
-                      isPopoverOpen && styles.warehouseChevronOpen
-                    )} 
-                  />
-                </button>
-              </Popover>
-            ) : (
-              <button 
-                className={clsx(
-                  styles.warehouseTrigger, 
-                  styles.warehouseTriggerDisabled,
-                  warehouseTriggerClassName
-                )}
-                disabled={true}
-                style={lineHeightStyle}
-                aria-label={`Warehouse selector disabled. Current: ${selectedWarehouse}`}
-              >
-                {warehouseIcon || <IconBuilding size={warehouseIconSize} className={styles.warehouseIcon} />}
-                <span className={styles.warehouseText}>{selectedWarehouse}</span>
-                <IconChevronDown size={16} className={styles.warehouseChevron} />
-              </button>
-            )}
-          </div>
+          {/* Center Section - Swappable Content */}
+          {showCenterSection && (
+            <div
+              className={styles.centerSection}
+              style={{
+                minWidth: centerSectionMinWidth,
+                maxWidth: centerSectionMaxWidth,
+                ...lineHeightStyle
+              }}
+            >
+              {centerContent}
+            </div>
+          )}
+
+          {/* End Section - Swappable Content */}
+          {showEndSection && (
+            <div className={styles.endSection} style={lineHeightStyle}>
+              {endContent || defaultEndContent}
+            </div>
+          )}
         </div>
       </header>
     );

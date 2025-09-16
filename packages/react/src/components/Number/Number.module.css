@@ -1,0 +1,640 @@
+/* Number Component Styles */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+/* Label styles */
+.labelContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--t-space-200);
+}
+
+.label {
+  font: var(--t-typography-body-md-default);
+  color: var(--t-color-text-primary);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for label */
+.label::before,
+.label::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.label::before {
+  margin-top: -0.15em;
+}
+
+.label::after {
+  margin-bottom: -0.25em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .label::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .label::after {
+  margin-bottom: -0.4em;
+}
+
+.required {
+  color: var(--t-color-fill-critical);
+  margin-inline-start: var(--t-space-50);
+}
+
+.optional {
+  color: var(--t-color-text-secondary);
+  font-size: var(--t-font-size-300);
+  font-weight: var(--t-font-weight-regular);
+  margin-left: var(--t-space-100);
+}
+
+/* RTL support for optional text margin */
+:global([dir="rtl"]) .optional {
+  margin-left: 0;
+  margin-right: var(--t-space-100);
+}
+
+/* Input wrapper and flex positioning */
+.inputWrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  border-radius: var(--t-border-radius-200);
+  border: 1px solid var(--t-color-border-secondary);
+  background-color: var(--t-color-surface-primary);
+  overflow: hidden;
+  transition: all var(--t-duration-base) var(--t-easing-in-out);
+}
+
+.inputWrapper:hover {
+  border-color: var(--t-color-border-hover);
+  background-color: var(--t-color-surface-hover);
+}
+
+.inputWrapper:focus-within {
+  border-color: var(--t-color-fill-brand);
+  box-shadow: 0 0 0 1px var(--t-color-fill-brand-hover);
+}
+
+/* Base input styles */
+.input {
+  flex: 1;
+  border: none;
+  background-color: transparent;
+  color: var(--t-color-text-primary);
+  padding-block: var(--t-space-200);
+  padding-inline: var(--t-space-300);
+  font-family: var(--t-font-family-primary);
+  font-size: var(--t-font-size-350);
+  outline: none;
+  width: 100%;
+  position: relative;
+  line-height: 1.5;
+  -moz-appearance: textfield; /* Remove spinner in Firefox */
+}
+
+/* Remove spinner in Chrome, Safari, Edge */
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Line height trim for input field */
+.input::before,
+.input::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.input::before {
+  margin-top: -0.15em;
+}
+
+.input::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .input::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .input::after {
+  margin-bottom: -0.25em;
+}
+
+/* RTL specific vertical centering for Arabic text */
+:global([dir="rtl"]) .input {
+  padding-top: calc(var(--t-space-200) + 2px);
+  padding-bottom: calc(var(--t-space-200) - 2px);
+}
+
+/* Input states */
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.inputWrapper.disabled {
+  background-color: var(--t-color-surface-disabled);
+  border-color: var(--t-color-border-disabled);
+  opacity: 0.5;
+}
+
+.inputWrapper.readOnly {
+  background-color: var(--t-color-surface-primary);
+  border-color: var(--t-color-border-secondary);
+  cursor: default;
+}
+
+.inputWrapper.readOnly .stepperButton {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.input::placeholder {
+  color: var(--t-color-text-secondary);
+  opacity: 0.7;
+}
+
+/* Prefix and suffix positioning with flex */
+.prefix {
+  display: flex;
+  align-items: center;
+  padding-inline-start: var(--t-space-300);
+  color: var(--t-color-icon-secondary);
+}
+
+.suffix {
+  display: flex;
+  align-items: center;
+  padding-inline-end: var(--t-space-300);
+  color: var(--t-color-icon-secondary);
+  gap: var(--t-space-100);
+}
+
+/* RTL vertical centering for prefix and suffix text */
+:global([dir="rtl"]) .prefix {
+  padding-top: 2px;
+  padding-bottom: 0px;
+}
+
+:global([dir="rtl"]) .suffix {
+  padding-top: 2px;
+  padding-bottom: 0px;
+}
+
+/* Add padding adjustments for input with prefix/suffix */
+.input.withPrefix {
+  padding-inline-start: var(--t-space-150);
+}
+
+.input.withSuffix {
+  padding-inline-end: var(--t-space-100);
+}
+
+/* Stepper container */
+.stepperContainer {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--t-color-border-secondary);
+}
+
+/* RTL support for stepper container */
+:global([dir="rtl"]) .stepperContainer {
+  border-left: none;
+  border-right: 1px solid var(--t-color-border-secondary);
+}
+
+.stepperButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--t-color-icon-secondary);
+  cursor: pointer;
+  padding: 0;
+  width: var(--t-size-600); /* 24px */
+  height: 50%;
+  transition: all var(--t-duration-fast) var(--t-easing-in-out);
+}
+
+.stepperButton:hover:not(:disabled) {
+  background-color: var(--t-color-surface-hover);
+  color: var(--t-color-icon-primary);
+}
+
+.stepperButton:active:not(:disabled) {
+  background-color: var(--t-color-surface-active);
+}
+
+.stepperButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.stepperUp {
+  border-bottom: 1px solid var(--t-color-border-secondary);
+}
+
+/* Icon button (for clear, etc.) */
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--t-color-icon-secondary);
+  cursor: pointer;
+  padding: var(--t-space-50);
+  border-radius: var(--t-border-radius-100);
+  transition: background-color var(--t-duration-fast) var(--t-easing-in-out);
+}
+
+.iconButton:hover {
+  background-color: var(--t-color-surface-hover);
+}
+
+.iconButton:active {
+  background-color: var(--t-color-surface-active);
+}
+
+/* Size variants with adjusted spacing */
+
+/* XLarge - 56px height */
+.sizeXlarge .inputWrapper {
+  height: var(--t-size-1400); /* 56px */
+  min-height: var(--t-size-1400);
+}
+
+.sizeXlarge .input {
+  font: var(--t-typography-body-lg-default);
+  padding-block: var(--t-space-400);
+  padding-inline: var(--t-space-400);
+}
+
+.sizeXlarge .input.withPrefix {
+  padding-inline-start: var(--t-space-150);
+}
+
+.sizeXlarge .input.withSuffix {
+  padding-inline-end: var(--t-space-150);
+}
+
+.sizeXlarge .labelContainer {
+  margin-bottom: var(--t-space-250);
+}
+
+.sizeXlarge .label {
+  font: var(--t-typography-body-md-default);
+}
+
+.sizeXlarge .helpText,
+.sizeXlarge .errorMessage {
+  font: var(--t-typography-body-sm-default);
+  margin-top: var(--t-space-250);
+}
+
+.sizeXlarge .prefix svg,
+.sizeXlarge .suffix svg,
+.sizeXlarge .stepperButton svg {
+  width: var(--t-size-500); /* 20px */
+  height: var(--t-size-500);
+}
+
+.sizeXlarge .stepperButton {
+  width: var(--t-size-800); /* 32px */
+}
+
+/* RTL vertical centering for xlarge size */
+:global([dir="rtl"]) .sizeXlarge .input {
+  padding-top: calc(var(--t-space-400) + 2px);
+  padding-bottom: calc(var(--t-space-400) - 2px);
+}
+
+/* Large - 48px height */
+.sizeLarge .inputWrapper {
+  height: var(--t-size-1200); /* 48px */
+  min-height: var(--t-size-1200);
+}
+
+.sizeLarge .input {
+  font: var(--t-typography-body-md-default);
+  padding-block: var(--t-space-300);
+  padding-inline: var(--t-space-400);
+}
+
+.sizeLarge .input.withPrefix {
+  padding-inline-start: var(--t-space-150);
+}
+
+.sizeLarge .input.withSuffix {
+  padding-inline-end: var(--t-space-150);
+}
+
+.sizeLarge .labelContainer {
+  margin-bottom: var(--t-space-250);
+}
+
+.sizeLarge .label {
+  font: var(--t-typography-body-sm-default);
+}
+
+.sizeLarge .helpText,
+.sizeLarge .errorMessage {
+  font: var(--t-typography-body-sm-default);
+  margin-top: var(--t-space-250);
+}
+
+.sizeLarge .prefix svg,
+.sizeLarge .suffix svg,
+.sizeLarge .stepperButton svg {
+  width: var(--t-size-450); /* 18px */
+  height: var(--t-size-450);
+}
+
+.sizeLarge .stepperButton {
+  width: var(--t-size-700); /* 28px */
+}
+
+/* RTL vertical centering for large size */
+:global([dir="rtl"]) .sizeLarge .input {
+  padding-top: calc(var(--t-space-300) + 2px);
+  padding-bottom: calc(var(--t-space-300) - 2px);
+}
+
+/* Medium - 40px height */
+.sizeMedium .inputWrapper {
+  height: var(--t-size-1000); /* 40px */
+  min-height: var(--t-size-1000);
+}
+
+.sizeMedium .input {
+  font: var(--t-typography-body-md-default);
+  padding-block: var(--t-space-200);
+  padding-inline: var(--t-space-300);
+}
+
+.sizeMedium .input.withPrefix {
+  padding-inline-start: var(--t-space-150);
+}
+
+.sizeMedium .input.withSuffix {
+  padding-inline-end: var(--t-space-150);
+}
+
+.sizeMedium .labelContainer {
+  margin-bottom: var(--t-space-200);
+}
+
+.sizeMedium .label {
+  font: var(--t-typography-body-sm-default);
+}
+
+.sizeMedium .helpText,
+.sizeMedium .errorMessage {
+  font: var(--t-typography-caption-lg-default);
+  margin-top: var(--t-space-200);
+}
+
+.sizeMedium .prefix svg,
+.sizeMedium .suffix svg,
+.sizeMedium .stepperButton svg {
+  width: var(--t-size-400); /* 16px */
+  height: var(--t-size-400);
+}
+
+.sizeMedium .stepperButton {
+  width: var(--t-size-600); /* 24px */
+}
+
+/* RTL vertical centering for medium size */
+:global([dir="rtl"]) .sizeMedium .input {
+  padding-top: calc(var(--t-space-200) + 2px);
+  padding-bottom: calc(var(--t-space-200) - 2px);
+}
+
+/* Small - 32px height */
+.sizeSmall .inputWrapper {
+  height: var(--t-size-800); /* 32px */
+  min-height: var(--t-size-800);
+}
+
+.sizeSmall .input {
+  font: var(--t-typography-body-sm-default);
+  padding-block: var(--t-space-150);
+  padding-inline: var(--t-space-300);
+}
+
+.sizeSmall .input.withPrefix {
+  padding-inline-start: var(--t-space-150);
+}
+
+.sizeSmall .input.withSuffix {
+  padding-inline-end: var(--t-space-150);
+}
+
+.sizeSmall .labelContainer {
+  margin-bottom: var(--t-space-200);
+}
+
+.sizeSmall .label {
+  font: var(--t-typography-caption-lg-default);
+}
+
+.sizeSmall .helpText,
+.sizeSmall .errorMessage {
+  font: var(--t-typography-caption-lg-default);
+  margin-top: var(--t-space-200);
+}
+
+.sizeSmall .prefix svg,
+.sizeSmall .suffix svg,
+.sizeSmall .stepperButton svg {
+  width: var(--t-size-350); /* 14px */
+  height: var(--t-size-350);
+}
+
+.sizeSmall .stepperButton {
+  width: var(--t-size-500); /* 20px */
+}
+
+/* RTL vertical centering for small size */
+:global([dir="rtl"]) .sizeSmall .input {
+  padding-top: calc(var(--t-space-150) + 1px);
+  padding-bottom: calc(var(--t-space-150) - 1px);
+}
+
+/* XSmall - 28px height */
+.sizeXsmall .inputWrapper {
+  height: var(--t-size-700); /* 28px */
+  min-height: var(--t-size-700);
+}
+
+.sizeXsmall .input {
+  font: var(--t-typography-caption-lg-default);
+  padding-block: var(--t-space-100);
+  padding-inline: var(--t-space-300);
+}
+
+.sizeXsmall .input.withPrefix {
+  padding-inline-start: var(--t-space-150);
+}
+
+.sizeXsmall .input.withSuffix {
+  padding-inline-end: var(--t-space-150);
+}
+
+.sizeXsmall .labelContainer {
+  margin-bottom: var(--t-space-200);
+}
+
+.sizeXsmall .label {
+  font: var(--t-typography-caption-lg-default);
+}
+
+.sizeXsmall .helpText,
+.sizeXsmall .errorMessage {
+  font: var(--t-typography-caption-lg-default);
+  margin-top: var(--t-space-200);
+}
+
+.sizeXsmall .prefix svg,
+.sizeXsmall .suffix svg,
+.sizeXsmall .stepperButton svg {
+  width: var(--t-size-300); /* 12px */
+  height: var(--t-size-300);
+}
+
+.sizeXsmall .stepperButton {
+  width: var(--t-size-450); /* 18px */
+}
+
+/* RTL vertical centering for xsmall size */
+:global([dir="rtl"]) .sizeXsmall .input {
+  padding-top: calc(var(--t-space-100) + 1px);
+  padding-bottom: calc(var(--t-space-100) - 1px);
+}
+
+/* Error state */
+.error .inputWrapper {
+  border-color: var(--t-color-fill-critical);
+  background-color: var(--t-color-fill-critical-secondary);
+}
+
+.error .inputWrapper:hover {
+  background-color: var(--t-color-fill-critical-secondary-hover);
+  border-color: var(--t-color-border-critical-hover);
+}
+
+.error .inputWrapper:focus-within {
+  box-shadow: 0 0 0 2px var(--t-color-fill-critical-secondary);
+}
+
+.errorMessage {
+  display: flex;
+  align-items: center;
+  color: var(--t-color-text-critical);
+  font: var(--t-typography-body-sm-default);
+  margin-top: var(--t-space-200);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for error message */
+.errorMessage::before,
+.errorMessage::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.errorMessage::before {
+  margin-top: -0.15em;
+}
+
+.errorMessage::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .errorMessage::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .errorMessage::after {
+  margin-bottom: -0.25em;
+}
+
+.errorIcon {
+  color: var(--t-color-icon-critical);
+  margin-right: var(--t-space-200);
+  flex-shrink: 0;
+}
+
+/* RTL support for error icon */
+:global([dir="rtl"]) .errorIcon {
+  margin-right: 0;
+  margin-left: var(--t-space-200);
+}
+
+/* Help text */
+.helpText {
+  font: var(--t-typography-body-sm-default);
+  color: var(--t-color-text-secondary);
+  margin-top: var(--t-space-200);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Line height trim for help text */
+.helpText::before,
+.helpText::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* English font adjustment (smaller trim) */
+.helpText::before {
+  margin-top: -0.15em;
+}
+
+.helpText::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic font adjustment (larger trim) */
+:global([dir="rtl"]) .helpText::before {
+  margin-top: 0.1em;
+}
+
+:global([dir="rtl"]) .helpText::after {
+  margin-bottom: -0.25em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .input {
+    font-size: var(--t-font-size-300);
+  }
+}

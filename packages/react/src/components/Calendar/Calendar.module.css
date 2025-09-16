@@ -755,7 +755,113 @@
   align-items: center;
   gap: var(--t-space-300);
   flex-wrap: nowrap; /* Prevent wrapping to single line */
-  overflow-x: auto; /* Allow horizontal scroll if needed */
+}
+
+/* Override DatePicker component width inside header controls */
+/* Target the DatePicker's outer container and trigger wrapper */
+.headerControls div[class*="container"] {
+  min-width: fit-content !important;
+  width: fit-content !important;
+}
+
+.headerControls div[class*="triggerWrapper"] {
+  min-width: fit-content !important;
+  width: fit-content !important;
+}
+
+/* Also target any global container classes */
+.headerControls :global(.container) {
+  min-width: fit-content !important;
+  width: fit-content !important;
+}
+
+.headerControls :global(.triggerWrapper) {
+  min-width: fit-content !important;
+  width: fit-content !important;
+}
+
+/* Target the input wrapper and input field to remove fixed widths */
+.headerControls :global(.inputWrapper) {
+  min-width: fit-content !important;
+  width: fit-content !important;
+  flex: none !important;
+}
+
+.headerControls :global(.input) {
+  min-width: fit-content !important;
+  width: fit-content !important;
+  flex: none !important;
+  padding-left: var(--t-space-200) !important;
+  padding-right: var(--t-space-200) !important;
+}
+
+/* Also target with attribute selectors for more specificity */
+.headerControls div[class*="inputWrapper"] {
+  min-width: fit-content !important;
+  width: fit-content !important;
+  flex: none !important;
+}
+
+.headerControls input[class*="input"] {
+  min-width: fit-content !important;
+  width: fit-content !important;
+  flex: none !important;
+  padding-left: var(--t-space-200) !important;
+  padding-right: var(--t-space-200) !important;
+}
+
+/* Target all possible input elements in header controls with highest specificity */
+.headerControls * input {
+  min-width: 0 !important;
+  width: auto !important;
+  flex: none !important;
+  max-width: 120px !important;
+  padding-left: var(--t-space-150) !important;
+  padding-right: var(--t-space-150) !important;
+}
+
+.headerControls * div[class*="Wrapper"] {
+  min-width: 0 !important;
+  width: auto !important;
+  flex: none !important;
+  max-width: 120px !important;
+}
+
+/* Specific approach: calculate width based on typical date format */
+.headerControls input[placeholder*="date"],
+.headerControls input[value*="/"] {
+  width: 6.5em !important; /* Roughly fits "DD/MM/YYYY" format */
+  min-width: 6.5em !important;
+  max-width: 7em !important;
+}
+
+/* For number inputs, make them very narrow */
+.headerControls input[type="text"][inputmode="decimal"],
+.headerControls input[role="spinbutton"] {
+  width: 3.5em !important;
+  min-width: 3.5em !important;
+  max-width: 4em !important;
+  text-align: center !important;
+}
+
+/* Target Number component specifically - it has the same classes as TextInput */
+.headerControls form[class*="container"]:not([class*="fullWidth"]) {
+  min-width: fit-content !important;
+  width: fit-content !important;
+  flex: none !important;
+}
+
+/* More aggressive targeting for Number component containers */
+.headerControls form {
+  min-width: fit-content !important;
+  width: fit-content !important;
+  flex: none !important;
+}
+
+.headerControls form * {
+  min-width: fit-content !important;
+  width: auto !important;
+  flex: none !important;
 }
 
 /* Calendar section */
@@ -778,12 +884,13 @@
 }
 
 /* Header control elements */
-.rangeDropdown {
-  min-width: 80px;
+.rangeDropdown {  min-width: fit-content;
+  width: auto;
 }
 
 .periodDropdown {
-  min-width: 80px;
+  min-width: fit-content;
+  width: auto;
 }
 
 .dateInput {
@@ -793,7 +900,8 @@
   font: var(--t-typography-body-sm-default);
   background: var(--t-color-surface-primary);
   color: var(--t-color-text-primary);
-  min-width: 120px;
+  min-width: fit-content;
+  width: auto;
   outline: none;
   transition: border-color var(--t-duration-fast) var(--t-easing-in-out);
 }

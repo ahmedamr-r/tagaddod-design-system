@@ -15,7 +15,6 @@
 .topBarContent {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   max-width: 100%;
   margin: 0 auto;
   gap: var(--t-space-400, 1rem);
@@ -31,12 +30,12 @@
   display: none;
 }
 
-/* Left section containing hamburger and logo */
-.leftSection {
+/* Start section containing hamburger and logo */
+.startSection {
   display: flex;
   align-items: center;
   gap: var(--t-space-200, 0.5rem);
-  flex-shrink: 0;
+  flex: 0 0 auto; /* Fixed width - no grow, no shrink */
 }
 
 .logoSection {
@@ -45,6 +44,23 @@
   flex-shrink: 0;
 }
 
+/* Center section for swappable content with min/max width constraints */
+.centerSection {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto; /* Grows and shrinks, but respects min/max width */
+  justify-content: center;
+  overflow: hidden; /* Prevent content overflow */
+}
+
+/* End section for swappable content */
+.endSection {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto; /* Content-based width - no grow, no shrink */
+}
+
+/* Legacy warehouse section (now part of end section) */
 .warehouseSection {
   display: flex;
   align-items: center;
@@ -199,15 +215,25 @@
   flex-direction: row-reverse;
 }
 
-/* RTL: Left section becomes right section - keep hamburger + logo together */
-:global([dir="rtl"]) .leftSection {
-  /* Don't reverse the flex-direction - keep hamburger before logo */
+/* RTL: Start section maintains order but content aligns properly */
+:global([dir="rtl"]) .startSection {
+  /* Keep hamburger + logo together but align to right edge */
   justify-content: flex-end;
 }
 
-/* RTL: Warehouse dropdown alignment */
+/* RTL: Center section maintains center alignment */
+:global([dir="rtl"]) .centerSection {
+  /* Center content remains centered */
+}
+
+/* RTL: End section alignment */
+:global([dir="rtl"]) .endSection {
+  /* End section content aligns properly in RTL */
+}
+
+/* RTL: Legacy warehouse section */
 :global([dir="rtl"]) .warehouseSection {
-  order: -1; /* Move warehouse section to the left in RTL */
+  order: -1; /* Move warehouse section to the left in RTL when used independently */
 }
 
 
@@ -224,14 +250,27 @@
     gap: var(--t-space-300, 0.75rem);
   }
   
-  /* Left section (hamburger + logo) takes 50% width on mobile */
-  .leftSection {
-    width: 50%;
+  /* Start section (hamburger + logo) takes flexible width on mobile */
+  .startSection {
+    flex: 0 1 auto; /* Allow slight shrinking on mobile if needed */
+    min-width: fit-content; /* Ensure content doesn't get cut off */
     gap: var(--t-space-200, 0.5rem);
   }
 
+  /* Center section adjusts for mobile */
+  .centerSection {
+    /* Allow center section to be more flexible on mobile */
+    min-width: 12rem; /* Reduced from 16.25rem for mobile */
+    max-width: 20rem; /* Reduced from 50rem for mobile */
+  }
+
+  /* End section adjusts for mobile */
+  .endSection {
+    flex: 0 1 auto; /* Allow slight shrinking if absolutely necessary */
+  }
+
   .logoSection {
-    flex: 1; /* Logo takes remaining space within the 50% container */
+    flex: 1; /* Logo takes remaining space within the start section */
   }
   
   .mobileOnly {
@@ -261,13 +300,16 @@
   }
 
   /* RTL mobile adjustments */
-  :global([dir="rtl"]) .leftSection {
-    width: 50%; /* Keep the 50% width in RTL mobile */
-    justify-content: flex-end; /* Align hamburger + logo to right edge of their 50% container */
+  :global([dir="rtl"]) .startSection {
+    justify-content: flex-end; /* Align hamburger + logo to right edge in RTL */
+  }
+
+  :global([dir="rtl"]) .endSection {
+    /* End section aligns properly in RTL mobile */
   }
 
   :global([dir="rtl"]) .warehouseSection {
-    order: -1; /* Ensure warehouse section is on the left in RTL mobile */
+    order: -1; /* Ensure warehouse section is on the left in RTL mobile when used independently */
   }
 }
 
