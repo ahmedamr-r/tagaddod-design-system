@@ -6,6 +6,12 @@ export type {
   CalendarVariant,
   DatePreset,
   DateRangeType,
-  DateRangeConfig
+  DateRangeConfig,
+  PeriodType
 } from './Calendar';
-export { calendarModes, calendarCaptionLayouts } from './Calendar';
+export {
+  calendarModes,
+  calendarCaptionLayouts,
+  RANGE_TYPE_OPTIONS,
+  PERIOD_TYPE_OPTIONS
+} from './Calendar';

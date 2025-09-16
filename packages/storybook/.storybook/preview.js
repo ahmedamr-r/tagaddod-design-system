@@ -57,6 +57,42 @@ const ThemeWrapper = ({ children, theme, direction }) => {
   );
 };
 
+// Define custom viewports for large screens
+const customViewports = {
+  desktop: {
+    name: 'Desktop (1024px)',
+    styles: {
+      width: '1024px',
+      height: '768px',
+    },
+    type: 'desktop',
+  },
+  desktopLarge: {
+    name: 'Desktop Large (1440px)',
+    styles: {
+      width: '1440px',
+      height: '900px',
+    },
+    type: 'desktop',
+  },
+  desktopXLarge: {
+    name: 'Desktop XL (1920px)',
+    styles: {
+      width: '1920px',
+      height: '1080px',
+    },
+    type: 'desktop',
+  },
+  ultrawide: {
+    name: 'Ultrawide (2560px)',
+    styles: {
+      width: '2560px',
+      height: '1440px',
+    },
+    type: 'desktop',
+  },
+};
+
 const preview = {
   parameters: {
     controls: {
@@ -64,6 +100,11 @@ const preview = {
         color: /(background|color)$/i,
         date: /Date$/i
       }
+    },
+    viewport: {
+      viewports: {
+        ...customViewports,
+      },
     },
     options: {
       storySort: {

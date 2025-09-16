@@ -2,7 +2,7 @@
 
 .topBar {
   --t-topbar-height: 64px; /* Define TopBar height as CSS custom property */
-  position: relative;
+  position: relative; /* Required for absolute positioning of center section */
   width: 100%;
   background-color: var(--t-color-surface-primary);
   border-bottom: 1px solid var(--t-color-border-primary, #e5e7eb);
@@ -44,20 +44,64 @@
   flex-shrink: 0;
 }
 
-/* Center section for swappable content with min/max width constraints */
+/* Center section for swappable content with absolute positioning */
 .centerSection {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
-  flex: 1 1 auto; /* Grows and shrinks, but respects min/max width */
   justify-content: center;
-  overflow: hidden; /* Prevent content overflow */
+  max-width: calc(100% - 2rem); /* Prevent overlap with start/end sections */
+  z-index: 1; /* Ensure it's above the flexbox layout but below dropdowns */
 }
 
-/* End section for swappable content */
+/* Center section responsive visibility */
+.centerSection.hiddenOnTablet {
+  display: none;
+}
+
+.centerSection.hiddenOnMobile {
+  display: none;
+}
+
+.centerSection.forceVisible {
+  display: flex !important;
+}
+
+/* End section for swappable content - always aligned to the right */
 .endSection {
   display: flex;
   align-items: center;
   flex: 0 0 auto; /* Content-based width - no grow, no shrink */
+  margin-left: auto; /* Push to the right edge regardless of center section visibility */
+  gap: var(--t-space-200, 0.5rem); /* Space between end section items */
+}
+
+/* Mobile action button styling */
+.mobileActionButton {
+  display: none; /* Hidden by default, shown on mobile when center is hidden */
+  flex-shrink: 0;
+}
+
+/* TopBar expansion styles */
+.topBar.expanded {
+  height: auto;
+  transition: height var(--expansion-duration, 300ms) var(--t-transition-timing-ease, ease);
+}
+
+/* Expanded content area */
+.expandedContent {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--t-color-surface-primary);
+  border-bottom: 1px solid var(--t-color-border-primary, #e5e7eb);
+  padding: var(--t-space-400, 1rem);
+  z-index: 45; /* Below dropdowns but above main content */
+  box-shadow: var(--t-shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
 }
 
 /* Legacy warehouse section (now part of end section) */
@@ -221,14 +265,17 @@
   justify-content: flex-end;
 }
 
-/* RTL: Center section maintains center alignment */
+/* RTL: Center section maintains absolute center positioning */
 :global([dir="rtl"]) .centerSection {
-  /* Center content remains centered */
+  /* Absolute positioning works the same in RTL - always centered */
+  left: 50%; /* Same as LTR since we want true center */
+  transform: translate(-50%, -50%); /* Same centering transform */
 }
 
-/* RTL: End section alignment */
+/* RTL: End section alignment - push to left edge in RTL */
 :global([dir="rtl"]) .endSection {
-  /* End section content aligns properly in RTL */
+  margin-left: 0; /* Remove LTR margin */
+  margin-right: auto; /* Push to the left edge in RTL direction */
 }
 
 /* RTL: Legacy warehouse section */
@@ -237,6 +284,19 @@
 }
 
 
+
+/* Tablet responsive for TopBar */
+@media (max-width: 1024px) and (min-width: 769px) {
+  /* Center section shrinks on tablet */
+  .centerSection {
+    max-width: calc(100% - 6rem); /* More constraints on tablet */
+  }
+
+  /* Hide center section on tablet if not enabled */
+  .centerSection.hiddenOnTablet {
+    display: none;
+  }
+}
 
 /* Mobile responsive for TopBar */
 @media (max-width: 768px) {
@@ -257,11 +317,20 @@
     gap: var(--t-space-200, 0.5rem);
   }
 
-  /* Center section adjusts for mobile */
+  /* Center section adjusts for mobile with absolute positioning */
   .centerSection {
-    /* Allow center section to be more flexible on mobile */
-    min-width: 12rem; /* Reduced from 16.25rem for mobile */
-    max-width: 20rem; /* Reduced from 50rem for mobile */
+    /* Maintain absolute positioning on mobile but with smaller constraints */
+    max-width: calc(100% - 4rem); /* More padding on mobile to avoid overlap */
+  }
+
+  /* Hide center section on mobile if not enabled */
+  .centerSection.hiddenOnMobile {
+    display: none;
+  }
+
+  /* Show mobile action button when center section is hidden */
+  .mobileActionButton {
+    display: flex;
   }
 
   /* End section adjusts for mobile */
@@ -305,7 +374,8 @@
   }
 
   :global([dir="rtl"]) .endSection {
-    /* End section aligns properly in RTL mobile */
+    margin-left: 0; /* Remove LTR margin on mobile */
+    margin-right: auto; /* Push to left edge in RTL mobile */
   }
 
   :global([dir="rtl"]) .warehouseSection {

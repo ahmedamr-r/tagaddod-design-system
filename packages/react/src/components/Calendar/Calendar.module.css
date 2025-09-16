@@ -943,7 +943,6 @@
 
 /* Custom preset button */
 .customPreset {
-  font-style: italic;
   color: var(--t-color-text-tertiary);
 }
 

@@ -196,6 +196,23 @@ export interface DatePickerProps extends Omit<TextInputProps, 'value' | 'onChang
    * Whether to show timezone information
    */
   showTimezone?: boolean;
+
+  /**
+   * Enable input validation with fallback behavior
+   * When enabled, invalid inputs will be replaced with fallback values on blur
+   */
+  enableValidation?: boolean;
+
+  /**
+   * Function that returns fallback date for invalid inputs
+   * Called when enableValidation is true and user inputs invalid data
+   */
+  validationFallback?: () => Date;
+
+  /**
+   * Callback when input value changes (for tracking raw input)
+   */
+  onInputChange?: (value: string) => void;
 }
 
 export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
@@ -234,6 +251,9 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     onCancel,
     timezone,
     showTimezone = false,
+    enableValidation = false,
+    validationFallback,
+    onInputChange,
     className,
     onFocus,
     onBlur,
@@ -243,6 +263,10 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
   }, ref) => {
     const [internalOpen, setInternalOpen] = useState(false);
     const [inputValue, setInputValue] = useState('');
+    // State for validation
+    const [hasInvalidInput, setHasInvalidInput] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
+    const [rawInputValue, setRawInputValue] = useState<string>('');
 
     // Dual layout state (for range mode with dual layout)
     const [activeInput, setActiveInput] = useState<'start' | 'end' | null>(null);
@@ -385,42 +409,75 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
       }
     };
 
-    // Parse input value to date
+    // Parse input value to date with flexible format support
     const parseInputValue = (inputValue: string): Date | Date[] | { from?: Date; to?: Date } | undefined => {
       if (!inputValue.trim()) return undefined;
-      
+
       try {
         if (parseDate) {
           const parsed = parseDate(inputValue);
           return parsed;
         }
-        
+
+        // Helper function to try multiple date formats for flexible parsing
+        const tryParseDate = (dateStr: string): Date | undefined => {
+          const trimmed = dateStr.trim();
+          if (!trimmed) return undefined;
+
+          // Flexible date formats to try (supports both 1 and 01 for days/months)
+          const formats = [
+            'dd/MM/yyyy',  // 01/01/2025
+            'd/MM/yyyy',   // 1/01/2025
+            'dd/M/yyyy',   // 01/1/2025
+            'd/M/yyyy',    // 1/1/2025
+            'dd-MM-yyyy',  // 01-01-2025
+            'd-MM-yyyy',   // 1-01-2025
+            'dd-M-yyyy',   // 01-1-2025
+            'd-M-yyyy',    // 1-1-2025
+            'yyyy-MM-dd',  // 2025-01-01
+            'yyyy-M-d',    // 2025-1-1
+            'MM/dd/yyyy',  // 01/01/2025 (US format)
+            'M/dd/yyyy',   // 1/01/2025
+            'MM/d/yyyy',   // 01/1/2025
+            'M/d/yyyy',    // 1/1/2025
+            dateFormat     // Original format as fallback
+          ];
+
+          // Try each format
+          for (const format of formats) {
+            try {
+              const parsed = parse(trimmed, format, new Date());
+              if (isValid(parsed)) {
+                return parsed;
+              }
+            } catch {
+              continue;
+            }
+          }
+
+          return undefined;
+        };
+
         if (mode === 'single') {
-          const parsed = parse(inputValue, dateFormat, new Date());
-          return isValid(parsed) ? parsed : undefined;
+          return tryParseDate(inputValue);
         }
-        
+
         if (mode === 'multiple') {
-          const dates = inputValue.split(',').map(dateStr => {
-            const trimmed = dateStr.trim();
-            const parsed = parse(trimmed, dateFormat, new Date());
-            return isValid(parsed) ? parsed : null;
-          }).filter(Boolean) as Date[];
-          
+          const dates = inputValue.split(',').map(dateStr => tryParseDate(dateStr)).filter(Boolean) as Date[];
           return dates.length > 0 ? dates : undefined;
         }
-        
+
         if (mode === 'range') {
           const [fromStr, toStr] = inputValue.split('-').map(s => s.trim());
-          const from = fromStr ? parse(fromStr, dateFormat, new Date()) : undefined;
-          const to = toStr ? parse(toStr, dateFormat, new Date()) : undefined;
-          
+          const from = fromStr ? tryParseDate(fromStr) : undefined;
+          const to = toStr ? tryParseDate(toStr) : undefined;
+
           return {
-            from: from && isValid(from) ? from : undefined,
-            to: to && isValid(to) ? to : undefined
+            from,
+            to
           };
         }
-        
+
         return undefined;
       } catch (error) {
         console.warn('Failed to parse date:', error);
@@ -428,10 +485,13 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
       }
     };
 
-    // Update input value when external value changes
+    // Update input value when external value changes, but only if user is not actively typing
     useEffect(() => {
-      setInputValue(formatDateForDisplay(value));
-    }, [value, dateFormat, formatDate, mode]);
+      // Don't overwrite input while user is typing to preserve text selection behavior
+      if (!isTyping) {
+        setInputValue(formatDateForDisplay(value));
+      }
+    }, [value, dateFormat, formatDate, mode, isTyping]);
 
     // Handle calendar date selection
     const handleCalendarSelect = (selectedDate: Date | Date[] | { from?: Date; to?: Date } | undefined) => {
@@ -447,10 +507,25 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
       setInputValue(newValue);
-      
-      // Try to parse the input value
-      const parsedDate = parseInputValue(newValue);
-      onChange?.(parsedDate);
+      setRawInputValue(newValue);
+      setIsTyping(true);
+
+      // Call onInputChange callback if provided
+      onInputChange?.(newValue);
+
+      // Clear validation errors when user starts typing (good UX practice)
+      if (enableValidation && hasInvalidInput) {
+        setHasInvalidInput(false);
+      }
+
+      // Be very conservative about calling onChange during typing to preserve text selection behavior
+      // Only call onChange for empty input - let blur handler handle parsing and formatting
+      if (!newValue.trim()) {
+        // Empty input - clear the value
+        onChange?.(undefined);
+      }
+      // For non-empty input, let the user continue typing and handle parsing on blur
+      // This preserves natural text selection and replacement behavior
     };
 
     // Handle input focus
@@ -458,7 +533,44 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
       if (!readOnly) {
         setIsOpen(true);
       }
+      setIsTyping(true);
       onFocus?.(e);
+    };
+
+    // Enhanced blur handler with validation fallback and formatting
+    const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      setIsTyping(false);
+
+      // Try to parse and format the current input
+      const currentInput = inputValue.trim();
+      if (currentInput) {
+        const parsedDate = parseInputValue(currentInput);
+
+        if (parsedDate) {
+          // Successfully parsed - format it properly and update the input display
+          const formattedValue = formatDateForDisplay(parsedDate);
+          setInputValue(formattedValue);
+
+          // Make sure parent component gets the parsed date
+          onChange?.(parsedDate);
+
+          // Clear any validation errors
+          if (enableValidation) {
+            setHasInvalidInput(false);
+          }
+        } else if (enableValidation && validationFallback) {
+          // Invalid input - apply fallback
+          setHasInvalidInput(true);
+          const fallbackDate = validationFallback();
+          if (fallbackDate && isValid(fallbackDate)) {
+            onChange?.(fallbackDate);
+            setHasInvalidInput(false);
+            setRawInputValue('');
+          }
+        }
+      }
+
+      onBlur?.(e);
     };
 
     // Handle input key down
@@ -891,6 +1003,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                 value={inputValue}
                 onChange={readOnly ? undefined : handleInputChange}
                 onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
                 onKeyDown={handleInputKeyDown}
                 placeholder={placeholderText}
                 suffix={

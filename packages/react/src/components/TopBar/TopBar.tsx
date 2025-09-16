@@ -260,6 +260,46 @@ export interface TopBarProps extends React.ComponentPropsWithoutRef<'header'> {
    */
   popoverProps?: Record<string, any>;
   
+  /* ===== RESPONSIVE BEHAVIOR ===== */
+  /**
+   * Whether to show center section on tablet devices (768px-1024px)
+   * @default true
+   */
+  showCenterSectionOnTablet?: boolean;
+  /**
+   * Whether to show center section on mobile devices (< 768px)
+   * @default false
+   */
+  showCenterSectionOnMobile?: boolean;
+  /**
+   * Whether the TopBar is in expanded state (shows expanded content below main bar)
+   * @default false
+   */
+  isExpanded?: boolean;
+  /**
+   * Callback when expansion state should change
+   */
+  onExpandToggle?: (expanded: boolean) => void;
+  /**
+   * Content to show when TopBar is expanded (typically the center content)
+   */
+  expandedContent?: React.ReactNode;
+  /**
+   * Mobile action button to show when center section is hidden
+   * Typically a search icon or menu trigger. Appears in end section.
+   */
+  mobileActionContent?: React.ReactNode;
+  /**
+   * Custom height for expanded state
+   * @default "auto"
+   */
+  expandedHeight?: string | number;
+  /**
+   * Animation duration for height transitions in milliseconds
+   * @default 300
+   */
+  expansionDuration?: number;
+
   /* ===== MOBILE NAVIGATION ===== */
   /**
    * Whether to show the hamburger menu on small devices
@@ -311,6 +351,15 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
     // End section props
     endContent,
     showEndSection = true,
+    // Responsive behavior props
+    showCenterSectionOnTablet = true,
+    showCenterSectionOnMobile = false,
+    isExpanded = false,
+    onExpandToggle,
+    expandedContent,
+    mobileActionContent,
+    expandedHeight = "auto",
+    expansionDuration = 300,
     // Warehouse selector props
     selectedWarehouse = "Al Haram Warehouse",
     warehouses = ["Al Haram Warehouse", "Main Warehouse", "Secondary Warehouse"],
@@ -423,49 +472,95 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
       ...popoverProps
     };
 
+    // Determine responsive center section visibility classes
+    const centerSectionClasses = clsx(
+      styles.centerSection,
+      // Hide on tablet if disabled
+      !showCenterSectionOnTablet && styles.hiddenOnTablet,
+      // Hide on mobile if disabled
+      !showCenterSectionOnMobile && styles.hiddenOnMobile,
+      // Force visible when expanded
+      isExpanded && styles.forceVisible
+    );
+
+    // Create mobile action button handler
+    const handleMobileActionClick = () => {
+      onExpandToggle?.(!isExpanded);
+    };
+
     // Create default end content (warehouse dropdown) if no endContent provided
     const defaultEndContent = !endContent ? (
-      !warehouseDisabled ? (
-        <Popover {...mergedPopoverProps}>
+      <>
+        {/* Mobile action button - only shown when center section is hidden on mobile */}
+        {mobileActionContent && (
+          <div
+            className={styles.mobileActionButton}
+            onClick={handleMobileActionClick}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleMobileActionClick();
+              }
+            }}
+            aria-label={isExpanded ? 'Collapse search' : 'Expand search'}
+          >
+            {mobileActionContent}
+          </div>
+        )}
+
+        {/* Warehouse dropdown */}
+        {!warehouseDisabled ? (
+          <Popover {...mergedPopoverProps}>
+            <button
+              className={clsx(styles.warehouseTrigger, warehouseTriggerClassName)}
+              style={lineHeightStyle}
+              aria-label={`Select warehouse. Current: ${selectedWarehouse}`}
+            >
+              {warehouseIcon || <IconBuilding size={warehouseIconSize} className={styles.warehouseIcon} />}
+              <span className={styles.warehouseText}>{selectedWarehouse}</span>
+              <IconChevronDown
+                size={16}
+                className={clsx(
+                  styles.warehouseChevron,
+                  isPopoverOpen && styles.warehouseChevronOpen
+                )}
+              />
+            </button>
+          </Popover>
+        ) : (
           <button
-            className={clsx(styles.warehouseTrigger, warehouseTriggerClassName)}
+            className={clsx(
+              styles.warehouseTrigger,
+              styles.warehouseTriggerDisabled,
+              warehouseTriggerClassName
+            )}
+            disabled={true}
             style={lineHeightStyle}
-            aria-label={`Select warehouse. Current: ${selectedWarehouse}`}
+            aria-label={`Warehouse selector disabled. Current: ${selectedWarehouse}`}
           >
             {warehouseIcon || <IconBuilding size={warehouseIconSize} className={styles.warehouseIcon} />}
             <span className={styles.warehouseText}>{selectedWarehouse}</span>
-            <IconChevronDown
-              size={16}
-              className={clsx(
-                styles.warehouseChevron,
-                isPopoverOpen && styles.warehouseChevronOpen
-              )}
-            />
+            <IconChevronDown size={16} className={styles.warehouseChevron} />
           </button>
-        </Popover>
-      ) : (
-        <button
-          className={clsx(
-            styles.warehouseTrigger,
-            styles.warehouseTriggerDisabled,
-            warehouseTriggerClassName
-          )}
-          disabled={true}
-          style={lineHeightStyle}
-          aria-label={`Warehouse selector disabled. Current: ${selectedWarehouse}`}
-        >
-          {warehouseIcon || <IconBuilding size={warehouseIconSize} className={styles.warehouseIcon} />}
-          <span className={styles.warehouseText}>{selectedWarehouse}</span>
-          <IconChevronDown size={16} className={styles.warehouseChevron} />
-        </button>
-      )
+        )}
+      </>
     ) : null;
 
     return (
       <header
         ref={ref}
-        className={clsx(styles.topBar, className)}
-        style={lineHeightStyle}
+        className={clsx(
+          styles.topBar,
+          isExpanded && styles.expanded,
+          className
+        )}
+        style={{
+          ...lineHeightStyle,
+          '--expansion-duration': `${expansionDuration}ms`,
+          '--expanded-height': typeof expandedHeight === 'number' ? `${expandedHeight}px` : expandedHeight
+        }}
         {...props}
       >
         <div className={styles.topBarContent}>
@@ -476,7 +571,7 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
               <Button
                 variant="plain"
                 tone="neutral"
-                size="micro"
+                size="xSmall"
                 className={clsx(
                   styles.hamburgerButton,
                   styles.mobileOnly,
@@ -509,10 +604,10 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
             </div>
           </div>
 
-          {/* Center Section - Swappable Content */}
+          {/* Center Section - Swappable Content with responsive visibility */}
           {showCenterSection && (
             <div
-              className={styles.centerSection}
+              className={centerSectionClasses}
               style={{
                 minWidth: centerSectionMinWidth,
                 maxWidth: centerSectionMaxWidth,
@@ -530,6 +625,13 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
             </div>
           )}
         </div>
+
+        {/* Expanded Content Area */}
+        {isExpanded && expandedContent && (
+          <div className={styles.expandedContent} style={lineHeightStyle}>
+            {expandedContent}
+          </div>
+        )}
       </header>
     );
   }

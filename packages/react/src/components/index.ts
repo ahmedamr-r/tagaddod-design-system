@@ -155,4 +155,16 @@ export { Number } from './Number';
 export type { NumberProps, NumberFormatOptions, NumberSize } from './Number';
 export { numberSizes } from './Number';
 
+// Export Token Documentation components
+export {
+  TokenScanner,
+  ColorTokenGrid,
+  TypographyTokenPreview,
+  SpacingTokenScale,
+  TokenHierarchyTree,
+  TokenControls,
+  BrandTokenComparison,
+  TokenPlayground
+} from './TokenDocumentation';
+
 
