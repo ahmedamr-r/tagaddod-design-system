@@ -1,18 +1,19 @@
-import React, { forwardRef, useState, useCallback, useMemo } from 'react';
+import React, { forwardRef, useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { DayPicker, DayPickerProps } from 'react-day-picker';
 import clsx from 'clsx';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { IconChevronLeft, IconChevronRight, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { Select } from '../Select/Select';
 import { Button } from '../Button/Button';
 import { DatePicker } from '../DatePicker/DatePicker';
 import { Number } from '../Number/Number';
+import { ScrollArea } from '../ScrollArea/ScrollArea';
 import { startOfDay, endOfDay, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter, startOfYear, endOfYear, addMonths, isValid, parse } from 'date-fns';
 import styles from './Calendar.module.css';
 
 // Constants for better maintainability
 const DEFAULT_CALENDAR_CELL_SIZE = 'var(--t-size-1000)'; // 40px
 const DEFAULT_NUMBER_OF_MONTHS = 1;
-const ANALYTICS_VARIANT_MONTHS = 2;
+const DEFAULT_ANALYTICS_MONTHS = 2;
 
 // Date validation constants
 const DATE_FORMAT = 'dd/MM/yyyy';
@@ -306,6 +307,12 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
       lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
     }), [isRTL]);
 
+    // Scroll indicator state for preset section
+    const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+    const [showScrollUpIndicator, setShowScrollUpIndicator] = useState(false);
+    const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+
 
     // Default presets for analytics variant - commonly used date ranges
     const defaultPresets: DatePreset[] = [
@@ -347,6 +354,60 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     ];
 
     const availablePresets = presets || defaultPresets;
+
+    // Check if content is scrollable and handle scroll indicator visibility
+    useEffect(() => {
+      const checkScrollable = () => {
+        const scrollElement = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+        if (scrollElement) {
+          const { scrollHeight, clientHeight, scrollTop } = scrollElement as HTMLElement;
+          const isScrollable = scrollHeight > clientHeight;
+          const isAtBottom = scrollTop + clientHeight >= scrollHeight - 5; // 5px threshold
+          const isAtTop = scrollTop <= 5; // 5px threshold
+
+          // Show down indicator if scrollable and not at bottom
+          setShowScrollIndicator(isScrollable && !isAtBottom);
+          // Show up indicator if scrollable and not at top
+          setShowScrollUpIndicator(isScrollable && !isAtTop);
+        }
+      };
+
+      // Initial check
+      checkScrollable();
+
+      // Listen for scroll events
+      const scrollElement = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollElement) {
+        scrollElement.addEventListener('scroll', checkScrollable);
+        return () => scrollElement.removeEventListener('scroll', checkScrollable);
+      }
+    }, [availablePresets, showCustomPreset]); // Re-check when presets change
+
+    // Handle scroll indicator click to scroll down
+    const handleScrollIndicatorClick = useCallback(() => {
+      const scrollElement = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollElement) {
+        const { scrollTop, clientHeight } = scrollElement as HTMLElement;
+        // Scroll down by half the visible height for smooth scrolling
+        (scrollElement as HTMLElement).scrollTo({
+          top: scrollTop + clientHeight * 0.5,
+          behavior: 'smooth'
+        });
+      }
+    }, []);
+
+    // Handle scroll up indicator click to scroll up
+    const handleScrollUpIndicatorClick = useCallback(() => {
+      const scrollElement = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollElement) {
+        const { scrollTop, clientHeight } = scrollElement as HTMLElement;
+        // Scroll up by half the visible height for smooth scrolling
+        (scrollElement as HTMLElement).scrollTo({
+          top: scrollTop - clientHeight * 0.5,
+          behavior: 'smooth'
+        });
+      }
+    }, []);
 
     // Date validation handlers
     const handleStartDateBlur = useCallback(() => {
@@ -784,56 +845,89 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
             {/* Left Panel - Presets with reduced width */}
             <div className={styles.presetPanel}>
               <h3 className={styles.presetTitle}>Presets</h3>
-              <div className={styles.presetGroup}>
-                {availablePresets.map((preset) => (
+              <div className={styles.presetScrollContainer}>
+                {/* Scroll up indicator chevron */}
+                {showScrollUpIndicator && (
                   <button
-                    key={preset.id}
-                    className={clsx(
-                      styles.presetButton,
-                      selectedPreset === preset.id && styles.active
-                    )}
-                    onClick={() => {
-                      // Mark this as a preset selection
-                      setIsPresetSelection(true);
-                      onPresetChange?.(preset.id);
-                      const range = preset.getValue();
-                      onSelect?.({ from: range.from, to: range.to });
-
-                      // Auto-sync dropdown with preset selection
-                      if (preset.label.startsWith('Last ')) {
-                        onRangeTypeChange?.('last', true); // true = from preset
-                        // Extract number from preset label (e.g., "Last 30 Days" -> 30)
-                        const match = preset.label.match(/Last (\d+)/);
-                        if (match) {
-                          onRangeValueChange?.(parseInt(match[1]), true); // true = from preset
-                        }
-                      } else if (preset.label.startsWith('This ')) {
-                        onRangeTypeChange?.('this', true); // true = from preset
-                        // Extract period from preset label (e.g., "This Week" -> "week")
-                        const period = preset.label.replace('This ', '').toLowerCase() as PeriodType;
-                        onPeriodTypeChange?.(period, true); // true = from preset
-                      }
-                      // Reset the flag after a short delay
-                      setTimeout(() => setIsPresetSelection(false), 100);
-                    }}
+                    className={styles.scrollUpIndicator}
+                    onClick={handleScrollUpIndicatorClick}
+                    type="button"
+                    aria-label="Scroll up to see more presets"
                   >
-                    {preset.label}
+                    <IconChevronUp size={16} />
                   </button>
-                ))}
-                {shouldShowCustom && (
+                )}
+
+                <ScrollArea
+                  ref={scrollAreaRef}
+                  className={styles.presetScrollArea}
+                  height="280px"
+                  type="scroll"
+                >
+                <div className={styles.presetGroup}>
+                  {availablePresets.map((preset) => (
+                    <button
+                      key={preset.id}
+                      className={clsx(
+                        styles.presetButton,
+                        selectedPreset === preset.id && styles.active
+                      )}
+                      onClick={() => {
+                        // Mark this as a preset selection
+                        setIsPresetSelection(true);
+                        onPresetChange?.(preset.id);
+                        const range = preset.getValue();
+                        onSelect?.({ from: range.from, to: range.to });
+
+                        // Auto-sync dropdown with preset selection
+                        if (preset.label.startsWith('Last ')) {
+                          onRangeTypeChange?.('last', true); // true = from preset
+                          // Extract number from preset label (e.g., "Last 30 Days" -> 30)
+                          const match = preset.label.match(/Last (\d+)/);
+                          if (match) {
+                            onRangeValueChange?.(parseInt(match[1]), true); // true = from preset
+                          }
+                        } else if (preset.label.startsWith('This ')) {
+                          onRangeTypeChange?.('this', true); // true = from preset
+                          // Extract period from preset label (e.g., "This Week" -> "week")
+                          const period = preset.label.replace('This ', '').toLowerCase() as PeriodType;
+                          onPeriodTypeChange?.(period, true); // true = from preset
+                        }
+                        // Reset the flag after a short delay
+                        setTimeout(() => setIsPresetSelection(false), 100);
+                      }}
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                  {shouldShowCustom && (
+                    <button
+                      className={clsx(
+                        styles.presetButton,
+                        styles.customPreset,
+                        selectedPreset === 'custom' && styles.active
+                      )}
+                      onClick={() => {
+                        onPresetChange?.('custom');
+                        // Switch to "Between" mode when Custom is selected
+                        onRangeTypeChange?.('between');
+                      }}
+                    >
+                      Custom
+                    </button>
+                  )}
+                </div>
+                </ScrollArea>
+
+                {/* Scroll indicator chevron */}
+                {showScrollIndicator && (
                   <button
-                    className={clsx(
-                      styles.presetButton,
-                      styles.customPreset,
-                      selectedPreset === 'custom' && styles.active
-                    )}
-                    onClick={() => {
-                      onPresetChange?.('custom');
-                      // Switch to "Between" mode when Custom is selected
-                      onRangeTypeChange?.('between');
-                    }}
+                    className={styles.scrollIndicator}
+                    onClick={handleScrollIndicatorClick}
+                    type="button"
+                    aria-label="Scroll down to see more presets"
                   >
-                    Custom
+                    <IconChevronDown size={16} />
                   </button>
                 )}
               </div>
@@ -866,7 +960,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
 
                     {/* Month labels group in center */}
                     <div className={styles.monthLabelsGroup}>
-                      {Array.from({ length: ANALYTICS_VARIANT_MONTHS }, (_, index) => {
+                      {Array.from({ length: variant === 'analytics' ? (numberOfMonths || DEFAULT_ANALYTICS_MONTHS) : numberOfMonths }, (_, index) => {
                         const monthDate = addMonths(currentMonth, index);
                         return (
                           <div key={index} className={styles.captionLabel}>
@@ -896,7 +990,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                 {/* Calendar content with hidden default navigation */}
                 <DayPicker
                   mode="range"
-                  numberOfMonths={ANALYTICS_VARIANT_MONTHS}
+                  numberOfMonths={numberOfMonths || DEFAULT_ANALYTICS_MONTHS}
                   selected={selected as any}
                   onDayClick={(clickedDate: Date) => {
                     // Skip custom preset selection if this is from a preset button

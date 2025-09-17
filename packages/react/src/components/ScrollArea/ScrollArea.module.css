@@ -2,6 +2,12 @@
 
 .root {
   overflow: hidden;
+  /* Protection against CSS conflicts that commonly break ScrollArea */
+  box-sizing: border-box !important;
+  /* Prevent external CSS from overriding critical layout properties */
+  flex-grow: 0 !important;
+  flex-basis: auto !important;
+  /* Note: height/width are controlled via inline styles from component props */
 }
 
 .viewport {

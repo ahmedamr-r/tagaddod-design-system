@@ -15,6 +15,11 @@ const meta: Meta<typeof Calendar> = {
     }
   },
   argTypes: {
+    variant: {
+      control: { type: 'select' },
+      options: ['default', 'analytics'],
+      description: 'Calendar variant - analytics enables preset sidebar'
+    },
     mode: {
       control: { type: 'select' },
       options: ['single', 'multiple', 'range'],
@@ -47,6 +52,7 @@ const meta: Meta<typeof Calendar> = {
     }
   },
   args: {
+    variant: 'default',
     mode: 'single',
     captionLayout: 'label',
     numberOfMonths: 1,
@@ -414,6 +420,11 @@ export const AnalyticsRangeRTL: Story = {
 
 // Analytics Range - Amplitude-style date picker with presets
 export const AnalyticsRange: Story = {
+  args: {
+    variant: 'analytics',
+    mode: 'range',
+    numberOfMonths: 2
+  },
   parameters: {
     docs: {
       description: {
@@ -422,7 +433,7 @@ export const AnalyticsRange: Story = {
 **Features:**
 - **Preset Panel**: Quick access to common date ranges
 - **Dynamic Header**: Changes based on selected range type (Between, Last, Since, This)
-- **Dual Calendar**: Two-month calendar display for range selection
+- **Configurable Months**: Use the numberOfMonths control to change display (1-3 months)
 - **Smart Inputs**: Editable date inputs and number inputs based on selection type
 - **Auto-Custom Preset**: Automatically appears and gets selected when user modifies header controls
 - **Professional Actions**: Apply and Cancel buttons
@@ -438,6 +449,8 @@ export const AnalyticsRange: Story = {
 - **Since**: Single date input
 - **This**: Period dropdown (Week/Month/Quarter/Year)
 
+**Try the numberOfMonths control above to see 1, 2, or 3 months!**
+
 **Use Cases:**
 - Analytics dashboards
 - Reporting interfaces
@@ -446,7 +459,7 @@ export const AnalyticsRange: Story = {
       }
     }
   },
-  render: () => {
+  render: (args) => {
     const [selectedRange, setSelectedRange] = useState<{ from?: Date; to?: Date }>({
       from: new Date(new Date().setDate(new Date().getDate() - 30)),
       to: new Date()
@@ -477,9 +490,7 @@ export const AnalyticsRange: Story = {
         backgroundColor: 'var(--t-color-surface-secondary)'
       }}>
         <Calendar
-          variant="analytics"
-          mode="range"
-          numberOfMonths={2}
+          {...args}
           selected={selectedRange}
           onSelect={(range) => {
             const newRange = range as { from?: Date; to?: Date };
@@ -552,12 +563,19 @@ export const AnalyticsRange: Story = {
 
 // Analytics Range with Date Validation Testing
 export const AnalyticsDateValidation: Story = {
+  args: {
+    variant: 'analytics',
+    mode: 'range',
+    numberOfMonths: 2
+  },
   parameters: {
     docs: {
       description: {
         story: `**Analytics Range Calendar with Date Input Validation**
 
-        This story demonstrates robust date validation for the analytics variant:
+        This story demonstrates robust date validation for the analytics variant with configurable month display.
+
+        **Use the numberOfMonths control above to change between 1, 2, or 3 months!**
 
         **Validation Features:**
         - **Graceful Invalid Input Handling**: No error messages shown for invalid formats
@@ -581,7 +599,7 @@ export const AnalyticsDateValidation: Story = {
       }
     }
   },
-  render: () => {
+  render: (args) => {
     const [selectedRange, setSelectedRange] = useState<{ from?: Date; to?: Date }>({
       from: new Date(new Date().setDate(new Date().getDate() - 30)),
       to: new Date()
@@ -630,9 +648,7 @@ export const AnalyticsDateValidation: Story = {
           alignItems: 'flex-start'
         }}>
           <Calendar
-            variant="analytics"
-            mode="range"
-            numberOfMonths={2}
+            {...args}
             selected={selectedRange}
             onSelect={(range) => {
               const newRange = range as { from?: Date; to?: Date };
