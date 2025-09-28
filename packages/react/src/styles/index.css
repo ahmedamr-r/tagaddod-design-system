@@ -292,10 +292,12 @@
   --t-z-base: 0;
   --t-z-dropdown: 1000;
   --t-z-popover: 1010;
+  --t-z-drawer: 1020;
   --t-z-modal: 1050;
   --t-z-modal-dropdown: 1060;
-  --t-z-toast: 1070;
-  --t-z-tooltip: 1080;
+  --t-z-drawer-modal: 1070;
+  --t-z-toast: 1080;
+  --t-z-tooltip: 1090;
   --t-font-family-primary: Outfit, sans-serif;
   --t-font-weight-regular: 400;
   --t-font-weight-medium: 500;

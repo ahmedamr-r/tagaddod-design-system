@@ -9,15 +9,23 @@ import { Number } from '../Number/Number';
 import { ScrollArea } from '../ScrollArea/ScrollArea';
 import { startOfDay, endOfDay, subDays, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfQuarter, endOfQuarter, startOfYear, endOfYear, addMonths, isValid, parse } from 'date-fns';
 import styles from './Calendar.module.css';
+import {
+  CALENDAR_CONFIG,
+  CALENDAR_TRANSLATIONS,
+  PRESET_LABELS,
+  RANGE_TYPE_LABELS,
+  PERIOD_TYPE_LABELS,
+  WEEKDAY_NAMES,
+  getCalendarText,
+  getPresetLabel,
+  getRangeTypeLabel,
+  getPeriodTypeLabel,
+  formatMonthYear as formatMonthYearHelper,
+  getWeekdayNames
+} from './Calendar.constants';
 
-// Constants for better maintainability
-const DEFAULT_CALENDAR_CELL_SIZE = 'var(--t-size-1000)'; // 40px
-const DEFAULT_NUMBER_OF_MONTHS = 1;
-const DEFAULT_ANALYTICS_MONTHS = 2;
-
-// Date validation constants
-const DATE_FORMAT = 'dd/MM/yyyy';
-const DATE_FORMAT_PATTERNS = ['dd/MM/yyyy', 'dd/MM/yy', 'd/M/yyyy', 'd/M/yy', 'dd-MM-yyyy', 'yyyy-MM-dd'];
+// Import constants from Calendar.constants.ts
+const { DEFAULT_CELL_SIZE, DEFAULT_NUMBER_OF_MONTHS, DEFAULT_ANALYTICS_MONTHS, DATE_FORMAT, DATE_FORMAT_PATTERNS } = CALENDAR_CONFIG;
 
 /**
  * Validates and parses a date string, returns null if invalid
@@ -54,20 +62,24 @@ const getFallbackDates = () => {
 };
 
 // Range type options for analytics variant
-export const RANGE_TYPE_OPTIONS = [
-  { value: 'between', label: 'Between' },
-  { value: 'last', label: 'Last' },
-  { value: 'since', label: 'Since' },
-  { value: 'this', label: 'This' }
+export const getRangeTypeOptions = (isRTL: boolean) => [
+  { value: 'between', label: getRangeTypeLabel('between', isRTL) },
+  { value: 'last', label: getRangeTypeLabel('last', isRTL) },
+  { value: 'since', label: getRangeTypeLabel('since', isRTL) },
+  { value: 'this', label: getRangeTypeLabel('this', isRTL) }
 ];
 
 // Period type options for 'this' range type
-export const PERIOD_TYPE_OPTIONS = [
-  { value: 'week', label: 'Week' },
-  { value: 'month', label: 'Month' },
-  { value: 'quarter', label: 'Quarter' },
-  { value: 'year', label: 'Year' }
+export const getPeriodTypeOptions = (isRTL: boolean) => [
+  { value: 'week', label: getPeriodTypeLabel('week', isRTL) },
+  { value: 'month', label: getPeriodTypeLabel('month', isRTL) },
+  { value: 'quarter', label: getPeriodTypeLabel('quarter', isRTL) },
+  { value: 'year', label: getPeriodTypeLabel('year', isRTL) }
 ];
+
+// For backward compatibility
+export const RANGE_TYPE_OPTIONS = getRangeTypeOptions(false);
+export const PERIOD_TYPE_OPTIONS = getPeriodTypeOptions(false);
 
 // Calendar display and behavior types
 export type CalendarCaptionLayout = 'label' | 'dropdown' | 'dropdown-months' | 'dropdown-years';
@@ -247,6 +259,18 @@ export interface CalendarProps extends Omit<DayPickerProps, 'mode' | 'captionLay
    * Whether to show the custom preset option
    */
   showCustomPreset?: boolean;
+
+  /**
+   * The minimum date that can be navigated to
+   * Navigation will be disabled for months before this date
+   */
+  minDate?: Date;
+
+  /**
+   * The maximum date that can be navigated to
+   * Navigation will be disabled for months after this date
+   */
+  maxDate?: Date;
 }
 
 export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
@@ -281,6 +305,8 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     onApply,
     onCancel,
     showCustomPreset = false,
+    minDate,
+    maxDate,
     classNames,
     components,
     ...props
@@ -314,41 +340,84 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
 
 
 
+    // Use the helper function from constants
+    const formatMonthYear = (date: Date): string => {
+      return formatMonthYearHelper(date, isRTL);
+    };
+
+    // Helper function to check if navigation is allowed
+    const canNavigateTo = useCallback((targetDate: Date): boolean => {
+      const targetYear = targetDate.getFullYear();
+      const targetMonth = targetDate.getMonth();
+
+      if (minDate) {
+        const minYear = minDate.getFullYear();
+        const minMonth = minDate.getMonth();
+        if (targetYear < minYear || (targetYear === minYear && targetMonth < minMonth)) {
+          return false;
+        }
+      }
+
+      if (maxDate) {
+        const maxYear = maxDate.getFullYear();
+        const maxMonth = maxDate.getMonth();
+        if (targetYear > maxYear || (targetYear === maxYear && targetMonth > maxMonth)) {
+          return false;
+        }
+      }
+
+      return true;
+    }, [minDate, maxDate]);
+
+    // Helper function to check if previous navigation is disabled
+    const isPreviousDisabled = useMemo(() => {
+      if (!minDate) return false;
+      const previousMonth = addMonths(currentMonth, -1);
+      return !canNavigateTo(previousMonth);
+    }, [currentMonth, minDate, canNavigateTo]);
+
+    // Helper function to check if next navigation is disabled
+    const isNextDisabled = useMemo(() => {
+      if (!maxDate) return false;
+      const nextMonth = addMonths(currentMonth, numberOfMonths || 1);
+      return !canNavigateTo(nextMonth);
+    }, [currentMonth, maxDate, numberOfMonths, canNavigateTo]);
+
     // Default presets for analytics variant - commonly used date ranges
     const defaultPresets: DatePreset[] = [
       {
         id: 'last30',
-        label: 'Last 30 Days',
+        label: getPresetLabel('last30', isRTL),
         getValue: () => ({ from: startOfDay(subDays(new Date(), 29)), to: endOfDay(new Date()) })
       },
       {
         id: 'last60',
-        label: 'Last 60 Days',
+        label: getPresetLabel('last60', isRTL),
         getValue: () => ({ from: startOfDay(subDays(new Date(), 59)), to: endOfDay(new Date()) })
       },
       {
         id: 'last90',
-        label: 'Last 90 Days',
+        label: getPresetLabel('last90', isRTL),
         getValue: () => ({ from: startOfDay(subDays(new Date(), 89)), to: endOfDay(new Date()) })
       },
       {
         id: 'thisWeek',
-        label: 'This Week',
+        label: getPresetLabel('thisWeek', isRTL),
         getValue: () => ({ from: startOfWeek(new Date()), to: endOfWeek(new Date()) })
       },
       {
         id: 'thisMonth',
-        label: 'This Month',
+        label: getPresetLabel('thisMonth', isRTL),
         getValue: () => ({ from: startOfMonth(new Date()), to: endOfMonth(new Date()) })
       },
       {
         id: 'thisQuarter',
-        label: 'This Quarter',
+        label: getPresetLabel('thisQuarter', isRTL),
         getValue: () => ({ from: startOfQuarter(new Date()), to: endOfQuarter(new Date()) })
       },
       {
         id: 'thisYear',
-        label: 'This Year',
+        label: getPresetLabel('thisYear', isRTL),
         getValue: () => ({ from: startOfYear(new Date()), to: endOfYear(new Date()) })
       }
     ];
@@ -489,6 +558,21 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
 
     // Custom components for consistent styling
     const customComponents = {
+      Weekdays: () => {
+        // Custom weekdays component with Arabic support
+        const weekdayNames = getWeekdayNames(isRTL, 'short');
+        const displayNames = isRTL ? [...weekdayNames].reverse() : weekdayNames;
+
+        return (
+          <tr className={styles.weekdays}>
+            {displayNames.map((day, index) => (
+              <th key={index} className={styles.weekday} scope="col">
+                <span style={lineHeightStyle}>{day}</span>
+              </th>
+            ))}
+          </tr>
+        );
+      },
       Chevron: ({ ...props }) => {
         // Determine which chevron to use based on orientation
         if (props.orientation === 'left') {
@@ -659,7 +743,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
               }}
               size="small"
               className={styles.rangeDropdown}
-              options={RANGE_TYPE_OPTIONS}
+              options={getRangeTypeOptions(isRTL)}
             />
 
             {/* Dynamic section based on range type */}
@@ -673,7 +757,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                     setShouldValidateOnBlur(true);
                   }}
                   onBlur={handleStartDateBlur}
-                  placeholder="Start date"
+                  placeholder={getCalendarText('startDate', isRTL)}
                   size="small"
                   dateFormat={DATE_FORMAT}
                   showCalendarIcon={false}
@@ -687,7 +771,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                     return startDateFallback;
                   }}
                 />
-                <span className={styles.betweenLabel}>and</span>
+                <span className={styles.betweenLabel}>{getCalendarText('and', isRTL)}</span>
                 <DatePicker
                   value={endDate}
                   onChange={handleEndDateChange}
@@ -696,7 +780,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                     setShouldValidateOnBlur(true);
                   }}
                   onBlur={handleEndDateBlur}
-                  placeholder="End date"
+                  placeholder={getCalendarText('endDate', isRTL)}
                   size="small"
                   dateFormat={DATE_FORMAT}
                   showCalendarIcon={false}
@@ -751,7 +835,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                   fullWidth={false}
                   hideSteppers={false}
                 />
-                <span className={styles.lastLabel}>complete days and today</span>
+                <span className={styles.lastLabel}>{getCalendarText('completeDaysAndToday', isRTL)}</span>
               </>
             )}
 
@@ -764,7 +848,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                   setShouldValidateOnBlur(true);
                 }}
                 onBlur={handleSinceDateBlur}
-                placeholder="Since date"
+                placeholder={getCalendarText('sinceDate', isRTL)}
                 size="small"
                 dateFormat={DATE_FORMAT}
                 showCalendarIcon={false}
@@ -824,7 +908,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                 }}
                 size="small"
                 className={styles.periodDropdown}
-                options={PERIOD_TYPE_OPTIONS}
+                options={getPeriodTypeOptions(isRTL)}
               />
             )}
           </div>
@@ -844,7 +928,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
           <div className={styles.analyticsMain}>
             {/* Left Panel - Presets with reduced width */}
             <div className={styles.presetPanel}>
-              <h3 className={styles.presetTitle}>Presets</h3>
+              <h3 className={styles.presetTitle}>{getCalendarText('presets', isRTL)}</h3>
               <div className={styles.presetScrollContainer}>
                 {/* Scroll up indicator chevron */}
                 {showScrollUpIndicator && (
@@ -913,7 +997,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                         onRangeTypeChange?.('between');
                       }}
                     >
-                      Custom
+                      {getCalendarText('custom', isRTL)}
                     </button>
                   )}
                 </div>
@@ -946,16 +1030,23 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                 <div className={styles.customHeader}>
                   {/* Navigation row with buttons and month labels */}
                   <div className={styles.navigationRow}>
-                    {/* Previous button on far left */}
+                    {/* Previous button on far left - swap icon for RTL */}
                     <button
                       className={styles.buttonPrevious}
                       onClick={() => {
                         const newMonth = addMonths(currentMonth, -1);
-                        setCurrentMonth(newMonth);
+                        if (canNavigateTo(newMonth)) {
+                          setCurrentMonth(newMonth);
+                        }
                       }}
-                      aria-label="Previous month"
+                      disabled={isPreviousDisabled}
+                      aria-label={getCalendarText('previousMonth', isRTL)}
                     >
-                      <IconChevronLeft className={styles.chevron} size={16} />
+                      {isRTL ? (
+                        <IconChevronRight className={styles.chevron} size={16} />
+                      ) : (
+                        <IconChevronLeft className={styles.chevron} size={16} />
+                      )}
                     </button>
 
                     {/* Month labels group in center */}
@@ -964,25 +1055,29 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                         const monthDate = addMonths(currentMonth, index);
                         return (
                           <div key={index} className={styles.captionLabel}>
-                            {monthDate.toLocaleDateString(isRTL ? 'ar-SA' : 'en-US', {
-                              month: 'long',
-                              year: 'numeric'
-                            })}
+                            {formatMonthYear(monthDate)}
                           </div>
                         );
                       })}
                     </div>
 
-                    {/* Next button on far right */}
+                    {/* Next button on far right - swap icon for RTL */}
                     <button
                       className={styles.buttonNext}
                       onClick={() => {
                         const newMonth = addMonths(currentMonth, 1);
-                        setCurrentMonth(newMonth);
+                        if (canNavigateTo(newMonth)) {
+                          setCurrentMonth(newMonth);
+                        }
                       }}
-                      aria-label="Next month"
+                      disabled={isNextDisabled}
+                      aria-label={getCalendarText('nextMonth', isRTL)}
                     >
-                      <IconChevronRight className={styles.chevron} size={16} />
+                      {isRTL ? (
+                        <IconChevronLeft className={styles.chevron} size={16} />
+                      ) : (
+                        <IconChevronRight className={styles.chevron} size={16} />
+                      )}
                     </button>
                   </div>
                 </div>
@@ -1081,12 +1176,12 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
           <div className={styles.analyticsActions}>
             {onCancel && (
               <Button variant="outlined" size="small" onClick={onCancel}>
-                Cancel
+                {getCalendarText('cancel', isRTL)}
               </Button>
             )}
             {onApply && (
               <Button variant="primary" size="small" onClick={onApply}>
-                Apply
+                {getCalendarText('apply', isRTL)}
               </Button>
             )}
           </div>
@@ -1110,40 +1205,83 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
               {/* Navigation row with buttons and dropdowns */}
               <div className={styles.navigationRow}>
                 {/* Previous button on far left */}
-                <button
-                  className={styles.buttonPrevious}
+                <Button
+                  variant="plain"
+                  size="small"
                   onClick={() => {
                     const newMonth = addMonths(currentMonth, -1);
-                    setCurrentMonth(newMonth);
+                    if (canNavigateTo(newMonth)) {
+                      setCurrentMonth(newMonth);
+                    }
                   }}
-                  aria-label="Previous month"
-                >
-                  <IconChevronLeft className={styles.chevron} size={16} />
-                </button>
+                  disabled={isPreviousDisabled}
+                  aria-label={getCalendarText('previousMonth', isRTL)}
+                  prefixIcon={<IconChevronLeft size={16} />}
+                />
 
-                {/* Dropdown controls in center - let DayPicker render them */}
+                {/* Dropdown controls in center */}
                 <div className={styles.dropdownGroup}>
-                  {/* The actual dropdowns will be rendered by DayPicker */}
+                  {/* Month dropdown */}
+                  <Select
+                    value={currentMonth.toLocaleString('default', { month: 'long' })}
+                    onValueChange={(monthName) => {
+                      const monthIndex = new Date(Date.parse(monthName + " 1, 2000")).getMonth();
+                      const newMonth = new Date(currentMonth.getFullYear(), monthIndex, 1);
+                      setCurrentMonth(newMonth);
+                    }}
+                    size="small"
+                    options={[
+                      { value: "January", label: "January" },
+                      { value: "February", label: "February" },
+                      { value: "March", label: "March" },
+                      { value: "April", label: "April" },
+                      { value: "May", label: "May" },
+                      { value: "June", label: "June" },
+                      { value: "July", label: "July" },
+                      { value: "August", label: "August" },
+                      { value: "September", label: "September" },
+                      { value: "October", label: "October" },
+                      { value: "November", label: "November" },
+                      { value: "December", label: "December" }
+                    ]}
+                  />
+
+                  {/* Year dropdown */}
+                  <Select
+                    value={currentMonth.getFullYear().toString()}
+                    onValueChange={(year) => {
+                      const newMonth = new Date(parseInt(year), currentMonth.getMonth(), 1);
+                      setCurrentMonth(newMonth);
+                    }}
+                    size="small"
+                    options={Array.from({ length: 11 }, (_, i) => {
+                      const year = new Date().getFullYear() - 5 + i;
+                      return { value: year.toString(), label: year.toString() };
+                    })}
+                  />
                 </div>
 
                 {/* Next button on far right */}
-                <button
-                  className={styles.buttonNext}
+                <Button
+                  variant="plain"
+                  size="small"
                   onClick={() => {
                     const newMonth = addMonths(currentMonth, 1);
-                    setCurrentMonth(newMonth);
+                    if (canNavigateTo(newMonth)) {
+                      setCurrentMonth(newMonth);
+                    }
                   }}
-                  aria-label="Next month"
-                >
-                  <IconChevronRight className={styles.chevron} size={16} />
-                </button>
+                  disabled={isNextDisabled}
+                  aria-label={getCalendarText('nextMonth', isRTL)}
+                  suffixIcon={<IconChevronRight size={16} />}
+                />
               </div>
             </div>
 
-            {/* Calendar content with custom nav hidden, keep dropdown caption */}
+            {/* Calendar content with custom nav and caption hidden */}
             <DayPicker
               mode={mode as any}
-              captionLayout="dropdown"
+              captionLayout="label"
               navLayout={navLayout}
               selected={selected as any}
               onSelect={onSelect as any}
@@ -1158,7 +1296,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
               classNames={{
                 ...customClassNames,
                 nav: styles.hiddenNav,
-                month_caption: styles.dropdownRoot
+                month_caption: styles.hiddenCaption
               }}
               components={customComponents}
               dir={isRTL ? 'rtl' : 'ltr'}
@@ -1180,16 +1318,23 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
           <div className={styles.customHeader}>
             {/* Navigation row with buttons and month labels */}
             <div className={styles.navigationRow}>
-              {/* Previous button on far left */}
+              {/* Previous button on far left - swap icon for RTL */}
               <button
                 className={styles.buttonPrevious}
                 onClick={() => {
                   const newMonth = addMonths(currentMonth, -1);
-                  setCurrentMonth(newMonth);
+                  if (canNavigateTo(newMonth)) {
+                    setCurrentMonth(newMonth);
+                  }
                 }}
-                aria-label="Previous month"
+                disabled={isPreviousDisabled}
+                aria-label={getCalendarText('previousMonth', isRTL)}
               >
-                <IconChevronLeft className={styles.chevron} size={16} />
+                {isRTL ? (
+                  <IconChevronRight className={styles.chevron} size={16} />
+                ) : (
+                  <IconChevronLeft className={styles.chevron} size={16} />
+                )}
               </button>
 
               {/* Month labels group in center */}
@@ -1198,25 +1343,29 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                   const monthDate = addMonths(currentMonth, index);
                   return (
                     <div key={index} className={styles.captionLabel}>
-                      {monthDate.toLocaleDateString(isRTL ? 'ar-SA' : 'en-US', {
-                        month: 'long',
-                        year: 'numeric'
-                      })}
+                      {formatMonthYear(monthDate)}
                     </div>
                   );
                 })}
               </div>
 
-              {/* Next button on far right */}
+              {/* Next button on far right - swap icon for RTL */}
               <button
                 className={styles.buttonNext}
                 onClick={() => {
                   const newMonth = addMonths(currentMonth, 1);
-                  setCurrentMonth(newMonth);
+                  if (canNavigateTo(newMonth)) {
+                    setCurrentMonth(newMonth);
+                  }
                 }}
-                aria-label="Next month"
+                disabled={isNextDisabled}
+                aria-label={getCalendarText('nextMonth', isRTL)}
               >
-                <IconChevronRight className={styles.chevron} size={16} />
+                {isRTL ? (
+                  <IconChevronLeft className={styles.chevron} size={16} />
+                ) : (
+                  <IconChevronRight className={styles.chevron} size={16} />
+                )}
               </button>
             </div>
           </div>

@@ -1,0 +1,243 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as PageStories from './Page.stories';
+import { Page } from './Page';
+
+<Meta of={PageStories} />
+
+# Page Component
+
+The Page component is a comprehensive layout orchestrator that automatically handles responsive breakpoints, integrates Sidebar and TopBar components, and provides smart container width management.
+
+## Key Features
+
+- **5 Responsive Breakpoints**: XL (>1440px), L (1220-1439px), MD (768-1219px), SM (490-767px), XS (<490px)
+- **Smart Container Logic**: Flexible margins until minimum threshold, then fixed margins with flexible container
+- **Integrated Components**: Sidebar (expanded/icon-only/hidden) and TopBar (with hamburger menu) automatically configured
+- **RTL Support**: Complete right-to-left layout support with Arabic fonts
+- **Mobile Optimization**: Overlay sidebar behavior with backdrop and smooth transitions
+
+## Import & Setup
+
+```jsx
+import { Page } from '@tagaddod-design/react';
+```
+
+## Props
+
+<ArgTypes of={Page} />
+
+## Basic Usage
+
+The Page component orchestrates your entire application layout with automatic responsive behavior:
+
+<Canvas of={PageStories.Default} />
+
+### Default Implementation with Responsive Layout
+
+```jsx
+import { Page } from '@tagaddod-design/react';
+import { IconHome, IconChartBar } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <Page
+      sidebarProps={{
+        menuItems: [
+          { id: 'dashboard', icon: IconHome, label: 'Dashboard' },
+          { id: 'analytics', icon: IconChartBar, label: 'Analytics' }
+        ],
+        selectedItem: 'dashboard'
+      }}
+      topBarProps={{
+        selectedWarehouse: 'Main Warehouse'
+      }}
+    >
+      <h1>Your Content Here</h1>
+    </Page>
+  );
+}
+```
+
+## Responsive Breakpoints
+
+The Page component automatically adapts to different screen sizes:
+
+### XL Breakpoint (>1440px)
+
+Full sidebar expanded with maximum container width and flexible margins.
+
+<Canvas of={PageStories.XLBreakpoint} />
+
+### L Breakpoint (1220-1439px)
+
+Full sidebar expanded with 24px minimum margins maintained.
+
+<Canvas of={PageStories.LBreakpoint} />
+
+### MD Breakpoint (768-1219px)
+
+Icon-only sidebar with hover expansion. Hover over the sidebar to see the expansion behavior.
+
+<Canvas of={PageStories.MDBreakpoint} />
+
+### SM Breakpoint (490-767px)
+
+Hidden sidebar with mobile overlay. Click the hamburger icon to open the mobile sidebar.
+
+<Canvas of={PageStories.SMBreakpoint} />
+
+### XS Breakpoint (<490px)
+
+Optimized mobile layout for the smallest screens.
+
+<Canvas of={PageStories.XSBreakpoint} />
+
+## Container Logic
+
+The Page component uses smart container width calculation:
+
+- **Large screens**: `min(1240px, calc(100vw - 48px))` - maintains 24px minimum margins
+- **Medium/small screens**: `calc(100vw - 48px)` - fixed 24px margins, flexible container
+- **Mobile screens**: `calc(100vw - 32px)` - fixed 16px margins, flexible container
+
+## Component Integration
+
+### Sidebar Integration
+
+Pass sidebar configuration through the `sidebarProps` prop:
+
+```jsx
+<Page
+  sidebarProps={{
+    menuItems: [
+      { id: 'dashboard', icon: IconHome, label: 'Dashboard' },
+      { id: 'analytics', icon: IconChartBar, label: 'Analytics' }
+    ],
+    selectedItem: 'dashboard',
+    onItemChange: (itemId) => console.log('Selected:', itemId)
+  }}
+>
+```
+
+### TopBar Integration
+
+Configure the TopBar through the `topBarProps` prop:
+
+```jsx
+<Page
+  topBarProps={{
+    selectedWarehouse: 'Main Warehouse',
+    warehouses: ['Main Warehouse', 'Secondary Warehouse'],
+    onWarehouseChange: (warehouse) => console.log('Warehouse:', warehouse)
+  }}
+>
+```
+
+## RTL Support
+
+Complete right-to-left layout support with Arabic fonts and proper text rendering:
+
+<Canvas of={PageStories.RTLSupport} />
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with ThemeProvider:
+
+```jsx
+import { ThemeProvider, Page } from '@tagaddod-design/react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Page
+        sidebarProps={{
+          menuItems: [...] // Arabic labels will be used automatically
+        }}
+        topBarProps={{
+          selectedWarehouse: 'مستودع الحرم'
+        }}
+      >
+        <div>المحتوى العربي</div>
+      </Page>
+    </ThemeProvider>
+  );
+}
+```
+
+## Layout Variations
+
+### Without Sidebar
+
+<Canvas of={PageStories.WithoutSidebar} />
+
+### Without TopBar
+
+<Canvas of={PageStories.WithoutTopBar} />
+
+### Custom Container Width
+
+<Canvas of={PageStories.CustomContainerWidth} />
+
+## API Reference
+
+The Page component exports useful constants for programmatic access:
+
+```jsx
+import {
+  pageBreakpoints,    // { xl: '1440px', l: '1220px', md: '768px', sm: '490px' }
+  pageContainerWidths, // { default: '1240px', fluid: 'auto' }
+  pageMargins         // { large: '24px', small: '16px' }
+} from '@tagaddod-design/react';
+```
+
+## Accessibility
+
+The Page component includes comprehensive accessibility features:
+
+- **Focus Management**: Proper focus handling when sidebar toggles
+- **Keyboard Navigation**: Full keyboard support for all interactive elements
+- **ARIA Landmarks**: Semantic HTML with proper roles and labels
+- **Screen Reader Support**: Descriptive labels and live regions
+- **High Contrast**: Support for high contrast mode
+- **Reduced Motion**: Respects user motion preferences
+
+## Migration from Manual Layouts
+
+### Before (Manual Layout)
+```jsx
+// Old approach - manual responsive handling
+function OldApp() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
+  return (
+    <div className="app">
+      <TopBar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+      <div className="app-body">
+        {!isMobile && <Sidebar />}
+        {isMobile && sidebarOpen && <MobileSidebar />}
+        <main className="content">
+          <div className="container">
+            {children}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
+```
+
+### After (Page Component)
+```jsx
+// New approach - automatic responsive handling
+function NewApp() {
+  return (
+    <Page
+      sidebarProps={{ menuItems, selectedItem }}
+      topBarProps={{ selectedWarehouse }}
+    >
+      {children}
+    </Page>
+  );
+}
+```

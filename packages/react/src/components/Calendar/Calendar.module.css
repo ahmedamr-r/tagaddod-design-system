@@ -124,14 +124,10 @@
 .captionDropdowns {
   display: flex !important;
   flex-direction: row !important;
-  gap: var(--t-space-200) !important;
+  gap: var(--t-space-300) !important;
   align-items: center !important;
   justify-content: center !important;
-  order: 2 !important;
-  flex: 1 !important;
-  position: absolute !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
+  white-space: nowrap !important;
   pointer-events: auto !important;
 }
 
@@ -150,11 +146,10 @@
 }
 
 .dropdownRoot {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  order: 2;
+  gap: var(--t-space-300);
   flex: 1;
   margin: 0 var(--t-space-400);
 }
@@ -164,7 +159,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: var(--t-space-300);
   padding: 0 var(--t-space-100);
   position: relative;
   gap: var(--t-space-200);
@@ -208,11 +202,11 @@
 }
 
 /* Hide default DayPicker caption and nav when using custom header */
-.hiddenCaption {
+.hiddenNav {
   display: none !important;
 }
 
-.hiddenNav {
+.hiddenCaption {
   display: none !important;
 }
 
@@ -607,6 +601,11 @@
   position: relative;
   line-height: 1.5;
   flex-shrink: 0; /* Don't shrink the title */
+  text-align: left;
+}
+
+:global([dir="rtl"]) .presetTitle {
+  text-align: right;
 }
 
 /* Line height trim for preset title */
@@ -708,6 +707,7 @@
 
 :global([dir="rtl"]) .presetButton {
   text-align: right;
+  justify-content: flex-end; /* Align text to right in RTL */
 }
 
 .presetButton:hover {
@@ -888,9 +888,9 @@
 /* Specific approach: calculate width based on typical date format */
 .headerControls input[placeholder*="date"],
 .headerControls input[value*="/"] {
-  width: 6.5em !important; /* Roughly fits "DD/MM/YYYY" format */
-  min-width: 6.5em !important;
-  max-width: 7em !important;
+  width: 7em !important; /* Roughly fits "DD/MM/YYYY" format */
+  min-width: 7em !important;
+  max-width: 8em !important;
 }
 
 /* For number inputs, make them very narrow */
@@ -925,7 +925,7 @@
 /* Calendar section */
 .calendarSection {
   flex: none; /* Don't expand vertically */
-  padding: var(--t-space-100) 0; /* Minimal vertical padding, no horizontal padding */
+  padding: var(--t-space-100) var(--t-space-300) 0; /* Add right padding using design token */
   margin: 0; /* Remove all margins */
   display: flex;
   justify-content: center;
@@ -933,6 +933,11 @@
   flex-direction: column;
   overflow-x: auto; /* Allow horizontal scroll if needed */
   min-width: fit-content; /* Allow calendar to expand to natural size */
+}
+
+/* RTL: Mirror padding for RTL */
+:global([dir="rtl"]) .calendarSection {
+  padding: var(--t-space-100) 0 var(--t-space-100) var(--t-space-300); /* Swap padding for RTL */
 }
 
 .calendarSection .calendar {

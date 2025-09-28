@@ -1,0 +1,217 @@
+/* Page container */
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--t-color-surface-primary, #ffffff);
+  position: relative;
+}
+
+/* Page body - contains sidebar and content */
+.pageBody {
+  display: flex;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Main content area */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: auto;
+  min-width: 0; /* Allows content to shrink below its intrinsic width */
+}
+
+/* Content container with responsive width logic */
+.container {
+  /* Default: max 1240px with flexible margins, minimum 24px on each side */
+  width: min(var(--container-max-width, 1240px), calc(100% - var(--container-margin) * 2));
+  margin: 0 auto;
+  padding: var(--t-space-600, 24px);
+
+  /* CSS custom properties for responsive margins */
+  --container-margin: var(--t-space-600, 24px); /* 24px */
+}
+
+/* Responsive margin adjustments */
+@media (max-width: 767px) {
+  .container {
+    --container-margin: var(--t-space-400, 16px); /* 16px */
+    padding: var(--t-space-400, 16px);
+  }
+}
+
+/* Sidebar base styles */
+.sidebar {
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* TopBar base styles */
+.topBar {
+  position: relative;
+  z-index: 10;
+}
+
+/* Mobile sidebar styles */
+.sidebarMobile {
+  position: fixed;
+  top: var(--t-size-topbar-height, 56px);
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  transform: translateX(-100%);
+  background-color: var(--t-color-surface-primary, #ffffff);
+  box-shadow: var(--t-shadow-large);
+}
+
+/* RTL mobile sidebar */
+:global([dir="rtl"]) .sidebarMobile {
+  left: auto;
+  right: 0;
+  transform: translateX(100%);
+}
+
+.sidebarMobileOpen {
+  transform: translateX(0);
+}
+
+:global([dir="rtl"]) .sidebarMobileOpen {
+  transform: translateX(0);
+}
+
+/* Mobile backdrop */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Breakpoint-specific adjustments */
+
+/* XL Breakpoint (>1440px) */
+.breakpoint-xl .container {
+  /* On very large screens, allow larger margins */
+  width: min(var(--container-max-width, 1240px), calc(100% - 48px));
+}
+
+/* L Breakpoint (1220px-1439px) */
+.breakpoint-l .container {
+  /* Maintain 1240px max with 24px minimum margins */
+  width: min(var(--container-max-width, 1240px), calc(100% - 48px));
+}
+
+/* MD Breakpoint (768px-1219px) */
+.breakpoint-md .container {
+  /* Container with 24px margins, maintain 1240px max width */
+  /* max-width handled by the min() function in the base container */
+}
+
+/* SM Breakpoint (490px-767px) */
+.breakpoint-sm .container {
+  /* Smaller margins, maintain 1240px max width */
+  /* max-width handled by the min() function in the base container */
+}
+
+/* XS Breakpoint (<490px) */
+.breakpoint-xs .container {
+  /* Smallest margins, maintain 1240px max width */
+  /* max-width handled by the min() function in the base container */
+}
+
+/* Content adjustments when mobile sidebar is open */
+.pageWithMobileSidebar .content {
+  /* Prevent scrolling when mobile menu is open */
+  overflow: hidden;
+}
+
+/* RTL support */
+:global([dir="rtl"]) .pageBody {
+  /* Ensure proper layout direction */
+  direction: rtl;
+}
+
+:global([dir="rtl"]) .container {
+  /* Maintain proper text alignment in RTL */
+  text-align: right;
+}
+
+/* Responsive sidebar width adjustments for content */
+@media (min-width: 1220px) {
+  /* Large screens: account for expanded sidebar (240px) */
+  .content {
+    /* Content area automatically adjusts due to flexbox */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1219px) {
+  /* Medium screens: account for collapsed sidebar (64px) */
+  .content {
+    /* Content area automatically adjusts due to flexbox */
+  }
+}
+
+@media (max-width: 767px) {
+  /* Small screens: full width content (sidebar is overlay) */
+  .content {
+    width: 100%;
+  }
+
+  /* Adjust top spacing for mobile when topbar is present */
+  .pageBody {
+    /* Account for fixed topbar height on mobile */
+  }
+}
+
+/* Smooth transitions for layout changes */
+.page,
+.pageBody,
+.content,
+.container {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus management for accessibility */
+.page:focus-within .sidebar {
+  /* Ensure sidebar is accessible when focused */
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .backdrop {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .backdrop,
+  .page,
+  .pageBody,
+  .content,
+  .container {
+    transition: none;
+  }
+
+  .backdrop {
+    animation: none;
+    opacity: 1;
+  }
+}

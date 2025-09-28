@@ -350,217 +350,6 @@ export const Responsive: Story = {
   }
 };
 
-// Analytics Range with RTL support test
-export const AnalyticsRangeRTL: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: `Analytics Range Calendar with RTL support for Arabic interfaces.
-
-        Tests the analytics variant in right-to-left mode with Arabic labels and proper layout adjustments.`
-      }
-    }
-  },
-  render: () => {
-    const [selectedRange, setSelectedRange] = useState<{ from?: Date; to?: Date }>({
-      from: new Date(new Date().setDate(new Date().getDate() - 30)),
-      to: new Date()
-    });
-    const [selectedPreset, setSelectedPreset] = useState<string>('last30');
-    const [rangeType, setRangeType] = useState<'between' | 'last' | 'since' | 'this'>('last');
-    const [rangeValue, setRangeValue] = useState<string | number>(30);
-    const [periodType, setPeriodType] = useState<string>('week');
-    const [startDate, setStartDate] = useState<Date | undefined>();
-    const [endDate, setEndDate] = useState<Date | undefined>();
-    const [showCustomPreset, setShowCustomPreset] = useState<boolean>(false);
-
-    return (
-      <div dir="rtl" style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '600px',
-        padding: '20px',
-        backgroundColor: 'var(--t-color-surface-secondary)',
-        fontFamily: 'var(--t-font-family-arabic)'
-      }}>
-        <Calendar
-          variant="analytics"
-          mode="range"
-          numberOfMonths={2}
-          selected={selectedRange}
-          onSelect={(range) => {
-            const newRange = range as { from?: Date; to?: Date };
-            setSelectedRange(newRange);
-            if (newRange) {
-              setStartDate(newRange.from);
-              setEndDate(newRange.to);
-            }
-          }}
-          selectedPreset={selectedPreset}
-          onPresetChange={setSelectedPreset}
-          rangeType={rangeType}
-          onRangeTypeChange={setRangeType}
-          rangeValue={rangeValue}
-          onRangeValueChange={setRangeValue}
-          periodType={periodType}
-          onPeriodTypeChange={setPeriodType}
-          startDate={startDate}
-          endDate={endDate}
-          onStartDateChange={setStartDate}
-          onEndDateChange={setEndDate}
-          showCustomPreset={showCustomPreset}
-          onApply={() => console.log('Applied RTL range')}
-          onCancel={() => console.log('Cancelled RTL range')}
-        />
-      </div>
-    );
-  }
-};
-
-// Analytics Range - Amplitude-style date picker with presets
-export const AnalyticsRange: Story = {
-  args: {
-    variant: 'analytics',
-    mode: 'range',
-    numberOfMonths: 2
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: `**Analytics Range Calendar** - A sophisticated date range picker inspired by Amplitude's design.
-
-**Features:**
-- **Preset Panel**: Quick access to common date ranges
-- **Dynamic Header**: Changes based on selected range type (Between, Last, Since, This)
-- **Configurable Months**: Use the numberOfMonths control to change display (1-3 months)
-- **Smart Inputs**: Editable date inputs and number inputs based on selection type
-- **Auto-Custom Preset**: Automatically appears and gets selected when user modifies header controls
-- **Professional Actions**: Apply and Cancel buttons
-
-**Custom Preset Behavior:**
-- **Auto-Appearance**: "Custom" preset appears when user changes any header selection
-- **Auto-Selection**: Automatically becomes active when user modifies range type, values, or dates
-- **Smart Detection**: Triggers on changes to Between dates, Last value, Since date, or This period
-
-**Range Types:**
-- **Between**: Two date inputs with "and" separator
-- **Last**: Number input + "complete days and today" label
-- **Since**: Single date input
-- **This**: Period dropdown (Week/Month/Quarter/Year)
-
-**Try the numberOfMonths control above to see 1, 2, or 3 months!**
-
-**Use Cases:**
-- Analytics dashboards
-- Reporting interfaces
-- Data visualization controls
-- Business intelligence tools`
-      }
-    }
-  },
-  render: (args) => {
-    const [selectedRange, setSelectedRange] = useState<{ from?: Date; to?: Date }>({
-      from: new Date(new Date().setDate(new Date().getDate() - 30)),
-      to: new Date()
-    });
-    const [selectedPreset, setSelectedPreset] = useState<string>('last30');
-    const [rangeType, setRangeType] = useState<'between' | 'last' | 'since' | 'this'>('between');
-    const [rangeValue, setRangeValue] = useState<string | number>(30);
-    const [periodType, setPeriodType] = useState<string>('week');
-    const [startDate, setStartDate] = useState<Date | undefined>(new Date(new Date().setDate(new Date().getDate() - 30)));
-    const [endDate, setEndDate] = useState<Date | undefined>(new Date());
-    const [showCustomPreset, setShowCustomPreset] = useState<boolean>(false);
-
-    const handleApply = () => {
-      console.log('Applied:', { rangeType, rangeValue, periodType, startDate, endDate, selectedRange });
-    };
-
-    const handleCancel = () => {
-      console.log('Cancelled');
-    };
-
-    return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '600px',
-        padding: '20px',
-        backgroundColor: 'var(--t-color-surface-secondary)'
-      }}>
-        <Calendar
-          {...args}
-          selected={selectedRange}
-          onSelect={(range) => {
-            const newRange = range as { from?: Date; to?: Date };
-            setSelectedRange(newRange);
-            // Sync the start and end dates with the selected range
-            if (newRange) {
-              setStartDate(newRange.from);
-              setEndDate(newRange.to);
-            } else {
-              setStartDate(undefined);
-              setEndDate(undefined);
-            }
-          }}
-          selectedPreset={selectedPreset}
-          onPresetChange={(preset) => {
-            setSelectedPreset(preset);
-            // Show custom preset only when 'custom' is selected
-            if (preset === 'custom') {
-              setShowCustomPreset(true);
-            } else {
-              // Hide custom preset when any other preset is selected
-              setShowCustomPreset(false);
-            }
-          }}
-          rangeType={rangeType}
-          onRangeTypeChange={(type, fromPreset) => {
-            setRangeType(type);
-            // Only show custom preset if this is a manual change, not from preset
-            if (!fromPreset) {
-              setShowCustomPreset(true);
-              setSelectedPreset('custom');
-            }
-          }}
-          rangeValue={rangeValue}
-          onRangeValueChange={(value, fromPreset) => {
-            setRangeValue(value);
-            // Only show custom preset if this is a manual change, not from preset
-            if (!fromPreset) {
-              setShowCustomPreset(true);
-              setSelectedPreset('custom');
-            }
-          }}
-          periodType={periodType}
-          onPeriodTypeChange={(period, fromPreset) => {
-            setPeriodType(period);
-            // Only show custom preset if this is a manual change, not from preset
-            if (!fromPreset) {
-              setShowCustomPreset(true);
-              setSelectedPreset('custom');
-            }
-          }}
-          startDate={startDate}
-          endDate={endDate}
-          onStartDateChange={(date) => {
-            setStartDate(date);
-            // Don't show custom preset here as this gets triggered by presets too
-          }}
-          onEndDateChange={(date) => {
-            setEndDate(date);
-            // Don't show custom preset here as this gets triggered by presets too
-          }}
-          showCustomPreset={showCustomPreset}
-          onApply={handleApply}
-          onCancel={handleCancel}
-        />
-      </div>
-    );
-  }
-};
-
 // Analytics Range with Date Validation Testing
 export const AnalyticsDateValidation: Story = {
   args: {
@@ -704,6 +493,111 @@ export const AnalyticsDateValidation: Story = {
             <p><strong>End Date:</strong> {endDate ? endDate.toLocaleDateString() : 'Not set'}</p>
             <p><strong>Selected Range:</strong> {selectedRange?.from ? selectedRange.from.toLocaleDateString() : 'N/A'} - {selectedRange?.to ? selectedRange.to.toLocaleDateString() : 'N/A'}</p>
           </div>
+        </div>
+      </div>
+    );
+  }
+};
+
+// Calendar with Navigation Restrictions - New Feature
+export const WithNavigationRestrictions: Story = {
+  args: {
+    variant: "default",
+    mode: "single",
+    numberOfMonths: 1
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `**Calendar with Navigation Restrictions**
+
+        This story demonstrates the new \`minDate\` and \`maxDate\` props that restrict calendar navigation.
+
+        **Features:**
+        - **minDate**: Prevents navigating to months before this date
+        - **maxDate**: Prevents navigating to months after this date
+        - **Smart Button States**: Previous/Next buttons automatically disable when limits are reached
+        - **RTL Support**: Works correctly in both LTR and RTL modes
+        - **All Variants**: Compatible with default, dropdown, and analytics variants
+
+        **Current Configuration:**
+        - **Min Date**: January 2024 (cannot go before)
+        - **Max Date**: December 2025 (cannot go after)
+        - Try clicking the navigation arrows to see the restrictions in action
+
+        **Use Cases:**
+        - Restrict date selection to valid business periods
+        - Prevent navigation to historical data that doesn't exist
+        - Limit future date selection for booking systems
+        - Control data visualization timeframes`
+      }
+    }
+  },
+  render: (args) => {
+    const [selected, setSelected] = useState<Date | undefined>();
+    
+    // Set restrictions: January 2024 to December 2025
+    const minDate = new Date(2024, 0, 1); // January 1, 2024
+    const maxDate = new Date(2025, 11, 31); // December 31, 2025
+    
+    return (
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "20px",
+        padding: "20px",
+        alignItems: "center"
+      }}>
+        {/* Instructions */}
+        <div style={{
+          padding: "16px",
+          backgroundColor: "var(--t-color-surface-primary)",
+          borderRadius: "8px",
+          border: "1px solid var(--t-color-border-secondary)",
+          maxWidth: "600px",
+          textAlign: "center"
+        }}>
+          <h3 style={{ margin: "0 0 12px 0", color: "var(--t-color-text-primary)" }}>
+            Navigation Restrictions Demo
+          </h3>
+          <p style={{ margin: 0, color: "var(--t-color-text-secondary)", fontSize: "14px" }}>
+            <strong>Allowed Range:</strong> January 2024 - December 2025<br/>
+            Try navigating with the arrow buttons. They will disable when you reach the limits.
+          </p>
+        </div>
+
+        {/* Calendar */}
+        <Calendar
+          {...args}
+          selected={selected}
+          onSelect={(date) => setSelected(date as Date | undefined)}
+          minDate={minDate}
+          maxDate={maxDate}
+          footer={
+            selected ? (
+              <p style={{ margin: 0, textAlign: "center" }}>
+                Selected: {selected.toLocaleDateString()}
+              </p>
+            ) : (
+              <p style={{ margin: 0, textAlign: "center" }}>
+                Navigation restricted to Jan 2024 - Dec 2025
+              </p>
+            )
+          }
+        />
+        
+        {/* Current State */}
+        <div style={{
+          padding: "12px",
+          backgroundColor: "var(--t-color-surface-secondary)",
+          borderRadius: "8px",
+          fontSize: "14px",
+          color: "var(--t-color-text-secondary)",
+          textAlign: "center"
+        }}>
+          <strong>Current Month:</strong> {new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}<br/>
+          <strong>Min Date:</strong> {minDate.toLocaleDateString()}<br/>
+          <strong>Max Date:</strong> {maxDate.toLocaleDateString()}
         </div>
       </div>
     );

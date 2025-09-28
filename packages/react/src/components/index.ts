@@ -135,10 +135,49 @@ export { sonnerTypes, sonnerPositions } from './Sonner';
 export { RangeSlider } from './RangeSlider';
 export type { RangeSliderProps } from './RangeSlider';
 
-// Export the Calendar component
+// Export the Calendar component with full RTL and Arabic support
 export { Calendar } from './Calendar';
-export type { CalendarProps, CalendarMode, CalendarCaptionLayout, CalendarVariant, DatePreset } from './Calendar';
-export { calendarModes, calendarCaptionLayouts } from './Calendar';
+export type {
+  CalendarProps,
+  CalendarMode,
+  CalendarVariant,
+  CalendarCaptionLayout,
+  CalendarNavLayout,
+  DateRangeType,
+  PeriodType,
+  DatePreset,
+  DateRangeConfig
+} from './Calendar';
+export {
+  calendarModes,
+  calendarCaptionLayouts,
+  calendarNavLayouts,
+  getRangeTypeOptions,
+  getPeriodTypeOptions,
+  RANGE_TYPE_OPTIONS,
+  PERIOD_TYPE_OPTIONS
+} from './Calendar';
+// Calendar translations and helpers for internationalization
+export {
+  CALENDAR_CONFIG,
+  CALENDAR_TRANSLATIONS,
+  PRESET_LABELS,
+  RANGE_TYPE_LABELS,
+  PERIOD_TYPE_LABELS,
+  WEEKDAY_NAMES,
+  ARABIC_GREGORIAN_MONTHS,
+  getCalendarText,
+  getPresetLabel,
+  getRangeTypeLabel,
+  getPeriodTypeLabel,
+  formatMonthYear,
+  getWeekdayNames,
+  type CalendarLocale,
+  type WeekdayFormat,
+  type RangeTypeKey,
+  type PeriodTypeKey,
+  type PresetKey
+} from './Calendar/Calendar.constants';
 
 // Export the DatePicker component
 export { DatePicker } from './DatePicker';
@@ -154,5 +193,15 @@ export { scrollAreaTypes } from './ScrollArea';
 export { Number } from './Number';
 export type { NumberProps, NumberFormatOptions, NumberSize } from './Number';
 export { numberSizes } from './Number';
+
+// Export the Card component
+export { Card } from './Card';
+export type { CardProps, CardVariant, CardSize } from './Card';
+export { cardVariants, cardSizes } from './Card';
+
+// Export the Page component - comprehensive layout orchestrator
+export { Page } from './Page';
+export type { PageProps, PageBreakpoint } from './Page';
+export { pageBreakpoints, pageContainerWidths, pageMargins } from './Page';
 
 

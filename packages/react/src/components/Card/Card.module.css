@@ -1,0 +1,252 @@
+/* Base Card Styles */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--t-color-surface-primary);
+  border-radius: var(--t-border-radius-200);
+  transition: all 0.2s var(--t-easing-standard);
+  overflow: hidden;
+}
+
+/* Card Variants */
+.variantElevated {
+  border: 1px solid var(--t-color-border-tertiary);
+  box-shadow: var(--t-shadow-100);
+}
+
+.variantOutlined {
+  border: 1px solid var(--t-color-border-secondary);
+  box-shadow: none;
+  background-color: var(--t-color-surface-primary);
+}
+
+.variantGhost {
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+}
+
+/* Interactive States */
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:hover {
+  transform: translateY(-1px);
+}
+
+.variantElevated.interactive:hover {
+  box-shadow: var(--t-shadow-200);
+  border-color: var(--t-color-border-secondary);
+}
+
+.variantOutlined.interactive:hover {
+  border-color: var(--t-color-border-primary);
+  background-color: var(--t-color-surface-secondary);
+}
+
+.variantGhost.interactive:hover {
+  background-color: var(--t-color-surface-tertiary);
+}
+
+.interactive:focus-visible {
+  outline: 2px solid var(--t-color-border-brand);
+  outline-offset: 2px;
+}
+
+.interactive:active {
+  transform: translateY(0);
+}
+
+/* Clickable States */
+.clickable {
+  cursor: pointer;
+  transition: all 0.2s var(--t-easing-standard);
+}
+
+.clickable:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.02);
+}
+
+.variantElevated.clickable:hover {
+  box-shadow: var(--t-shadow-300);
+  border-color: var(--t-color-border-primary);
+}
+
+.variantOutlined.clickable:hover {
+  border-color: var(--t-color-border-brand);
+  background-color: var(--t-color-surface-secondary);
+  box-shadow: var(--t-shadow-100);
+}
+
+.variantGhost.clickable:hover {
+  background-color: var(--t-color-surface-secondary);
+  box-shadow: var(--t-shadow-100);
+}
+
+.clickable:active {
+  transform: translateY(-1px);
+  transition: all 0.1s var(--t-easing-standard);
+}
+
+.variantElevated.clickable:active {
+  box-shadow: var(--t-shadow-200);
+}
+
+.clickable:focus-visible {
+  outline: 2px solid var(--t-color-border-brand);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* Card Sizes */
+.sizeSmall {
+  --card-padding: var(--t-space-300);
+  --card-gap: var(--t-space-200);
+}
+
+.sizeMedium {
+  --card-padding: var(--t-space-400);
+  --card-gap: var(--t-space-300);
+}
+
+.sizeLarge {
+  --card-padding: var(--t-space-500);
+  --card-gap: var(--t-space-400);
+}
+
+/* Full Width */
+.fullWidth {
+  width: 100%;
+}
+
+/* Card Sections */
+.header {
+  padding: var(--card-padding) var(--card-padding) var(--card-padding) var(--card-padding);
+  border-bottom: 1px solid var(--t-color-border-tertiary);
+  color: var(--t-color-text-primary);
+  font-weight: var(--t-font-weight-600);
+}
+
+.body {
+  flex: 1;
+  padding: var(--card-padding) var(--card-padding);
+  color: var(--t-color-text-secondary);
+}
+
+.footer {
+  padding: var(--card-padding) var(--card-padding) var(--card-padding) var(--card-padding);
+  border-top: 1px solid var(--t-color-border-tertiary);
+  color: var(--t-color-text-secondary);
+}
+
+/* Special case: header without footer - remove bottom padding from body */
+.card:has(.header):not(:has(.footer)) .body {
+  padding-bottom: 0;
+}
+
+/* Special case: footer without header - remove top padding from body */
+.card:has(.footer):not(:has(.header)) .body {
+  padding-top: 0;
+}
+
+/* Special case: both header and footer - remove top and bottom padding from body */
+.card:has(.header):has(.footer) .body {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Line height trim for English text */
+.card::before,
+.card::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.card::before {
+  margin-top: -0.15em;
+}
+
+.card::after {
+  margin-bottom: -0.15em;
+}
+
+/* RTL Support */
+:global([dir="rtl"]) .card {
+  font-family: var(--t-font-family-arabic);
+  text-align: right;
+}
+
+/* Arabic text adjustment (larger trim) */
+:global([dir="rtl"]) .card::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .card::after {
+  margin-bottom: -0.25em;
+}
+
+/* RTL Header alignment */
+:global([dir="rtl"]) .header {
+  text-align: right;
+}
+
+/* RTL Footer alignment */
+:global([dir="rtl"]) .footer {
+  text-align: right;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sizeSmall {
+    --card-padding: var(--t-space-200);
+    --card-gap: var(--t-space-150);
+  }
+
+  .sizeMedium {
+    --card-padding: var(--t-space-300);
+    --card-gap: var(--t-space-200);
+  }
+
+  .sizeLarge {
+    --card-padding: var(--t-space-400);
+    --card-gap: var(--t-space-300);
+  }
+}
+
+/* Focus Management for Interactive Cards */
+.interactive:focus-visible {
+  z-index: 1;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .variantElevated {
+    border-color: var(--t-color-border-primary);
+  }
+
+  .variantOutlined {
+    border-width: 2px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .clickable {
+    transition: none;
+  }
+
+  .interactive:hover,
+  .clickable:hover {
+    transform: none;
+  }
+
+  .interactive:active,
+  .clickable:active {
+    transform: none;
+  }
+}

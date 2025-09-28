@@ -1,0 +1,335 @@
+import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
+import * as CardStories from './Card.stories';
+
+<Meta of={CardStories} />
+
+# Card
+
+The Card component is a versatile container that serves as a flexible building block for any content. It provides optional header and footer sections while maintaining a consistent visual design across your application.
+
+## Overview
+
+The Card component follows a composition pattern, making it perfect for AI agents to use in various contexts:
+
+- **Flexible Content**: The main body accepts any React children
+- **Optional Sections**: Header and footer can be shown or hidden as needed
+- **Multiple Variants**: Different visual styles for various use cases
+- **Interactive Support**: Can be made clickable with hover states
+- **RTL Support**: Full right-to-left language support with proper Arabic typography
+
+<Canvas of={CardStories.Default} />
+
+## Basic Usage
+
+### Simple Card
+The most basic card contains just content in the body area:
+
+<Canvas of={CardStories.Default} />
+
+### Card with Header
+Add a header section for titles, actions, or metadata:
+
+<Canvas of={CardStories.WithHeader} />
+
+### Card with Footer
+Include a footer for actions, pagination, or supplementary information:
+
+<Canvas of={CardStories.WithFooter} />
+
+### Complete Card
+Use both header and footer for maximum structure:
+
+<Canvas of={CardStories.Complete} />
+
+## Variants
+
+Choose from three visual variants to match your design needs:
+
+<Canvas of={CardStories.Variants} />
+
+- **Elevated**: Default style with shadow and subtle border
+- **Outlined**: Clean style with visible border, no shadow
+- **Ghost**: Minimal style with no border or shadow
+
+## Sizes
+
+Three size options provide different spacing levels:
+
+<Canvas of={CardStories.Sizes} />
+
+- **Small**: Compact spacing for tight layouts
+- **Medium**: Default spacing for most use cases
+- **Large**: Generous spacing for prominent content
+
+## Interactive Cards
+
+Make cards clickable with interactive states:
+
+<Canvas of={CardStories.Interactive} />
+
+## Real-World Examples for AI Agents
+
+### Analytics Dashboard Card
+
+Perfect for displaying metrics and data visualizations:
+
+<Canvas of={CardStories.AnalyticsCard} />
+
+```jsx
+<Card
+  variant="elevated"
+  header={
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      <IconChart size={20} />
+      <span>Analytics Overview</span>
+    </div>
+  }
+  footer={
+    <Button variant="plain" suffixIcon={<IconArrowRight />}>
+      View Details
+    </Button>
+  }
+>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+    <div>
+      <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>1,234</div>
+      <div>Total Users</div>
+    </div>
+    {/* More metrics... */}
+  </div>
+</Card>
+```
+
+### User Profile Card
+
+Ideal for user information and profile management:
+
+<Canvas of={CardStories.UserProfileCard} />
+
+### Action Card
+
+Great for call-to-action sections and interactive elements:
+
+<Canvas of={CardStories.ActionCard} />
+
+### Settings Card
+
+Perfect for configuration and settings interfaces:
+
+<Canvas of={CardStories.SettingsCard} />
+
+## Internationalization and RTL Support
+
+The Card component provides comprehensive Right-to-Left (RTL) language support when used with the `ThemeProvider`. This includes automatic font switching, proper text alignment, and directional icon handling.
+
+### Using with ThemeProvider
+
+For full RTL support, wrap your application with `ThemeProvider`:
+
+```jsx
+import { ThemeProvider, Card } from '@tagaddod-design/react';
+import { IconArrowRight } from '@tabler/icons-react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <Card header="رأس البطاقة">
+        محتوى البطاقة باللغة العربية
+      </Card>
+    </ThemeProvider>
+  );
+}
+```
+
+### Automatic RTL Adjustments
+
+When RTL is enabled via ThemeProvider, the Card component automatically:
+
+1. **Font Switching**: Changes from Outfit (English) to Tajawal (Arabic) font
+2. **Text Alignment**: Adjusts text alignment to right for Arabic content
+3. **Line Height**: Applies appropriate line height for Arabic text rendering
+4. **Layout Direction**: Maintains proper positioning in RTL mode
+5. **Content Flow**: Ensures header and footer content flows correctly
+
+<Canvas of={CardStories.RTLSupport} />
+
+### Directional Icon Handling
+
+**Important**: When using directional icons (arrows, chevrons, etc.) in multilingual applications, you should manually choose the appropriate icon based on the current direction:
+
+```jsx
+import { useTheme } from '@tagaddod-design/react';
+import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+
+function DirectionalCard() {
+  const { isRTL } = useTheme();
+
+  // Use arrow pointing in the correct direction for the language
+  const ArrowIcon = isRTL ? IconArrowLeft : IconArrowRight;
+
+  return (
+    <Card
+      header={isRTL ? 'الإعدادات' : 'Settings'}
+      footer={
+        <Button suffixIcon={<ArrowIcon />}>
+          {isRTL ? 'التالي' : 'Next'}
+        </Button>
+      }
+    >
+      {isRTL ? 'محتوى البطاقة' : 'Card content'}
+    </Card>
+  );
+}
+```
+
+### Common Directional Icon Patterns
+
+#### "Next" Action
+```jsx
+// English: Next → (arrow points right)
+// Arabic: التالي ← (arrow points left, matching RTL reading direction)
+const NextIcon = isRTL ? IconArrowLeft : IconArrowRight;
+
+<Card
+  footer={
+    <Button variant="primary" suffixIcon={<NextIcon />}>
+      {isRTL ? 'التالي' : 'Next'}
+    </Button>
+  }
+>
+  {content}
+</Card>
+```
+
+#### "Back" Action
+```jsx
+// English: ← Back (arrow points left)
+// Arabic: رجوع → (arrow points right, matching RTL reading direction)
+const BackIcon = isRTL ? IconArrowRight : IconArrowLeft;
+
+<Card
+  footer={
+    <Button variant="outlined" prefixIcon={<BackIcon />}>
+      {isRTL ? 'رجوع' : 'Back'}
+    </Button>
+  }
+>
+  {content}
+</Card>
+```
+
+#### "More Info" or "Expand" Action
+```jsx
+// For expand/collapse or "more info" actions
+const ExpandIcon = isRTL ? IconChevronLeft : IconChevronRight;
+
+<Card
+  footer={
+    <Button variant="plain" suffixIcon={<ExpandIcon />}>
+      {isRTL ? 'المزيد' : 'More'}
+    </Button>
+  }
+>
+  {content}
+</Card>
+```
+
+### RTL Best Practices
+
+1. **Always use ThemeProvider** for proper RTL support and font switching
+2. **Choose directional icons carefully** - arrows should point in the reading direction
+3. **Test with actual Arabic content** to ensure proper text rendering
+4. **Use `useTheme` hook** to access RTL state and theme information
+5. **Consider icon semantics** - "next" in RTL should point left (←) not right (→)
+6. **Direction follows reading flow** - not physical direction on screen
+
+## Layout Examples
+
+### Full Width Cards
+
+For dashboard-style layouts where cards should stretch across available space:
+
+<Canvas of={CardStories.FullWidth} />
+
+### Grid Layout
+
+Perfect for dashboard grids and card-based interfaces:
+
+<Canvas of={CardStories.GridLayout} />
+
+```jsx
+<div style={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+  gap: '1rem'
+}}>
+  <Card variant="elevated" header="Metric 1">
+    <div>42 Active Projects</div>
+  </Card>
+  <Card variant="outlined" header="Metric 2">
+    <div>15 Updates Today</div>
+  </Card>
+  <Card variant="ghost" header="Metric 3">
+    <div>98% Uptime</div>
+  </Card>
+</div>
+```
+
+## API Reference
+
+<Controls of={CardStories.Default} />
+
+## Component Props
+
+<ArgTypes of={CardStories} />
+
+## Best Practices
+
+### For AI Agents
+
+1. **Use semantic headers**: Provide clear, descriptive header content
+2. **Structure content logically**: Keep the body focused on the main content
+3. **Include relevant actions**: Use the footer for related actions or metadata
+4. **Choose appropriate variants**: Match the visual style to the content purpose
+5. **Consider interactivity**: Make cards interactive when they lead to actions
+
+### Accessibility
+
+- Cards are focusable when interactive
+- Proper semantic structure with header/body/footer sections
+- High contrast support for better visibility
+- Keyboard navigation support for interactive cards
+- Screen reader friendly with proper ARIA labels
+
+### Performance
+
+- Minimal re-renders with React.memo optimization
+- Efficient CSS-in-JS with CSS modules
+- Optimized for different screen sizes
+- Supports reduced motion preferences
+
+## Common Use Cases
+
+The Card component is perfect for:
+
+- **Dashboard widgets** displaying analytics and metrics
+- **Content previews** for articles, products, or media
+- **Navigation cards** for app sections or features
+- **Form sections** grouping related form fields
+- **User profiles** displaying user information and actions
+- **Settings panels** organizing configuration options
+- **Status displays** showing system or account status
+- **Call-to-action sections** promoting features or actions
+
+## Integration with Other Components
+
+The Card component works seamlessly with other design system components:
+
+- **Buttons** in headers and footers for actions
+- **Badges** for status indicators in headers
+- **Avatars** for user representation
+- **Icons** for visual hierarchy and actions
+- **Forms** can be embedded in the body section
+- **Charts** and data visualizations fit perfectly in the body
+
+This makes it an ideal building block for AI agents to compose complex interfaces while maintaining design consistency.
