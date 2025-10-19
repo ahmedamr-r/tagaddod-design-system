@@ -117,6 +117,11 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
 
+  // Auto-adjust direction for Radix UI
+  // If user provides explicit dir prop, respect it
+  // Otherwise, use detected direction from document
+  const adjustedDir = dir !== undefined ? dir : (isRTL ? 'rtl' : 'ltr');
+
   // URL Synchronization Logic
   // Only runs when syncWithUrl is true
   useEffect(() => {
@@ -198,7 +203,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
         styles[`count${count}`],
         className
       )}
-      dir={dir}
+      dir={adjustedDir}
       orientation={orientation}
       value={value}
       onValueChange={onValueChange}

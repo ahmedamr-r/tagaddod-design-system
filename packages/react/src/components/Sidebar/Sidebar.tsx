@@ -108,13 +108,19 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
   }, ref) => {
     const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
     const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
-    
+
     const isExpanded = controlledExpanded !== undefined ? controlledExpanded : internalExpanded;
     const activeItem = selectedItem || defaultSelectedItem;
-    
+
     // Detect RTL for line height adjustments and positioning
-    const isRTL = typeof document !== 'undefined' && 
+    const isRTL = typeof document !== 'undefined' &&
       (document.dir === 'rtl' || document.documentElement.dir === 'rtl');
+
+    // Auto-switch position in RTL: default 'left' becomes 'right' in RTL
+    // Explicit positioning (e.g., position="right") is preserved
+    const adjustedPosition = isRTL && position === 'left'
+      ? 'right'  // Auto-switch to right in RTL when using default left position
+      : position; // Preserve explicit positioning choice
     
     // Apply line height style based on text direction following RTL guidelines
     const lineHeightStyle = {
@@ -259,7 +265,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
         className={clsx(
           styles.sidebar,
           isExpanded && styles.sidebarExpanded,
-          position === 'right' && styles.sidebarRight,
+          adjustedPosition === 'right' && styles.sidebarRight,
           isRTL && styles.sidebarRTL,
           className
         )}

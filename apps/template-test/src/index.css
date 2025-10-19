@@ -1,9 +1,6 @@
 /* Import Tagaddod Design System styles FIRST */
 @import '@tagaddod-design/react/styles.css';
 
-/* Import RTL-specific styles */
-@import './styles/rtl.css';
-
 /* Root CSS custom properties for enhanced theming */
 :root {
   /* Application-specific overrides (optional) */
