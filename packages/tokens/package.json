@@ -1,6 +1,6 @@
 {
   "name": "@tagaddod-design/tokens",
-  "version": "0.2.3",
+  "version": "0.2.3-local.1",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",

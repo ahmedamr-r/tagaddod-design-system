@@ -52,5 +52,17 @@ backup/
 !.yarn/versions
 .vercel
 
-# Claude Instructions
-.claude
+# Claude Instructions (ignore root .claude, but keep template-test/.claude)
+/.claude
+
+# Verdaccio local registry (local testing only)
+verdaccio-storage/
+verdaccio-htpasswd
+.verdaccio-db.json
+.local-version-counter
+
+# Template test package - ignore runtime files only
+apps/template-test/node_modules/
+apps/template-test/dist/
+apps/template-test/.npmrc
+apps/template-test/package-lock.json

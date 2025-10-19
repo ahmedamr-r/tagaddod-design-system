@@ -776,7 +776,7 @@ export const SwappableHeaderAreas: Story = {
           return (
             <TextInput
               placeholder="Search..."
-              size="micro"
+              size="xsmall"
               hideLabel
               style={{ minWidth: '120px' }}
             />
@@ -792,7 +792,7 @@ export const SwappableHeaderAreas: Story = {
       switch (suffixType) {
         case 'action':
           return (
-            <Button variant="plain" size="micro" tone="neutral">
+            <Button variant="plain" size="xSmall" tone="neutral">
               Edit
             </Button>
           );
@@ -804,14 +804,14 @@ export const SwappableHeaderAreas: Story = {
           );
         case 'menu':
           return (
-            <Button variant="plain" size="micro" tone="neutral" prefixIcon="⋯">
+            <Button variant="plain" size="xSmall" tone="neutral" prefixIcon="⋯">
             </Button>
           );
         case 'textinput':
           return (
             <TextInput
               placeholder="Filter..."
-              size="micro"
+              size="xsmall"
               hideLabel
               style={{ minWidth: '100px' }}
             />
@@ -1254,10 +1254,10 @@ export const UltimateZIndexTest: Story = {
             }}>
               <h4 style={{ margin: '0 0 var(--t-space-200) 0' }}>Quick Actions</h4>
               <div style={{ display: 'flex', gap: 'var(--t-space-200)' }}>
-                <Button variant="secondary" size="medium">
+                <Button variant="tonal" size="medium">
                   Import Employees
                 </Button>
-                <Button variant="secondary" size="medium">
+                <Button variant="tonal" size="medium">
                   Export Data
                 </Button>
                 <Modal
@@ -1426,7 +1426,7 @@ export const UltimateZIndexTest: Story = {
                         {employee.role} • {employee.dept}
                       </div>
                     </div>
-                    <Button variant="plain" size="micro" tone="neutral">
+                    <Button variant="plain" size="xSmall" tone="neutral">
                       Edit
                     </Button>
                   </div>

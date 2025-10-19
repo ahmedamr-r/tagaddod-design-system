@@ -18,6 +18,7 @@
     "build:docs": "turbo run build --filter=@tagaddod-design/docs-app",
     "test": "turbo run test",
     "test:watch": "turbo run test:watch",
+    "test:local": "cd apps/template-test && npm run dev",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
     "clean": "turbo run clean --parallel",
@@ -25,7 +26,15 @@
     "clean:all": "yarn clean && yarn clean:cache && rm -rf node_modules **/node_modules",
     "release": "changeset version && turbo run build && changeset publish",
     "changeset": "changeset",
-    "test:build": "node scripts/test-optimized-build.js"
+    "test:build": "node scripts/test-optimized-build.js",
+    "registry:start": "verdaccio --config verdaccio-config.yaml",
+    "registry:publish": "node scripts/publish-local.js",
+    "registry:update-test": "cd apps/template-test && npm install @tagaddod-design/react@latest @tagaddod-design/tokens@latest --registry http://localhost:4873",
+    "registry:test-workflow": "yarn build && yarn registry:publish && yarn registry:update-test",
+    "registry:reset": "rm -rf verdaccio-storage verdaccio-htpasswd .local-version-counter",
+    "publish:local": "node scripts/publish-local.js",
+    "bump:local": "node scripts/bump-local-version.js",
+    "sync:docs": "cd packages/react && yarn copy-docs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
@@ -35,7 +44,8 @@
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "workspaces": [
     "packages/*",
-    "apps/*"
+    "apps/*",
+    "!apps/template-test"
   ],
   "resolutions": {
     "@storybook/addon-essentials": "8.6.12",

@@ -5,7 +5,7 @@
   box-shadow: var(--t-shadow-popover);
   max-width: var(--t-width-350);
   will-change: transform, opacity;
-  z-index: var(--t-z-index-popover, 100);
+  z-index: var(--t-z-popover, 1010);
   position: relative;
   border: 1px solid var(--t-color-border-subtle);
   transform-origin: var(--radix-popover-content-transform-origin);

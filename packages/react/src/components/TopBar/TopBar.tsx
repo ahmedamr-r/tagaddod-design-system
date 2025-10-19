@@ -171,7 +171,18 @@ export interface TopBarProps extends React.ComponentPropsWithoutRef<'header'> {
 
   /* ===== END SECTION CONFIGURATION ===== */
   /**
-   * Content to display in the end section (replaces warehouse dropdown if provided)
+   * Content to display in the end section (fully swappable slot)
+   * When null, the end section will be empty
+   * @default null
+   * @example
+   * // User profile dropdown
+   * endContent={<UserProfileDropdown />}
+   *
+   * // Custom action buttons
+   * endContent={<><Button>Action 1</Button><Button>Action 2</Button></>}
+   *
+   * // Warehouse dropdown (example only - see warehouseDropdownConfig)
+   * endContent={<WarehouseDropdown {...config} />}
    */
   endContent?: React.ReactNode;
   /**
@@ -179,6 +190,22 @@ export interface TopBarProps extends React.ComponentPropsWithoutRef<'header'> {
    * @default true
    */
   showEndSection?: boolean;
+
+  /* ===== WAREHOUSE DROPDOWN EXAMPLE (OPTIONAL) ===== */
+  /**
+   * Whether to show the example warehouse dropdown in the end section.
+   * This is a convenience prop to enable the built-in warehouse dropdown.
+   * When true and endContent is not provided, displays the warehouse dropdown.
+   * When false or endContent is provided, this prop is ignored.
+   * @default false
+   * @example
+   * // Enable built-in warehouse dropdown
+   * <TopBar showWarehouseDropdown={true} selectedWarehouse="Main" />
+   *
+   * // Use custom end content instead
+   * <TopBar endContent={<CustomComponent />} />
+   */
+  showWarehouseDropdown?: boolean;
   
   /* ===== WAREHOUSE SELECTOR CONFIGURATION ===== */
   /**
@@ -351,6 +378,8 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
     // End section props
     endContent,
     showEndSection = true,
+    // Warehouse dropdown example props
+    showWarehouseDropdown = false,
     // Responsive behavior props
     showCenterSectionOnTablet = true,
     showCenterSectionOnMobile = false,
@@ -488,8 +517,8 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
       onExpandToggle?.(!isExpanded);
     };
 
-    // Create default end content (warehouse dropdown) if no endContent provided
-    const defaultEndContent = !endContent ? (
+    // Create warehouse dropdown example content only if explicitly enabled
+    const warehouseDropdownContent = showWarehouseDropdown && !endContent ? (
       <>
         {/* Mobile action button - only shown when center section is hidden on mobile */}
         {mobileActionContent && (
@@ -568,10 +597,7 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
           <div className={styles.startSection}>
             {/* Hamburger/Close Menu - visible on small devices */}
             {showHamburgerMenu && (
-              <Button
-                variant="plain"
-                tone="neutral"
-                size="xSmall"
+              <button
                 className={clsx(
                   styles.hamburgerButton,
                   styles.mobileOnly,
@@ -583,14 +609,14 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
                     ? (isRTL ? 'إغلاق القائمة' : 'Close menu')
                     : (isRTL ? 'فتح القائمة' : 'Open menu')
                 }
-                prefixIcon={
-                  isMobileSidebarOpen ? (
-                    <IconX size={20} />
-                  ) : (
-                    <IconMenu2 size={20} />
-                  )
-                }
-              />
+                type="button"
+              >
+                {isMobileSidebarOpen ? (
+                  <IconX size={20} />
+                ) : (
+                  <IconMenu2 size={20} />
+                )}
+              </button>
             )}
 
             {/* Logo Section */}
@@ -621,7 +647,7 @@ export const TopBar = forwardRef<HTMLElement, TopBarProps>(
           {/* End Section - Swappable Content */}
           {showEndSection && (
             <div className={styles.endSection} style={lineHeightStyle}>
-              {endContent || defaultEndContent}
+              {endContent || warehouseDropdownContent}
             </div>
           )}
         </div>

@@ -1,0 +1,98 @@
+/* RTL-specific utility classes and enhancements */
+
+/* Logical properties for automatic RTL support */
+.ml-auto { margin-inline-start: auto; }
+.mr-auto { margin-inline-end: auto; }
+.pl-4 { padding-inline-start: 1rem; }
+.pr-4 { padding-inline-end: 1rem; }
+.text-left { text-align: start; }
+.text-right { text-align: end; }
+
+/* Border radius adjustments for RTL */
+.rounded-l-lg { border-start-start-radius: 0.5rem; border-end-start-radius: 0.5rem; }
+.rounded-r-lg { border-start-end-radius: 0.5rem; border-end-end-radius: 0.5rem; }
+
+/* RTL-aware positioning */
+.left-4 { inset-inline-start: 1rem; }
+.right-4 { inset-inline-end: 1rem; }
+
+/* Arabic text optimizations */
+[dir="rtl"] {
+  /* Enhanced Arabic typography */
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  font-variant-ligatures: contextual;
+  letter-spacing: 0.01em;
+}
+
+/* Arabic text blocks */
+[dir="rtl"] .arabic-text {
+  font-family: var(--t-font-family-primary);
+  text-align: right;
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+
+/* English text in RTL context */
+[dir="rtl"] .english-text {
+  font-family: var(--t-font-family-primary);
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+/* Mixed content handling */
+.mixed-content {
+  unicode-bidi: plaintext;
+}
+
+/* RTL-specific component adjustments */
+[dir="rtl"] .sidebar {
+  border-left: 1px solid var(--t-color-border-secondary);
+  border-right: none;
+}
+
+[dir="rtl"] .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+[dir="rtl"] .tooltip-arrow {
+  transform: scaleX(-1);
+}
+
+/* Icon mirroring for directional context */
+[dir="rtl"] .flip-icon {
+  transform: scaleX(-1);
+}
+
+/* Form field layouts */
+[dir="rtl"] .form-field {
+  text-align: right;
+}
+
+[dir="rtl"] .form-field label {
+  text-align: right;
+}
+
+/* Table alignments */
+[dir="rtl"] .table-cell-start {
+  text-align: right;
+}
+
+[dir="rtl"] .table-cell-end {
+  text-align: left;
+}
+
+/* Navigation adjustments */
+[dir="rtl"] .breadcrumb-separator {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .pagination-prev {
+  order: 2;
+}
+
+[dir="rtl"] .pagination-next {
+  order: 1;
+}

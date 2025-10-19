@@ -1,12 +1,12 @@
 /* TopBar Component Styles */
 
 .topBar {
-  --t-topbar-height: 64px; /* Define TopBar height as CSS custom property */
+  --t-topbar-height: 3.5rem; /* 56px - Fixed TopBar height */
   position: relative; /* Required for absolute positioning of center section */
   width: 100%;
   background-color: var(--t-color-surface-primary);
   border-bottom: 1px solid var(--t-color-border-primary, #e5e7eb);
-  padding: var(--t-space-300, 0.75rem) var(--t-space-400, 1rem);
+  padding: 0 var(--t-space-400, 1rem); /* Remove vertical padding, only horizontal */
   z-index: 50; /* Higher z-index to stay above sidebar */
   height: var(--t-topbar-height);
   box-sizing: border-box;
@@ -18,12 +18,40 @@
   max-width: 100%;
   margin: 0 auto;
   gap: var(--t-space-400, 1rem);
+  height: 100%; /* Full height of TopBar for vertical centering */
 }
 
-/* Hamburger Menu Button */
+/* Hamburger Menu Button - Icon Button Style */
 .hamburgerButton {
   display: none;
   flex-shrink: 0;
+  padding: var(--t-space-100); /* Minimal padding for touch target */
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: var(--t-color-icon-primary);
+  cursor: pointer;
+  border-radius: var(--t-border-radius-200);
+  transition: background-color var(--t-transition-duration-200) var(--t-transition-timing-ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; /* Fixed width for icon button */
+  height: 32px; /* Fixed height for icon button */
+}
+
+.hamburgerButton:hover {
+  background-color: var(--t-color-surface-hover);
+}
+
+.hamburgerButton:focus,
+.hamburgerButton:focus-visible {
+  outline: 2px solid var(--t-color-focus-ring, #3b82f6);
+  outline-offset: 2px;
+}
+
+.hamburgerButton:active {
+  background-color: var(--t-color-surface-pressed);
 }
 
 .mobileOnly {
@@ -301,9 +329,9 @@
 /* Mobile responsive for TopBar */
 @media (max-width: 768px) {
   .topBar {
-    --t-topbar-height: 56px; /* Slightly smaller on mobile */
+    --t-topbar-height: 3.5rem; /* Same 56px height on mobile */
     height: var(--t-topbar-height);
-    padding: var(--t-space-250, 0.625rem) var(--t-space-300, 0.75rem);
+    padding: 0 var(--t-space-300, 0.75rem); /* Remove vertical padding */
   }
   
   .topBarContent {
@@ -361,11 +389,11 @@
 
   /* Update mobile overlay and sidebar positioning for mobile TopBar height */
   .mobileOverlay {
-    top: var(--t-topbar-height, 56px);
+    top: var(--t-topbar-height, 3.5rem);
   }
 
   .mobileSidebarWrapper {
-    top: var(--t-topbar-height, 56px);
+    top: var(--t-topbar-height, 3.5rem);
   }
 
   /* RTL mobile adjustments */
@@ -388,7 +416,7 @@
 /* Mobile Overlay Styles */
 .mobileOverlay {
   position: fixed;
-  top: var(--t-topbar-height, 64px); /* Position overlay below TopBar */
+  top: var(--t-topbar-height, 3.5rem); /* Position overlay below TopBar */
   left: 0;
   right: 0;
   bottom: 0;
@@ -413,7 +441,7 @@
 
 .mobileSidebarWrapper {
   position: fixed;
-  top: var(--t-topbar-height, 64px); /* Position sidebar below TopBar */
+  top: var(--t-topbar-height, 3.5rem); /* Position sidebar below TopBar */
   left: -280px; /* Start off-screen (assuming sidebar width ~280px) */
   bottom: 0;
   z-index: var(--t-z-modal);

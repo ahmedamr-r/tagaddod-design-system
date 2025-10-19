@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import styles from './Popover.module.css';
 import { Listbox, ListboxProps } from '../Listbox/Listbox';
 import { ListboxOptionProps } from '../Listbox/ListboxOption';
+import { useDrawerContext } from '../Drawer/Drawer';
 
 export type PopoverType = 'default' | 'with-scrollbar';
 export type PopoverMargin = 'none' | 'small' | 'medium' | 'large' | number;
@@ -148,13 +149,23 @@ export const Popover: React.FC<PopoverProps> = ({
   listboxItemPaddingVertical,
   listboxItemPaddingHorizontal,
 }) => {
+  // Check if popover is inside a drawer for z-index management
+  const drawerContext = useDrawerContext();
+
   // Detect RTL direction for line height adjustments
   const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
-  
+
   // Apply line height style based on text direction
   const lineHeightStyle = {
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
+
+  // Calculate z-index based on context
+  // Base z-index: 1010 (--t-z-popover)
+  // Inside drawer: drawerZIndex + 60 = 1080
+  const popoverZIndex = drawerContext.isInsideDrawer
+    ? drawerContext.drawerZIndex + 60
+    : undefined; // Use CSS default (--t-z-popover: 1010)
 
   const animationStyles = {
     animationDuration: `${animationDuration}ms`,
@@ -224,6 +235,7 @@ export const Popover: React.FC<PopoverProps> = ({
           style={{
             ...animationStyles,
             ...getMarginStyle(margin),
+            ...(popoverZIndex && { zIndex: popoverZIndex }),
           }}
           collisionPadding={10}
           {...contentProps}
@@ -250,17 +262,25 @@ export const PopoverContent = ({
   style,
   margin = 'medium',
   ...props
-}: React.ComponentProps<typeof RadixPopover.Content> & { 
+}: React.ComponentProps<typeof RadixPopover.Content> & {
   type?: PopoverType;
   margin?: PopoverMargin;
 }) => {
+  // Check if popover is inside a drawer for z-index management
+  const drawerContext = useDrawerContext();
+
   // Detect RTL direction for line height adjustments
   const isRTL = document.dir === 'rtl' || document.documentElement.dir === 'rtl';
-  
+
   // Apply line height style based on text direction
   const lineHeightStyle = {
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
+
+  // Calculate z-index based on context
+  const popoverZIndex = drawerContext.isInsideDrawer
+    ? drawerContext.drawerZIndex + 60
+    : undefined;
 
   // Calculate margin styles
   const getMarginStyle = (margin: PopoverMargin): React.CSSProperties => {
@@ -288,15 +308,16 @@ export const PopoverContent = ({
         ...style,
         ...getMarginStyle(margin),
         animationDuration: style?.animationDuration || '200ms',
+        ...(popoverZIndex && { zIndex: popoverZIndex }),
       }}
       {...props}
     >
       <div className={styles.innerContent} style={lineHeightStyle}>
         {children}
       </div>
-      <RadixPopover.Arrow 
-        className={styles.arrow} 
-        width={10} 
+      <RadixPopover.Arrow
+        className={styles.arrow}
+        width={10}
         height={5}
         style={{
           animationDuration: style?.animationDuration || '200ms',

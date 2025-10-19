@@ -1,0 +1,472 @@
+<!-- 
+REALM AGENT NAVIGATION INDEX
+=============================
+Quick Reference for Claude Code Agents:
+
+📚 QUICK REFERENCE (Lines 5-30)
+- Token import patterns
+- Basic usage examples
+
+🎨 COLORS (Lines 32-80)
+- Brand Colors (Lines 34-36)
+- Text Colors (Lines 38-48): Primary, secondary, tertiary, states
+- Fill/Background Colors (Lines 51-61): All background variants
+- Border Colors (Lines 63-72): All border variants
+- Complete Color Palettes (Lines 74-79): Blue, red, orange, gray, purple
+
+📏 SPACING & SIZING (Lines 83-132)
+- Spacing Scale (Lines 85-107): 0px to 256px system
+- Size Scale (Lines 109-116): Same progression for sizes
+- Common Usage Examples (Lines 118-131): Gap, padding, margin patterns
+
+🔤 TYPOGRAPHY (Lines 135-223)
+- Font Family (Lines 137-140): Outfit font
+- Font Weights (Lines 142-148): Regular to bold
+- Font Sizes (Lines 150-167): 10px to 56px
+- Complete Typography Scale (Lines 169-222):
+  * Headings (Lines 172-181): 3xl to xs
+  * Body Text (Lines 183-197): xl to sm with weight variants
+  * Labels & Captions (Lines 199-213): Form labels and small text
+  * Usage Examples (Lines 215-222)
+
+🎯 LAYOUT & STRUCTURE (Lines 226-271)
+- Border Radius (Lines 228-240): 0px to pill shape
+- Border Widths (Lines 242-249): 1px to 4px
+- Box Shadows (Lines 251-256): Subtle to popover
+- Z-Index Layers (Lines 258-271): Base to tooltip
+
+⚡ ANIMATION & TRANSITIONS (Lines 275-303)
+- Duration (Lines 277-281): Fast and base timing
+- Easing (Lines 283-286): Smooth curves
+- Combined Transitions (Lines 288-291): Ready-to-use transitions
+- Usage Examples (Lines 293-303)
+
+📝 COMMON PATTERNS (Lines 307-342)
+- Card Component Example (Lines 309-318)
+- Button Component Example (Lines 320-330)
+- Form Input Example (Lines 332-342)
+
+⚠️ BEST PRACTICES (Lines 346-368)
+- Do's and Don'ts (Lines 348-359)
+- Token Import (Lines 361-365)
+
+QUICK TOKEN LOOKUP:
+- Colors: var(--t-color-text-primary), var(--t-color-fill-brand)
+- Spacing: var(--t-space-200), var(--t-space-400)
+- Typography: var(--t-typography-body-md), var(--t-typography-heading-lg)
+- Layout: var(--t-border-radius-100), var(--t-shadow-1)
+
+⚠️ FALLBACK INSTRUCTION:
+If you cannot find what you're looking for in the sections above, 
+read the ENTIRE document from start to finish to ensure complete 
+understanding of all design token capabilities and patterns.
+-->
+
+# Design Tokens Reference
+
+This document provides a comprehensive reference for all Tagaddod design tokens available in the design system. **Always use these tokens instead of hardcoded values** to maintain consistency.
+
+## 🚨 MANDATORY RULES
+
+### Background Colors
+- **Full-page backgrounds**: ALWAYS use `--t-color-bg-light` for body tag and main page backgrounds
+- **Card/Component backgrounds**: Use `--t-color-surface-primary` for any cards or containers outside of design library components
+- **Card borders**: When using `--t-color-surface-primary` background, ALWAYS add border using `--t-color-border-secondary`
+
+### Text Colors
+- **Primary text**: Use `--t-color-text-primary` for normal text on light surfaces (high contrast)
+- **Text on dark surfaces**: Use `--t-color-text-on-fill` for text placed on dark surfaces (black, blue, etc.)
+- **Secondary text**: Use `--t-color-text-secondary` for less emphasized but readable text (subtitles, descriptions)
+
+
+### Examples
+```css
+/* ✅ CORRECT: Full page background */
+body {
+  background-color: var(--t-color-bg-light);
+}
+
+/* ✅ CORRECT: Custom card component */
+.custom-card {
+  background-color: var(--t-color-surface-primary);
+  border: var(--t-border-width-25) solid var(--t-color-border-secondary);
+  color: var(--t-color-text-primary);
+}
+
+/* ✅ CORRECT: Text on dark button */
+.dark-button {
+  background-color: var(--t-color-fill-brand);
+  color: var(--t-color-text-on-fill);
+}
+
+/* ✅ CORRECT: Secondary text */
+.description {
+  color: var(--t-color-text-secondary);
+}
+```
+
+## Quick Reference
+
+All tokens are available as CSS custom properties from `@tagaddod-design/react/dist/styles/styles.css`:
+
+```css
+/* Import in your CSS */
+@import '@tagaddod-design/react/dist/styles/styles.css';
+
+/* Use in CSS */
+.my-component {
+  color: var(--t-color-text-primary);
+  padding: var(--t-space-400);
+  font: var(--t-typography-body-md);
+}
+```
+
+```tsx
+// Use in React components with style prop
+<div style={{ 
+  color: 'var(--t-color-text-primary)',
+  padding: 'var(--t-space-400)',
+  font: 'var(--t-typography-body-md)'
+}}>
+```
+
+---
+
+## 🎨 Colors
+
+### Brand Colors
+- **Blue Palette**: `--t-color-blue-100` to `--t-color-blue-1600`
+- **Primary Brand**: `--t-color-fill-brand`, `--t-color-border-brand`
+
+### Text Colors
+```css
+--t-color-text-primary      /* Main text color */
+--t-color-text-secondary    /* Subdued text */
+--t-color-text-tertiary     /* Very light text */
+--t-color-text-on-fill      /* Text on dark backgrounds */
+--t-color-text-brand        /* Brand colored text */
+--t-color-text-critical     /* Error/danger text */
+--t-color-text-warning      /* Warning text */
+--t-color-text-success      /* Success text */
+--t-color-text-disabled     /* Disabled state text */
+```
+
+### Fill/Background Colors
+```css
+--t-color-fill-primary      /* Main background */
+--t-color-fill-secondary    /* Secondary background */
+--t-color-fill-tertiary     /* Tertiary background */
+--t-color-fill-brand        /* Brand background */
+--t-color-fill-critical     /* Error background */
+--t-color-fill-warning      /* Warning background */
+--t-color-fill-success      /* Success background */
+--t-color-fill-disabled     /* Disabled background */
+```
+
+### Border Colors
+```css
+--t-color-border-primary    /* Main borders */
+--t-color-border-secondary  /* Secondary borders */
+--t-color-border-brand      /* Brand borders */
+--t-color-border-critical   /* Error borders */
+--t-color-border-warning    /* Warning borders */
+--t-color-border-success    /* Success borders */
+--t-color-border-disabled   /* Disabled borders */
+```
+
+### Complete Color Palettes
+- **Blue**: `--t-color-blue-100` to `--t-color-blue-1600`
+- **Red**: `--t-color-red-100` to `--t-color-red-1600`
+- **Orange**: `--t-color-orange-100` to `--t-color-orange-1600`
+- **Gray**: `--t-color-gray-100` to `--t-color-gray-1600`
+- **Purple**: `--t-color-purple-100` to `--t-color-purple-1600`
+
+---
+
+## 📏 Spacing & Sizing
+
+### Spacing Scale
+```css
+--t-space-0      /* 0px */
+--t-space-25     /* 2px */
+--t-space-50     /* 4px */
+--t-space-75     /* 6px */
+--t-space-100    /* 8px */
+--t-space-150    /* 12px */
+--t-space-200    /* 16px */
+--t-space-300    /* 24px */
+--t-space-400    /* 32px */
+--t-space-500    /* 40px */
+--t-space-600    /* 48px */
+--t-space-700    /* 56px */
+--t-space-800    /* 64px */
+--t-space-900    /* 72px */
+--t-space-1000   /* 80px */
+--t-space-1200   /* 96px */
+--t-space-1600   /* 128px */
+--t-space-2000   /* 160px */
+--t-space-2400   /* 192px */
+--t-space-3200   /* 256px */
+```
+
+### Size Scale
+```css
+--t-size-0       /* 0px */
+--t-size-25      /* 2px */
+--t-size-50      /* 4px */
+/* ... same progression as spacing ... */
+--t-size-3200    /* 256px */
+```
+
+### Common Usage Examples
+```css
+/* Small gaps */
+gap: var(--t-space-100);           /* 8px */
+gap: var(--t-space-150);           /* 12px */
+
+/* Standard padding */
+padding: var(--t-space-200);       /* 16px */
+padding: var(--t-space-300);       /* 24px */
+
+/* Large sections */
+margin: var(--t-space-600);        /* 48px */
+margin: var(--t-space-800);        /* 64px */
+```
+
+---
+
+## 🔤 Typography
+
+### Font Family
+```css
+--t-font-family-primary    /* "Outfit", sans-serif */
+```
+
+### Font Weights
+```css
+--t-font-weight-regular    /* 400 */
+--t-font-weight-medium     /* 500 */
+--t-font-weight-semibold   /* 600 */
+--t-font-weight-bold       /* 700 */
+```
+
+### Font Sizes
+```css
+--t-font-size-250     /* 10px */
+--t-font-size-300     /* 12px */
+--t-font-size-350     /* 14px */
+--t-font-size-400     /* 16px */
+--t-font-size-450     /* 18px */
+--t-font-size-500     /* 20px */
+--t-font-size-600     /* 24px */
+--t-font-size-700     /* 28px */
+--t-font-size-800     /* 32px */
+--t-font-size-900     /* 36px */
+--t-font-size-1000    /* 40px */
+--t-font-size-1100    /* 44px */
+--t-font-size-1200    /* 48px */
+--t-font-size-1300    /* 52px */
+--t-font-size-1400    /* 56px */
+```
+
+### Complete Typography Scale
+**Use these ready-made typography combinations:**
+
+#### Headings
+```css
+--t-typography-heading-3xl      /* 56px, bold */
+--t-typography-heading-2xl      /* 48px, bold */
+--t-typography-heading-xl       /* 40px, bold */
+--t-typography-heading-lg       /* 32px, bold */
+--t-typography-heading-md       /* 24px, bold */
+--t-typography-heading-sm       /* 20px, bold */
+--t-typography-heading-xs       /* 18px, bold */
+```
+
+#### Body Text
+```css
+--t-typography-body-xl          /* 20px, regular */
+--t-typography-body-xl-medium   /* 20px, medium */
+--t-typography-body-xl-semibold /* 20px, semibold */
+--t-typography-body-lg          /* 18px, regular */
+--t-typography-body-lg-medium   /* 18px, medium */
+--t-typography-body-lg-semibold /* 18px, semibold */
+--t-typography-body-md          /* 16px, regular */
+--t-typography-body-md-medium   /* 16px, medium */
+--t-typography-body-md-semibold /* 16px, semibold */
+--t-typography-body-sm          /* 14px, regular */
+--t-typography-body-sm-medium   /* 14px, medium */
+--t-typography-body-sm-semibold /* 14px, semibold */
+```
+
+#### Labels & Captions
+```css
+--t-typography-label-lg         /* 16px, medium */
+--t-typography-label-lg-semibold /* 16px, semibold */
+--t-typography-label-md         /* 14px, medium */
+--t-typography-label-md-semibold /* 14px, semibold */
+--t-typography-label-sm         /* 12px, medium */
+--t-typography-label-sm-semibold /* 12px, semibold */
+--t-typography-caption-lg       /* 14px, regular */
+--t-typography-caption-lg-medium /* 14px, medium */
+--t-typography-caption-md       /* 12px, regular */
+--t-typography-caption-md-medium /* 12px, medium */
+--t-typography-caption-sm       /* 10px, regular */
+--t-typography-caption-sm-semibold /* 10px, semibold */
+```
+
+#### Typography Usage Examples
+```css
+/* Use complete typography tokens */
+h1 { font: var(--t-typography-heading-xl); }
+p { font: var(--t-typography-body-md); }
+.label { font: var(--t-typography-label-md-semibold); }
+.caption { font: var(--t-typography-caption-sm); }
+```
+
+---
+
+## 🎯 Layout & Structure
+
+### Border Radius
+```css
+--t-border-radius-0      /* 0px */
+--t-border-radius-25     /* 2px */
+--t-border-radius-50     /* 4px */
+--t-border-radius-75     /* 6px */
+--t-border-radius-100    /* 8px */
+--t-border-radius-150    /* 12px */
+--t-border-radius-200    /* 16px */
+--t-border-radius-300    /* 24px */
+--t-border-radius-400    /* 32px */
+--t-border-radius-full   /* 9999px (pill shape) */
+```
+
+### Border Widths
+```css
+--t-border-width-25      /* 1px */
+--t-border-width-50      /* 2px */
+--t-border-width-75      /* 3px */
+--t-border-width-100     /* 4px */
+--t-border-width-icon    /* 1.5px */
+```
+
+### Box Shadows
+```css
+--t-shadow-1             /* Subtle shadow */
+--t-shadow-2             /* Medium shadow */
+--t-shadow-popover       /* Popover/modal shadow */
+```
+
+### Z-Index Layers
+```css
+--t-z-base               /* 1 */
+--t-z-docked             /* 10 */
+--t-z-dropdown           /* 1000 */
+--t-z-sticky             /* 1100 */
+--t-z-banner             /* 1200 */
+--t-z-overlay            /* 1300 */
+--t-z-modal              /* 1400 */
+--t-z-popover            /* 1500 */
+--t-z-skip-link          /* 1600 */
+--t-z-toast              /* 1700 */
+--t-z-tooltip            /* 1800 */
+```
+
+---
+
+## ⚡ Animation & Transitions
+
+### Duration
+```css
+--t-duration-fast        /* 150ms */
+--t-duration-base        /* 300ms */
+```
+
+### Easing
+```css
+--t-easing-in-out        /* cubic-bezier(0.4, 0, 0.2, 1) */
+```
+
+### Combined Transitions
+```css
+--t-transition-soft      /* all 300ms cubic-bezier(0.4, 0, 0.2, 1) */
+```
+
+### Usage Examples
+```css
+.button {
+  transition: var(--t-transition-soft);
+}
+
+.modal {
+  animation-duration: var(--t-duration-base);
+  animation-timing-function: var(--t-easing-in-out);
+}
+```
+
+---
+
+## 📝 Common Patterns
+
+### Card Component Example
+```css
+.card {
+  background: var(--t-color-fill-primary);
+  border: var(--t-border-width-25) solid var(--t-color-border-primary);
+  border-radius: var(--t-border-radius-150);
+  padding: var(--t-space-400);
+  box-shadow: var(--t-shadow-1);
+}
+```
+
+### Button Component Example
+```css
+.button {
+  font: var(--t-typography-label-md-semibold);
+  padding: var(--t-space-200) var(--t-space-300);
+  border-radius: var(--t-border-radius-100);
+  background: var(--t-color-fill-brand);
+  color: var(--t-color-text-on-fill);
+  transition: var(--t-transition-soft);
+}
+```
+
+### Form Input Example
+```css
+.input {
+  font: var(--t-typography-body-md);
+  padding: var(--t-space-200);
+  border: var(--t-border-width-25) solid var(--t-color-border-primary);
+  border-radius: var(--t-border-radius-100);
+  background: var(--t-color-fill-primary);
+  color: var(--t-color-text-primary);
+}
+```
+
+---
+
+## ⚠️ Best Practices
+
+### DO ✅
+- Always use design tokens instead of hardcoded values
+- Reference this document when creating custom components
+- Use complete typography tokens (`--t-typography-*`) for consistent text styling
+- Follow the spacing scale for consistent layouts
+- Use semantic color tokens (`--t-color-text-primary`) over palette tokens
+
+### DON'T ❌
+- Use arbitrary values like `color: #333` or `margin: 16px`
+- Mix design system tokens with hardcoded values
+- Create custom spacing or color values outside the system
+- Ignore the typography scale and use random font sizes
+
+### Token Import
+```css
+/* Always import the complete design system */
+@import '@tagaddod-design/react/dist/styles/styles.css';
+```
+
+---
+
+This reference ensures all implementations maintain design system consistency and support the Tagaddod "vibe coder with no code knowledge" workflow.

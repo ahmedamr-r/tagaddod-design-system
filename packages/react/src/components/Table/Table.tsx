@@ -30,6 +30,13 @@ import {
   horizontalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { Tabs, TabsList, TabsTrigger } from '../Tabs';
+import { ScrollArea } from '../ScrollArea';
+import { Button } from '../Button';
+import { Drawer } from '../Drawer';
+import { Select } from '../Select';
+import { RangeSlider } from '../RangeSlider';
+import { Checkbox } from '../Checkbox';
+import { RadioGroup, RadioButtonItem } from '../RadioButton';
 
 // Extend ColumnMeta to include custom properties
 declare module '@tanstack/react-table' {
@@ -93,12 +100,19 @@ export const Table = <T extends object>({
   className = '',
   footerContent,
   emptyStateNode,
+  enableScrollArea = false,
+  scrollAreaHeight = '400px',
+  scrollAreaWidth = '100%',
+  enableHorizontalScroll = true,
+  enableVerticalScroll = true,
+  scrollAreaType = 'hover',
 }: TableProps<T>) => {
   // Table state
   const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(defaultColumnVisibility);
   const [globalFilter, setGlobalFilter] = useState<string>(searchQuery);
   const [isFilterBarVisible, setIsFilterBarVisible] = useState<boolean>(defaultShowFilterBar);
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState<boolean>(false);
   
   // Column ordering, sizing, and pinning state
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([]);
@@ -343,6 +357,17 @@ export const Table = <T extends object>({
     onFilterChange?.(newFilters);
   };
 
+  // Handle clear all filters
+  const handleClearAllFilters = () => {
+    onFilterChange?.({});
+  };
+
+  // Filter visibility logic - progressive disclosure pattern
+  const MAX_VISIBLE_FILTERS = 5;
+  const allFilterKeys = Object.keys(filterOptions);
+  const visibleFilterKeys = allFilterKeys.slice(0, MAX_VISIBLE_FILTERS);
+  const hasMoreFilters = allFilterKeys.length > MAX_VISIBLE_FILTERS;
+
   // Create lineHeightStyle object for proper text rendering
   const lineHeightStyle = {
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
@@ -382,27 +407,8 @@ export const Table = <T extends object>({
   // Get current pagination state (either from props or internal state)
   const currentPagination = activePagination || internalPagination;
 
-  // Helper to render content based on state
-  const renderContent = () => {
-    if (state === 'error') {
-      return <TableContentCase type="error" message={errorMessage} />;
-    }
-    
-    if (state === 'loading') {
-      return <TableContentCase type="loading" />;
-    }
-    
-    if (state === 'notFound') {
-      return <TableContentCase type="notFound" message={notFoundMessage} subtitle={notFoundSubtitle} />;
-    }
-    
-    if (state === 'empty' || activeData.length === 0) {
-      if (emptyStateNode) {
-        return emptyStateNode;
-      }
-      return <TableContentCase type="empty" message={emptyMessage} />;
-    }
-    
+  // Helper to render table element
+  const renderTable = () => {
     if (enableColumnOrdering) {
       return (
         <DndContext
@@ -433,7 +439,7 @@ export const Table = <T extends object>({
             <tbody>
               {table.getRowModel().rows.map((row, rowIndex) => {
                 const isEvenRow = rowIndex % 2 === 0;
-                
+
                 return (
                   <tr
                     key={row.id}
@@ -451,7 +457,7 @@ export const Table = <T extends object>({
                         className={`${styles.tableCell} ${cell.column.columnDef.meta?.cellClassName || ''} ${
                           striped && !isEvenRow ? styles.striped : ''
                         } ${gridCells ? styles.gridCell : ''}`}
-                        style={{ 
+                        style={{
                           width: `${cell.column.getSize()}px`,
                           ...getPinningStyles(cell.column)
                         }}
@@ -471,7 +477,7 @@ export const Table = <T extends object>({
         </DndContext>
       );
     }
-    
+
     // Static table without column ordering
     return (
       <table className={clsx(styles.table, className?.includes('fixed-width') && styles.fixedWidthTable)}>
@@ -492,7 +498,7 @@ export const Table = <T extends object>({
         <tbody>
           {table.getRowModel().rows.map((row, rowIndex) => {
             const isEvenRow = rowIndex % 2 === 0;
-            
+
             return (
               <tr
                 key={row.id}
@@ -510,7 +516,7 @@ export const Table = <T extends object>({
                     className={`${styles.tableCell} ${cell.column.columnDef.meta?.cellClassName || ''} ${
                       striped && !isEvenRow ? styles.striped : ''
                     } ${gridCells ? styles.gridCell : ''}`}
-                    style={{ 
+                    style={{
                       width: `${cell.column.getSize()}px`,
                       ...getPinningStyles(cell.column)
                     }}
@@ -528,6 +534,48 @@ export const Table = <T extends object>({
         </tbody>
       </table>
     );
+  };
+
+  // Helper to render content based on state
+  const renderContent = () => {
+    if (state === 'error') {
+      return <TableContentCase type="error" message={errorMessage} />;
+    }
+
+    if (state === 'loading') {
+      return <TableContentCase type="loading" />;
+    }
+
+    if (state === 'notFound') {
+      return <TableContentCase type="notFound" message={notFoundMessage} subtitle={notFoundSubtitle} />;
+    }
+
+    if (state === 'empty' || activeData.length === 0) {
+      if (emptyStateNode) {
+        return emptyStateNode;
+      }
+      return <TableContentCase type="empty" message={emptyMessage} />;
+    }
+
+    // Render table with or without ScrollArea
+    const tableElement = renderTable();
+
+    if (enableScrollArea) {
+      return (
+        <ScrollArea
+          height={scrollAreaHeight}
+          width={scrollAreaWidth}
+          horizontal={enableHorizontalScroll}
+          vertical={enableVerticalScroll}
+          type={scrollAreaType}
+          dir={isRTL ? 'rtl' : 'ltr'}
+        >
+          {tableElement}
+        </ScrollArea>
+      );
+    }
+
+    return tableElement;
   };
 
   return (
@@ -586,22 +634,22 @@ export const Table = <T extends object>({
           <div className={styles.filterBarLabel} style={lineHeightStyle}>
             {isRTL ? "تصفية:" : "Filters:"}
           </div>
-          
+
           <div className={styles.filterItems}>
-            {Object.keys(filterOptions).map((filterKey) => {
+            {visibleFilterKeys.map((filterKey) => {
               const filterOption = filterOptions[filterKey];
               const filterType = filterOption.type || 'select';
-              
+
               // Generate current filters for currentFilters type
               const getCurrentFilters = () => {
                 if (filterType !== 'currentFilters') return [];
-                
+
                 return Object.entries(activeFilters)
                   .filter(([key, value]) => value !== undefined && key !== filterKey)
                   .map(([key, value]) => {
                     const relatedFilter = filterOptions[key];
                     if (!relatedFilter) return { label: `${key}: ${value}`, value: key };
-                    
+
                     // Format based on filter type
                     if (relatedFilter.type === 'rangeSlider' && Array.isArray(value)) {
                       const config = relatedFilter.rangeConfig;
@@ -619,11 +667,11 @@ export const Table = <T extends object>({
                         value: key
                       };
                     }
-                    
+
                     return { label: `${relatedFilter.label}: ${value}`, value: key };
                   });
               };
-              
+
               return (
                 <FilterItem
                   key={filterKey}
@@ -640,7 +688,31 @@ export const Table = <T extends object>({
                 />
               );
             })}
+
+            {hasMoreFilters && (
+              <Button
+                variant="plain"
+                tone="default"
+                size="small"
+                onClick={() => setIsFilterDrawerOpen(true)}
+                className={styles.moreFiltersButton}
+              >
+                {isRTL ? "المزيد من الفلاتر" : "More filters"}
+              </Button>
+            )}
           </div>
+
+          {Object.keys(activeFilters).length > 0 && (
+            <Button
+              variant="plain"
+              tone="critical"
+              size="small"
+              onClick={handleClearAllFilters}
+              className={styles.clearAllButton}
+            >
+              {isRTL ? "مسح جميع الفلاتر" : "Clear all filters"}
+            </Button>
+          )}
         </div>
       )}
       
@@ -680,6 +752,122 @@ export const Table = <T extends object>({
           {footerContent}
         </div>
       )}
+
+      {/* Advanced Filters Drawer */}
+      <Drawer
+        open={isFilterDrawerOpen}
+        onOpenChange={setIsFilterDrawerOpen}
+        title={isRTL ? "الفلاتر" : "Filters"}
+        position={isRTL ? "left" : "right"}
+        size="medium"
+        showFooter={false}
+      >
+        <div className={styles.drawerFilters}>
+          {allFilterKeys.map((filterKey) => {
+            const filterOption = filterOptions[filterKey];
+            const filterType = filterOption.type || 'select';
+            const currentValue = activeFilters[filterKey];
+
+            // Render appropriate input component based on filter type
+            if (filterType === 'rangeSlider' && filterOption.rangeConfig) {
+              const config = filterOption.rangeConfig;
+              const value = Array.isArray(currentValue) ? currentValue : [config.min, config.max];
+
+              return (
+                <div key={filterKey} className={styles.drawerFilterItem}>
+                  <RangeSlider
+                    label={filterOption.label}
+                    min={config.min}
+                    max={config.max}
+                    step={config.step || 1}
+                    value={value}
+                    onChange={(newValue) => handleFilterChange(filterKey, newValue)}
+                    formatValue={config.formatValue}
+                    prefix={config.prefix}
+                    suffix={config.suffix}
+                  />
+                </div>
+              );
+            }
+
+            if (filterType === 'checkboxGroup' && filterOption.options) {
+              const selectedValues = Array.isArray(currentValue) ? currentValue : [];
+
+              return (
+                <div key={filterKey} className={styles.drawerFilterItem}>
+                  <label className={styles.drawerFilterLabel}>{filterOption.label}</label>
+                  <div className={styles.checkboxGroup}>
+                    {filterOption.options.map((option) => (
+                      <Checkbox
+                        key={option.value}
+                        label={option.label}
+                        checked={selectedValues.includes(option.value)}
+                        onCheckedChange={(checked) => {
+                          const newValues = checked
+                            ? [...selectedValues, option.value]
+                            : selectedValues.filter(v => v !== option.value);
+                          handleFilterChange(filterKey, newValues);
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+
+            if (filterType === 'radioGroup' && filterOption.options) {
+              // Ensure we have a valid string value for the RadioGroup component
+              const radioValue = currentValue ? String(currentValue) : '';
+
+              return (
+                <div key={filterKey} className={styles.drawerFilterItem}>
+                  <RadioGroup
+                    label={filterOption.label}
+                    value={radioValue}
+                    onValueChange={(newValue) => handleFilterChange(filterKey, newValue)}
+                  >
+                    {filterOption.options.map((option) => (
+                      <RadioButtonItem
+                        key={option.value}
+                        value={String(option.value)}
+                        label={option.label}
+                      />
+                    ))}
+                  </RadioGroup>
+                </div>
+              );
+            }
+
+            // Default: select dropdown
+            if (filterOption.options) {
+              // Ensure we have a valid string value for the Select component
+              const selectValue = currentValue ? String(currentValue) : '';
+
+              // Convert filter options to Select component format
+              const selectOptions = filterOption.options.map(opt => ({
+                value: String(opt.value),
+                label: opt.label,
+                disabled: false
+              }));
+
+              return (
+                <div key={filterKey} className={styles.drawerFilterItem}>
+                  <Select
+                    label={filterOption.label}
+                    value={selectValue}
+                    onValueChange={(newValue) => handleFilterChange(filterKey, newValue)}
+                    placeholder={isRTL ? `اختر ${filterOption.label}` : `Select ${filterOption.label}`}
+                    options={selectOptions}
+                    fullWidth
+                  />
+                </div>
+              );
+            }
+
+            return null;
+          })}
+        </div>
+      </Drawer>
     </div>
   );
 };

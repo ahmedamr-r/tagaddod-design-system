@@ -55,6 +55,12 @@ const meta: Meta<typeof Modal> = {
     rtl: {
       control: 'boolean',
     },
+    scrollable: {
+      control: 'boolean',
+    },
+    maxHeight: {
+      control: 'text',
+    },
   },
 };
 
@@ -280,6 +286,8 @@ export const FormWithSelect: Story = {
         primaryLabel="Register"
         showPrimaryButton={true}
         showSecondaryButton={false}
+        scrollable={true}
+        maxHeight="400px"
         onCancel={() => setIsOpen(false)}
         onPrimary={handleSubmit}
       >
@@ -541,6 +549,53 @@ export const DynamicFooter: Story = {
     docs: {
       description: {
         story: 'Demonstrates complete dynamic control over the Modal footer. Toggle button visibility, switch footer variants, and add custom content in real-time.',
+      },
+    },
+  },
+};
+
+// Scrollable Content Story
+export const ScrollableContent: Story = {
+  args: {
+    ...Default.args,
+    title: 'Scrollable Modal Content',
+    scrollable: true,
+    maxHeight: '300px',
+    trigger: <Button>Open Scrollable Modal</Button>,
+    children: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <p>This modal demonstrates the ScrollArea integration for long content.</p>
+        {Array.from({ length: 20 }, (_, i) => (
+          <div
+            key={i}
+            style={{
+              padding: '12px',
+              backgroundColor: i % 2 === 0 ? 'var(--t-color-fill-secondary)' : 'var(--t-color-fill-tertiary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}
+          >
+            <strong>Item {i + 1}:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris.
+          </div>
+        ))}
+        <div style={{
+          padding: '16px',
+          backgroundColor: 'var(--t-color-fill-brand-secondary)',
+          borderRadius: 'var(--t-border-radius-200)',
+          textAlign: 'center',
+          fontWeight: 'var(--t-font-weight-medium)'
+        }}>
+          🎉 You've reached the end of the scrollable content!
+        </div>
+      </div>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Modal with scrollable content using the ScrollArea component. The content area is limited to a specific height and provides custom scrollbars when needed.',
       },
     },
   },

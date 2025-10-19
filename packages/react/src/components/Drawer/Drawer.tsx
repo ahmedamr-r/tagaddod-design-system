@@ -345,10 +345,10 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
               {/* Group 1: Back + Title + Prefix */}
               <div className={styles.headerLeft}>
                 {showBackButton && step > 1 && (
-                  <Button 
-                    variant="tertiary"
+                  <Button
+                    variant="outlined"
                     tone="neutral"
-                    size="micro"
+                    size="xSmall"
                     onClick={handleBackClick}
                     aria-label={isRTL ? 'التالي' : 'Back'}
                     className={styles.backButton}
@@ -378,10 +378,10 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
                 )}
                 
                 {showClose && (
-                  <Button 
-                    variant="tertiary"
+                  <Button
+                    variant="outlined"
                     tone="neutral"
-                    size="micro"
+                    size="xSmall"
                     onClick={() => onOpenChange(false)}
                     aria-label={isRTL ? 'إغلاق' : 'Close'}
                     className={styles.closeButton}
@@ -413,8 +413,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
                     </div>
                     <div className={styles.footerRight}>
                       {showSecondaryButton && (
-                        <Button 
-                          variant="tertiary" 
+                        <Button
+                          variant="outlined"
                           onClick={onSecondary}
                           style={lineHeightStyle}
                         >
@@ -422,8 +422,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
                         </Button>
                       )}
                       {showPrimaryButton && (
-                        <Button 
-                          variant="primary" 
+                        <Button
+                          variant="primary"
                           onClick={onPrimary}
                           style={lineHeightStyle}
                         >
@@ -440,8 +440,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
                     </div>
                     <div className={styles.footerRight}>
                       {showSecondaryButton && (
-                        <Button 
-                          variant="tertiary" 
+                        <Button
+                          variant="outlined"
                           onClick={onSecondary}
                           style={lineHeightStyle}
                         >
@@ -449,8 +449,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
                         </Button>
                       )}
                       {showPrimaryButton && (
-                        <Button 
-                          variant="primary" 
+                        <Button
+                          variant="primary"
                           onClick={onPrimary}
                           style={lineHeightStyle}
                         >
@@ -463,8 +463,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
                 {footerVariant === 'actionsOnly' && (
                   <div className={styles.footerRight}>
                     {showSecondaryButton && (
-                      <Button 
-                        variant="tertiary" 
+                      <Button
+                        variant="outlined"
                         onClick={onSecondary}
                         style={lineHeightStyle}
                       >
@@ -472,8 +472,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(({
                       </Button>
                     )}
                     {showPrimaryButton && (
-                      <Button 
-                        variant="primary" 
+                      <Button
+                        variant="primary"
                         onClick={onPrimary}
                         style={lineHeightStyle}
                       >

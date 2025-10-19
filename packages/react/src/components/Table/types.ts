@@ -335,6 +335,43 @@ export interface TableProps<T extends object> {
    * A node to render when there is no data and no special state
    */
   emptyStateNode?: ReactNode;
+
+  /**
+   * Enable custom scrolling behavior for the table
+   * When enabled, wraps the table in a ScrollArea component
+   * @default false
+   */
+  enableScrollArea?: boolean;
+
+  /**
+   * Height of the scrollable area when enableScrollArea is true
+   * @default '400px'
+   */
+  scrollAreaHeight?: string | number;
+
+  /**
+   * Width of the scrollable area when enableScrollArea is true
+   * @default '100%'
+   */
+  scrollAreaWidth?: string | number;
+
+  /**
+   * Enable horizontal scrolling
+   * @default true
+   */
+  enableHorizontalScroll?: boolean;
+
+  /**
+   * Enable vertical scrolling
+   * @default true
+   */
+  enableVerticalScroll?: boolean;
+
+  /**
+   * Scrollbar visibility behavior
+   * @default 'hover'
+   */
+  scrollAreaType?: 'always' | 'scroll' | 'hover' | 'auto';
 }
 
 export interface TableHeaderProps {

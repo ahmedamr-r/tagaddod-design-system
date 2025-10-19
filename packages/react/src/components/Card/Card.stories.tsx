@@ -136,8 +136,8 @@ export const Interactive: Story = {
   args: {
     interactive: true,
     header: 'Interactive Card',
-    children: 'Click or hover to see interactive states. Perfect for clickable cards or navigation items.',
-    footer: 'Try hovering or focusing this card'
+    children: 'Hover to see the 0.2s ease-in-out transition with surface-hover background. Perfect for clickable cards or navigation items.',
+    footer: 'Notice the smooth animation and background change'
   }
 };
 
@@ -360,6 +360,78 @@ export const GridLayout: Story = {
   )
 };
 
+// Animation and Hover Effects Demo
+export const AnimationShowcase: Story = {
+  render: (args) => (
+    <div style={{ display: 'grid', gap: '2rem', maxWidth: '900px' }}>
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>Hover Effects with 0.2s Ease-In-Out Transitions</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+          <Card
+            variant="elevated"
+            interactive={true}
+            header="Interactive Card"
+            footer="Hover for surface-hover background"
+            {...args}
+          >
+            <p>Interactive cards get surface-hover background on hover with smooth 0.2s ease-in-out transition. No drop shadow for interactive cards.</p>
+          </Card>
+
+          <Card
+            variant="outlined"
+            clickable={true}
+            header="Clickable Card"
+            footer="Hover for drop shadow + lift"
+            onClick={() => console.log('Clicked!')}
+            {...args}
+          >
+            <p>Clickable cards get surface-hover background, drop shadow, and 2px lift on hover. All animations use 0.2s ease-in-out.</p>
+          </Card>
+
+          <Card
+            variant="ghost"
+            clickable={true}
+            header="Ghost Clickable"
+            footer="Watch the transformation"
+            onClick={() => console.log('Ghost clicked!')}
+            {...args}
+          >
+            <p>Ghost cards gain background and shadow on hover, transforming from minimal to elevated with smooth animation.</p>
+          </Card>
+        </div>
+      </div>
+
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>Transition Details</h3>
+        <Card
+          variant="elevated"
+          size="large"
+          clickable={true}
+          header="Animation Technical Details"
+          footer="Try hovering and clicking"
+          onClick={() => console.log('Technical card clicked!')}
+          {...args}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div><strong>Hover Effects:</strong></div>
+            <ul style={{ margin: 0, paddingLeft: '20px' }}>
+              <li>Background changes to <code>var(--t-color-surface-hover)</code></li>
+              <li>Clickable cards get <code>var(--t-shadow-200)</code> drop shadow</li>
+              <li>Transform: <code>translateY(-2px)</code> for clickable, <code>translateY(-1px)</code> for interactive</li>
+              <li>All transitions use <code>0.2s ease-in-out</code></li>
+            </ul>
+            <div><strong>Active State:</strong></div>
+            <ul style={{ margin: 0, paddingLeft: '20px' }}>
+              <li>Reduces lift to <code>translateY(-1px)</code></li>
+              <li>Faster transition: <code>0.1s ease-in-out</code></li>
+            </ul>
+          </div>
+        </Card>
+      </div>
+    </div>
+  )
+};
+
 // Clickable Card Examples
 export const ClickableCards: Story = {
   render: (args) => (
@@ -399,11 +471,11 @@ export const ClickableCards: Story = {
         variant="outlined"
         size="medium"
         clickable={true}
-        header="Navigation Card"
+        header="Navigation Card with Drop Shadow"
         onClick={() => alert('Navigation clicked!')}
         {...args}
       >
-        <p>Click this entire card to navigate. Notice the enhanced hover and click effects with smooth 0.2s transitions.</p>
+        <p>Click this entire card to navigate. Notice the enhanced hover effects: surface-hover background, drop shadow (0.2s ease-in-out), and smooth 2px lift animation.</p>
       </Card>
 
       <Card
@@ -419,8 +491,52 @@ export const ClickableCards: Story = {
         onClick={() => alert('Create new clicked!')}
         {...args}
       >
-        <p>Ghost variant with clickable functionality. Try hovering and clicking to see the subtle animations.</p>
+        <p>Ghost variant with clickable functionality. Watch the ghost card gain surface-hover background and drop shadow on hover with smooth 0.2s ease-in-out transition.</p>
       </Card>
+    </div>
+  )
+};
+
+// Padding Demo - Shows equal padding on all sides by default
+export const PaddingDemo: Story = {
+  render: (args) => (
+    <div style={{ display: 'grid', gap: '2rem', maxWidth: '800px' }}>
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>Equal 12px Padding on All Sides (All Card Sizes)</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+          <Card
+            variant="outlined"
+            size="medium"
+            header="Equal Padding Demo"
+            footer="All sides have equal padding"
+            style={{ border: '2px dashed var(--t-color-border-tertiary)' }}
+            {...args}
+          >
+            <div style={{ backgroundColor: 'var(--t-color-surface-secondary)', padding: '8px', borderRadius: '4px' }}>
+              <p style={{ margin: 0 }}>
+                All card sizes now use 12px (var(--t-space-300)) padding on all four sides: top, bottom, left, and right.
+                This creates perfect symmetry and makes the card ideal for AI agents to use consistently.
+              </p>
+            </div>
+          </Card>
+
+          <Card
+            variant="elevated"
+            size="large"
+            header="Large Size Equal Padding"
+            footer="Consistent spacing maintained"
+            style={{ border: '2px dashed var(--t-color-border-tertiary)' }}
+            {...args}
+          >
+            <div style={{ backgroundColor: 'var(--t-color-surface-secondary)', padding: '8px', borderRadius: '4px' }}>
+              <p style={{ margin: 0 }}>
+                Large size cards maintain the same 12px base padding on all sides,
+                ensuring predictable and harmonious layouts across all sizes.
+              </p>
+            </div>
+          </Card>
+        </div>
+      </div>
     </div>
   )
 };
@@ -438,7 +554,7 @@ export const CustomPadding: Story = {
             footer="Standard spacing"
             {...args}
           >
-            <p>This card uses the default size-based padding (medium = 16px).</p>
+            <p>This card uses the default 12px padding (var(--t-space-300)) on all sides.</p>
           </Card>
 
           <Card

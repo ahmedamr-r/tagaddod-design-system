@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tabs, TabsTrigger, TabsContent, TabsList, tabsVariants, tabsCounts, tabsOrientations } from './Tabs';
 import styles from './Tabs.module.css';
-import { 
-  IconHome, 
-  IconUser, 
-  IconSettings, 
-  IconBell, 
-  IconCalendar, 
-  IconMessage
+import {
+  IconHome,
+  IconUser,
+  IconSettings,
+  IconBell,
+  IconCalendar,
+  IconMessage,
+  IconChartBar,
+  IconFileText
 } from '@tabler/icons-react';
 
 const meta = {
@@ -1109,6 +1112,267 @@ export const AccessibilityFeatures: Story = {
     docs: {
       description: {
         story: 'Showcases the accessibility features of the Tabs component, including keyboard navigation, ARIA attributes, and focus management.',
+      },
+    },
+  },
+};
+
+// URL Routing - Basic
+export const URLRoutingBasic: Story = {
+  render: () => {
+    const [activeTab, setActiveTab] = useState('overview');
+
+    return (
+      <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
+        <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: '#e0f2fe', borderRadius: '4px' }}>
+          <strong>Current URL will show:</strong> ?tab={activeTab}
+          <br />
+          <small>Try changing tabs and using browser back/forward buttons!</small>
+        </div>
+
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          syncWithUrl={true}
+          variant="primary"
+          fitted
+          ariaLabel="Dashboard navigation with URL routing"
+        >
+          <TabsList>
+            <TabsTrigger value="overview" icon={<IconHome size={18} />}>
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="analytics" icon={<IconChartBar size={18} />}>
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="reports" icon={<IconFileText size={18} />}>
+              Reports
+            </TabsTrigger>
+            <TabsTrigger value="settings" icon={<IconSettings size={18} />}>
+              Settings
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview">
+            <div style={{ padding: '24px', backgroundColor: '#fff', borderRadius: '8px', marginTop: '16px' }}>
+              <h4>Dashboard Overview</h4>
+              <p>This tab is synced with the URL. Check your browser's address bar!</p>
+              <p><strong>URL:</strong> ?tab=overview</p>
+              <ul>
+                <li>Browser back/forward buttons work</li>
+                <li>Bookmark this URL to return to this tab</li>
+                <li>Share this URL to let others see this tab</li>
+                <li>Page reload maintains tab selection</li>
+              </ul>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <div style={{ padding: '24px', backgroundColor: '#fff', borderRadius: '8px', marginTop: '16px' }}>
+              <h4>Analytics Dashboard</h4>
+              <p>URL updated to: ?tab=analytics</p>
+              <p>Try clicking the browser back button to return to the previous tab!</p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="reports">
+            <div style={{ padding: '24px', backgroundColor: '#fff', borderRadius: '8px', marginTop: '16px' }}>
+              <h4>Generated Reports</h4>
+              <p>URL updated to: ?tab=reports</p>
+              <p>Each tab change creates a new browser history entry.</p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <div style={{ padding: '24px', backgroundColor: '#fff', borderRadius: '8px', marginTop: '16px' }}>
+              <h4>Dashboard Settings</h4>
+              <p>URL updated to: ?tab=settings</p>
+              <p>Users can bookmark this exact URL to return directly to the settings tab.</p>
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        <div style={{ marginTop: '20px', padding: '16px', backgroundColor: '#fff', borderRadius: '8px' }}>
+          <h4>Try This:</h4>
+          <ol>
+            <li>Click through the tabs above</li>
+            <li>Notice how the URL changes in your browser</li>
+            <li>Use the browser's back button to navigate through tab history</li>
+            <li>Refresh the page - the selected tab persists!</li>
+            <li>Bookmark a tab and reopen it later</li>
+          </ol>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Basic URL routing example with syncWithUrl enabled. Each tab change updates the URL with ?tab=value, creating browser history entries for back/forward navigation.',
+      },
+    },
+  },
+};
+
+// URL Routing - Custom Parameter Name
+export const URLRoutingCustomParam: Story = {
+  render: () => {
+    const [activeSection, setActiveSection] = useState('products');
+
+    return (
+      <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
+        <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: '#fef3c7', borderRadius: '4px' }}>
+          <strong>Custom URL parameter:</strong> ?section={activeSection}
+          <br />
+          <small>Using <code>urlParamName="section"</code> instead of the default "tab"</small>
+        </div>
+
+        <Tabs
+          value={activeSection}
+          onValueChange={setActiveSection}
+          syncWithUrl={true}
+          urlParamName="section"
+          variant="secondary"
+          ariaLabel="Store management with custom URL parameter"
+        >
+          <TabsList>
+            <TabsTrigger value="products">Products</TabsTrigger>
+            <TabsTrigger value="orders" badge="12">Orders</TabsTrigger>
+            <TabsTrigger value="customers">Customers</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="products">
+            <div style={{ padding: '24px', backgroundColor: '#fff', borderRadius: '8px', marginTop: '16px' }}>
+              <h4>Product Catalog</h4>
+              <p><strong>URL:</strong> ?section=products</p>
+              <p>The URL parameter name can be customized to match your application's routing conventions.</p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="orders">
+            <div style={{ padding: '24px', backgroundColor: '#fff', borderRadius: '8px', marginTop: '16px' }}>
+              <h4>Orders Management</h4>
+              <p><strong>URL:</strong> ?section=orders</p>
+              <p>Useful when you have multiple tab groups on the same page with different parameter names.</p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="customers">
+            <div style={{ padding: '24px', backgroundColor: '#fff', borderRadius: '8px', marginTop: '16px' }}>
+              <h4>Customer Directory</h4>
+              <p><strong>URL:</strong> ?section=customers</p>
+              <p>Custom parameter names make URLs more semantic and easier to understand.</p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <div style={{ padding: '24px', backgroundColor: '#fff', borderRadius: '8px', marginTop: '16px' }}>
+              <h4>Store Analytics</h4>
+              <p><strong>URL:</strong> ?section=analytics</p>
+              <p>All URL routing features work the same with custom parameter names.</p>
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        <div style={{ marginTop: '20px', padding: '16px', backgroundColor: '#fff', borderRadius: '8px' }}>
+          <p><strong>Use Cases for Custom Parameters:</strong></p>
+          <ul>
+            <li><code>urlParamName="view"</code> - For different view modes</li>
+            <li><code>urlParamName="step"</code> - For wizard/multi-step forms</li>
+            <li><code>urlParamName="category"</code> - For category navigation</li>
+            <li><code>urlParamName="panel"</code> - For settings panels</li>
+          </ul>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example using a custom URL parameter name with urlParamName="section" instead of the default "tab". Useful for semantic URLs or when multiple tab groups exist on the same page.',
+      },
+    },
+  },
+};
+
+// URL Routing - Replace History
+export const URLRoutingReplaceHistory: Story = {
+  render: () => {
+    const [activeView, setActiveView] = useState('grid');
+
+    return (
+      <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
+        <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: '#fef2f2', borderRadius: '4px' }}>
+          <strong>Replace History Mode:</strong> ?view={activeView}
+          <br />
+          <small>URL updates without creating new browser history entries</small>
+        </div>
+
+        <Tabs
+          value={activeView}
+          onValueChange={setActiveView}
+          syncWithUrl={true}
+          urlParamName="view"
+          replaceHistory={true}
+          variant="primary"
+          ariaLabel="View mode switcher"
+        >
+          <TabsList>
+            <TabsTrigger value="grid">Grid View</TabsTrigger>
+            <TabsTrigger value="list">List View</TabsTrigger>
+            <TabsTrigger value="compact">Compact View</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="grid">
+            <div style={{ padding: '24px', backgroundColor: '#fff', borderRadius: '8px', marginTop: '16px' }}>
+              <h4>Grid View</h4>
+              <p><strong>URL:</strong> ?view=grid</p>
+              <p>With <code>replaceHistory=true</code>, switching tabs updates the URL but doesn't add to browser history.</p>
+              <p><strong>Try this:</strong> Switch between views multiple times, then click the browser back button. You'll skip all the view changes!</p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="list">
+            <div style={{ padding: '24px', backgroundColor: '#fff', borderRadius: '8px', marginTop: '16px' }}>
+              <h4>List View</h4>
+              <p><strong>URL:</strong> ?view=list</p>
+              <p>This is useful for UI state that users shouldn't navigate back through, like view mode toggles or filter panels.</p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="compact">
+            <div style={{ padding: '24px', backgroundColor: '#fff', borderRadius: '8px', marginTop: '16px' }}>
+              <h4>Compact View</h4>
+              <p><strong>URL:</strong> ?view=compact</p>
+              <p>URL persists across page reloads, but switching views doesn't clutter browser history.</p>
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        <div style={{ marginTop: '20px', padding: '16px', backgroundColor: '#fff', borderRadius: '8px' }}>
+          <p><strong>When to use <code>replaceHistory=true</code>:</strong></p>
+          <ul>
+            <li><strong>View mode toggles</strong> - Grid/list/compact views</li>
+            <li><strong>Filter panels</strong> - Different filter configurations</li>
+            <li><strong>Sort options</strong> - Changing sort order</li>
+            <li><strong>UI preferences</strong> - Theme toggles, density settings</li>
+          </ul>
+          <p><strong>When to use <code>replaceHistory=false</code> (default):</strong></p>
+          <ul>
+            <li><strong>Page navigation</strong> - Main sections or pages</li>
+            <li><strong>Content categories</strong> - Different types of content</li>
+            <li><strong>Workflow steps</strong> - Multi-step processes</li>
+            <li><strong>Settings sections</strong> - Different settings panels</li>
+          </ul>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example using replaceHistory=true to update the URL without creating new browser history entries. Perfect for view modes, filters, or UI state that users shouldn\'t navigate back through.',
       },
     },
   },

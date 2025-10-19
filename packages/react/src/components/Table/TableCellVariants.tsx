@@ -264,7 +264,7 @@ export const SelectCell: React.FC<CellVariantProps<string>> = ({
       onValueChange={(newValue) => onChange?.(newValue, row)}
       options={validOptions}
       className={className}
-      size="micro"
+      size="xsmall"
     />
   );
 };
@@ -375,6 +375,9 @@ interface ActionIconCellAction {
   icon: React.ReactNode;
   onClick: (row: any) => void;
   label: string;
+  variant?: 'primary' | 'outlined' | 'plain';
+  size?: 'xSmall' | 'small' | 'medium' | 'large' | 'xLarge';
+  tone?: 'default' | 'neutral' | 'critical' | 'success' | 'warning' | 'info';
 }
 
 export const ActionIconCell: React.FC<CellVariantProps<any> & { actions?: ActionIconCellAction[] }> = ({ 
@@ -408,9 +411,9 @@ export const ActionIconCell: React.FC<CellVariantProps<any> & { actions?: Action
             e.stopPropagation();
             action.onClick(row);
           }}
-          variant="plain"
-          size="micro"
-          tone="neutral"
+          variant={action.variant || "plain"}
+          size={action.size || "xLarge"}
+          tone={action.tone || "neutral"}
           prefixIcon={action.icon}
           title={action.label}
         />
@@ -440,7 +443,7 @@ export const ActionDropdownIconCell: React.FC<CellVariantProps<Array<{ label: st
       options={selectOptions}
       placeholder="Actions"
       className={className}
-      size="micro"
+      size="xsmall"
     />
   );
 };

@@ -7,8 +7,11 @@ const meta: Meta<typeof Pagination> = {
   component: Pagination,
   parameters: {
     layout: 'padded',
+    docs: {
+      page: () => import('./Pagination.mdx'),
+    },
   },
-  tags: ['autodocs'],
+  tags: [],
 };
 
 export default meta;

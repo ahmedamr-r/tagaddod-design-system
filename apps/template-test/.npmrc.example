@@ -1,0 +1,38 @@
+# Tagaddod Design System - NPM Registry Configuration
+#
+# This file configures where npm should fetch @tagaddod-design packages from.
+#
+# Copy this file to .npmrc and uncomment the configuration you need:
+#   cp .npmrc.example .npmrc
+
+# =============================================================================
+# LOCAL TESTING WITH VERDACCIO (Development Mode)
+# =============================================================================
+# Use this when testing local package changes before publishing to npm
+#
+# Prerequisites:
+#   1. Start Verdaccio: yarn registry:start (in monorepo root)
+#   2. Publish packages: yarn publish:local (in monorepo root)
+#   3. Uncomment line below:
+
+# @tagaddod-design:registry=http://localhost:4873
+
+# =============================================================================
+# PRODUCTION (NPM Registry)
+# =============================================================================
+# Use this when using published packages from npm (default)
+# This is the default behavior, no configuration needed.
+#
+# Uncomment line below to explicitly use npm registry:
+
+# @tagaddod-design:registry=https://registry.npmjs.org/
+
+# =============================================================================
+# NOTES
+# =============================================================================
+#
+# - Only one registry can be active at a time
+# - .npmrc is git-ignored to prevent accidentally committing local config
+# - Always add .npmrc to .gitignore
+# - Verdaccio registry only works when Verdaccio server is running
+# - npm registry requires packages to be published on npmjs.com

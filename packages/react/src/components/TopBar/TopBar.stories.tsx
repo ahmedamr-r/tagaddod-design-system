@@ -46,11 +46,30 @@ type Story = StoryObj<typeof meta>;
 
 export const BasicLayout: Story = {
   render: () => {
+    return (
+      <TopBar
+        logoClickable={true}
+        onLogoClick={() => alert('Navigate to dashboard')}
+      />
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Basic TopBar layout with just logo and hamburger menu. The center and end sections are empty by default, providing a clean slate for customization.'
+      }
+    }
+  }
+};
+
+export const WithWarehouseDropdown: Story = {
+  render: () => {
     const [selectedWarehouse, setSelectedWarehouse] = useState("Main Warehouse");
     const warehouses = ["Main Warehouse", "Secondary Warehouse", "Distribution Center"];
 
     return (
       <TopBar
+        showWarehouseDropdown={true}
         selectedWarehouse={selectedWarehouse}
         warehouses={warehouses}
         logoClickable={true}
@@ -66,7 +85,148 @@ export const BasicLayout: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Basic TopBar layout showing the new absolute center positioning. The end section (warehouse dropdown) stays anchored to the right edge, while the center section would be perfectly centered if shown.'
+        story: 'TopBar with the optional warehouse dropdown enabled via showWarehouseDropdown prop. This is just an example - you can replace the end section with any custom component.'
+      }
+    }
+  }
+};
+
+export const EndContentSwappable: Story = {
+  render: () => {
+    const [endContentType, setEndContentType] = useState("userProfile");
+
+    const endContentOptions = {
+      userProfile: (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--t-space-300)' }}>
+          <Button variant="plain" size="small" prefixIcon={<IconBell size={18} />} aria-label="Notifications">
+            3
+          </Button>
+          <div style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            backgroundColor: 'var(--t-color-fill-brand-primary)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontWeight: 'var(--t-font-weight-medium)',
+            fontSize: 'var(--t-font-size-250)',
+            cursor: 'pointer'
+          }}>
+            JD
+          </div>
+        </div>
+      ),
+      actions: (
+        <div style={{ display: 'flex', gap: 'var(--t-space-200)' }}>
+          <Button variant="outlined" size="small" prefixIcon={<IconPlus size={16} />}>
+            New
+          </Button>
+          <Button variant="primary" size="small">
+            Export
+          </Button>
+        </div>
+      ),
+      warehouseExample: (
+        <Button
+          variant="outlined"
+          size="small"
+          prefixIcon={<IconBuilding size={16} />}
+        >
+          Main Warehouse
+        </Button>
+      ),
+      empty: null
+    };
+
+    return (
+      <div>
+        <TopBar
+          logoClickable={true}
+          onLogoClick={() => alert('Navigate to dashboard')}
+          endContent={endContentOptions[endContentType]}
+        />
+
+        {/* Demo controls */}
+        <div style={{
+          padding: 'var(--t-space-600)',
+          backgroundColor: 'var(--t-color-bg-primary)',
+          minHeight: '400px'
+        }}>
+          <h2 style={{
+            color: 'var(--t-color-text-primary)',
+            margin: '0 0 var(--t-space-400) 0'
+          }}>
+            🔄 Swappable End Content
+          </h2>
+          <p style={{
+            color: 'var(--t-color-text-secondary)',
+            margin: '0 0 var(--t-space-500) 0'
+          }}>
+            The end section is fully swappable - you can place ANY component there. Try switching between different content types:
+          </p>
+          <div style={{ display: 'flex', gap: 'var(--t-space-300)', flexWrap: 'wrap' }}>
+            <Button
+              variant={endContentType === 'userProfile' ? 'primary' : 'outlined'}
+              onClick={() => setEndContentType('userProfile')}
+            >
+              User Profile
+            </Button>
+            <Button
+              variant={endContentType === 'actions' ? 'primary' : 'outlined'}
+              onClick={() => setEndContentType('actions')}
+            >
+              Action Buttons
+            </Button>
+            <Button
+              variant={endContentType === 'warehouseExample' ? 'primary' : 'outlined'}
+              onClick={() => setEndContentType('warehouseExample')}
+            >
+              Warehouse Example
+            </Button>
+            <Button
+              variant={endContentType === 'empty' ? 'primary' : 'outlined'}
+              onClick={() => setEndContentType('empty')}
+            >
+              Empty (null)
+            </Button>
+          </div>
+
+          <div style={{
+            marginTop: 'var(--t-space-500)',
+            padding: 'var(--t-space-400)',
+            backgroundColor: 'var(--t-color-fill-info-secondary)',
+            borderRadius: 'var(--t-border-radius-300)',
+            border: '1px solid var(--t-color-border-info)'
+          }}>
+            <h3 style={{
+              color: 'var(--t-color-text-info)',
+              margin: '0 0 var(--t-space-300) 0'
+            }}>
+              ✨ End Section Capabilities
+            </h3>
+            <ul style={{
+              color: 'var(--t-color-text-info)',
+              margin: 0,
+              paddingLeft: 'var(--t-space-400)'
+            }}>
+              <li>Accepts any React component or element</li>
+              <li>Default value is null (no content)</li>
+              <li>Can contain user profiles, actions, dropdowns, or custom components</li>
+              <li>Automatically aligns to the right edge (left in RTL)</li>
+              <li>Warehouse dropdown is just an optional example via showWarehouseDropdown prop</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story: 'Demonstrates the swappable end content slot. The end section can contain user profiles, action buttons, dropdowns, or any custom component. By default, it is empty (null).'
       }
     }
   }
@@ -74,9 +234,7 @@ export const BasicLayout: Story = {
 
 export const CenterContentSwappable: Story = {
   render: () => {
-    const [selectedWarehouse, setSelectedWarehouse] = useState("Distribution Hub");
     const [currentContent, setCurrentContent] = useState("search");
-    const warehouses = ["Distribution Hub", "Storage Facility", "Processing Center"];
 
     const contentOptions = {
       search: (
@@ -128,15 +286,10 @@ export const CenterContentSwappable: Story = {
     return (
       <div>
         <TopBar
-          selectedWarehouse={selectedWarehouse}
-          warehouses={warehouses}
           showCenterSection={true}
           centerContent={contentOptions[currentContent]}
           logoClickable={true}
-          onWarehouseChange={setSelectedWarehouse}
           onLogoClick={() => alert('Navigate to dashboard')}
-          onLogoutClick={() => alert('User logged out')}
-          showLogoutOption={true}
         />
 
         {/* Demo controls */}

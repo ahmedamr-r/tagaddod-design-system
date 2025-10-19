@@ -7,9 +7,9 @@
   border-radius: var( --t-border-radius-200);
   max-width: 12.5rem;
   word-wrap: break-word;
-  z-index: 50;
+  z-index: var(--t-z-tooltip, 1090);
   position: relative;
-  
+
   /* Animation */
   animation-duration: 200ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);

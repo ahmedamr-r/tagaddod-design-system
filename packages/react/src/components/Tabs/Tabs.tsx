@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import * as RadixTabs from '@radix-ui/react-tabs';
 import clsx from 'clsx';
 import styles from './Tabs.module.css';
@@ -61,6 +61,27 @@ export interface TabsProps extends Omit<RadixTabs.TabsProps, 'orientation'> {
   ariaLabelledby?: string;
 
   /**
+   * Enable URL synchronization (query parameter)
+   * When true, the active tab will be synced with the URL query parameter
+   * @default false
+   */
+  syncWithUrl?: boolean;
+
+  /**
+   * Query parameter name for URL sync
+   * Only used when syncWithUrl is true
+   * @default 'tab'
+   */
+  urlParamName?: string;
+
+  /**
+   * Use replaceState instead of pushState for URL updates
+   * When true, URL changes won't create new browser history entries
+   * @default false
+   */
+  replaceHistory?: boolean;
+
+  /**
    * Children components
    */
   children: React.ReactNode;
@@ -80,15 +101,74 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
   listClassName,
   ariaLabel,
   ariaLabelledby,
+  syncWithUrl = false,
+  urlParamName = 'tab',
+  replaceHistory = false,
+  value,
+  onValueChange,
+  defaultValue,
   ...props
 }, ref) => {
   // Detect if we need to apply RTL text fixes
   const isRTL = dir === 'rtl' || document.dir === 'rtl' || document.documentElement.dir === 'rtl';
-  
+
   // Apply line height style based on text direction
   const lineHeightStyle = {
     lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
   };
+
+  // URL Synchronization Logic
+  // Only runs when syncWithUrl is true
+  useEffect(() => {
+    if (!syncWithUrl || typeof window === 'undefined') return;
+
+    // Read initial tab value from URL on mount
+    const params = new URLSearchParams(window.location.search);
+    const urlTab = params.get(urlParamName);
+
+    // If URL has a tab parameter and it's different from current value, update the tab
+    if (urlTab && urlTab !== value && onValueChange) {
+      onValueChange(urlTab);
+    }
+  }, []); // Only run on mount
+
+  useEffect(() => {
+    if (!syncWithUrl || typeof window === 'undefined' || !value) return;
+
+    // Update URL when tab value changes
+    const params = new URLSearchParams(window.location.search);
+    const currentUrlTab = params.get(urlParamName);
+
+    // Only update URL if the value is different
+    if (currentUrlTab !== value) {
+      params.set(urlParamName, value);
+      const newUrl = `${window.location.pathname}?${params.toString()}`;
+
+      if (replaceHistory) {
+        window.history.replaceState({}, '', newUrl);
+      } else {
+        window.history.pushState({}, '', newUrl);
+      }
+    }
+  }, [value, syncWithUrl, urlParamName, replaceHistory]);
+
+  useEffect(() => {
+    if (!syncWithUrl || typeof window === 'undefined') return;
+
+    // Handle browser back/forward navigation
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const urlTab = params.get(urlParamName);
+
+      // Update tab if URL parameter changed and differs from current value
+      if (urlTab && urlTab !== value && onValueChange) {
+        onValueChange(urlTab);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [syncWithUrl, value, urlParamName, onValueChange]);
 
   // Extract TabsList and TabsContent children
   const childrenArray = React.Children.toArray(children);
@@ -120,6 +200,9 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
       )}
       dir={dir}
       orientation={orientation}
+      value={value}
+      onValueChange={onValueChange}
+      defaultValue={defaultValue}
       {...props}
     >
       {tabsList && (

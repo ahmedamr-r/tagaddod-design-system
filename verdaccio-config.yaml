@@ -1,0 +1,83 @@
+# Verdaccio Configuration for Local NPM Registry Testing
+# This configuration enables testing published packages locally before pushing to npmjs.com
+
+# Storage path for published packages
+storage: ./verdaccio-storage
+
+# Authentication and access control
+auth:
+  htpasswd:
+    file: ./verdaccio-htpasswd
+    # Maximum number of users allowed to register, -1 is unlimited
+    max_users: -1
+    # Hash algorithm, bcrypt is recommended
+    algorithm: bcrypt
+    # Number of bcrypt rounds
+    rounds: 10
+
+# Uplinks to proxy external registries
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+    # Cache all requests to npmjs
+    cache: true
+
+# Package access control
+packages:
+  # Tagaddod Design System packages (allow publishing without auth for local testing)
+  '@tagaddod-design/*':
+    access: $all
+    publish: $all
+    unpublish: $all
+    proxy: npmjs
+
+  # All scoped packages
+  '@*/*':
+    access: $all
+    publish: $all
+    unpublish: $all
+    proxy: npmjs
+
+  # All other packages
+  '**':
+    access: $all
+    publish: $all
+    unpublish: $all
+    proxy: npmjs
+
+# Server configuration
+server:
+  # Bind to localhost only (not accessible from network)
+  # Change to 0.0.0.0 if you need network access
+  listen: 127.0.0.1:4873
+
+# Web UI configuration
+web:
+  title: Tagaddod Design System - Local Registry
+  # Uncomment to disable web UI
+  # enable: false
+
+# Logs configuration (updated for Verdaccio 6.x)
+log:
+  type: stdout
+  format: pretty
+  level: info
+
+# Security configuration
+security:
+  api:
+    jwt:
+      sign:
+        expiresIn: 7d
+
+# Middleware for better error handling
+middlewares:
+  audit:
+    enabled: true
+
+# Notifications (optional - can be used for CI/CD integration)
+# notify:
+#   method: POST
+#   headers: [{ "Content-Type": "application/json" }]
+#   endpoint: http://localhost:3000/api/registry-webhook
+#   content: '{"name": "{{name}}", "version": "{{version}}"}'

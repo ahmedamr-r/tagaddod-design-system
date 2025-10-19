@@ -3,8 +3,22 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Table } from './Table';
 import { ColumnDef } from '@tanstack/react-table';
 import { IconEdit, IconTrash, IconFilter, IconAlertTriangle } from '@tabler/icons-react';
-import { Button } from '../Button';
+import { Button } from '../Button/Button';
 import { QuickColumns, createCellColumn, createInteractiveCellColumn, createActionCellColumn } from './TableCellHelpers';
+import {
+  TextSingleLineCell,
+  TextMultilineCell,
+  TextTruncatedCell,
+  TextSingleLineWithBadgeCell,
+  BadgeCell,
+  BadgeMultipleCell,
+  CheckboxCell,
+  RadioButtonCell,
+  SelectCell,
+  TextFieldCell,
+  UpdatedNumberCell,
+  ActionIconCell,
+} from './TableCellVariants';
 
 // Define product data type
 interface Product {
@@ -132,6 +146,140 @@ const productColumns: ColumnDef<Product, any>[] = [
     },
   },
 ];
+
+// Search placeholder templates for different data contexts
+const searchPlaceholders = {
+  products: {
+    en: "Search by product name or ID...",
+    ar: "ابحث باسم المنتج أو المعرف..."
+  },
+  customers: {
+    en: "Search by customer name or email...",
+    ar: "ابحث باسم العميل أو البريد الإلكتروني..."
+  },
+  sales: {
+    en: "Search by customer, email, or description...",
+    ar: "ابحث بالعميل أو البريد أو الوصف..."
+  },
+  inventory: {
+    en: "Search inventory by name or ID...",
+    ar: "ابحث في المخزون بالاسم أو المعرف..."
+  },
+  general: {
+    en: "Search table data...",
+    ar: "ابحث في بيانات الجدول..."
+  }
+};
+
+// Helper function to get appropriate search placeholder
+const getSearchPlaceholder = (context: keyof typeof searchPlaceholders, isRTL: boolean = false) => {
+  return searchPlaceholders[context][isRTL ? 'ar' : 'en'];
+};
+
+// Common filter options templates
+const createProductFilters = (isRTL: boolean = false) => ({
+  category: {
+    label: isRTL ? 'الفئة' : 'Category',
+    type: 'select' as const,
+    options: [
+      { label: isRTL ? 'جميع الفئات' : 'All Categories', value: '' },
+      { label: isRTL ? 'مواد تنظيف' : 'Cleaning Products', value: 'cleaning' },
+      { label: isRTL ? 'مشروبات' : 'Beverages', value: 'beverages' },
+      { label: isRTL ? 'زيوت وتوابل' : 'Oils & Spices', value: 'oils' },
+    ]
+  },
+  stockRange: {
+    label: isRTL ? 'نطاق المخزون' : 'Stock Range',
+    type: 'rangeSlider' as const,
+    rangeConfig: {
+      min: 0,
+      max: 1000,
+      step: 10,
+      formatValue: (value: number) => value.toString()
+    }
+  }
+});
+
+const createCustomerFilters = (isRTL: boolean = false) => ({
+  status: {
+    label: isRTL ? 'الحالة' : 'Status',
+    type: 'select' as const,
+    options: [
+      { label: isRTL ? 'جميع الحالات' : 'All Status', value: '' },
+      { label: isRTL ? 'نشط' : 'Active', value: 'Active' },
+      { label: isRTL ? 'في الانتظار' : 'Pending', value: 'Pending' },
+      { label: isRTL ? 'غير نشط' : 'Inactive', value: 'Inactive' },
+    ]
+  },
+  region: {
+    label: isRTL ? 'المنطقة' : 'Region',
+    type: 'checkboxGroup' as const,
+    options: [
+      { label: isRTL ? 'الشرق الأوسط وشمال أفريقيا' : 'MENA', value: 'MENA' },
+      { label: isRTL ? 'الولايات المتحدة' : 'United States', value: 'US' },
+      { label: isRTL ? 'أوروبا' : 'Europe', value: 'EU' },
+    ]
+  },
+  amountRange: {
+    label: isRTL ? 'نطاق المبلغ' : 'Amount Range',
+    type: 'rangeSlider' as const,
+    rangeConfig: {
+      min: 0,
+      max: 5000,
+      step: 100,
+      prefix: '$',
+      formatValue: (value: number) => value.toString()
+    }
+  }
+});
+
+// Helper function to implement search functionality
+const useTableSearch = (data: any[], searchFields: string[]) => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredData = useMemo(() => {
+    if (!searchQuery) return data;
+
+    const query = searchQuery.toLowerCase();
+    return data.filter(item =>
+      searchFields.some(field =>
+        item[field]?.toString().toLowerCase().includes(query)
+      )
+    );
+  }, [data, searchQuery, searchFields]);
+
+  return { searchQuery, setSearchQuery, filteredData };
+};
+
+// Helper function to implement filter functionality
+const useTableFilters = (data: any[]) => {
+  const [activeFilters, setActiveFilters] = useState<Record<string, any>>({});
+
+  const filteredData = useMemo(() => {
+    if (Object.keys(activeFilters).length === 0) return data;
+
+    return data.filter(item => {
+      return Object.entries(activeFilters).every(([key, value]) => {
+        if (!value || value === '') return true;
+
+        // Handle different filter types
+        if (Array.isArray(value)) {
+          return value.includes(item[key]);
+        }
+
+        // Handle range filters
+        if (typeof value === 'object' && value.min !== undefined) {
+          const itemValue = Number(item[key]);
+          return itemValue >= value.min && itemValue <= value.max;
+        }
+
+        return item[key] === value;
+      });
+    });
+  }, [data, activeFilters]);
+
+  return { activeFilters, setActiveFilters, filteredData };
+};
 
 
 const meta: Meta<typeof Table> = {
@@ -285,7 +433,7 @@ export const Playground: Story = {
     const [pageIndex, setPageIndex] = useState(0);
     const [pageSize, setPageSize] = useState(5);
     
-    // Filter options
+    // Filter options - More than 5 to test progressive disclosure
     const filterOptions = {
       status: {
         label: 'Status',
@@ -302,6 +450,54 @@ export const Playground: Story = {
           { label: 'Food', value: 'food' },
           { label: 'Cleaning', value: 'cleaning' },
           { label: 'Drinks', value: 'drinks' },
+          { label: 'Personal Care', value: 'personal-care' },
+        ],
+      },
+      brand: {
+        label: 'Brand',
+        options: [
+          { label: 'All', value: 'all' },
+          { label: 'Brand A', value: 'brand-a' },
+          { label: 'Brand B', value: 'brand-b' },
+          { label: 'Brand C', value: 'brand-c' },
+        ],
+      },
+      priceRange: {
+        label: 'Price Range',
+        type: 'rangeSlider',
+        rangeConfig: {
+          min: 0,
+          max: 1000,
+          step: 10,
+          prefix: '$',
+          formatValue: (val: number) => val.toString(),
+        },
+      },
+      stockLevel: {
+        label: 'Stock Level',
+        options: [
+          { label: 'All', value: 'all' },
+          { label: 'In Stock', value: 'in-stock' },
+          { label: 'Low Stock', value: 'low-stock' },
+          { label: 'Out of Stock', value: 'out-of-stock' },
+        ],
+      },
+      supplier: {
+        label: 'Supplier',
+        options: [
+          { label: 'All', value: 'all' },
+          { label: 'Supplier 1', value: 'supplier-1' },
+          { label: 'Supplier 2', value: 'supplier-2' },
+          { label: 'Supplier 3', value: 'supplier-3' },
+        ],
+      },
+      location: {
+        label: 'Location',
+        options: [
+          { label: 'All', value: 'all' },
+          { label: 'Warehouse A', value: 'warehouse-a' },
+          { label: 'Warehouse B', value: 'warehouse-b' },
+          { label: 'Warehouse C', value: 'warehouse-c' },
         ],
       },
     };
@@ -348,27 +544,491 @@ export const Playground: Story = {
   }
 };
 
-// Documentation example showing the basic table with just enough props for clarity
-export const Example: Story = {
-  name: 'Basic Example',
-  render: () => (
-    <Table
-      data={sampleProducts}
-      columns={productColumns}
-      title="Inventory Stock"
-      striped={false}
-      showHeader={true}
-      onRowClick={(row) => console.log('Row clicked:', row.original)}
-    />
-  )
+// Cell Variants Showcase
+export const AllCellVariants: Story = {
+  name: 'All Cell Variants',
+  parameters: {
+    docs: {
+      source: {
+        type: 'code',
+      },
+    },
+  },
+  render: (args, { globals }) => {
+    const direction = globals?.direction || 'ltr';
+    const isRTL = direction === 'rtl';
+
+    // State for managing cell variant data
+    const [cellVariantsData, setCellVariantsData] = useState([
+      {
+        id: 1,
+        textSingle: 'Single line text',
+        textMultiline: 'Primary line\nSecondary line',
+        textTruncated: 'This is a very long text that will be truncated with ellipsis when it overflows the cell width',
+        textWithBadge: { text: 'Product Name', badge: 'New', badgeVariant: 'success' as const },
+        badge: { text: 'Active', tone: 'success' as const },
+        badgeMultiple: [
+          { text: 'Tag 1', tone: 'info' as const },
+          { text: 'Tag 2', tone: 'warning' as const }
+        ],
+        checkbox: true,
+        radioButton: 'option1',
+        select: 'option-a',
+        textField: 'Editable text',
+        number: { primary: 1250, secondary: 200 },
+      },
+      {
+        id: 2,
+        textSingle: 'Another single line',
+        textMultiline: 'First line\nSecond line\nThird line',
+        textTruncated: 'Short text',
+        textWithBadge: { text: 'Service Item', badge: 'Hot', badgeVariant: 'critical' as const },
+        badge: { text: 'Pending', tone: 'warning' as const },
+        badgeMultiple: [
+          { text: 'Premium', tone: 'magic' as const },
+          { text: 'Featured', tone: 'success' as const },
+          { text: 'Sale', tone: 'critical' as const }
+        ],
+        checkbox: false,
+        radioButton: 'option2',
+        select: 'option-b',
+        textField: 'Type here...',
+        number: { primary: 3500, secondary: -150 },
+      },
+      {
+        id: 3,
+        textSingle: 'Text example 3',
+        textMultiline: 'Main text\nSupporting info',
+        textTruncated: 'This text will overflow and show tooltip on hover when the cell is too narrow to display the full content',
+        textWithBadge: { text: 'Special Offer', badge: '50% OFF', badgeVariant: 'info' as const },
+        badge: { text: 'Inactive', tone: 'default' as const },
+        badgeMultiple: [
+          { text: 'Draft', tone: 'default' as const }
+        ],
+        checkbox: true,
+        radioButton: 'option1',
+        select: 'option-c',
+        textField: 'Another field',
+        number: 999,
+      },
+    ]);
+
+    // Handler to update cell data
+    const updateCellData = useCallback((rowId: number, field: string, value: any) => {
+      setCellVariantsData(prevData =>
+        prevData.map(row =>
+          row.id === rowId ? { ...row, [field]: value } : row
+        )
+      );
+    }, []);
+
+    // Column definitions using cell variants
+    const cellVariantColumns: ColumnDef<typeof cellVariantsData[0], any>[] = useMemo(() => [
+      {
+        accessorKey: 'id',
+        header: 'ID',
+        size: 60,
+        cell: ({ getValue }) => <TextSingleLineCell value={String(getValue())} />,
+      },
+      {
+        accessorKey: 'textSingle',
+        header: isRTL ? 'نص سطر واحد' : 'Single Line Text',
+        size: 150,
+        cell: ({ getValue }) => <TextSingleLineCell value={getValue()} />,
+      },
+      {
+        accessorKey: 'textMultiline',
+        header: isRTL ? 'نص متعدد الأسطر' : 'Multiline Text',
+        size: 180,
+        cell: ({ getValue }) => <TextMultilineCell value={getValue()} />,
+      },
+      {
+        accessorKey: 'textTruncated',
+        header: isRTL ? 'نص مقتطع' : 'Truncated Text',
+        size: 200,
+        cell: ({ getValue }) => <TextTruncatedCell value={getValue()} />,
+      },
+      {
+        accessorKey: 'textWithBadge',
+        header: isRTL ? 'نص مع شارة' : 'Text with Badge',
+        size: 180,
+        cell: ({ getValue }) => <TextSingleLineWithBadgeCell value={getValue()} />,
+      },
+      {
+        accessorKey: 'badge',
+        header: isRTL ? 'شارة' : 'Badge',
+        size: 120,
+        cell: ({ getValue }) => <BadgeCell value={getValue()} />,
+      },
+      {
+        accessorKey: 'badgeMultiple',
+        header: isRTL ? 'شارات متعددة' : 'Multiple Badges',
+        size: 200,
+        cell: ({ getValue }) => <BadgeMultipleCell value={getValue()} />,
+      },
+      {
+        accessorKey: 'checkbox',
+        header: isRTL ? 'خانة اختيار' : 'Checkbox',
+        size: 100,
+        cell: ({ getValue, row }) => (
+          <CheckboxCell
+            value={getValue()}
+            onChange={(checked) => updateCellData(row.original.id, 'checkbox', checked)}
+          />
+        ),
+      },
+      {
+        accessorKey: 'radioButton',
+        header: isRTL ? 'زر راديو' : 'Radio Button',
+        size: 120,
+        cell: ({ getValue, row }) => (
+          <RadioButtonCell
+            value={getValue()}
+            options={[
+              { label: 'Option 1', value: 'option1' },
+              { label: 'Option 2', value: 'option2' },
+            ]}
+            onChange={(value) => updateCellData(row.original.id, 'radioButton', value)}
+          />
+        ),
+      },
+      {
+        accessorKey: 'select',
+        header: isRTL ? 'قائمة منسدلة' : 'Select',
+        size: 150,
+        cell: ({ getValue, row }) => (
+          <SelectCell
+            value={getValue()}
+            options={[
+              { label: 'Option A', value: 'option-a' },
+              { label: 'Option B', value: 'option-b' },
+              { label: 'Option C', value: 'option-c' },
+            ]}
+            onChange={(value) => updateCellData(row.original.id, 'select', value)}
+          />
+        ),
+      },
+      {
+        accessorKey: 'textField',
+        header: isRTL ? 'حقل نصي' : 'Text Field',
+        size: 150,
+        cell: ({ getValue, row }) => (
+          <TextFieldCell
+            value={getValue()}
+            onChange={(value) => updateCellData(row.original.id, 'textField', value)}
+          />
+        ),
+      },
+      {
+        accessorKey: 'number',
+        header: isRTL ? 'رقم محدث' : 'Number Updated',
+        size: 150,
+        cell: ({ getValue }) => <UpdatedNumberCell value={getValue()} />,
+      },
+      {
+        id: 'actions',
+        header: isRTL ? 'إجراءات' : 'Actions',
+        size: 100,
+        cell: ({ row }) => (
+          <ActionIconCell
+            value={row.original}
+            actions={[
+              {
+                icon: <IconEdit size={16} />,
+                label: isRTL ? 'تعديل' : 'Edit',
+                onClick: (rowData) => console.log('Edit:', rowData),
+                tone: 'neutral' as const, // Secondary icon color
+              },
+              {
+                icon: <IconTrash size={16} />,
+                label: isRTL ? 'حذف' : 'Delete',
+                onClick: (rowData) => console.log('Delete:', rowData),
+                tone: 'critical' as const,
+              },
+            ]}
+          />
+        ),
+      },
+    ], [isRTL, updateCellData]);
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--t-space-600)' }}>
+        {/* Grid Display */}
+        <div>
+          <h3 style={{
+            marginBottom: 'var(--t-space-400)',
+            font: 'var(--t-typography-heading-sm-default)',
+            color: 'var(--t-color-text-primary)'
+          }}>
+            {isRTL ? 'شبكة أنواع الخلايا' : 'Cell Variants Grid'}
+          </h3>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: 'var(--t-space-400)',
+            padding: 'var(--t-space-400)',
+            backgroundColor: 'var(--t-color-surface-secondary)',
+            borderRadius: 'var(--t-border-radius-200)',
+          }}>
+            {/* Text Single Line */}
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-primary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <div style={{
+                font: 'var(--t-typography-caption-lg-default)',
+                color: 'var(--t-color-text-secondary)',
+                marginBottom: 'var(--t-space-200)'
+              }}>
+                TextSingleLineCell
+              </div>
+              <TextSingleLineCell value="Single line text" />
+            </div>
+
+            {/* Text Multiline */}
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-primary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <div style={{
+                font: 'var(--t-typography-caption-lg-default)',
+                color: 'var(--t-color-text-secondary)',
+                marginBottom: 'var(--t-space-200)'
+              }}>
+                TextMultilineCell
+              </div>
+              <TextMultilineCell value="Primary line\nSecondary line" />
+            </div>
+
+            {/* Text Truncated */}
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-primary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <div style={{
+                font: 'var(--t-typography-caption-lg-default)',
+                color: 'var(--t-color-text-secondary)',
+                marginBottom: 'var(--t-space-200)'
+              }}>
+                TextTruncatedCell
+              </div>
+              <TextTruncatedCell value="This is a very long text that will be truncated with ellipsis" />
+            </div>
+
+            {/* Text with Badge */}
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-primary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <div style={{
+                font: 'var(--t-typography-caption-lg-default)',
+                color: 'var(--t-color-text-secondary)',
+                marginBottom: 'var(--t-space-200)'
+              }}>
+                TextSingleLineWithBadgeCell
+              </div>
+              <TextSingleLineWithBadgeCell value={{ text: 'Product Name', badge: 'New', badgeVariant: 'success' }} />
+            </div>
+
+            {/* Badge */}
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-primary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <div style={{
+                font: 'var(--t-typography-caption-lg-default)',
+                color: 'var(--t-color-text-secondary)',
+                marginBottom: 'var(--t-space-200)'
+              }}>
+                BadgeCell
+              </div>
+              <BadgeCell value={{ text: 'Active', tone: 'success' }} />
+            </div>
+
+            {/* Badge Multiple */}
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-primary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <div style={{
+                font: 'var(--t-typography-caption-lg-default)',
+                color: 'var(--t-color-text-secondary)',
+                marginBottom: 'var(--t-space-200)'
+              }}>
+                BadgeMultipleCell
+              </div>
+              <BadgeMultipleCell value={[
+                { text: 'Tag 1', tone: 'info' },
+                { text: 'Tag 2', tone: 'warning' }
+              ]} />
+            </div>
+
+            {/* Checkbox */}
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-primary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <div style={{
+                font: 'var(--t-typography-caption-lg-default)',
+                color: 'var(--t-color-text-secondary)',
+                marginBottom: 'var(--t-space-200)'
+              }}>
+                CheckboxCell
+              </div>
+              <CheckboxCell value={true} onChange={(checked) => console.log('Checkbox:', checked)} />
+            </div>
+
+            {/* Radio Button */}
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-primary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <div style={{
+                font: 'var(--t-typography-caption-lg-default)',
+                color: 'var(--t-color-text-secondary)',
+                marginBottom: 'var(--t-space-200)'
+              }}>
+                RadioButtonCell
+              </div>
+              <RadioButtonCell
+                value="option1"
+                options={[
+                  { label: 'Option 1', value: 'option1' },
+                  { label: 'Option 2', value: 'option2' }
+                ]}
+                onChange={(value) => console.log('Radio:', value)}
+              />
+            </div>
+
+            {/* Select */}
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-primary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <div style={{
+                font: 'var(--t-typography-caption-lg-default)',
+                color: 'var(--t-color-text-secondary)',
+                marginBottom: 'var(--t-space-200)'
+              }}>
+                SelectCell
+              </div>
+              <SelectCell
+                value="option-a"
+                options={[
+                  { label: 'Option A', value: 'option-a' },
+                  { label: 'Option B', value: 'option-b' }
+                ]}
+                onChange={(value) => console.log('Select:', value)}
+              />
+            </div>
+
+            {/* Text Field */}
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-primary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <div style={{
+                font: 'var(--t-typography-caption-lg-default)',
+                color: 'var(--t-color-text-secondary)',
+                marginBottom: 'var(--t-space-200)'
+              }}>
+                TextFieldCell
+              </div>
+              <TextFieldCell value="Editable text" onChange={(value) => console.log('TextField:', value)} />
+            </div>
+
+            {/* Updated Number */}
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-primary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <div style={{
+                font: 'var(--t-typography-caption-lg-default)',
+                color: 'var(--t-color-text-secondary)',
+                marginBottom: 'var(--t-space-200)'
+              }}>
+                UpdatedNumberCell
+              </div>
+              <UpdatedNumberCell value={{ primary: 1250, secondary: 200 }} />
+            </div>
+
+            {/* Action Icon */}
+            <div style={{
+              padding: 'var(--t-space-300)',
+              backgroundColor: 'var(--t-color-surface-primary)',
+              borderRadius: 'var(--t-border-radius-100)',
+              border: '1px solid var(--t-color-border-secondary)'
+            }}>
+              <div style={{
+                font: 'var(--t-typography-caption-lg-default)',
+                color: 'var(--t-color-text-secondary)',
+                marginBottom: 'var(--t-space-200)'
+              }}>
+                ActionIconCell
+              </div>
+              <ActionIconCell
+                value={{}}
+                actions={[
+                  { icon: <IconEdit size={16} />, label: 'Edit', onClick: () => console.log('Edit') },
+                  { icon: <IconTrash size={16} />, label: 'Delete', onClick: () => console.log('Delete'), tone: 'critical' }
+                ]}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Table Display */}
+        <div>
+          <h3 style={{
+            marginBottom: 'var(--t-space-400)',
+            font: 'var(--t-typography-heading-sm-default)',
+            color: 'var(--t-color-text-primary)'
+          }}>
+            {isRTL ? 'عرض الجدول' : 'Table Display'}
+          </h3>
+          <Table
+            data={cellVariantsData}
+            columns={cellVariantColumns}
+            title={isRTL ? 'جميع أنواع الخلايا' : 'All Cell Variants'}
+            showHeader={true}
+            showPagination={false}
+            showSearch={false}
+            showFilters={false}
+          />
+        </div>
+      </div>
+    );
+  }
 };
 
-// Cell Variants Showcase - SalesData interface defined in AdvancedFilters story
-
-
+// Sales Data Variants
 export const CellVariants: Story = {
   name: 'Sales Variant Showcase',
-  render: () => {
+  render: (args, { globals }) => {
+    const direction = globals?.direction || 'ltr';
+    const isRTL = direction === 'rtl';
     // Enhanced sample data for comprehensive grid showcase
     const textVariantsData = [
       { id: 1, singleLine: 'Ahmed Al-Rashid', multiLine: 'Premium customer\nwith excellent\nrating history', truncated: 'This is a very long text that will be truncated with ellipsis when it overflows the cell width and shows tooltip on hover', withBadge: { text: 'Ahmed Al-Rashid', badge: 'VIP', badgeVariant: 'success' as const } },
@@ -427,6 +1087,40 @@ export const CellVariants: Story = {
     const [badgeData] = useState(badgeVariantsData);
     const [interactiveData, setInteractiveData] = useState(interactiveVariantsData);
     const [enhancedData] = useState(enhancedVariantsData);
+
+    // Add search and filter functionality to interactive table
+    const { searchQuery: interactiveSearchQuery, setSearchQuery: setInteractiveSearchQuery, filteredData: interactiveSearchFiltered } = useTableSearch(
+      interactiveData,
+      ['textField', 'select', 'radioButton'] // Search in text field and dropdown values
+    );
+
+    const { activeFilters: interactiveActiveFilters, setActiveFilters: setInteractiveActiveFilters, filteredData: interactiveFilterFiltered } = useTableFilters(interactiveSearchFiltered);
+
+    // Get the final interactive data (search + filters)
+    const finalInteractiveData = interactiveFilterFiltered;
+
+    // Create customer/sales-specific filters for interactive table
+    const interactiveFilterOptions = {
+      select: {
+        label: isRTL ? 'الأولوية' : 'Priority',
+        type: 'select' as const,
+        options: [
+          { label: isRTL ? 'جميع الأولويات' : 'All Priorities', value: '' },
+          { label: isRTL ? 'عالية' : 'High', value: 'high' },
+          { label: isRTL ? 'متوسطة' : 'Medium', value: 'medium' },
+          { label: isRTL ? 'منخفضة' : 'Low', value: 'low' },
+        ]
+      },
+      radioButton: {
+        label: isRTL ? 'الخيار' : 'Option',
+        type: 'radioGroup' as const,
+        options: [
+          { label: isRTL ? 'الخيار الأول' : 'Option 1', value: 'option1' },
+          { label: isRTL ? 'الخيار الثاني' : 'Option 2', value: 'option2' },
+          { label: isRTL ? 'الخيار الثالث' : 'Option 3', value: 'option3' },
+        ]
+      }
+    };
 
     // Handlers for interactive cells
     const handleCheckboxChange = useCallback((checked: boolean, row: any) => {
@@ -626,13 +1320,23 @@ export const CellVariants: Story = {
             Interactive elements including checkboxes, dropdowns, radio buttons, text inputs, formatted numbers, and action buttons.
           </p>
           <Table
-            data={interactiveData}
+            data={finalInteractiveData}
             columns={interactiveVariantColumns}
             title="Interactive Variants"
-            badge={interactiveData.length}
+            badge={finalInteractiveData.length}
             showPagination={false}
-            showSearch={false}
-            showFilters={false}
+            showSearch={true}
+            showFilters={true}
+            searchQuery={interactiveSearchQuery}
+            onSearchChange={setInteractiveSearchQuery}
+            searchConfig={{
+              placeholder: getSearchPlaceholder('sales', isRTL),
+              debounceMs: 300,
+              minLength: 0
+            }}
+            activeFilters={interactiveActiveFilters}
+            onFilterChange={setInteractiveActiveFilters}
+            filterOptions={interactiveFilterOptions}
             striped={false}
             gridCells={true}
             onRowClick={(row) => console.log('Interactive row clicked:', row.original)}
@@ -720,7 +1424,9 @@ export const CellVariants: Story = {
 // Table States Showcase
 export const TableStates: Story = {
   name: 'Table States Showcase',
-  render: () => {
+  render: (args, { globals }) => {
+    const direction = globals?.direction || 'ltr';
+    const isRTL = direction === 'rtl';
     const [currentState, setCurrentState] = useState<'normal' | 'loading' | 'error' | 'empty' | 'notFound'>('normal');
     
     // Sample data for normal state
@@ -2604,6 +3310,97 @@ export const PinnedColumnsCustom: Story = {
     docs: {
       description: {
         story: '**Custom pinned columns** - Advanced example showing how to pin multiple columns strategically. Priority is pinned left for quick identification, while Status and Actions are pinned right for operational efficiency.'
+      }
+    }
+  }
+};
+
+// ScrollArea integration story
+export const WithScrollArea: Story = {
+  name: 'Table with ScrollArea',
+  render: (args, { globals }) => {
+    const direction = globals?.direction || 'ltr';
+    const isRTL = direction === 'rtl';
+
+    // Extended sample data to show scrolling
+    const extendedProducts = Array.from({ length: 50 }, (_, index) => ({
+      id: index + 1,
+      name: `Product ${index + 1} - منتج رقم ${index + 1}`,
+      stockCollectors: Math.floor(Math.random() * 1000),
+      stockWarehouse: Math.floor(Math.random() * 1000),
+    }));
+
+    // Use search functionality for products (search by name and ID)
+    const { searchQuery, setSearchQuery, filteredData: searchFiltered } = useTableSearch(
+      extendedProducts,
+      ['name', 'id']
+    );
+
+    // Use filter functionality
+    const { activeFilters, setActiveFilters, filteredData: filterFiltered } = useTableFilters(searchFiltered);
+
+    // Get the final filtered data (search + filters)
+    const finalData = filterFiltered;
+
+    // Create filter options for products
+    const filterOptions = createProductFilters(isRTL);
+
+    // Wide columns to demonstrate horizontal scrolling
+    const wideColumns: ColumnDef<Product, any>[] = [
+      createCellColumn('id', 'ID', 'textSingleLine', { width: '100px' }),
+      createCellColumn('name', 'Product Name', 'textSingleLine', { width: '400px' }),
+      createCellColumn('stockCollectors', 'Stock (Collectors)', 'textSingleLine', { width: '200px' }),
+      createCellColumn('stockWarehouse', 'Stock (Warehouse)', 'textSingleLine', { width: '200px' }),
+      // Duplicate columns for horizontal scrolling demo
+      createCellColumn('id', 'ID Copy 1', 'textSingleLine', { width: '100px' }),
+      createCellColumn('name', 'Product Name Copy 1', 'textSingleLine', { width: '400px' }),
+      createCellColumn('stockCollectors', 'Stock (Collectors) Copy 1', 'textSingleLine', { width: '200px' }),
+      createCellColumn('stockWarehouse', 'Stock (Warehouse) Copy 1', 'textSingleLine', { width: '200px' }),
+      createCellColumn('id', 'ID Copy 2', 'textSingleLine', { width: '100px' }),
+      createCellColumn('name', 'Product Name Copy 2', 'textSingleLine', { width: '400px' }),
+    ];
+
+    return (
+      <div style={{ width: '800px', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '16px' }}>
+        <h3 style={{ marginBottom: '16px' }}>ScrollArea Table Demo</h3>
+        <Table
+          {...args}
+          data={finalData}
+          columns={wideColumns}
+          enableScrollArea={true}
+          scrollAreaHeight="300px"
+          scrollAreaWidth="100%"
+          enableHorizontalScroll={true}
+          enableVerticalScroll={true}
+          scrollAreaType="hover"
+          title="Products with ScrollArea"
+          badge={finalData.length}
+          showPagination={false}
+          showSearch={true}
+          showFilters={true}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          searchConfig={{
+            placeholder: getSearchPlaceholder('products', isRTL),
+            debounceMs: 300,
+            minLength: 0
+          }}
+          activeFilters={activeFilters}
+          onFilterChange={setActiveFilters}
+          filterOptions={filterOptions}
+        />
+      </div>
+    );
+  },
+  args: {
+    striped: true,
+    gridCells: true,
+    showHeader: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '**ScrollArea Integration** - Demonstrates how the Table component integrates with ScrollArea for custom scrolling behavior. The table is wrapped in a ScrollArea with both horizontal and vertical scrolling enabled.'
       }
     }
   }

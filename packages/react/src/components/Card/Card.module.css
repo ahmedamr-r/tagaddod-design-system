@@ -5,7 +5,7 @@
   flex-direction: column;
   background-color: var(--t-color-surface-primary);
   border-radius: var(--t-border-radius-200);
-  transition: all 0.2s var(--t-easing-standard);
+  transition: all 0.2s ease-in-out;
   overflow: hidden;
 }
 
@@ -34,6 +34,7 @@
 
 .interactive:hover {
   transform: translateY(-1px);
+  background-color: var(--t-color-surface-hover);
 }
 
 .variantElevated.interactive:hover {
@@ -43,11 +44,11 @@
 
 .variantOutlined.interactive:hover {
   border-color: var(--t-color-border-primary);
-  background-color: var(--t-color-surface-secondary);
+  background-color: var(--t-color-surface-hover);
 }
 
 .variantGhost.interactive:hover {
-  background-color: var(--t-color-surface-tertiary);
+  background-color: var(--t-color-surface-hover);
 }
 
 .interactive:focus-visible {
@@ -62,33 +63,35 @@
 /* Clickable States */
 .clickable {
   cursor: pointer;
-  transition: all 0.2s var(--t-easing-standard);
+  transition: all 0.2s ease-in-out;
 }
 
 .clickable:hover {
   transform: translateY(-2px);
-  filter: brightness(1.02);
+  background-color: var(--t-color-surface-hover);
+  box-shadow: var(--t-shadow-200);
 }
 
 .variantElevated.clickable:hover {
   box-shadow: var(--t-shadow-300);
   border-color: var(--t-color-border-primary);
+  background-color: var(--t-color-surface-hover);
 }
 
 .variantOutlined.clickable:hover {
   border-color: var(--t-color-border-brand);
-  background-color: var(--t-color-surface-secondary);
-  box-shadow: var(--t-shadow-100);
+  background-color: var(--t-color-surface-hover);
+  box-shadow: var(--t-shadow-200);
 }
 
 .variantGhost.clickable:hover {
-  background-color: var(--t-color-surface-secondary);
-  box-shadow: var(--t-shadow-100);
+  background-color: var(--t-color-surface-hover);
+  box-shadow: var(--t-shadow-200);
 }
 
 .clickable:active {
   transform: translateY(-1px);
-  transition: all 0.1s var(--t-easing-standard);
+  transition: all 0.1s ease-in-out;
 }
 
 .variantElevated.clickable:active {
@@ -101,19 +104,19 @@
   z-index: 1;
 }
 
-/* Card Sizes */
+/* Card Sizes - All use 12px (0.75rem) base padding */
 .sizeSmall {
   --card-padding: var(--t-space-300);
   --card-gap: var(--t-space-200);
 }
 
 .sizeMedium {
-  --card-padding: var(--t-space-400);
+  --card-padding: var(--t-space-300);
   --card-gap: var(--t-space-300);
 }
 
 .sizeLarge {
-  --card-padding: var(--t-space-500);
+  --card-padding: var(--t-space-300);
   --card-gap: var(--t-space-400);
 }
 
@@ -124,7 +127,7 @@
 
 /* Card Sections */
 .header {
-  padding: var(--card-padding) var(--card-padding) var(--card-padding) var(--card-padding);
+  padding: var(--card-padding);
   border-bottom: 1px solid var(--t-color-border-tertiary);
   color: var(--t-color-text-primary);
   font-weight: var(--t-font-weight-600);
@@ -132,12 +135,12 @@
 
 .body {
   flex: 1;
-  padding: var(--card-padding) var(--card-padding);
+  padding: var(--card-padding);
   color: var(--t-color-text-secondary);
 }
 
 .footer {
-  padding: var(--card-padding) var(--card-padding) var(--card-padding) var(--card-padding);
+  padding: var(--card-padding);
   border-top: 1px solid var(--t-color-border-tertiary);
   color: var(--t-color-text-secondary);
 }
@@ -199,10 +202,10 @@
   text-align: right;
 }
 
-/* Responsive Design */
+/* Responsive Design - Maintain 12px base padding on mobile */
 @media (max-width: 768px) {
   .sizeSmall {
-    --card-padding: var(--t-space-200);
+    --card-padding: var(--t-space-300);
     --card-gap: var(--t-space-150);
   }
 
@@ -212,7 +215,7 @@
   }
 
   .sizeLarge {
-    --card-padding: var(--t-space-400);
+    --card-padding: var(--t-space-300);
     --card-gap: var(--t-space-300);
   }
 }

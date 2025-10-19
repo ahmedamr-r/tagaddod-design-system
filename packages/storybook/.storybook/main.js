@@ -12,6 +12,7 @@ module.exports = {
     {
       name: '@storybook/addon-docs',
       options: {
+        transcludeMarkdown: true,  // Enable importing .md files
         mdxPluginOptions: {
           mdxCompileOptions: {
             // Enable MDX v3 syntax support
@@ -67,7 +68,9 @@ module.exports = {
       '@radix-ui/react-switch',
       '@radix-ui/react-tabs',
       '@radix-ui/react-navigation-menu',
-      '@tabler/icons-react'
+      '@radix-ui/react-scroll-area',
+      '@tabler/icons-react',
+      '@tanstack/react-table'
     );
     
     // Exclude problematic dependencies from optimization to avoid module resolution issues
@@ -110,7 +113,37 @@ module.exports = {
       loader: 'tsx',
       include: /\.(ts|tsx|js|jsx)$/,
     };
-    
+
+    // Build configuration to handle large chunks better
+    if (!config.build) config.build = {};
+    config.build.rollupOptions = {
+      ...config.build.rollupOptions,
+      output: {
+        ...config.build.rollupOptions?.output,
+        manualChunks: (id) => {
+          // Split large story files into separate chunks
+          if (id.includes('stories.tsx') || id.includes('stories.ts')) {
+            const fileName = id.split('/').pop()?.replace(/\.(stories|story)\.(tsx?|jsx?)$/, '');
+            return `stories-${fileName}`;
+          }
+          // Split vendor libraries into separate chunks
+          if (id.includes('node_modules')) {
+            if (id.includes('@radix-ui')) return 'vendor-radix';
+            if (id.includes('@storybook')) return 'vendor-storybook';
+            if (id.includes('@tanstack')) return 'vendor-tanstack';
+            return 'vendor-other';
+          }
+        },
+      },
+    };
+
+    // Development server configuration for better module handling
+    if (!config.server) config.server = {};
+    config.server.hmr = {
+      ...config.server.hmr,
+      overlay: false, // Disable error overlay that can cause module issues
+    };
+
     return config;
   },
   docs: {

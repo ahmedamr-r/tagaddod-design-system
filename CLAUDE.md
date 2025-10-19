@@ -63,6 +63,265 @@ yarn changeset
 yarn release         # Versions, builds, and publishes to npm
 ```
 
+### Local Testing & Verdaccio Workflow
+```bash
+# Start Verdaccio (local npm registry)
+yarn registry:start         # Start on http://localhost:4873
+
+# Publish to Verdaccio (after making changes)
+yarn publish:local          # Bump version + build + publish + sync docs
+yarn bump:local             # Just bump local version (optional)
+
+# Quick workflows
+yarn registry:publish       # Same as publish:local
+yarn registry:test-workflow # Build + publish + update template-test
+
+# Test in template-test app
+yarn test:local             # Start template-test dev server
+
+# Verdaccio management
+yarn registry:reset         # Clear storage and version counters
+yarn sync:docs              # Manually sync documentation to template-test
+```
+
+## Local Testing with Verdaccio
+
+The monorepo includes a **Verdaccio-based local testing workflow** that allows you to test packages exactly as end-users would consume them from npm, without publishing to the public registry.
+
+### Architecture Overview
+
+```
+packages/tokens + packages/react
+    ↓ build
+    ↓ auto-bump version (0.1.29-local.1, local.2, etc.)
+    ↓ auto-sync documentation
+    ↓ publish
+Verdaccio (localhost:4873)
+    ↓ npm install
+apps/template-test (self-contained testing environment)
+    • .claude/skills/tagaddod-design-system.md (Claude AI integration)
+    • .component-documentation/ (33 synced component docs)
+    • Full template with examples
+```
+
+### Key Features
+
+1. **Automatic Version Management**
+   - Local versions: `0.1.29-local.1`, `0.1.29-local.2`, etc.
+   - Auto-increments on each publish
+   - Resets counter when base version changes (via Changesets)
+   - State tracked in `.local-version-counter`
+
+2. **Template-Test Application** (`apps/template-test/`)
+   - Self-contained testing environment
+   - Consumes packages from Verdaccio (not workspace links)
+   - Includes 33 synced component documentation files
+   - **Claude AI skill** for automatic component implementation
+   - Ready to publish as standalone repository
+
+3. **Documentation Auto-Sync**
+   - Component `.mdx` files automatically copied to template-test
+   - Syncs on every publish
+   - Ensures template always has latest documentation
+
+### Daily Development Workflow
+
+**Simple 2-Terminal Setup**
+
+```bash
+# Terminal 1: Start Verdaccio (keep running)
+yarn registry:start
+
+# Terminal 2: Your workflow
+# 1. Edit components in packages/react/src/
+# 2. Make multiple changes
+# 3. When ready to test:
+
+yarn publish:local              # Bumps version, builds, publishes, syncs docs
+
+# 4. Update and test in template
+cd apps/template-test
+npm run update:design-system    # Updates packages from Verdaccio
+npm run dev                     # Start dev server and test
+```
+
+**What happens when you run `yarn publish:local`:**
+1. ✅ Version auto-bumps (0.1.29-local.1 → local.2)
+2. ✅ Builds tokens and react packages
+3. ✅ Documentation syncs to template-test
+4. ✅ Publishes to Verdaccio (only if build succeeds)
+5. ✅ Ready to update in template-test
+
+**Quick alternative workflows:**
+
+```bash
+# All-in-one: Build + publish + update template
+yarn registry:test-workflow
+
+# Or use registry:publish alias
+yarn registry:publish           # Same as publish:local
+```
+
+### Publish Script Options
+
+```bash
+# Full workflow (default)
+yarn publish:local
+
+# Skip build step (use existing dist/)
+yarn publish:local --skip-build
+
+# Skip version bump
+yarn publish:local --skip-bump
+
+# Skip documentation sync
+yarn publish:local --skip-docs
+
+# Auto-update template-test after publish
+yarn publish:local --auto-update
+
+# Skip specific packages
+yarn publish:local --skip-tokens
+yarn publish:local --skip-react
+```
+
+### Template-Test Scripts
+
+```bash
+cd apps/template-test
+
+# Update from Verdaccio
+npm run update:design-system    # Update packages
+npm run update:auto             # Update + start dev server
+
+# Documentation verification
+npm run docs:check              # Verify all docs synced
+npm run docs:list               # List available docs
+```
+
+## Claude Skills Integration
+
+The template-test application includes a **specialized Claude skill** for automatic component implementation.
+
+### Skill Location
+`apps/template-test/.claude/skills/tagaddod-design-system.md`
+
+### How It Works
+
+When you or a user asks Claude Code to implement a component in the template-test app:
+
+1. **Detects** component name from request
+2. **Reads** `.component-documentation/[Component].mdx`
+3. **Extracts** exact import patterns, props, and examples
+4. **Generates** correct implementation code
+5. **Falls back** to Shadcn/Antd if component not found
+6. **Applies** design tokens for custom styling
+
+### Example Usage
+
+```
+User: "I need a button with loading state"
+
+Claude: [Automatically reads .component-documentation/Button.mdx]
+        [Extracts props, examples, and patterns]
+        [Generates correct implementation]
+
+Result:
+import { Button } from '@tagaddod-design/react'
+
+<Button variant="primary" loading={isLoading}>
+  Submit
+</Button>
+```
+
+### Skill Features
+
+- **Self-contained**: Works in standalone template repository
+- **Documentation-driven**: Reads local .mdx files for accuracy
+- **Intelligent fallback**: Searches Shadcn → Antd → builds custom
+- **Design token integration**: Ensures consistent styling
+- **RTL support**: Implements Arabic/RTL when requested
+- **Session memory**: Caches documentation to optimize token usage
+
+### Benefits for AI-Assisted Development
+
+- ✅ "Vibe coders" can build with zero component knowledge
+- ✅ Automatic implementation following design system patterns
+- ✅ Consistent code across the codebase
+- ✅ Reduced documentation lookup time
+- ✅ Built-in best practices and accessibility
+
+## Version Management Strategy
+
+### Local Versions (Verdaccio)
+
+**Format**: `<base-version>-local.<counter>`
+
+**Example Flow**:
+```
+0.1.29              # Base version from Changesets
+0.1.29-local.1      # First local publish
+0.1.29-local.2      # Second local publish
+0.1.29-local.3      # Third local publish
+
+# After changeset updates base version:
+0.1.30              # New base version
+0.1.30-local.1      # Counter resets
+```
+
+**State File**: `.local-version-counter` (git-ignored)
+
+### Production Versions (npm)
+
+**Controlled by Changesets** (manual, intentional versioning):
+
+```bash
+# 1. Create changeset
+yarn changeset
+
+# 2. Version and publish to npm
+yarn release
+```
+
+This ensures:
+- Local testing doesn't pollute npm versions
+- Production versions are deliberate and documented
+- Team maintains full control over public releases
+
+## Documentation Sync
+
+Component documentation (`.mdx` files) automatically syncs from `packages/react/src/components/` to `apps/template-test/.component-documentation/`.
+
+### Automatic Sync Triggers
+
+Documentation syncs automatically when:
+- Running `yarn publish:local`
+- Running `yarn registry:publish`
+- Running `yarn registry:test-workflow`
+- Building React package (`yarn build:react`)
+
+### Manual Sync
+
+```bash
+yarn sync:docs
+# OR
+cd packages/react && npm run copy-docs
+```
+
+### Verification
+
+```bash
+cd apps/template-test
+npm run docs:check    # Verify 33 component docs are present
+npm run docs:list     # List all available docs
+```
+
+## Additional Documentation
+
+- **apps/template-test/WORKFLOW.md** - End-user development guide
+- **apps/template-test/README-STANDALONE.md** - Standalone repository README
+- **apps/template-test/CLAUDE.md** - Claude Code instructions for template
+
 ## Architecture
 
 ### Package Structure
@@ -91,6 +350,14 @@ yarn release         # Versions, builds, and publishes to npm
   - GitHub sync functionality
   - Zustand for state management
   - WCAG contrast checking
+
+- **template-test**: Local testing and standalone template application
+  - Self-contained Vite + React + TypeScript template
+  - Consumes packages from Verdaccio (not workspace links)
+  - 33 synced component documentation files (.mdx)
+  - Claude AI skill for automatic component implementation
+  - Complete examples and starter code
+  - Ready to publish as standalone repository
 
 ### Key Technical Details
 
@@ -412,6 +679,100 @@ Components that should include this RTL section:
 - TextInput, Select, Tabs, Modal, Drawer, Pagination
 - Any component with icons or directional elements
 - All interactive components that users interact with
+
+## Overlay System and Z-Index Management
+
+**CRITICAL FOR AI AGENTS**: The Tagaddod Design System uses **automatic z-index management** for all overlay components. AI agents should NEVER manually configure z-index values or worry about nesting scenarios.
+
+### How It Works
+
+The overlay system uses React Context (`DrawerContext`) and design tokens to automatically manage z-index layering:
+
+1. **Portal-Based Rendering**: Modal, Drawer, Popover render to `document.body`, escaping parent stacking contexts
+2. **Context-Aware Z-Index**: Components detect when they're nested (e.g., Popover inside Drawer) and automatically adjust their z-index
+3. **Design Token Integration**: All z-index values use CSS custom properties from `/packages/tokens/src/extras/zIndex.tokens.json`
+4. **Zero Configuration Required**: Developers and AI agents just use components as-is - the system handles all layering
+
+### Design Token Hierarchy (Reference Only)
+
+```
+Base:             0   (--t-z-base)
+Dropdown:      1000   (--t-z-dropdown)
+Popover:       1010   (--t-z-popover)
+Drawer:        1020   (--t-z-drawer)
+Modal:         1050   (--t-z-modal)
+Modal Dropdown: 1060  (--t-z-modal-dropdown)
+Drawer Modal:  1070   (--t-z-drawer-modal)
+Toast:         1080   (--t-z-toast)
+Tooltip:       1090   (--t-z-tooltip)
+```
+
+### Nesting Scenarios That Work Automatically
+
+All of these scenarios work without any z-index configuration:
+
+```jsx
+// ✅ Drawer → Table with Popover filters
+<Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+  <Table
+    showFilters={true}  // Popover automatically appears above Drawer
+    filterOptions={{ category: { type: 'select', options: [...] }}}
+  />
+</Drawer>
+
+// ✅ Drawer → Modal → Select dropdown
+<Drawer open={drawerOpen}>
+  <Modal open={modalOpen}>
+    <Select options={[...]} />  {/* Dropdown uses maximum z-index */}
+  </Modal>
+</Drawer>
+
+// ✅ Tabs → Modal/Drawer → Popover
+<Tabs defaultValue="tab1">
+  <TabsContent value="tab1">
+    <Modal open={modalOpen}>
+      <Popover content="Info">...</Popover>  {/* Works perfectly */}
+    </Modal>
+  </TabsContent>
+</Tabs>
+
+// ✅ Complex nesting: Drawer → Tabs → Table → Modal → Select
+// Everything layers correctly without configuration!
+```
+
+### Critical Rules for AI Agents
+
+When working with overlay components (Modal, Drawer, Popover, Select, Tooltip):
+
+❌ **NEVER** manually set z-index values or style props
+❌ **NEVER** calculate z-index in your code
+❌ **NEVER** import `useDrawerContext` unless creating custom overlay components
+❌ **NEVER** worry about nesting depth or stacking contexts
+
+✅ **ALWAYS** use components as documented - they handle nesting automatically
+✅ **TRUST** the system - any combination of overlays will layer correctly
+✅ **REFER** to `packages/react/src/OVERLAY-SYSTEM-AI-AGENT-GUIDE.md` for detailed examples
+
+### Common Mistake: Manual Z-Index Configuration
+
+```jsx
+// ❌ WRONG - Don't do this!
+<Modal open={open} style={{ zIndex: 9999 }}>Content</Modal>
+
+// ✅ CORRECT - Let the system handle it
+<Modal open={open}>Content</Modal>
+```
+
+### For More Details
+
+See the comprehensive AI-friendly guide at:
+`packages/react/src/OVERLAY-SYSTEM-AI-AGENT-GUIDE.md`
+
+This guide includes:
+- Complete nesting scenario examples
+- Troubleshooting for overlay visibility issues
+- Decision tree for choosing the right component
+- Common AI agent mistakes and solutions
 
 ## Recent Component Additions
 

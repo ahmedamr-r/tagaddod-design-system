@@ -2,6 +2,7 @@ import React from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import clsx from 'clsx';
 import { Button } from '../Button/Button';
+import { ScrollArea } from '../ScrollArea/ScrollArea';
 import { IconX } from '@tabler/icons-react';
 import { useDrawerContext } from '../Drawer/Drawer';
 import styles from './Modal.module.css';
@@ -26,6 +27,8 @@ export interface ModalProps extends React.ComponentPropsWithoutRef<typeof Dialog
   maxWidth?: string;
   contentPadding?: string;
   rtl?: boolean;
+  scrollable?: boolean;
+  maxHeight?: string;
   onCancel?: () => void;
   onPrimary?: () => void;
   onSecondary?: () => void;
@@ -51,6 +54,8 @@ export const Modal = ({
   maxWidth,
   contentPadding = 'var(--t-space-500)',
   rtl = false,
+  scrollable = false,
+  maxHeight = '60vh',
   onCancel,
   onPrimary,
   onSecondary,
@@ -118,9 +123,9 @@ export const Modal = ({
               </Dialog.Title>
               <Dialog.Close asChild>
                 <Button
-                  variant="tertiary"
+                  variant="outlined"
                   tone="neutral"
-                  size="micro"
+                  size="xSmall"
                   prefixIcon={<IconX size={16} />}
                   aria-label="Close"
                   className={styles.closeButton}
@@ -129,8 +134,22 @@ export const Modal = ({
             </div>
           )}
           
-          <div className={styles.body} style={{ padding: contentPadding }}>
-            {children}
+          <div className={styles.body} style={{ padding: scrollable ? '0' : contentPadding }}>
+            {scrollable ? (
+              <ScrollArea
+                height={maxHeight}
+                width="100%"
+                type="hover"
+                dir={isRTL ? 'rtl' : 'ltr'}
+                className={styles.scrollableContent}
+              >
+                <div style={{ padding: contentPadding }}>
+                  {children}
+                </div>
+              </ScrollArea>
+            ) : (
+              children
+            )}
           </div>
           
           {showFooter && (
@@ -150,7 +169,7 @@ export const Modal = ({
                   <div className={styles.footerRight}>
                     {showSecondaryButton && (
                       <Button 
-                        variant="tertiary" 
+                        variant="outlined" 
                         onClick={onSecondary}
                         style={lineHeightStyle}
                       >
@@ -177,7 +196,7 @@ export const Modal = ({
                   <div className={styles.footerRight}>
                     {showSecondaryButton && (
                       <Button 
-                        variant="tertiary" 
+                        variant="outlined" 
                         onClick={onSecondary}
                         style={lineHeightStyle}
                       >

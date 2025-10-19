@@ -17,7 +17,7 @@ interface DebouncedSearchInputProps {
   placeholder?: string;
   debounceMs?: number;
   minLength?: number;
-  size?: 'micro' | 'medium' | 'large';
+  size?: 'xsmall' | 'medium' | 'large';
   className?: string;
 }
 
@@ -27,7 +27,7 @@ const DebouncedSearchInput: React.FC<DebouncedSearchInputProps> = ({
   placeholder,
   debounceMs = 300,
   minLength = 0,
-  size = 'large',
+  size = 'medium',
   className
 }) => {
   const [localValue, setLocalValue] = useState(value);
@@ -147,15 +147,15 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
                   (searchConfig?.serverSide ? 500 : 300)
                 }
                 minLength={searchConfig?.minLength || 0}
-                size="large"
+                size="medium"
               />
             </div>
           )}
           
           {showFilters && (
-            <Button 
-              variant="tertiary" 
-              tone={isFilterBarVisible ? "neutral" : "neutral"}
+            <Button
+              variant="outlined"
+              tone="neutral"
               onClick={handleFilterClick}
               prefixIcon={<IconAdjustmentsHorizontal size={16} />}
               size="medium"
@@ -166,9 +166,9 @@ export const TableHeader: React.FC<TableHeaderProps> = ({
           )}
           
           {showExport && (
-            <Button 
-              variant="tertiary" 
-              tone="default" 
+            <Button
+              variant="outlined"
+              tone="default"
               onClick={onExport}
               prefixIcon={<IconFileExport size={16} />}
               size="medium"

@@ -1,0 +1,13 @@
+/* App-specific styles */
+.App {
+  text-align: center;
+}
+
+/* RTL-aware utilities */
+.rtl {
+  direction: rtl;
+}
+
+.ltr {
+  direction: ltr;
+}

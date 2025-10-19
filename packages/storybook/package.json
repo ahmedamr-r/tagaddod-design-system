@@ -1,6 +1,6 @@
 {
   "name": "@tagaddod-design/storybook",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "prestorybook": "shx cp ../react/llms.txt public/llms.txt",
