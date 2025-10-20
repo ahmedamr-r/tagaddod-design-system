@@ -9,7 +9,7 @@
     "build-storybook": "storybook build",
     "clean": "shx rm -rf .storybook-static",
     "prebuild-storybook": "cd ../tokens && yarn build && cd ../react && yarn build && shx cp llms.txt ../storybook/public/llms.txt",
-    "vercel-build": "cd ../tokens && yarn build && cd ../react && yarn build && cd ../storybook && shx cp ../react/llms.txt public/llms.txt && yarn build-storybook"
+    "vercel-build": "shx mkdir -p public && shx cp node_modules/@tagaddod-design/react/llms.txt public/llms.txt && yarn build-storybook"
   },
   "main": "index.js",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-tooltip": "^1.2.1",
     "@tabler/icons-react": "^3.33.0",
-    "@tagaddod-design/react": "*",
+    "@tagaddod-design/react": "0.1.30",
     "react-router": "^7.9.0",
     "sonner": "^2.0.5"
   },
