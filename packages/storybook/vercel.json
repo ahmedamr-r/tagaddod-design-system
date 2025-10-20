@@ -1,7 +1,7 @@
 {
-  "buildCommand": "yarn vercel-build",
+  "buildCommand": "cd ../.. && yarn build:tokens && yarn build:react && cd packages/storybook && yarn vercel-build",
   "outputDirectory": "storybook-static",
-  "installCommand": "cd ../.. && rm -rf node_modules && yarn install --force",
+  "installCommand": "cd ../.. && yarn install",
   "framework": null,
   "rewrites": [
     {
