@@ -121,6 +121,10 @@ export type { LogoProps } from './Logo';
 export { Sidebar, sidebarSizes, sidebarPositions } from './Sidebar';
 export type { SidebarProps, SidebarMenuItem, SidebarSize, SidebarPosition } from './Sidebar';
 
+// Export the SidebarWithRouter component (requires react-router)
+export { SidebarWithRouter } from './Sidebar';
+export type { SidebarWithRouterProps, SidebarMenuItemWithPath } from './Sidebar';
+
 // Export the Tooltip component
 export { Tooltip, TooltipProvider } from './Tooltip';
 export type { TooltipProps, TooltipSide, TooltipAlign } from './Tooltip';

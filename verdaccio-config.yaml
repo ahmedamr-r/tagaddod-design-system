@@ -4,16 +4,13 @@
 # Storage path for published packages
 storage: ./verdaccio-storage
 
-# Authentication and access control
-auth:
-  htpasswd:
-    file: ./verdaccio-htpasswd
-    # Maximum number of users allowed to register, -1 is unlimited
-    max_users: -1
-    # Hash algorithm, bcrypt is recommended
-    algorithm: bcrypt
-    # Number of bcrypt rounds
-    rounds: 10
+# Authentication and access control (disabled for local testing)
+# auth:
+#   htpasswd:
+#     file: ./verdaccio-htpasswd
+#     max_users: -1
+#     algorithm: bcrypt
+#     rounds: 10
 
 # Uplinks to proxy external registries
 uplinks:
@@ -26,9 +23,9 @@ uplinks:
 packages:
   # Tagaddod Design System packages (allow publishing without auth for local testing)
   '@tagaddod-design/*':
-    access: $all
-    publish: $all
-    unpublish: $all
+    access: $anonymous
+    publish: $anonymous
+    unpublish: $anonymous
     proxy: npmjs
 
   # All scoped packages

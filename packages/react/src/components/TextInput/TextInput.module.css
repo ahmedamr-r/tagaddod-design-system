@@ -107,6 +107,14 @@
   line-height: 1.5;
 }
 
+/* Remove all focus styling from input - only wrapper should show focus */
+.input:focus,
+.input:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
 /* Line height trim for input field */
 .input::before,
 .input::after {

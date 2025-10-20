@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { 
+import {
   IconHome,
   IconChartBar,
   IconUsers,
@@ -12,6 +12,7 @@ import {
   IconFileText,
   IconCalendar
 } from '@tabler/icons-react';
+import { MemoryRouter, Routes, Route, useLocation } from 'react-router';
 import { Sidebar } from './Sidebar';
 import type { SidebarMenuItem } from './Sidebar';
 
@@ -152,14 +153,39 @@ const createBottomItems = (isRTL: boolean): SidebarMenuItem[] => [
   }
 ];
 
+// Helper component to display current route
+const RouteDisplay = () => {
+  const location = useLocation();
+  return (
+    <div style={{
+      padding: 'var(--t-space-400)',
+      backgroundColor: 'var(--t-color-surface-secondary)',
+      borderRadius: 'var(--t-border-radius-200)',
+      marginBottom: 'var(--t-space-400)',
+      border: '1px solid var(--t-color-border-secondary)'
+    }}>
+      <strong style={{ color: 'var(--t-color-text-primary)' }}>Current Route:</strong>{' '}
+      <code style={{
+        padding: '2px 8px',
+        backgroundColor: 'var(--t-color-fill-brand-subtle)',
+        color: 'var(--t-color-text-brand)',
+        borderRadius: 'var(--t-border-radius-100)',
+        fontFamily: 'monospace'
+      }}>
+        {location.pathname}
+      </code>
+    </div>
+  );
+};
+
 // Controlled sidebar component for stories
 const ControlledSidebar = (props: any) => {
   const [selectedItem, setSelectedItem] = useState(props.selectedItem || 'page1');
-  
+
   // Get direction from Storybook globals or default to LTR
   const direction = props.globals?.direction || 'ltr';
   const isRTL = direction === 'rtl';
-  
+
   return (
     <div style={{ 
       display: 'flex', 
@@ -247,7 +273,11 @@ const ControlledSidebar = (props: any) => {
 };
 
 export const Default: Story = {
-  render: (args) => <ControlledSidebar {...args} />,
+  render: (args) => (
+    <MemoryRouter initialEntries={['/page1']}>
+      <ControlledSidebar {...args} disableRouting={false} />
+    </MemoryRouter>
+  ),
   args: {
     selectedItem: 'page1',
     position: 'left',
@@ -257,7 +287,11 @@ export const Default: Story = {
 };
 
 export const RightPosition: Story = {
-  render: (args) => <ControlledSidebar {...args} />,
+  render: (args) => (
+    <MemoryRouter initialEntries={['/analytics']}>
+      <ControlledSidebar {...args} disableRouting={false} />
+    </MemoryRouter>
+  ),
   args: {
     selectedItem: 'analytics',
     position: 'right',
@@ -266,7 +300,11 @@ export const RightPosition: Story = {
 };
 
 export const AlwaysExpanded: Story = {
-  render: (args) => <ControlledSidebar {...args} />,
+  render: (args) => (
+    <MemoryRouter initialEntries={['/users']}>
+      <ControlledSidebar {...args} disableRouting={false} />
+    </MemoryRouter>
+  ),
   args: {
     selectedItem: 'users',
     defaultExpanded: true,
@@ -275,7 +313,11 @@ export const AlwaysExpanded: Story = {
 };
 
 export const NoHoverExpand: Story = {
-  render: (args) => <ControlledSidebar {...args} />,
+  render: (args) => (
+    <MemoryRouter initialEntries={['/inventory']}>
+      <ControlledSidebar {...args} disableRouting={false} />
+    </MemoryRouter>
+  ),
   args: {
     selectedItem: 'inventory',
     hoverExpand: false
@@ -325,42 +367,46 @@ const customSecondaryItems: SidebarMenuItem[] = [
 export const CustomMenus: Story = {
   render: (args) => {
     const [selectedItem, setSelectedItem] = useState('add-product');
-    
+
     return (
-      <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-        <Sidebar
-          {...args}
-          selectedItem={selectedItem}
-          onItemChange={setSelectedItem}
-          menuItems={customMenuItems}
-          secondaryItems={customSecondaryItems}
-          bottomItems={[
-            {
-              id: 'help',
-              icon: IconSettings,
-              label: 'Help & Support'
-            }
-          ]}
-        />
-        <div style={{
-          flex: 1,
-          padding: 'var(--t-space-600)',
-          backgroundColor: 'var(--t-color-bg-primary)',
-          overflow: 'auto'
-        }}>
-          <h1 style={{ 
-            margin: '0 0 var(--t-space-400) 0',
-            fontSize: 'var(--t-font-size-700)',
-            color: 'var(--t-color-text-primary)'
+      <MemoryRouter initialEntries={['/products/add-product']}>
+        <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+          <Sidebar
+            {...args}
+            selectedItem={selectedItem}
+            onItemChange={setSelectedItem}
+            menuItems={customMenuItems}
+            secondaryItems={customSecondaryItems}
+            bottomItems={[
+              {
+                id: 'help',
+                icon: IconSettings,
+                label: 'Help & Support'
+              }
+            ]}
+            disableRouting={false}
+          />
+          <div style={{
+            flex: 1,
+            padding: 'var(--t-space-600)',
+            backgroundColor: 'var(--t-color-bg-primary)',
+            overflow: 'auto'
           }}>
-            Custom Sidebar Example
-          </h1>
-          <p style={{ color: 'var(--t-color-text-secondary)' }}>
-            This example shows a sidebar with custom menu items, including disabled items.
-            Current selection: <strong>{selectedItem}</strong>
-          </p>
+            <RouteDisplay />
+            <h1 style={{
+              margin: '0 0 var(--t-space-400) 0',
+              fontSize: 'var(--t-font-size-700)',
+              color: 'var(--t-color-text-primary)'
+            }}>
+              Custom Sidebar Example
+            </h1>
+            <p style={{ color: 'var(--t-color-text-secondary)' }}>
+              This example shows a sidebar with custom menu items, including disabled items.
+              Current selection: <strong>{selectedItem}</strong>
+            </p>
+          </div>
         </div>
-      </div>
+      </MemoryRouter>
     );
   },
   args: {
@@ -372,55 +418,59 @@ export const ControlledExpansion: Story = {
   render: (args) => {
     const [selectedItem, setSelectedItem] = useState('dashboard');
     const [expanded, setExpanded] = useState(false);
-    
+
     return (
-      <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-        <Sidebar
-          {...args}
-          selectedItem={selectedItem}
-          onItemChange={setSelectedItem}
-          expanded={expanded}
-          onExpandedChange={setExpanded}
-          hoverExpand={false}
-          menuItems={createMenuItems(false)}
-          secondaryItems={createSecondaryItems(false)}
-          bottomItems={createBottomItems(false)}
-        />
-        <div style={{
-          flex: 1,
-          padding: 'var(--t-space-600)',
-          backgroundColor: 'var(--t-color-bg-primary)',
-          overflow: 'auto'
-        }}>
-          <div style={{ marginBottom: 'var(--t-space-500)' }}>
-            <button
-              onClick={() => setExpanded(!expanded)}
-              style={{
-                padding: 'var(--t-space-200) var(--t-space-400)',
-                backgroundColor: 'var(--t-color-fill-brand)',
-                color: 'var(--t-color-text-on-fill)',
-                border: 'none',
-                borderRadius: 'var(--t-border-radius-200)',
-                cursor: 'pointer',
-                fontSize: 'var(--t-font-size-300)'
-              }}
-            >
-              {expanded ? 'Collapse' : 'Expand'} Sidebar
-            </button>
-          </div>
-          <h1 style={{ 
-            margin: '0 0 var(--t-space-400) 0',
-            fontSize: 'var(--t-font-size-700)',
-            color: 'var(--t-color-text-primary)'
+      <MemoryRouter initialEntries={['/dashboard']}>
+        <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+          <Sidebar
+            {...args}
+            selectedItem={selectedItem}
+            onItemChange={setSelectedItem}
+            expanded={expanded}
+            onExpandedChange={setExpanded}
+            hoverExpand={false}
+            menuItems={createMenuItems(false)}
+            secondaryItems={createSecondaryItems(false)}
+            bottomItems={createBottomItems(false)}
+            disableRouting={false}
+          />
+          <div style={{
+            flex: 1,
+            padding: 'var(--t-space-600)',
+            backgroundColor: 'var(--t-color-bg-primary)',
+            overflow: 'auto'
           }}>
-            Controlled Expansion
-          </h1>
-          <p style={{ color: 'var(--t-color-text-secondary)' }}>
-            This example shows how to control the sidebar expansion programmatically.
-            Current state: <strong>{expanded ? 'Expanded' : 'Collapsed'}</strong>
-          </p>
+            <RouteDisplay />
+            <div style={{ marginBottom: 'var(--t-space-500)' }}>
+              <button
+                onClick={() => setExpanded(!expanded)}
+                style={{
+                  padding: 'var(--t-space-200) var(--t-space-400)',
+                  backgroundColor: 'var(--t-color-fill-brand)',
+                  color: 'var(--t-color-text-on-fill)',
+                  border: 'none',
+                  borderRadius: 'var(--t-border-radius-200)',
+                  cursor: 'pointer',
+                  fontSize: 'var(--t-font-size-300)'
+                }}
+              >
+                {expanded ? 'Collapse' : 'Expand'} Sidebar
+              </button>
+            </div>
+            <h1 style={{
+              margin: '0 0 var(--t-space-400) 0',
+              fontSize: 'var(--t-font-size-700)',
+              color: 'var(--t-color-text-primary)'
+            }}>
+              Controlled Expansion
+            </h1>
+            <p style={{ color: 'var(--t-color-text-secondary)' }}>
+              This example shows how to control the sidebar expansion programmatically.
+              Current state: <strong>{expanded ? 'Expanded' : 'Collapsed'}</strong>
+            </p>
+          </div>
         </div>
-      </div>
+      </MemoryRouter>
     );
   }
 };
@@ -522,26 +572,28 @@ const arabicBottomItems: SidebarMenuItem[] = [
 export const RTLArabic: Story = {
   render: (args) => {
     const [selectedItem, setSelectedItem] = useState('electronics');
-    
+
     return (
-      <div 
-        dir="rtl" 
-        style={{ 
-          display: 'flex', 
-          height: '100vh', 
-          overflow: 'hidden',
-          fontFamily: 'var(--t-font-family-arabic)',
-          direction: 'rtl'
-        }}
-      >
-        <Sidebar
-          {...args}
-          selectedItem={selectedItem}
-          onItemChange={setSelectedItem}
-          menuItems={arabicMenuItems}
-          secondaryItems={arabicSecondaryItems}
-          bottomItems={arabicBottomItems}
-        />
+      <MemoryRouter initialEntries={['/dashboard/electronics']}>
+        <div
+          dir="rtl"
+          style={{
+            display: 'flex',
+            height: '100vh',
+            overflow: 'hidden',
+            fontFamily: 'var(--t-font-family-arabic)',
+            direction: 'rtl'
+          }}
+        >
+          <Sidebar
+            {...args}
+            selectedItem={selectedItem}
+            onItemChange={setSelectedItem}
+            menuItems={arabicMenuItems}
+            secondaryItems={arabicSecondaryItems}
+            bottomItems={arabicBottomItems}
+            disableRouting={false}
+          />
         <div style={{
           flex: 1,
           padding: 'var(--t-space-600)',
@@ -643,7 +695,8 @@ export const RTLArabic: Story = {
             </p>
           </div>
         </div>
-      </div>
+        </div>
+      </MemoryRouter>
     );
   },
   args: {
@@ -664,18 +717,20 @@ export const HiddenBottomSection: Story = {
   render: (args) => {
     const [selectedItem, setSelectedItem] = useState('analytics');
     const [showBottom, setShowBottom] = useState(false);
-    
+
     return (
-      <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-        <Sidebar
-          {...args}
-          selectedItem={selectedItem}
-          onItemChange={setSelectedItem}
-          showBottomSection={showBottom}
-          menuItems={createMenuItems(false)}
-          secondaryItems={createSecondaryItems(false)}
-          bottomItems={createBottomItems(false)}
-        />
+      <MemoryRouter initialEntries={['/analytics']}>
+        <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+          <Sidebar
+            {...args}
+            selectedItem={selectedItem}
+            onItemChange={setSelectedItem}
+            showBottomSection={showBottom}
+            menuItems={createMenuItems(false)}
+            secondaryItems={createSecondaryItems(false)}
+            bottomItems={createBottomItems(false)}
+            disableRouting={false}
+          />
         <div style={{
           flex: 1,
           padding: 'var(--t-space-600)',
@@ -821,7 +876,8 @@ export const HiddenBottomSection: Story = {
             </ul>
           </div>
         </div>
-      </div>
+        </div>
+      </MemoryRouter>
     );
   },
   args: {

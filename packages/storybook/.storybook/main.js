@@ -55,6 +55,7 @@ module.exports = {
       '@storybook/react-vite',
       'react',
       'react-dom',
+      'react-router',
       '@storybook/blocks',
       '@storybook/addon-docs',
       '@mdx-js/react',

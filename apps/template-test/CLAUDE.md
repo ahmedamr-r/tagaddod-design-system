@@ -4,6 +4,60 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
+## 🚨 MANDATORY PRE-FLIGHT PROTOCOL
+
+**CRITICAL**: Before implementing ANYTHING, read this section FIRST. This overrides all other instructions.
+
+### Claude's Verbalization Requirement
+
+For EVERY user request, Claude MUST verbally state:
+
+1. **What I'm being asked to do**: [1 sentence summary]
+2. **Which workflow I will follow**: [Reference `.claude/MANDATORY-WORKFLOWS.md` section]
+3. **My execution checklist**: [Use TodoWrite to show steps]
+4. **Checkpoint question**: "Have I checked all mandatory workflows?"
+
+### Example Verbalization:
+
+> "You're asking me to add a Kanban board.
+>
+> I will follow: **WORKFLOW #2 - Custom Component Discovery** (from `.claude/MANDATORY-WORKFLOWS.md`)
+>
+> My execution plan:
+> - ✅ Step 1: Invoke tagaddod-design-system skill
+> - 📋 Step 2: Check if Kanban exists in `.component-documentation/`
+> - 📋 Step 3a: If NO → Search Shadcn (Tier 1)
+> - 📋 Step 3b: If not found → Search Antd (Tier 2)
+> - 📋 Step 3c: If not found → Read DesignTokens.mdx + Build custom (Tier 3)
+>
+> Checkpoint: Have I identified the correct workflow? ✅ YES
+>
+> Beginning Step 1..."
+
+### Critical Files Reference
+
+**BEFORE implementing, check which file to read**:
+
+| Situation | Read This FIRST |
+|-----------|-----------------|
+| **Component implementation** | `.claude/MANDATORY-WORKFLOWS.md` → WORKFLOW #1 |
+| **Component NOT in Tagaddod** | `.claude/MANDATORY-WORKFLOWS.md` → WORKFLOW #2 |
+| **Styling/tokens needed** | `.component-documentation/DesignTokens.mdx` |
+| **RTL questions** | `.design-system-guides/RTL-AUTO-SWITCHING.md` |
+| **Behavioral guidelines** | `.claude/AI-BEHAVIOR-RULES.md` |
+
+### Self-Check Questions (Ask Before Acting)
+
+- [ ] Have I checked `.claude/MANDATORY-WORKFLOWS.md`?
+- [ ] Have I verbalized which workflow I'm following?
+- [ ] Have I created a TodoWrite checklist?
+- [ ] If component NOT in Tagaddod: Have I searched Tier 1 (Shadcn) AND Tier 2 (Antd)?
+- [ ] Am I using design tokens (not hardcoded values)?
+
+**If ANY answer is NO → STOP and correct before proceeding**
+
+---
+
 ## 🎯 TL;DR - The #1 Rule
 
 **For ANY component request: ALWAYS invoke `tagaddod-design-system` skill FIRST.**
@@ -343,70 +397,108 @@ Covers:
 
 ## 🚨 MANDATORY RULE #4: Design Tokens
 
-**For ALL styling tasks (components, layouts, custom styles, modifications):**
+**For ALL styling tasks (components, layouts, custom styles, modifications), consult DesignTokens.mdx FIRST.**
 
-### The Rules
+### The Three Golden Rules
 
-1. **Check DesignTokens.mdx FIRST** before applying ANY styles
-2. **Use Tagaddod design tokens ONLY** - NEVER use arbitrary CSS values
-3. **Apply tokens via CSS custom properties**: `var(--t-color-*)`, `var(--t-space-*)`
+1. **ALWAYS use semantic tokens** (`--t-color-text-primary`, `--t-color-fill-brand`)
+2. **NEVER use primitive palettes** (`--t-color-blue-500`) or hardcoded values (`#333`, `16px`)
+3. **CONSULT decision trees FIRST** before selecting any token
 
-### Token Categories
+### Token Selection Process
 
-**Colors**:
-```css
-var(--t-color-fill-brand-primary)
-var(--t-color-text-primary)
-var(--t-color-border-secondary)
-var(--t-color-surface-primary)
+**Step-by-Step Workflow:**
+
+```
+1. Identify what you're styling (text, button, card, form input, etc.)
+2. Read .component-documentation/DesignTokens.mdx
+3. Navigate to relevant Decision Tree:
+   - Text colors? → Text Color Decision Tree
+   - Button/badge? → Fill Color Decision Tree
+   - Card/panel? → Use surface-* tokens
+   - Spacing? → Spacing Decision Tree
+   - Typography? → Typography Decision Tree
+4. Follow if-then logic to select correct token
+5. Apply token via CSS custom property
 ```
 
-**Spacing** (0 through 3200):
-```css
-var(--t-space-200)    /* 8px */
-var(--t-space-400)    /* 16px */
-var(--t-space-600)    /* 24px */
+### Decision Tree Example
+
+**Scenario**: "I need to style text on a button"
+
+```
+1. Button = filled element → Use Fill Color Decision Tree
+2. Button background: IF primary action → use fill-brand
+3. Button text: IF on dark background → use text-on-fill
+4. Result:
+   background-color: var(--t-color-fill-brand);
+   color: var(--t-color-text-on-fill);
 ```
 
-**Typography**:
-```css
-var(--t-typography-heading-lg-semibold)
-var(--t-typography-body-md-default)
-var(--t-font-family-primary)    /* Outfit (English) */
-var(--t-font-family-arabic)     /* Tajawal (Arabic) */
-```
+### Most Common Tokens (80% of Use Cases)
 
-**Layout**:
-```css
-var(--t-border-radius-200)
-var(--t-shadow-200)
-```
+**Colors:**
+- `--t-color-text-primary` (main text on light surfaces)
+- `--t-color-text-on-fill` (text on dark/colored backgrounds)
+- `--t-color-fill-brand` (primary action buttons)
+- `--t-color-surface-primary` (cards, panels)
+- `--t-color-border-secondary` (card borders - MANDATORY with surface-primary)
+
+**Spacing:**
+- `--t-space-200` (8px - most common gap)
+- `--t-space-300` (12px - button/input padding)
+- `--t-space-400` (16px - card padding)
+- `--t-space-600` (24px - section gaps)
+
+**Typography:**
+- `--t-typography-body-md` (standard body text)
+- `--t-typography-heading-md` (section titles)
+- `--t-typography-label-md-semibold` (form labels, button text)
+
+**Layout:**
+- `--t-border-radius-150` (6px - buttons, inputs)
+- `--t-border-radius-300` (12px - cards)
+- `--t-border-width-25` (1px - standard border)
 
 ### Correct vs Incorrect
 
 ```css
 /* ❌ WRONG - Hardcoded values */
-.component {
+.card {
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
   color: #333;
-  margin: 16px;
-  font-size: 14px;
-  border-radius: 8px;
 }
 
-/* ✅ CORRECT - Design tokens */
-.component {
+/* ✅ CORRECT - Semantic tokens with decision tree logic */
+.card {
+  /* Surface token (large element) */
+  background-color: var(--t-color-surface-primary);
+  /* Border (MANDATORY for cards) */
+  border: var(--t-border-width-25) solid var(--t-color-border-secondary);
+  /* Spacing token */
+  padding: var(--t-space-400);
+  /* Border radius for cards */
+  border-radius: var(--t-border-radius-300);
+  /* Text on light surface */
   color: var(--t-color-text-primary);
-  margin: var(--t-space-400);
-  font: var(--t-typography-body-md-default);
-  border-radius: var(--t-border-radius-200);
 }
 ```
 
-### Complete Token Reference
+### Comprehensive Token Guide
 
-**For complete design token catalog:**
+**For decision trees, workflows, and complete token catalog:**
 
 📖 **Read**: `.component-documentation/DesignTokens.mdx`
+
+**Guide Structure:**
+- **Quick Navigation** (lines 10-27): Fast jump links by scenario
+- **Decision Trees** (lines 76-598): Visual flowcharts for token selection
+- **Semantic Color System** (lines 600-795): All 113 tokens with if-then logic
+- **Component Styling Workflows** (lines 797-1182): Step-by-step patterns
+- **Anti-Patterns** (lines 1184-1373): Common mistakes to avoid
+- **Quick Checklist** (lines 1375-1418): Rapid token verification
 
 **Applies to**: Custom components, page layouts, spacing, colors, typography, any visual styling decision.
 

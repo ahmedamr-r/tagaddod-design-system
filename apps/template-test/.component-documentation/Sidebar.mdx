@@ -18,7 +18,14 @@ Quick Reference for Claude Code Agents:
 - Default active state management
 - Custom default active item
 
-📐 LAYOUT INTEGRATION (Lines 58-104)
+🔗 URL ROUTING (Lines 141-274)
+- React Router v7/v6 integration
+- Automatic URL updates and active state sync
+- Nested routes, custom paths, base path prefix
+- Custom navigation handler (escape hatch)
+- Disable routing for testing
+
+📐 LAYOUT INTEGRATION (Lines 276-322)
 - Recommended Layout Pattern (Lines 62-84): Flexbox setup
 - Right Position (Lines 86-104): Alternative positioning
 
@@ -68,7 +75,10 @@ Quick Reference for Claude Code Agents:
 - Component Architecture (Lines 742-748): Recursive rendering
 - Performance (Lines 749-754): Optimization details
 - Browser Support (Lines 755-763): Compatibility matrix
-- Migration Guide (Lines 765-781): From fixed layout
+
+🔄 MIGRATION GUIDES
+- React Router Migration (Lines 972-1049): Breaking change guide, troubleshooting
+- Fixed Layout Migration (Lines 1051-1063): Flexbox transition
 
 QUICK IMPLEMENTATION EXAMPLES:
 - Basic sidebar: Lines 32-40
@@ -132,9 +142,179 @@ The Sidebar automatically shows a default active item (`'page1'`) when no `selec
 <Sidebar onItemChange={setSelectedItem} />
 
 // Custom default active item
-<Sidebar 
+<Sidebar
   defaultSelectedItem="page2"
-  onItemChange={setSelectedItem} 
+  onItemChange={setSelectedItem}
+/>
+```
+
+## URL Routing and Navigation
+
+The Tagaddod Design System provides **two Sidebar components** to support different navigation needs:
+
+###  Core Sidebar (Callback-Based Navigation)
+
+The core `Sidebar` component works **without React Router** using callback-based navigation. Best for:
+- Applications not using React Router
+- Custom routing solutions
+- Static sites or SPAs with manual state management
+
+```jsx
+import { Sidebar } from '@tagaddod-design/react';
+
+function App() {
+  const [selectedItem, setSelectedItem] = useState('dashboard');
+
+  const handleNavigation = (itemId) => {
+    setSelectedItem(itemId);
+    // Your custom navigation logic here
+    // e.g., update state, fetch data, switch views, etc.
+  };
+
+  return (
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <Sidebar
+        selectedItem={selectedItem}
+        onItemChange={handleNavigation}
+        menuItems={[
+          { id: 'dashboard', icon: IconHome, label: 'Dashboard' },
+          { id: 'products', icon: IconPackage, label: 'Products' }
+        ]}
+      />
+      <main style={{ flex: 1 }}>
+        {selectedItem === 'dashboard' && <Dashboard />}
+        {selectedItem === 'products' && <Products />}
+      </main>
+    </div>
+  );
+}
+```
+
+### 📦 SidebarWithRouter (React Router Integration)
+
+The `SidebarWithRouter` component integrates with React Router v7/v6 to automatically update the browser URL and sync active states.
+
+**Requirements:**
+1. Install React Router: `npm install react-router@^7.0.0`
+2. Wrap app with `<BrowserRouter>`
+
+```jsx
+import { BrowserRouter } from 'react-router';
+import { SidebarWithRouter } from '@tagaddod-design/react';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <div style={{ display: 'flex', height: '100vh' }}>
+        <SidebarWithRouter
+          menuItems={[
+            { id: 'dashboard', icon: IconHome, label: 'Dashboard' },
+            { id: 'products', icon: IconPackage, label: 'Products' }
+          ]}
+        />
+        <main style={{ flex: 1 }}>
+          <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/products" element={<Products />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
+  );
+}
+```
+
+### How It Works
+
+**Automatic URL Updates:**
+- Clicking "Dashboard" → URL changes to `/dashboard`
+- Clicking "Products" → URL changes to `/products`
+
+**Automatic Active State:**
+- URL `/dashboard` → "Dashboard" menu item highlighted
+- Works on initial page load and browser back/forward buttons
+
+### Nested Routes Example
+
+Child menu items create nested URL paths:
+
+```jsx
+const menuItems = [
+  {
+    id: 'products',
+    label: 'Products',
+    icon: IconPackage,
+    hasChildren: true,
+    children: [
+      { id: 'all', label: 'All Products' },      // → /products/all
+      { id: 'add', label: 'Add Product' },       // → /products/add
+      { id: 'categories', label: 'Categories' }  // → /products/categories
+    ]
+  }
+];
+
+<Routes>
+  <Route path="/products/all" element={<AllProducts />} />
+  <Route path="/products/add" element={<AddProduct />} />
+  <Route path="/products/categories" element={<Categories />} />
+</Routes>
+```
+
+### Custom Path Override
+
+Override auto-generated paths using the `path` prop:
+
+```jsx
+const menuItems = [
+  { id: 'home', path: '/', label: 'Home' },              // Use "/" instead of "/home"
+  { id: 'config', path: '/settings', label: 'Config' }   // Use "/settings" instead of "/config"
+];
+
+<SidebarWithRouter menuItems={menuItems} />
+```
+
+### Base Path Prefix
+
+Prefix all routes with a base path (useful for admin panels, multi-tenant apps):
+
+```jsx
+<SidebarWithRouter
+  basePath="/admin"
+  menuItems={[
+    { id: 'dashboard', label: 'Dashboard' }  // → /admin/dashboard
+  ]}
+/>
+```
+
+### Custom Navigation Handler (Escape Hatch)
+
+Add custom logic before navigation (analytics, auth checks, etc.):
+
+```jsx
+<SidebarWithRouter
+  menuItems={menuItems}
+  onNavigate={(path, itemId) => {
+    // Custom logic
+    console.log('Navigating to:', path);
+    trackAnalytics('sidebar_click', { page: itemId });
+
+    // Then navigate manually
+    navigate(path);
+  }}
+/>
+```
+
+### Disable Routing (Testing/Storybook)
+
+Disable URL routing for isolated testing:
+
+```jsx
+<SidebarWithRouter
+  disableRouting={true}
+  menuItems={menuItems}
+  onItemChange={(itemId) => {
+    console.log('Item clicked:', itemId);
+  }}
 />
 ```
 
@@ -833,6 +1013,85 @@ Compatible with all modern browsers including:
 - Edge 88+
 
 Full RTL support in all supported browsers.
+
+## React Router Migration Guide
+
+### Breaking Change: React Router Required
+
+**Version 0.1.30+** requires React Router to be installed.
+
+#### Step 1: Install React Router
+
+```bash
+# React Router v7 (recommended for 2025)
+npm install react-router@^7.0.0
+
+# OR React Router v6 (also supported)
+npm install react-router-dom@^6.0.0
+```
+
+#### Step 2: Wrap App with BrowserRouter
+
+```jsx
+import { BrowserRouter } from 'react-router';
+
+<BrowserRouter>
+  <App />
+</BrowserRouter>
+```
+
+#### Step 3: Define Routes
+
+```jsx
+import { Routes, Route } from 'react-router';
+
+<Routes>
+  <Route path="/dashboard" element={<Dashboard />} />
+  <Route path="/products" element={<Products />} />
+</Routes>
+```
+
+### Why This Change?
+
+Modern web apps expect URL updates when navigating. This change:
+- ✅ Enables shareable URLs (send `/dashboard` link to coworkers)
+- ✅ Browser back/forward buttons work naturally
+- ✅ Bookmarking specific pages
+- ✅ SEO benefits for public pages
+- ✅ Standard UX pattern users expect
+
+### Troubleshooting
+
+**Error: "useNavigate() may be used only in the context of a `<Router>` component"**
+
+Solution: Wrap your app with `<BrowserRouter>`:
+```jsx
+import { BrowserRouter } from 'react-router';
+
+root.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+```
+
+**Menu items not matching URL on load**
+
+Ensure menu item `id` values match your route paths:
+```jsx
+// Menu item
+{ id: 'dashboard', label: 'Dashboard' }
+
+// Route (should match)
+<Route path="/dashboard" element={<Dashboard />} />
+```
+
+**Need to disable routing for testing?**
+
+Use the `disableRouting` prop:
+```jsx
+<Sidebar disableRouting={true} menuItems={menuItems} />
+```
 
 ## Migration from Fixed Layout
 

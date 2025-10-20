@@ -18,6 +18,7 @@ export default defineConfig({
         'react',
         'react-dom',
         'react/jsx-runtime',
+        'react-router',
         /@radix-ui\/.*/,
         '@tabler/icons-react',
         '@tanstack/react-table',

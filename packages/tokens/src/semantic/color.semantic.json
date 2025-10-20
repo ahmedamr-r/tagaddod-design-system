@@ -3,467 +3,580 @@
     "border": {
       "primary": {
         "$value": "{color.gray.900}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The default color for borders on any element. It uses to emphasize an element that is placed on a page directly, but not on a surface card."
       },
       "secondary": {
         "$value": "{color.gray.700}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "This border is used to differentiate a section or a group or a card that is placed on top of another big card, usually used on groups that are placed on top of a surface background, which is a white background."
       },
       "tertiary": {
         "$value": "{color.gray.500}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "This border is a color that's rarely used, but it's used to make a less emphasized section border in order to allow it to differentiate this section."
       },
       "hover": {
         "$value": "{color.gray.1100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover color for borders on any element."
       },
       "active": {
         "$value": "{color.gray.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active color for borders on any active element or selected."
       },
       "disabled": {
         "$value": "{color.gray.800}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The disabled color for borders on any element."
       },
       "brand": {
         "$value": "{color.gray.1600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for borders paired with brand colors."
       },
       "brand-hover": {
         "$value": "{color.gray.1500}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use if the initial item is using the brand color border, but I am hovering on it and this is an interactive element."
       },
       "brand-active": {
         "$value": "{color.gray.1600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use if the initial item is using the brand color, and this item is currently in an active state."
       },
       "success": {
         "$value": "{color.green.1100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for borders communicating success."
       },
       "success-hover": {
         "$value": "{color.green.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for borders communicating success but while hover on it if the element is interactive."
       },
       "success-active": {
         "$value": "{color.green.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for borders communicating success but while the element is interactive and active."
       },
       "critical": {
         "$value": "{color.red.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for borders communicating critical information."
       },
       "critical-hover": {
         "$value": "{color.red.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for borders communicating critical but while hover on it if the element is interactive."
       },
       "critical-active": {
         "$value": "{color.red.1400}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for borders communicating critical but while the element is interactive and active."
       },
       "warning": {
         "$value": "{color.orange.1000}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for borders communicating warning."
       },
       "magic": {
         "$value": "{color.purple.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for borders suggested by magic AI."
       },
       "magic-hover": {
         "$value": "{color.purple.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for borders communicating AI but while hover on it if the element is interactive."
       },
       "magic-active": {
         "$value": "{color.purple.1400}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for borders communicating AI but while the element is interactive and active."
       }
     },
     "bg": {
       "primary": {
         "$value": "{color.gray.400}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "."
       },
       "light": {
         "$value": "{color.gray.300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The default background color of the application or page"
       }
     },
     "fill": {
       "primary": {
         "$value": "{color.gray.100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The background color of contained elements with a smaller surface area, like a button or badge."
       },
       "hover": {
         "$value": "{color.gray.300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color of contained elements with a smaller surface area."
       },
       "active": {
         "$value": "{color.gray.500}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color of contained elements with a smaller surface area."
       },
       "disabled": {
         "$value": "{color.gray.900}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The disabled state color of contained elements with a smaller surface area."
       },
       "brand": {
         "$value": "{color.gray.1600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The background color of main actions, like primary buttons."
       },
       "brand-hover": {
         "$value": "{color.gray.1500}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color of main actions, like primary buttons."
       },
       "brand-active": {
         "$value": "{color.gray.1600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color of main actions, like primary buttons."
       },
       "brand-secondary": {
         "$value": "{color.gray.500}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The background color of brand elements with a secondary level of prominence, like outlined buttons or subtle badges."
       },
       "brand-secondary-hover": {
         "$value": "{color.gray.600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color of brand elements with a secondary level of prominence."
       },
       "brand-secondary-active": {
         "$value": "{color.gray.700}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color of brand elements with a secondary level of prominence."
       },
       "warning": {
         "$value": "{color.orange.1000}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for backgrounds communicating warning on elements with a smaller surface area, like a badge or a button."
       },
       "warning-hover": {
         "$value": "{color.orange.1100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for communicating warning on elements with a smaller surface area."
       },
       "warning-active": {
         "$value": "{color.orange.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for communicating warning on elements with a smaller surface area."
       },
       "warning-secondary": {
         "$value": "{color.orange.400}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for backgrounds communicating warning on elements with a smaller surface area, with a secondary level of prominence."
       },
       "warning-secondary-hover": {
         "$value": "{color.orange.600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for warning elements with a secondary level of prominence."
       },
       "warning-secondary-active": {
         "$value": "{color.orange.700}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for warning elements with a secondary level of prominence."
       },
       "magic": {
         "$value": "{color.purple.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The background color of elements suggested by magic AI, like a badge or a button."
       },
       "magic-hover": {
         "$value": "{color.purple.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color of elements suggested by magic AI."
       },
       "magic-active": {
         "$value": "{color.purple.1400}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color of elements suggested by magic AI."
       },
       "magic-secondary": {
         "$value": "{color.purple.400}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The background color of elements suggested by magic AI, with a secondary level of prominence."
       },
       "magic-secondary-hover": {
         "$value": "{color.purple.600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color of AI-suggested elements with a secondary level of prominence."
       },
       "magic-secondary-active": {
         "$value": "{color.purple.800}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color of AI-suggested elements with a secondary level of prominence."
       },
       "success": {
         "$value": "{color.green.1100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for backgrounds communicating success on elements with a smaller surface area, like a badge or a button."
       },
       "success-hover": {
         "$value": "{color.green.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for communicating success on elements with a smaller surface area."
       },
       "success-active": {
         "$value": "{color.green.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for communicating success on elements with a smaller surface area."
       },
       "success-secondary": {
         "$value": "{color.green.200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for backgrounds communicating success on elements with a smaller surface area, with a secondary level of prominence."
       },
       "success-secondary-hover": {
         "$value": "{color.green.300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for success elements with a secondary level of prominence."
       },
       "success-secondary-active": {
         "$value": "{color.green.500}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for success elements with a secondary level of prominence."
       },
       "critical": {
         "$value": "{color.red.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for backgrounds communicating critical information on elements with a smaller surface area, like a badge or a button."
       },
       "critical-hover": {
         "$value": "{color.red.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for communicating critical information on elements with a smaller surface area."
       },
       "critical-active": {
         "$value": "{color.red.1400}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for communicating critical information on elements with a smaller surface area."
       },
       "critical-secondary": {
         "$value": "{color.red.400}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for backgrounds communicating critical information on elements with a smaller surface area, with a secondary level of prominence."
       },
       "critical-secondary-hover": {
         "$value": "{color.red.600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for critical elements with a secondary level of prominence."
       },
       "critical-secondary-active": {
         "$value": "{color.red.800}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for critical elements with a secondary level of prominence."
       }
     },
     "surface": {
       "primary": {
         "$value": "{color.gray.100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The background color for elements with the highest level of prominence, like a card or panel."
       },
       "hover": {
         "$value": "{color.gray.300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for elements with the highest level of prominence."
       },
       "active": {
         "$value": "{color.gray.500}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for elements with the highest level of prominence."
       },
       "secondary": {
         "$value": "{color.gray.500}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The background color for elements with a secondary level of prominence, like nested cards or sections."
       },
       "secondary-hover": {
         "$value": "{color.gray.600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for elements with a secondary level of prominence."
       },
       "secondary-active": {
         "$value": "{color.gray.700}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for elements with a secondary level of prominence."
       },
       "disabled": {
         "$value": "{color.gray.700}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The disabled state color for surface elements."
       }
     },
     "overlay": {
       "light-20": {
         "$value": "rgba(255, 255, 255, 0.2000)",
-        "$type": "color"
+        "$type": "color",
+        "$description": "A 20% opacity light overlay. Use for subtle highlights or shine effects on dark surfaces."
       },
       "dark-12": {
         "$value": "rgba(22, 22, 29, 0.1200)",
-        "$type": "color"
+        "$type": "color",
+        "$description": "A 12% opacity dark overlay. Use for subtle shadows or hover states on light backgrounds."
       },
       "dark-60": {
         "$value": "rgba(22, 22, 29, 0.6000)",
-        "$type": "color"
+        "$type": "color",
+        "$description": "A 60% opacity dark overlay. Use for modal backdrops or to dim background content."
       },
       "dark-70": {
         "$value": "rgba(22, 22, 29, 0.7000)",
-        "$type": "color"
+        "$type": "color",
+        "$description": "A 70% opacity dark overlay. Use for drawer backdrops or stronger content dimming."
       },
       "dark-85": {
         "$value": "rgba(22, 22, 29, 0.8500)",
-        "$type": "color"
+        "$type": "color",
+        "$description": "An 85% opacity dark overlay. Use for heavy backdrops or to strongly emphasize focused content."
       },
       "brand-12": {
         "$value": "rgba(22, 22, 29, 0.1200)",
-        "$type": "color"
+        "$type": "color",
+        "$description": "A 12% opacity brand-colored overlay. Use for subtle brand emphasis on interactive states."
       }
     },
     "text": {
       "primary": {
         "$value": "{color.gray.1600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The default text color for body text and headings."
       },
       "secondary": {
         "$value": "{color.gray.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for text with a secondary level of prominence, like descriptions or helper text."
       },
       "disabled": {
         "$value": "{color.gray.1000}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for text in a disabled state."
       },
       "on-fill": {
         "$value": "{color.gray.100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for text on filled backgrounds, like text on primary buttons."
       },
       "on-fill-hover": {
         "$value": "{color.gray.300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for text on filled backgrounds."
       },
       "on-fill-active": {
         "$value": "{color.gray.500}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for text on filled backgrounds."
       },
       "on-fill-disabled": {
         "$value": "{color.gray.100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The disabled state color for text on filled backgrounds."
       },
       "link": {
         "$value": "{color.gray.1600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for text links."
       },
       "link-hover": {
         "$value": "{color.gray.1500}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for text links."
       },
       "link-active": {
         "$value": "{color.gray.1600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for text links."
       },
       "magic": {
         "$value": "{color.purple.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for text suggested by magic AI."
       },
       "magic-hover": {
         "$value": "{color.purple.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for text suggested by magic AI."
       },
       "magic-active": {
         "$value": "{color.purple.1400}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for text suggested by magic AI."
       },
       "magic-secondary": {
         "$value": "{color.purple.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for text suggested by magic AI with a secondary level of prominence."
       },
       "success": {
         "$value": "{color.green.1100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for text communicating success."
       },
       "success-hover": {
         "$value": "{color.green.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for text communicating success."
       },
       "success-active": {
         "$value": "{color.green.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for text communicating success."
       },
       "success-secondary": {
         "$value": "{color.green.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for text communicating success with a secondary level of prominence."
       },
       "critical": {
         "$value": "{color.red.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for text communicating critical information."
       },
       "critical-hover": {
         "$value": "{color.red.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for text communicating critical information."
       },
       "critical-active": {
         "$value": "{color.red.1400}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for text communicating critical information."
       },
       "critical-secondary": {
         "$value": "{color.red.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for text communicating critical information with a secondary level of prominence."
       },
       "warning": {
         "$value": "{color.orange.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for text communicating warning."
       },
       "warning-secondary": {
         "$value": "{color.orange.1100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for text communicating warning with a secondary level of prominence."
       }
     },
     "icon": {
       "primary": {
         "$value": "{color.gray.1600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The default color for icons."
       },
       "secondary": {
         "$value": "{color.gray.1100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for icons with a secondary level of prominence."
       },
       "disabled": {
         "$value": "{color.gray.1000}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The disabled state color for icons."
       },
       "on-fill": {
         "$value": "{color.gray.100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for icons on filled backgrounds, like icons on primary buttons."
       },
       "on-fill-hover": {
         "$value": "{color.gray.300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for icons on filled backgrounds."
       },
       "on-fill-active": {
         "$value": "{color.gray.500}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for icons on filled backgrounds."
       },
       "on-fill-disabled": {
         "$value": "{color.gray.100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The disabled state color for icons on filled backgrounds."
       },
       "link": {
         "$value": "{color.gray.1600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for icons in link elements or clickable icon buttons."
       },
       "link-hover": {
         "$value": "{color.gray.1500}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for icons in link elements."
       },
       "link-active": {
         "$value": "{color.gray.1600}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for icons in link elements."
       },
       "success": {
         "$value": "{color.green.1100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for icons communicating success."
       },
       "success-hover": {
         "$value": "{color.green.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for icons communicating success."
       },
       "success-active": {
         "$value": "{color.green.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for icons communicating success."
       },
       "warning": {
         "$value": "{color.orange.1100}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for icons communicating warning."
       },
       "warning-dark": {
         "$value": "{color.orange.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for warning icons on light backgrounds that need stronger contrast."
       },
       "critical": {
         "$value": "{color.red.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for icons communicating critical information."
       },
       "critical-hover": {
         "$value": "{color.red.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for icons communicating critical information."
       },
       "critical-active": {
         "$value": "{color.red.1400}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for icons communicating critical information."
       },
       "magic": {
         "$value": "{color.purple.1200}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "Use for icons suggested by magic AI."
       },
       "magic-hover": {
         "$value": "{color.purple.1300}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The hover state color for icons suggested by magic AI."
       },
       "magic-active": {
         "$value": "{color.purple.1400}",
-        "$type": "color"
+        "$type": "color",
+        "$description": "The active state (on press) color for icons suggested by magic AI."
       }
     }
   }

@@ -3,35 +3,52 @@
     "0": {
       "$value": "{size.0}",
       "$type": "dimension",
-      "$description": "test"
+      "$description": "0px - No border radius. Use for sharp corners and rectangular elements."
     },
     "50": {
       "$value": "{size.50}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "2px - Very subtle rounding. Use for small elements like badges, tags, or minimal design aesthetic."
     },
     "100": {
       "$value": "{size.100}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "4px - Small rounding. Use for compact elements and tight layouts."
+    },
+    "150": {
+      "$value": "{size.150}",
+      "$type": "dimension",
+      "$description": "6px - Standard component rounding (primary choice). Use for most UI components like buttons, inputs, dropdowns, and small cards."
     },
     "200": {
       "$value": "{size.200}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "8px - Standard component rounding (common choice). Use for most UI components like buttons, inputs, and interactive elements."
     },
     "300": {
       "$value": "{size.300}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "12px - Main surface rounding. Use for cards, panels, modals, and medium-sized containers."
+    },
+    "400": {
+      "$value": "{size.400}",
+      "$type": "dimension",
+      "$description": "16px - Large surface rounding. Use for main cards, large panels, dialog boxes, and prominent containers."
     },
     "600": {
       "$value": "{size.600}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "24px - Extra large rounding. Use for highly rounded surfaces and design emphasis."
     },
     "800": {
       "$value": "{size.800}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "32px - Very large rounding. Use for oversized elements and strong visual softness."
     },
     "full": {
       "$value": "624.994rem",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "Fully rounded (pill shape). Use for pills, circular avatars, and fully rounded buttons."
     }
   }
 }

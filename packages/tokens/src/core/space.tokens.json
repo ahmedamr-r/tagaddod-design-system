@@ -2,75 +2,93 @@
   "space": {
     "0": {
       "$value": "{size.0}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "0px - No spacing. Use to remove spacing or when elements should touch."
     },
     "25": {
       "$value": "{size.25}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "1px - Hairline spacing. Use for very tight spacing or as a separator gap."
     },
     "50": {
       "$value": "{size.50}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "2px - Extra tight spacing. Use for minimal gaps between related elements like icon and text in a compact button."
     },
     "100": {
       "$value": "{size.100}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "4px - Tight spacing. Use for small gaps within closely related elements, like text and icons in buttons or badges."
     },
     "150": {
       "$value": "{size.150}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "6px - Small spacing. Use for gaps between related elements within a component."
     },
     "200": {
       "$value": "{size.200}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "8px - Base spacing (most common). Use for standard gaps between elements, padding in small components, and vertical rhythm in forms."
     },
     "250": {
       "$value": "{size.250}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "10px - Small-medium spacing. Use for padding in compact buttons and inputs."
     },
     "300": {
       "$value": "{size.300}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "12px - Medium spacing. Use for padding in standard buttons, inputs, and gaps between related component groups."
     },
     "400": {
       "$value": "{size.400}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "16px - Standard spacing. Use for padding in cards, gaps between sections, and standard component padding."
     },
     "500": {
       "$value": "{size.500}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "20px - Medium-large spacing. Use for padding in larger components and gaps between distinct sections."
     },
     "600": {
       "$value": "{size.600}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "24px - Large spacing. Use for card padding, spacing between major sections, and generous padding in containers."
     },
     "800": {
       "$value": "{size.800}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "32px - Extra large spacing. Use for prominent separation between sections and generous padding in large containers."
     },
     "1000": {
       "$value": "{size.1000}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "40px - Very large spacing. Use for major section separation and padding in large layouts."
     },
     "1200": {
       "$value": "{size.1200}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "48px - Extra extra large spacing. Use for significant visual separation between major page sections."
     },
     "1600": {
       "$value": "{size.1600}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "64px - Huge spacing. Use for page-level padding and major layout separations."
     },
     "2000": {
       "$value": "{size.2000}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "80px - Very huge spacing. Use for generous page margins and large layout gutters."
     },
     "2400": {
       "$value": "{size.2400}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "96px - Massive spacing. Use for dramatic page sections and oversized layout margins."
     },
     "3200": {
       "$value": "{size.3200}",
-      "$type": "dimension"
+      "$type": "dimension",
+      "$description": "128px - Ultra massive spacing. Use for hero sections and extremely generous layout spacing."
     }
   }
 }

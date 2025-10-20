@@ -1,6 +1,6 @@
 import React, { forwardRef, useState } from 'react';
 import clsx from 'clsx';
-import { 
+import {
   IconHome,
   IconChartBar,
   IconSettings,
@@ -108,9 +108,9 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
   }, ref) => {
     const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
     const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+    const [internalActiveItem, setInternalActiveItem] = useState(selectedItem || defaultSelectedItem);
 
     const isExpanded = controlledExpanded !== undefined ? controlledExpanded : internalExpanded;
-    const activeItem = selectedItem || defaultSelectedItem;
 
     // Detect RTL for line height adjustments and positioning
     const isRTL = typeof document !== 'undefined' &&
@@ -121,99 +121,10 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
     const adjustedPosition = isRTL && position === 'left'
       ? 'right'  // Auto-switch to right in RTL when using default left position
       : position; // Preserve explicit positioning choice
-    
+
     // Apply line height style based on text direction following RTL guidelines
     const lineHeightStyle = {
       lineHeight: isRTL ? 'var(--t-line-height-arabic, 1.2)' : 'var(--t-line-height-english, 1.5)'
-    };
-
-    const handleExpandedChange = (newExpanded: boolean) => {
-      if (controlledExpanded === undefined) {
-        setInternalExpanded(newExpanded);
-      }
-      onExpandedChange?.(newExpanded);
-    };
-
-    const handleItemClick = (itemId: string, item: SidebarMenuItem) => {
-      if (item.disabled) return;
-      
-      if (item.hasChildren) {
-        setExpandedGroups(prev => {
-          const newSet = new Set(prev);
-          if (newSet.has(itemId)) {
-            newSet.delete(itemId);
-          } else {
-            newSet.add(itemId);
-          }
-          return newSet;
-        });
-      } else {
-        onItemChange?.(itemId);
-      }
-    };
-
-    const renderMenuItem = (item: SidebarMenuItem, isActive = false, isChild = false) => {
-      const IconComponent = item.icon;
-      const hasChildren = item.hasChildren;
-      const isGroupExpanded = expandedGroups.has(item.id);
-      const isParentOfActive = hasChildren && item.children?.some(child => child.id === activeItem);
-      
-      return (
-        <div key={item.id} className={styles.menuItemContainer}>
-          <button
-            className={clsx(
-              styles.menuItem,
-              isActive && styles.menuItemActive,
-              isParentOfActive && styles.menuItemParentActive,
-              isChild && styles.menuItemChild,
-              item.disabled && styles.menuItemDisabled
-            )}
-            onClick={() => handleItemClick(item.id, item)}
-            disabled={item.disabled}
-            style={lineHeightStyle}
-            aria-label={item.label}
-          >
-            <div className={clsx(
-              styles.menuItemContent,
-              !isExpanded && styles.menuItemContentCollapsed
-            )}>
-              <div className={styles.menuItemIcon}>
-                {!isChild && IconComponent && (
-                  <IconComponent size={24} className={styles.icon} />
-                )}
-              </div>
-              
-              {isExpanded && (
-                <span className={clsx(
-                  styles.menuItemLabel,
-                  isRTL && styles.menuItemLabelRTL
-                )}>
-                  {item.label}
-                </span>
-              )}
-              
-              {hasChildren && isExpanded && (
-                <div className={styles.menuItemChevron}>
-                  {isGroupExpanded ? (
-                    <IconChevronDown size={16} />
-                  ) : (
-                    <IconChevronRight size={16} />
-                  )}
-                </div>
-              )}
-            </div>
-          </button>
-          
-          {/* Render children */}
-          {hasChildren && item.children && isGroupExpanded && isExpanded && (
-            <div className={styles.menuItemChildren}>
-              {item.children.map(child => 
-                renderMenuItem(child, activeItem === child.id, true)
-              )}
-            </div>
-          )}
-        </div>
-      );
     };
 
     // Default menu items if none provided
@@ -258,6 +169,99 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
     const finalMenuItems = menuItems.length > 0 ? menuItems : defaultMenuItems;
     const finalSecondaryItems = secondaryItems.length > 0 ? secondaryItems : defaultSecondaryItems;
     const finalBottomItems = bottomItems.length > 0 ? bottomItems : defaultBottomItems;
+
+    const activeItem = selectedItem || internalActiveItem;
+
+    const handleExpandedChange = (newExpanded: boolean) => {
+      if (controlledExpanded === undefined) {
+        setInternalExpanded(newExpanded);
+      }
+      onExpandedChange?.(newExpanded);
+    };
+
+    const handleItemClick = (itemId: string, item: SidebarMenuItem) => {
+      if (item.disabled) return;
+
+      if (item.hasChildren) {
+        setExpandedGroups(prev => {
+          const newSet = new Set(prev);
+          if (newSet.has(itemId)) {
+            newSet.delete(itemId);
+          } else {
+            newSet.add(itemId);
+          }
+          return newSet;
+        });
+      } else {
+        // Update active item and notify parent
+        setInternalActiveItem(itemId);
+        onItemChange?.(itemId);
+      }
+    };
+
+    const renderMenuItem = (item: SidebarMenuItem, isActive = false, isChild = false) => {
+      const IconComponent = item.icon;
+      const hasChildren = item.hasChildren;
+      const isGroupExpanded = expandedGroups.has(item.id);
+      const isParentOfActive = hasChildren && item.children?.some(child => child.id === activeItem);
+
+      return (
+        <div key={item.id} className={styles.menuItemContainer}>
+          <button
+            className={clsx(
+              styles.menuItem,
+              isActive && styles.menuItemActive,
+              isParentOfActive && styles.menuItemParentActive,
+              isChild && styles.menuItemChild,
+              item.disabled && styles.menuItemDisabled
+            )}
+            onClick={() => handleItemClick(item.id, item)}
+            disabled={item.disabled}
+            style={lineHeightStyle}
+            aria-label={item.label}
+          >
+            <div className={clsx(
+              styles.menuItemContent,
+              !isExpanded && styles.menuItemContentCollapsed
+            )}>
+              <div className={styles.menuItemIcon}>
+                {!isChild && IconComponent && (
+                  <IconComponent size={24} className={styles.icon} />
+                )}
+              </div>
+
+              {isExpanded && (
+                <span className={clsx(
+                  styles.menuItemLabel,
+                  isRTL && styles.menuItemLabelRTL
+                )}>
+                  {item.label}
+                </span>
+              )}
+
+              {hasChildren && isExpanded && (
+                <div className={styles.menuItemChevron}>
+                  {isGroupExpanded ? (
+                    <IconChevronDown size={16} />
+                  ) : (
+                    <IconChevronRight size={16} />
+                  )}
+                </div>
+              )}
+            </div>
+          </button>
+
+          {/* Render children */}
+          {hasChildren && item.children && isGroupExpanded && isExpanded && (
+            <div className={styles.menuItemChildren}>
+              {item.children.map(child =>
+                renderMenuItem(child, activeItem === child.id, true)
+              )}
+            </div>
+          )}
+        </div>
+      );
+    };
 
     return (
       <aside

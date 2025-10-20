@@ -92,7 +92,13 @@
     "date-fns": "^4.1.0",
     "react": ">=17.0.0",
     "react-day-picker": "^9.9.0",
-    "react-dom": ">=17.0.0"
+    "react-dom": ">=17.0.0",
+    "react-router": "^6.0.0 || ^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-router": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.27.1",
@@ -138,6 +144,7 @@
     "react-day-picker": "^9.9.0",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.5.1",
+    "react-router": "^7.9.0",
     "remark-mdx": "^3.1.0",
     "remark-parse": "^11.0.0",
     "remark-stringify": "^11.0.0",

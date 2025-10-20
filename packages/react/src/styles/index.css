@@ -230,8 +230,10 @@
   --t-border-radius-0: 0;
   --t-border-radius-50: 0.125rem;
   --t-border-radius-100: 0.25rem;
+  --t-border-radius-150: 0.375rem;
   --t-border-radius-200: 0.5rem;
   --t-border-radius-300: 0.75rem;
+  --t-border-radius-400: 1rem;
   --t-border-radius-600: 1.5rem;
   --t-border-radius-800: 2rem;
   --t-border-radius-full: 624.994rem;
