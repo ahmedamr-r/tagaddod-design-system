@@ -1,7 +1,7 @@
 {
   "buildCommand": "yarn vercel-build",
   "outputDirectory": "storybook-static",
-  "installCommand": "cd ../.. && yarn install",
+  "installCommand": "cd ../.. && rm -rf node_modules && yarn install --force",
   "framework": null,
   "rewrites": [
     {
