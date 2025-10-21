@@ -9,7 +9,7 @@
     "build-storybook": "storybook build",
     "clean": "shx rm -rf .storybook-static",
     "prebuild-storybook": "cd ../tokens && yarn build && cd ../react && yarn build && shx cp llms.txt ../storybook/public/llms.txt",
-    "vercel-build": "yarn build-storybook"
+    "vercel-build": "storybook build"
   },
   "main": "index.js",
   "license": "MIT",
