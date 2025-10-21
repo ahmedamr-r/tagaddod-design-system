@@ -34,7 +34,8 @@
     "registry:reset": "rm -rf verdaccio-storage verdaccio-htpasswd .local-version-counter",
     "publish:local": "node scripts/publish-local.js",
     "bump:local": "node scripts/bump-local-version.js",
-    "sync:docs": "cd packages/react && yarn copy-docs"
+    "sync:docs": "cd packages/react && yarn copy-docs",
+    "deploy:storybook": "./scripts/deploy-storybook.sh"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
