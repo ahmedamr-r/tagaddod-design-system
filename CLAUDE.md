@@ -744,7 +744,7 @@ All of these scenarios work without any z-index configuration:
 
 When working with overlay components (Modal, Drawer, Popover, Select, Tooltip):
 
-❌ **NEVER** manually set z-index values or style props
+❌ **NEVER** manually set z-index values or style props.
 ❌ **NEVER** calculate z-index in your code
 ❌ **NEVER** import `useDrawerContext` unless creating custom overlay components
 ❌ **NEVER** worry about nesting depth or stacking contexts
