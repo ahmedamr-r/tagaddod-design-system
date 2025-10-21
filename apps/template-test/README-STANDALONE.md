@@ -92,7 +92,7 @@ You: "I need a button with loading state"
 Claude: [Reads .component-documentation/Button.mdx]
         [Generates implementation with loading prop]
 
-import { Button } from '@tagaddod-design/react'
+import { Button } from 'tagaddod-design-react'
 
 <Button variant="primary" loading={isLoading}>
   Submit
@@ -118,7 +118,7 @@ See `.component-documentation/` for complete list:
 ### Basic Usage
 
 ```tsx
-import { Button, TextInput, Modal } from '@tagaddod-design/react'
+import { Button, TextInput, Modal } from 'tagaddod-design-react'
 
 function MyForm() {
   return (
@@ -133,7 +133,7 @@ function MyForm() {
 ### With RTL/Arabic Support
 
 ```tsx
-import { ThemeProvider, Button } from '@tagaddod-design/react'
+import { ThemeProvider, Button } from 'tagaddod-design-react'
 
 function App() {
   return (
@@ -218,7 +218,7 @@ Generate Implementation Code
 ### Enable RTL Mode
 
 ```tsx
-import { ThemeProvider } from '@tagaddod-design/react'
+import { ThemeProvider } from 'tagaddod-design-react'
 
 function App() {
   return (
@@ -331,7 +331,7 @@ See `WORKFLOW.md` for:
 
 - **Design System Docs**: [Storybook](https://tagaddod-design-system.vercel.app/)
 - **Repository**: [GitHub](https://github.com/ahmedamr-r/tagaddod-design-system)
-- **npm Packages**: [@tagaddod-design/react](https://www.npmjs.com/package/@tagaddod-design/react)
+- **npm Packages**: [tagaddod-design-react](https://www.npmjs.com/package/tagaddod-design-react)
 
 ---
 
@@ -343,7 +343,7 @@ Ask Claude Code to implement components - it will automatically read the documen
 ### For Experienced Developers
 Browse `.component-documentation/` to understand component APIs, then import directly:
 ```tsx
-import { Component } from '@tagaddod-design/react'
+import { Component } from 'tagaddod-design-react'
 ```
 
 ### For Arabic/RTL Projects

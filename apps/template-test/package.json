@@ -1,9 +1,9 @@
 {
-  "name": "template-test",
+  "name": "tagaddod-template",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
-  "description": "Local testing package for Tagaddod Design System - simulates real-world npm package consumption",
+  "description": "Starter template for building applications with Tagaddod Design System",
   "scripts": {
     "start": "npm run dev",
     "dev": "vite",
@@ -12,7 +12,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "type-check": "tsc --noEmit",
-    "update:design-system": "npm install @tagaddod-design/react@latest @tagaddod-design/tokens@latest --registry http://localhost:4873",
+    "update:design-system": "npm install tagaddod-design-react@latest @tagaddod-design/tokens@latest",
     "update:auto": "npm run update:design-system && npm run dev",
     "docs:check": "node scripts/check-docs-sync.js",
     "docs:list": "ls -lh .component-documentation/*.mdx | wc -l && echo 'documentation files available'"
@@ -35,8 +35,7 @@
     "@radix-ui/react-tabs": "^1.1.12",
     "@radix-ui/react-tooltip": "^1.2.7",
     "@tabler/icons-react": "^3.34.0",
-    "@tagaddod-design/react": "0.1.29-local.1",
-    "@tagaddod-design/tokens": "0.2.3-local.1",
+    "@tagaddod-design/react": "0.1.30",
     "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

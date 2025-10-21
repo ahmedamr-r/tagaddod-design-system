@@ -363,7 +363,7 @@ const isRTL = document.dir === 'rtl';
 
 ```tsx
 // Just use components - they auto-switch
-import { Sidebar, Drawer, TopBar, Button } from '@tagaddod-design/react';
+import { Sidebar, Drawer, TopBar, Button } from 'tagaddod-design-react';
 
 function App() {
   return (
@@ -402,7 +402,7 @@ const isRTL = document.dir === 'rtl';
 This is the **ONLY** thing you need to handle manually:
 
 ```tsx
-import { useTheme } from '@tagaddod-design/react';
+import { useTheme } from 'tagaddod-design-react';
 import { IconArrowLeft, IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 function NavigationExample() {
@@ -521,7 +521,7 @@ document.documentElement.lang = 'en';
 ### Method 2: ThemeProvider (Recommended)
 
 ```tsx
-import { ThemeProvider, useTheme } from '@tagaddod-design/react';
+import { ThemeProvider, useTheme } from 'tagaddod-design-react';
 
 function App() {
   return (
@@ -574,9 +574,9 @@ Test each component in both directions:
 ### Basic Setup
 
 ```tsx
-import { ThemeProvider } from '@tagaddod-design/react';
+import { ThemeProvider } from 'tagaddod-design-react';
 import '@tagaddod-design/tokens/tokens.css';
-import '@tagaddod-design/react/styles';
+import 'tagaddod-design-react/styles';
 
 function Root() {
   return (
@@ -594,7 +594,7 @@ function Root() {
 ### Accessing Theme Context
 
 ```tsx
-import { useTheme } from '@tagaddod-design/react';
+import { useTheme } from 'tagaddod-design-react';
 
 function Component() {
   const {

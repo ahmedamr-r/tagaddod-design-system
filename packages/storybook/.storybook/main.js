@@ -118,29 +118,9 @@ module.exports = {
       include: /\.(ts|tsx|js|jsx)$/,
     };
 
-    // Build configuration to handle large chunks better
+    // Keep build configuration lean to avoid circular chunk deps
     if (!config.build) config.build = {};
-    config.build.rollupOptions = {
-      ...config.build.rollupOptions,
-      output: {
-        ...config.build.rollupOptions?.output,
-        manualChunks: (id) => {
-          // Split large story files into separate chunks
-          if (id.includes('stories.tsx') || id.includes('stories.ts')) {
-            const fileName = id.split('/').pop()?.replace(/\.(stories|story)\.(tsx?|jsx?)$/, '');
-            return `stories-${fileName}`;
-          }
-          // Split vendor libraries into separate chunks
-          if (id.includes('node_modules')) {
-            if (id.includes('@radix-ui')) return 'vendor-radix';
-            if (id.includes('@storybook')) return 'vendor-storybook';
-            if (id.includes('@tanstack')) return 'vendor-tanstack';
-            return 'vendor-other';
-          }
-        },
-      },
-    };
-
+    
     // Development server configuration for better module handling
     if (!config.server) config.server = {};
     config.server.hmr = {

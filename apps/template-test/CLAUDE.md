@@ -262,7 +262,7 @@ flowchart TD
 The **ONLY** thing requiring manual handling is directional icons (arrows/chevrons):
 
 ```tsx
-import { useTheme } from '@tagaddod-design/react';
+import { useTheme } from 'tagaddod-design-react';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 function Component() {
@@ -598,7 +598,7 @@ npm run type-check     # TypeScript type checking
 
 **Technology Stack**:
 - Build System: Vite with React + TypeScript
-- UI Framework: Tagaddod Design System (@tagaddod-design/react)
+- UI Framework: Tagaddod Design System (tagaddod-design-react)
 - Styling: Global CSS with RTL support
 - Type Safety: Full TypeScript integration
 
@@ -625,7 +625,7 @@ src/
 
 ```tsx
 // Direct import from Tagaddod (recommended)
-import { Button, TextInput, Modal } from '@tagaddod-design/react'
+import { Button, TextInput, Modal } from 'tagaddod-design-react'
 
 // Or via convenience re-exports
 import { Button, TextInput, Modal } from '@/components/ui'
@@ -680,7 +680,7 @@ Uses Skill tool with command: "tagaddod-design-system"
 **Step 3**: Implementation using skill's guidance
 
 ```tsx
-import { Modal, Button } from '@tagaddod-design/react'
+import { Modal, Button } from 'tagaddod-design-react'
 
 function DeleteConfirmModal() {
   const [isOpen, setIsOpen] = useState(false);

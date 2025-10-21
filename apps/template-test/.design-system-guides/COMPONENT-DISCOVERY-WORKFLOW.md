@@ -96,7 +96,7 @@ SessionMemory = {
   components: {
     "Button": {
       source: "tagaddod",
-      imports: ["import { Button } from '@tagaddod-design/react'"],
+      imports: ["import { Button } from 'tagaddod-design-react'"],
       props: {
         variant: ["primary", "secondary", "tertiary", "plain"],
         size: ["small", "medium", "large"],
@@ -287,7 +287,7 @@ Use cached context to generate:
 1. Check memory: Button context NOT FOUND
 2. Read: .component-documentation/Button.mdx (complete file, ~500 lines)
 3. Extract & Cache:
-   - Imports: import { Button } from '@tagaddod-design/react'
+   - Imports: import { Button } from 'tagaddod-design-react'
    - Props: variant, size, tone, loading, disabled, prefixIcon, suffixIcon
    - Examples: 15+ usage patterns
    - RTL: Directional icon selection pattern
@@ -707,7 +707,7 @@ IF user communicates in Arabic OR requests Arabic content:
 - ⚠️ Directional icons (arrows/chevrons)
 
 ```tsx
-import { useTheme } from '@tagaddod-design/react';
+import { useTheme } from 'tagaddod-design-react';
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 
 const { isRTL } = useTheme();
@@ -723,7 +723,7 @@ const NextIcon = isRTL ? IconArrowLeft : IconArrowRight;
 #### Step 4: ThemeProvider Integration
 
 ```tsx
-import { ThemeProvider } from '@tagaddod-design/react';
+import { ThemeProvider } from 'tagaddod-design-react';
 
 <ThemeProvider
   defaultDirection="rtl"
@@ -751,7 +751,7 @@ import { ThemeProvider } from '@tagaddod-design/react';
 4. Extract & Cache:
    {
      source: "tagaddod",
-     imports: ["import { Button } from '@tagaddod-design/react'"],
+     imports: ["import { Button } from 'tagaddod-design-react'"],
      props: {
        variant: ["primary", "secondary", "tertiary", "plain"],
        size: ["small", "medium", "large"],

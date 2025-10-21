@@ -1,5 +1,5 @@
 /* Import Tagaddod Design System styles FIRST */
-@import '@tagaddod-design/react/styles.css';
+@import 'tagaddod-design-react/styles.css';
 
 /* Root CSS custom properties for enhanced theming */
 :root {

@@ -1,18 +1,17 @@
-# Template Test Package
+# Tagaddod Design System Template
 
-**Local NPM Registry Testing Environment for Tagaddod Design System**
+**Production-ready starter template for building applications with Tagaddod Design System**
 
-This package is an isolated testing environment within the monorepo that consumes the Tagaddod Design System packages from a local Verdaccio registry, simulating real-world npm package usage.
+This is a clean, minimal template that provides everything you need to start building applications with the Tagaddod Design System. It comes pre-configured with TypeScript, Vite, and comprehensive component documentation.
 
-## 🎯 Purpose
+## 🎯 What's Included
 
-This setup allows you to:
-
-1. **Test packages as external users would** - Packages are installed from a local npm registry, not workspace links
-2. **Maintain full monorepo context** - Claude Code can see both core packages and consumer in one place
-3. **Fast iteration workflow** - Edit core components → publish locally → test immediately
-4. **Pre-publish validation** - Test actual npm distribution before publishing to npmjs.com
-5. **Documentation sync** - Automatically receives updated component documentation
+1. **Pre-configured Vite + React + TypeScript setup** - Modern development environment ready to go
+2. **Tagaddod Design System integration** - All 33+ components ready to use
+3. **RTL/LTR support** - Built-in Arabic and English language support
+4. **Component documentation** - Complete .mdx documentation for all components
+5. **Claude AI skill** - Intelligent component implementation assistance
+6. **Design tokens** - Access to full design system token library
 
 ## 🏗️ Architecture
 
@@ -162,8 +161,8 @@ This package has access to all Tagaddod Design System components:
 ### Usage Example
 
 ```tsx
-import { Button, Modal, Table } from '@tagaddod-design/react'
-import '@tagaddod-design/react/styles'
+import { Button, Modal, Table } from 'tagaddod-design-react'
+import 'tagaddod-design-react/styles'
 
 function App() {
   return (
@@ -187,7 +186,7 @@ The `.component-documentation/` folder contains detailed MDX guides for all comp
 
 ## 🐛 Troubleshooting
 
-### "Cannot find module @tagaddod-design/react"
+### "Cannot find module tagaddod-design-react"
 
 **Solution**: Packages not published to Verdaccio yet.
 
@@ -253,7 +252,7 @@ If you encounter issues:
 
 1. Check Verdaccio is running: `curl http://localhost:4873`
 2. Verify packages are published: Visit http://localhost:4873 in browser
-3. Check package versions: `npm view @tagaddod-design/react versions --registry http://localhost:4873`
+3. Check package versions: `npm view tagaddod-design-react versions --registry http://localhost:4873`
 4. Clear npm cache: `npm cache clean --force`
 5. Reinstall: `rm -rf node_modules package-lock.json && npm install`
 
