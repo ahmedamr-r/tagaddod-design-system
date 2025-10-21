@@ -13,6 +13,7 @@ yarn build:storybook
 
 # Step 2: Prepare static-storybook directory
 echo "🧹 Cleaning static-storybook directory..."
+mkdir -p static-storybook
 rm -rf static-storybook/*
 
 # Step 3: Copy fresh build
