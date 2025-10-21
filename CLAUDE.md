@@ -736,7 +736,7 @@ All of these scenarios work without any z-index configuration:
   </TabsContent>
 </Tabs>
 
-// ✅ Complex nesting: Drawer → Tabs → Table → Modal → Select
+// ✅ Complex nesting: Drawer → Tabs → Table → Modal → Select.
 // Everything layers correctly without configuration!
 ```
 
