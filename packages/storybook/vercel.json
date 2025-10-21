@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd ../.. && yarn build:tokens && yarn build:react && cd packages/storybook && yarn vercel-build",
+  "buildCommand": "yarn vercel-build",
   "outputDirectory": "storybook-static",
-  "installCommand": "cd ../.. && yarn install",
+  "installCommand": "yarn install --frozen-lockfile",
   "framework": null,
   "rewrites": [
     {
