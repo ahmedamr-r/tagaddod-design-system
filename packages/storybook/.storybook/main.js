@@ -93,6 +93,9 @@ module.exports = {
       '@tagaddod/react': path.resolve(__dirname, '../../react/src'),
       '@tagaddod/tokens': path.resolve(__dirname, '../../tokens/dist'),
     };
+
+    // Force single React instance - prevents "multiple React" errors
+    config.resolve.dedupe = ['react', 'react-dom'];
     
     // Additional configuration to handle module resolution
     config.server = {
