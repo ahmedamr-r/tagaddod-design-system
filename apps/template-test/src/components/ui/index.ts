@@ -1,5 +1,5 @@
 // Simple re-exports from Tagaddod Design System
-// Import components directly in your app from 'tagaddod-design-react'
+// Import components directly in your app from '@tagaddod-design/react'
 
 export {
   // Form Controls
@@ -34,7 +34,7 @@ export {
   // Theme System
   ThemeProvider,
   useTheme,
-} from 'tagaddod-design-react'
+} from '@tagaddod-design/react'
 
 // Export commonly used types
 export type {
@@ -45,4 +45,8 @@ export type {
   Theme,
   Direction,
   Locale
-} from 'tagaddod-design-react'
+} from '@tagaddod-design/react'
+
+// Custom components
+export { Breadcrumb } from './Breadcrumb'
+export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb'

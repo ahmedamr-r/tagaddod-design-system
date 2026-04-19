@@ -55,6 +55,9 @@ backup/
 # Claude Instructions (ignore root .claude, but keep template-test/.claude)
 /.claude
 
+# Playwright MCP local data
+.playwright-mcp/
+
 # Verdaccio local registry (local testing only)
 verdaccio-storage/
 verdaccio-htpasswd

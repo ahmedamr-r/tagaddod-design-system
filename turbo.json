@@ -56,21 +56,6 @@
       "outputs": ["*.tsbuildinfo"],
       "cache": true
     },
-    "storybook": {
-      "dependsOn": ["^build"],
-      "outputs": [".storybook-static/**"],
-      "cache": false,
-      "persistent": true
-    },
-    "build-storybook": {
-      "dependsOn": ["^build"],
-      "inputs": [
-        "src/**/*.{ts,tsx,js,jsx,css}",
-        ".storybook/**"
-      ],
-      "outputs": ["storybook-static/**"],
-      "cache": true
-    },
     "clean": {
       "cache": false
     },

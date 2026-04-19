@@ -1,10 +1,5 @@
-import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
-import * as ButtonStories from './Button.stories';
 import { Button } from './Button';
 import { IconPlus, IconSearch, IconArrowRight } from '@tabler/icons-react';
-
-<Meta of={ButtonStories} />
-
 
 REALM AGENT NAVIGATION INDEX
 =============================
@@ -103,7 +98,7 @@ import { Button } from '@tagaddod/react';
 
 ## Basic Usage
 
-<Canvas of={ButtonStories.Default} />
+<Canvas example="Default" />
 
 ```jsx
 // Default button (primary variant)
@@ -119,13 +114,13 @@ import { Button } from '@tagaddod/react';
 
 Buttons come in four visual variants that represent different levels of emphasis.
 
-<Canvas of={ButtonStories.AllVariantsAndTones} />
+<Canvas example="AllVariantsAndTones" />
 
 ### Primary
 
 Use Primary buttons for the main action in a section or form.
 
-<Canvas of={ButtonStories.Primary} />
+<Canvas example="Primary" />
 
 ```jsx
 <Button variant="primary">Primary Button</Button>
@@ -135,7 +130,7 @@ Use Primary buttons for the main action in a section or form.
 
 Tonal buttons for alternative or secondary actions with a filled background.
 
-<Canvas of={ButtonStories.Tonal} />
+<Canvas example="Tonal" />
 
 ```jsx
 <Button variant="tonal">Tonal Button</Button>
@@ -145,7 +140,7 @@ Tonal buttons for alternative or secondary actions with a filled background.
 
 Outlined buttons have a subtle appearance with borders for less prominent actions.
 
-<Canvas of={ButtonStories.Outlined} />
+<Canvas example="Outlined" />
 
 ```jsx
 <Button variant="outlined">Outlined Button</Button>
@@ -155,7 +150,7 @@ Outlined buttons have a subtle appearance with borders for less prominent action
 
 Plain buttons are minimalist with no background or border until hovered.
 
-<Canvas of={ButtonStories.Plain} />
+<Canvas example="Plain" />
 
 ```jsx
 <Button variant="plain">Plain Button</Button>
@@ -169,13 +164,13 @@ Tones provide different color treatments that convey semantic meaning.
 
 The default tone uses brand colors.
 
-<Canvas of={ButtonStories.Default} />
+<Canvas example="Default" />
 
 ### Critical
 
 Use for destructive or high-risk actions (delete, remove).
 
-<Canvas of={ButtonStories.Critical} />
+<Canvas example="Critical" />
 
 ```jsx
 <Button tone="critical">Critical Button</Button>
@@ -185,7 +180,7 @@ Use for destructive or high-risk actions (delete, remove).
 
 Indicates positive or successful actions.
 
-<Canvas of={ButtonStories.Success} />
+<Canvas example="Success" />
 
 ```jsx
 <Button tone="success">Success Button</Button>
@@ -195,7 +190,7 @@ Indicates positive or successful actions.
 
 For standard, non-branded actions.
 
-<Canvas of={ButtonStories.Neutral} />
+<Canvas example="Neutral" />
 
 ```jsx
 <Button tone="neutral">Neutral Button</Button>
@@ -205,7 +200,7 @@ For standard, non-branded actions.
 
 For special or premium actions.
 
-<Canvas of={ButtonStories.Magic} />
+<Canvas example="Magic" />
 
 ```jsx
 <Button tone="magic">Magic Button</Button>
@@ -215,7 +210,7 @@ For special or premium actions.
 
 The Button component supports five sizes with automatic icon scaling and optimized spacing:
 
-<Canvas of={ButtonStories.AllSizes} />
+<Canvas example="AllSizes" />
 
 | Size | Height | Padding | Font | Icon Size | Gap |
 |------|--------|---------|------|-----------|-----|
@@ -237,7 +232,7 @@ The Button component supports five sizes with automatic icon scaling and optimiz
 
 Icons automatically resize based on button size - you don't need to specify icon sizes manually:
 
-<Canvas of={ButtonStories.IconButtonAllSizes} />
+<Canvas example="IconButtonAllSizes" />
 
 ## States
 
@@ -245,7 +240,7 @@ Icons automatically resize based on button size - you don't need to specify icon
 
 Shows a centered spinner and disables interaction. The button maintains its original width and full opacity during loading state.
 
-<Canvas of={ButtonStories.Loading} />
+<Canvas example="Loading" />
 
 ```jsx
 <Button loading>Loading Button</Button>
@@ -253,21 +248,21 @@ Shows a centered spinner and disables interaction. The button maintains its orig
 
 #### Loading Variations
 
-<Canvas of={ButtonStories.LoadingVariants} />
+<Canvas example="LoadingVariants" />
 
 #### Loading with Different Sizes
 
-<Canvas of={ButtonStories.LoadingSizes} />
+<Canvas example="LoadingSizes" />
 
 #### Loading with Icons
 
-<Canvas of={ButtonStories.LoadingWithIcons} />
+<Canvas example="LoadingWithIcons" />
 
 ### Disabled
 
 Indicates that a button action is unavailable. Each variant has a specific disabled appearance matching the design system.
 
-<Canvas of={ButtonStories.Disabled} />
+<Canvas example="Disabled" />
 
 ```jsx
 <Button disabled>Disabled Button</Button>
@@ -275,7 +270,7 @@ Indicates that a button action is unavailable. Each variant has a specific disab
 
 #### Disabled Variants
 
-<Canvas of={ButtonStories.DisabledVariants} />
+<Canvas example="DisabledVariants" />
 
 All button variants have specific disabled styles:
 - **Primary**: Light gray background with disabled text color
@@ -287,7 +282,7 @@ All button variants have specific disabled styles:
 
 Stretches the button to 100% of its container's width.
 
-<Canvas of={ButtonStories.FullWidth} />
+<Canvas example="FullWidth" />
 
 ```jsx
 <Button fullWidth>Full Width Button</Button>
@@ -299,7 +294,7 @@ Buttons can include icons before (prefix) or after (suffix) the text, or display
 
 ### With Prefix Icon
 
-<Canvas of={ButtonStories.WithPrefixIcon} />
+<Canvas example="WithPrefixIcon" />
 
 ```jsx
 import { IconPlus } from '@tabler/icons-react';
@@ -311,7 +306,7 @@ import { IconPlus } from '@tabler/icons-react';
 
 ### With Suffix Icon
 
-<Canvas of={ButtonStories.WithSuffixIcon} />
+<Canvas example="WithSuffixIcon" />
 
 ```jsx
 import { IconArrowRight } from '@tabler/icons-react';
@@ -323,7 +318,7 @@ import { IconArrowRight } from '@tabler/icons-react';
 
 ### With Both Icons
 
-<Canvas of={ButtonStories.WithBothIcons} />
+<Canvas example="WithBothIcons" />
 
 ```jsx
 import { IconSearch, IconArrowRight } from '@tabler/icons-react';
@@ -340,7 +335,7 @@ import { IconSearch, IconArrowRight } from '@tabler/icons-react';
 
 When creating icon-only buttons, always provide an accessible name using `aria-label`. The button will automatically become square and center the icon.
 
-<Canvas of={ButtonStories.IconOnly} />
+<Canvas example="IconOnly" />
 
 ```jsx
 import { IconPlus } from '@tabler/icons-react';
@@ -353,7 +348,7 @@ import { IconPlus } from '@tabler/icons-react';
 
 ### Icon Variants
 
-<Canvas of={ButtonStories.IconOnlyVariants} />
+<Canvas example="IconOnlyVariants" />
 
 ## Internationalization and RTL Support
 
@@ -388,7 +383,7 @@ When RTL is enabled via ThemeProvider, the Button component automatically:
 4. **Spinner Position**: Maintains proper loading spinner positioning in RTL mode
 5. **Gap Spacing**: Uses flexbox gap for consistent spacing in all directions
 
-<Canvas of={ButtonStories.RtlText} />
+<Canvas example="RtlText" />
 
 ### Directional Icon Handling
 
@@ -507,7 +502,7 @@ function ButtonGroup() {
 
 ## Common Use Cases
 
-<Canvas of={ButtonStories.CommonUseCases} />
+<Canvas example="CommonUseCases" />
 
 ### Form Actions
 

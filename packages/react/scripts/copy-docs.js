@@ -10,6 +10,10 @@ const __dirname = path.dirname(__filename);
 
 // Define paths
 const SOURCE_DIR = path.resolve(__dirname, '../src/components');
+const LLMS_SOURCE = path.resolve(__dirname, '../llms.txt');
+const LLMS_TARGETS = [
+  path.resolve(__dirname, '../../../apps/docs/public/llms.txt'),
+];
 
 // Multiple target directories for documentation sync
 const TARGET_DIRS = [
@@ -88,6 +92,18 @@ async function copyMdxFiles() {
     }
 
     console.log(`\n✨ Documentation copied to ${TARGET_DIRS.length} locations successfully!`);
+
+    // Sync llms.txt into the docs app public folder
+    try {
+      await fs.access(LLMS_SOURCE);
+      for (const target of LLMS_TARGETS) {
+        await fs.mkdir(path.dirname(target), { recursive: true });
+        await fs.copyFile(LLMS_SOURCE, target);
+        console.log(`  ✅ llms.txt → ${target}`);
+      }
+    } catch {
+      console.log('  ℹ  llms.txt not found — skipping docs app sync');
+    }
   } catch (error) {
     console.error('❌ Error during copy operation:', error.message);
     process.exit(1);

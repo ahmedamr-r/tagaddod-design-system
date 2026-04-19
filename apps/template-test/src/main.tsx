@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { ThemeProvider } from 'tagaddod-design-react'
+import { ThemeProvider } from '@tagaddod-design/react'
 import App from './App.tsx'
 import './index.css'
 

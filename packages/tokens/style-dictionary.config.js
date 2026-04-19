@@ -140,7 +140,10 @@ for (const locale of locales) {
                    token.filePath.includes(`locales/${direction}`);
           },
           options: {
-            selector: `html[lang="${locale}"]`,
+            // Cascade-friendly selector so nested elements with `lang="x"` get
+            // locale tokens too. Previously `html[lang="x"]` anchored tokens
+            // to <html>, which blocked per-subtree Arabic previews.
+            selector: `[lang="${locale}"]`,
             outputReferences: true,
             prefix: 't'
           }

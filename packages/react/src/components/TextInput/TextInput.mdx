@@ -1,10 +1,5 @@
-import { Meta, Story, Controls, Canvas, ArgTypes } from '@storybook/blocks';
-import * as TextInputStories from './TextInput.stories';
 import { TextInput } from './TextInput';
 import { IconSearch, IconMail } from '@tabler/icons-react';
-
-<Meta of={TextInputStories} />
-
 
 REALM AGENT NAVIGATION INDEX
 =============================
@@ -105,7 +100,7 @@ import { TextInput } from '@tagaddod/react';
 
 ## Basic Usage
 
-<Canvas of={TextInputStories.Default} />
+<Canvas example="Default" />
 
 ```jsx
 <TextInput 
@@ -120,13 +115,13 @@ import { TextInput } from '@tagaddod/react';
 
 Labels describe the purpose of the input field.
 
-<Canvas of={TextInputStories.Default} />
+<Canvas example="Default" />
 
 ### Optional Fields
 
 Mark non-required fields with the "optional" flag to display "(Optional)" next to the label.
 
-<Canvas of={TextInputStories.Optional} />
+<Canvas example="Optional" />
 
 ```jsx
 <TextInput 
@@ -140,7 +135,7 @@ Mark non-required fields with the "optional" flag to display "(Optional)" next t
 
 All fields are required by default. Use the `optional` prop to mark fields as optional.
 
-<Canvas of={TextInputStories.Required} />
+<Canvas example="Required" />
 
 ```jsx
 <TextInput 
@@ -154,7 +149,7 @@ All fields are required by default. Use the `optional` prop to mark fields as op
 
 Add supplementary information below the input with the `helpText` prop.
 
-<Canvas of={TextInputStories.WithHelpText} />
+<Canvas example="WithHelpText" />
 
 ```jsx
 <TextInput 
@@ -170,7 +165,7 @@ Add supplementary information below the input with the `helpText` prop.
 
 Display error messages when validation fails.
 
-<Canvas of={TextInputStories.WithError} />
+<Canvas example="WithError" />
 
 ```jsx
 <TextInput 
@@ -185,7 +180,7 @@ Display error messages when validation fails.
 
 Prevent interaction with disabled inputs.
 
-<Canvas of={TextInputStories.Disabled} />
+<Canvas example="Disabled" />
 
 ```jsx
 <TextInput 
@@ -199,7 +194,7 @@ Prevent interaction with disabled inputs.
 
 Display information that cannot be edited but should remain visible.
 
-<Canvas of={TextInputStories.ReadOnly} />
+<Canvas example="ReadOnly" />
 
 ```jsx
 <TextInput 
@@ -213,7 +208,7 @@ Display information that cannot be edited but should remain visible.
 
 TextInput comes in three sizes to fit different UI contexts.
 
-<Canvas of={TextInputStories.Sizes} />
+<Canvas example="Sizes" />
 
 ```jsx
 <TextInput 
@@ -245,7 +240,7 @@ Add icons or text before or after the input text.
 
 Different types of prefixes including icons and text.
 
-<Canvas of={TextInputStories.PrefixExamples} />
+<Canvas example="PrefixExamples" />
 
 ```jsx
 import { IconMail, IconSearch } from '@tabler/icons-react';
@@ -269,7 +264,7 @@ import { IconMail, IconSearch } from '@tabler/icons-react';
 
 Prefixes adapt to different input sizes with appropriate icon sizing.
 
-<Canvas of={TextInputStories.SizesWithPrefix} />
+<Canvas example="SizesWithPrefix" />
 
 ```jsx
 import { IconSearch } from '@tabler/icons-react';
@@ -282,7 +277,7 @@ import { IconSearch } from '@tabler/icons-react';
 
 #### Suffix
 
-<Canvas of={TextInputStories.WithSuffix} />
+<Canvas example="WithSuffix" />
 
 ```jsx
 import { IconCurrencyDollar } from '@tabler/icons-react';
@@ -296,7 +291,7 @@ import { IconCurrencyDollar } from '@tabler/icons-react';
 
 #### Combined Prefix and Suffix
 
-<Canvas of={TextInputStories.WithPrefixAndSuffix} />
+<Canvas example="WithPrefixAndSuffix" />
 
 ```jsx
 import { IconMail } from '@tabler/icons-react';
@@ -313,7 +308,7 @@ import { IconMail } from '@tabler/icons-react';
 
 Add a clear button that appears when the input has a value.
 
-<Canvas of={TextInputStories.Clearable} />
+<Canvas example="Clearable" />
 
 ```jsx
 <TextInput 
@@ -328,7 +323,7 @@ Add a clear button that appears when the input has a value.
 
 Password inputs automatically include a visibility toggle.
 
-<Canvas of={TextInputStories.Password} />
+<Canvas example="Password" />
 
 ```jsx
 <TextInput 
@@ -344,13 +339,13 @@ Password inputs automatically include a visibility toggle.
 
 By default, TextInput has a width defined by its container.
 
-<Canvas of={TextInputStories.Default} />
+<Canvas example="Default" />
 
 ### Full Width
 
 Set `fullWidth` to true to make the input take 100% of its container width.
 
-<Canvas of={TextInputStories.FullWidth} />
+<Canvas example="FullWidth" />
 
 ```jsx
 <TextInput 
@@ -364,7 +359,7 @@ Set `fullWidth` to true to make the input take 100% of its container width.
 
 The most common input patterns are demonstrated in the `PrefixExamples` story:
 
-<Canvas of={TextInputStories.PrefixExamples} />
+<Canvas example="PrefixExamples" />
 
 ```jsx
 import { IconSearch, IconMail } from '@tabler/icons-react';
@@ -393,7 +388,7 @@ import { IconSearch, IconMail } from '@tabler/icons-react';
 
 ### Password Input with Visibility Toggle
 
-<Canvas of={TextInputStories.Password} />
+<Canvas example="Password" />
 
 ```jsx
 <TextInput 
@@ -481,7 +476,7 @@ function SearchInput() {
 
 #### Basic RTL Input with Search
 
-<Canvas of={TextInputStories.RTLExample} />
+<Canvas example="RTLExample" />
 
 ```jsx
 <div dir="rtl">

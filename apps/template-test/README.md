@@ -161,8 +161,8 @@ This package has access to all Tagaddod Design System components:
 ### Usage Example
 
 ```tsx
-import { Button, Modal, Table } from 'tagaddod-design-react'
-import 'tagaddod-design-react/styles'
+import { Button, Modal, Table } from '@tagaddod-design/react'
+import '@tagaddod-design/react/styles'
 
 function App() {
   return (
@@ -186,7 +186,7 @@ The `.component-documentation/` folder contains detailed MDX guides for all comp
 
 ## 🐛 Troubleshooting
 
-### "Cannot find module tagaddod-design-react"
+### "Cannot find module @tagaddod-design/react"
 
 **Solution**: Packages not published to Verdaccio yet.
 
@@ -252,7 +252,7 @@ If you encounter issues:
 
 1. Check Verdaccio is running: `curl http://localhost:4873`
 2. Verify packages are published: Visit http://localhost:4873 in browser
-3. Check package versions: `npm view tagaddod-design-react versions --registry http://localhost:4873`
+3. Check package versions: `npm view @tagaddod-design/react versions --registry http://localhost:4873`
 4. Clear npm cache: `npm cache clean --force`
 5. Reinstall: `rm -rf node_modules package-lock.json && npm install`
 

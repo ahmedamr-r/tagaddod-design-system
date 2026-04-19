@@ -12,7 +12,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "type-check": "tsc --noEmit",
-    "update:design-system": "npm install tagaddod-design-react@latest @tagaddod-design/tokens@latest",
+    "update:design-system": "npm install @tagaddod-design/react@latest",
     "update:auto": "npm run update:design-system && npm run dev",
     "docs:check": "node scripts/check-docs-sync.js",
     "docs:list": "ls -lh .component-documentation/*.mdx | wc -l && echo 'documentation files available'"

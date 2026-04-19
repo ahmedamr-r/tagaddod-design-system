@@ -1,0 +1,36 @@
+{
+  "name": "@tagaddod-design/docs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Native documentation site for the Tagaddod Design System (replaces Storybook).",
+  "scripts": {
+    "dev": "vite --port 6010 --strictPort",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --port 6010",
+    "type-check": "tsc -b --noEmit"
+  },
+  "dependencies": {
+    "@mdx-js/react": "^3.1.0",
+    "@mdx-js/rollup": "^3.1.0",
+    "@tabler/icons-react": "^3.34.0",
+    "@tagaddod-design/docs-types": "0.1.0",
+    "@tagaddod-design/react": "0.1.30",
+    "@tagaddod-design/tokens": "0.2.3-local.1",
+    "clsx": "^2.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0"
+  },
+  "devDependencies": {
+    "@joshwooding/vite-plugin-react-docgen-typescript": "^0.6.1",
+    "@types/mdx": "^2.0.13",
+    "@types/node": "^22.15.17",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.4.1",
+    "react-grab": "^0.1.32",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}

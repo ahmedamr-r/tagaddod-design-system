@@ -1,0 +1,129 @@
+/* Breadcrumb container */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Breadcrumb list */
+.list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--t-space-100); /* 4px */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Breadcrumb item */
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--t-space-100); /* 4px */
+}
+
+/* Base text styling */
+.link,
+.text {
+  font: var(--t-typography-body-sm-regular);
+  color: var(--t-color-text-secondary);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s ease;
+  line-height: 1.5;
+}
+
+/* Line height trim for English text */
+.link::before,
+.link::after,
+.text::before,
+.text::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.link::before,
+.text::before {
+  margin-top: -0.15em;
+}
+
+.link::after,
+.text::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic text adjustment (larger trim) */
+:global([dir="rtl"]) .link::before,
+:global([dir="rtl"]) .text::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .link::after,
+:global([dir="rtl"]) .text::after {
+  margin-bottom: -0.25em;
+}
+
+/* Link hover state */
+.link:hover {
+  color: var(--t-color-text-link);
+}
+
+/* Link active state (not last item) */
+.linkActive {
+  color: var(--t-color-text-secondary);
+}
+
+/* Current page (last item) */
+.current {
+  color: var(--t-color-text-primary);
+  font-weight: 500;
+}
+
+/* Separator */
+.separator {
+  display: inline-flex;
+  align-items: center;
+  color: var(--t-color-text-secondary);
+  opacity: 0.6;
+}
+
+/* Label with line height trim for English */
+.label {
+  position: relative;
+}
+
+.label::before,
+.label::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+.label::before {
+  margin-top: -0.15em;
+}
+
+.label::after {
+  margin-bottom: -0.15em;
+}
+
+/* Arabic text adjustment (larger trim) */
+:global([dir="rtl"]) .label::before {
+  margin-top: -0.25em;
+}
+
+:global([dir="rtl"]) .label::after {
+  margin-bottom: -0.25em;
+}
+
+/* RTL layout adjustments */
+:global([dir="rtl"]) .list {
+  direction: rtl;
+}
+
+:global([dir="rtl"]) .link,
+:global([dir="rtl"]) .text {
+  font-family: var(--t-font-family-arabic);
+}
