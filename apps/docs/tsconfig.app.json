@@ -21,7 +21,9 @@
     "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
-      "@tagaddod-design/docs-types": ["../../packages/docs-types/src"]
+      "@tagaddod-design/docs-types": ["../../packages/docs-types/src"],
+      "@tagaddod-design/react": ["../../packages/react/src/index.ts"],
+      "@tokens-src/*": ["../../packages/tokens/src/*"]
     }
   },
   "include": [

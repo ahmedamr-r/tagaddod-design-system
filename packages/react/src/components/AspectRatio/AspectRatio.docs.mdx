@@ -1,0 +1,166 @@
+<div className="component-docs">
+
+# AspectRatio
+
+Constrains children to a given width-to-height ratio, so images, video, iframes, and media placeholders hold their shape as the container resizes. Reach for it whenever you need a media slot to stay the same proportion regardless of source dimensions — product thumbnails, hero banners, embedded videos, social cards.
+
+## Import
+
+```jsx
+import { AspectRatio } from '@tagaddod-design/react';
+```
+
+## Basic usage
+
+Wrap any content and set `ratio` to `width / height`. The child fills the box; the box holds the ratio.
+
+<LiveExample previewSlug="aspect-ratio" example="Sixteen-by-nine" />
+
+```jsx
+<div style={{ width: 320 }}>
+  <AspectRatio ratio={16 / 9}>
+    <div>16 : 9</div>
+  </AspectRatio>
+</div>
+```
+
+## Examples
+
+### Four-by-three
+
+Classic photo ratio for gallery thumbnails and card media.
+
+<LiveExample previewSlug="aspect-ratio" example="Four-by-three" />
+
+```jsx
+<div style={{ width: 320 }}>
+  <AspectRatio ratio={4 / 3}>
+    <div>4 : 3</div>
+  </AspectRatio>
+</div>
+```
+
+### Square
+
+Use `ratio={1}` for avatars, product tiles, and grid cells that need a uniform shape.
+
+<LiveExample previewSlug="aspect-ratio" example="Square" />
+
+```jsx
+<div style={{ width: 240 }}>
+  <AspectRatio ratio={1}>
+    <div>1 : 1</div>
+  </AspectRatio>
+</div>
+```
+
+### Portrait
+
+Pass a value less than 1 for taller-than-wide media such as book covers or poster art.
+
+<LiveExample previewSlug="aspect-ratio" example="Portrait" />
+
+```jsx
+<div style={{ width: 200 }}>
+  <AspectRatio ratio={3 / 4}>
+    <div>3 : 4</div>
+  </AspectRatio>
+</div>
+```
+
+### With an image
+
+Wrap an `<img>` to lock it to a ratio regardless of the source dimensions. Pair with `object-fit: cover` so the image fills the frame without distortion.
+
+<LiveExample previewSlug="aspect-ratio" example="WithImage" />
+
+```jsx
+<div style={{ width: 320 }}>
+  <AspectRatio ratio={16 / 9}>
+    <img
+      src="/landscape.jpg"
+      alt="Landscape"
+      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
+    />
+  </AspectRatio>
+</div>
+```
+
+## Props
+
+See the **Props** tab for the full auto-generated table. Key props:
+
+- `ratio` — *number* — width divided by height. `16/9 ≈ 1.78`, `1` for square, `3/4` for portrait. Defaults to `1`.
+- `children` — *ReactNode* — the content to be framed. Typically a single element that fills the box (`width: 100%; height: 100%`).
+- `className` — *string* — forwarded to the outer container for layout or border overrides.
+- `style` — *CSSProperties* — forwarded to the outer container. Use it to set the container width; the height follows from `ratio`.
+
+All other native `<div>` attributes (`id`, `data-*`, `aria-*`, event handlers) pass through.
+
+## Internationalization and RTL support
+
+`AspectRatio` is a layout primitive with no text and no directional content, so it needs no RTL-specific logic. When used inside a `ThemeProvider` set to `rtl`, the container simply honors the inherited direction on its children — place the media slot wherever your layout puts it and AspectRatio will hold its shape in either direction.
+
+```jsx
+import { ThemeProvider, AspectRatio } from '@tagaddod-design/react';
+
+function App() {
+  return (
+    <ThemeProvider defaultDirection="rtl" defaultLocale="ar">
+      <div style={{ width: 320 }}>
+        <AspectRatio ratio={16 / 9}>
+          <img src="/hero.jpg" alt="بطل" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </AspectRatio>
+      </div>
+    </ThemeProvider>
+  );
+}
+```
+
+## Accessibility
+
+- `AspectRatio` renders a plain `<div>` — it does not add any ARIA roles or semantics. Any accessibility attributes belong on the child (e.g. `alt` on an image, `title` on an iframe, a role on a custom widget).
+- Because the box maintains its height from the width, screen readers encounter the child directly; there is no extra scroll container or offscreen content to manage.
+- If the container is decorative, add `aria-hidden="true"` to the wrapped element rather than to `AspectRatio` itself.
+
+## Common use cases
+
+### Responsive product thumbnail
+
+```jsx
+<AspectRatio ratio={1}>
+  <img
+    src={product.imageUrl}
+    alt={product.name}
+    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
+  />
+</AspectRatio>
+```
+
+### Embedded video
+
+```jsx
+<AspectRatio ratio={16 / 9}>
+  <iframe
+    src="https://www.youtube.com/embed/VIDEO_ID"
+    title="Product demo"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+    allowFullScreen
+    style={{ width: '100%', height: '100%', border: 0, borderRadius: 8 }}
+  />
+</AspectRatio>
+```
+
+### Skeleton placeholder during load
+
+```jsx
+<AspectRatio ratio={16 / 9}>
+  {loading ? (
+    <div style={{ width: '100%', height: '100%', background: 'var(--t-color-surface-hover)' }} />
+  ) : (
+    <img src={src} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+  )}
+</AspectRatio>
+```
+
+</div>

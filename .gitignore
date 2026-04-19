@@ -55,8 +55,9 @@ backup/
 # Vercel
 .vercel
 
-# Claude (ignore root .claude workspace config)
-/.claude
+# Claude — keep /.claude/skills/ in the repo, ignore everything else in /.claude/
+/.claude/*
+!/.claude/skills/
 
 # Playwright MCP local data
 .playwright-mcp/

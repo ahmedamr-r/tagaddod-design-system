@@ -26,9 +26,22 @@ export default defineConfig({
     }),
   ],
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
+    alias: [
+      { find: '@', replacement: path.resolve(__dirname, './src') },
+      { find: '@tokens-src', replacement: path.resolve(repoRoot, 'packages/tokens/src') },
+      {
+        find: /^@tagaddod-design\/react$/,
+        replacement: path.resolve(repoRoot, 'packages/react/src/index.ts'),
+      },
+      {
+        find: '@storybook/blocks',
+        replacement: path.resolve(__dirname, 'src/stubs/storybook-blocks.tsx'),
+      },
+      {
+        find: '@storybook/react',
+        replacement: path.resolve(__dirname, 'src/stubs/storybook-react.ts'),
+      },
+    ],
   },
   server: {
     port: 6010,

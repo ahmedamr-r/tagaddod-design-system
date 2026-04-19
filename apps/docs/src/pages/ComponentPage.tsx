@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@tagaddod-design/react';
 import { getComponent } from '../registry';
 import { Playground } from '../components/Playground';
 import { PropsTable } from '../components/PropsTable';
@@ -40,23 +41,35 @@ export function ComponentPage() {
       <h1>{entry.name}</h1>
       {entry.description ? <p>{entry.description}</p> : null}
 
-      <div className="tabs" role="tablist">
-        {visibleTabs.map((tab) => (
-          <button
-            key={tab.id}
-            role="tab"
-            aria-selected={active === tab.id}
-            onClick={() => setActive(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      <Tabs
+        value={active}
+        onValueChange={(value) => setActive(value as TabId)}
+        count={visibleTabs.length as 2 | 3 | 4 | 5 | 6}
+        ariaLabel={`${entry.name} documentation sections`}
+      >
+        <TabsList>
+          {visibleTabs.map((tab) => (
+            <TabsTrigger key={tab.id} value={tab.id}>
+              {tab.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
 
-      {active === 'docs' && MDXContent ? <MDXContent /> : null}
-      {active === 'playground' ? <Playground preview={entry.preview} /> : null}
-      {active === 'examples' ? <ExamplesGrid slug={entry.slug} /> : null}
-      {active === 'props' ? <PropsTable previewSlug={entry.slug} /> : null}
+        {hasDocs && MDXContent ? (
+          <TabsContent value="docs">
+            <MDXContent />
+          </TabsContent>
+        ) : null}
+        <TabsContent value="playground">
+          <Playground preview={entry.preview} />
+        </TabsContent>
+        <TabsContent value="examples">
+          <ExamplesGrid slug={entry.slug} />
+        </TabsContent>
+        <TabsContent value="props">
+          <PropsTable previewSlug={entry.slug} />
+        </TabsContent>
+      </Tabs>
     </PreviewProvider>
   );
 }

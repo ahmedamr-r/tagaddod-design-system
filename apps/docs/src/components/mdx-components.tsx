@@ -40,4 +40,5 @@ export const mdxComponents: MDXComponents = {
   Story,
   Controls: ControlsBlock,
   ArgTypes,
+  LiveExample,
 };

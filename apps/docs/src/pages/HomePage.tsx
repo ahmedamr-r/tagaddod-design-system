@@ -1,23 +1,40 @@
 import { Link } from 'react-router-dom';
-import { componentList } from '../registry';
 
 export function HomePage() {
   return (
-    <div>
-      <h1>Tagaddod Design System</h1>
-      <p>
-        Native documentation site for <code>@tagaddod-design/react</code>. Select a component from
-        the navigation to view docs, examples, and an interactive playground.
-      </p>
-      <h2>Available components</h2>
-      <ul>
-        {componentList.map((entry) => (
-          <li key={entry.slug}>
-            <Link to={`/components/${entry.slug}`}>{entry.name}</Link>
-            {entry.description ? <> — {entry.description}</> : null}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <main className="docs-main docs-prose home-page">
+      <section className="home-hero">
+        <h1>Tagaddod Design System</h1>
+        <p>
+          The official documentation for <code>@tagaddod-design</code>. Explore the design tokens
+          that drive theming across brands and locales, and the React components that put them to
+          work in production.
+        </p>
+      </section>
+
+      <section className="home-choices">
+        <Link to="/tokens" className="home-choice">
+          <div className="home-choice__header">
+            <h2>Tokens</h2>
+          </div>
+          <p>
+            Colors, spacing, typography, radii, and motion — the primitives every component is
+            built on, with multi-brand and RTL support.
+          </p>
+          <span className="home-choice__cta">Explore tokens →</span>
+        </Link>
+
+        <Link to="/components" className="home-choice">
+          <div className="home-choice__header">
+            <h2>Components</h2>
+          </div>
+          <p>
+            Accessible React components with live playgrounds, usage examples, props references,
+            and full RTL support out of the box.
+          </p>
+          <span className="home-choice__cta">Browse components →</span>
+        </Link>
+      </section>
+    </main>
   );
 }

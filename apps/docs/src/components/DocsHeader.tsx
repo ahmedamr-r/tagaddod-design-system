@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useDocsTheme, type Brand, type Mode } from '../context/DocsThemeProvider';
 
 const brands: { value: Brand; label: string }[] = [
@@ -15,7 +16,9 @@ export function DocsHeader() {
 
   return (
     <header className="docs-header">
-      <div className="docs-header__brand">Tagaddod Design System</div>
+      <div className="docs-header__brand">
+        <Link to="/">Tagaddod Design System</Link>
+      </div>
       <div className="docs-header__controls">
         <div className="docs-header__control">
           <label htmlFor="docs-brand">Brand</label>

@@ -10,15 +10,24 @@ const previewModules = import.meta.glob<PreviewFile>(
 );
 
 /**
- * Only glob MDX files that have been migrated off Storybook blocks. As more
- * components are converted (via scripts/strip-storybook-mdx.mjs), extend this
- * pattern. Keeping it narrow prevents Vite from failing to compile `.mdx`
- * files that still import `@storybook/blocks`.
+ * New-style docs produced by the `component-docs-writer` skill use the
+ * `{Name}.docs.mdx` naming convention and contain no Storybook imports, so
+ * the whole tree can be globbed safely.
  */
-const mdxModules = import.meta.glob<MDXModule>(
+const docsMdxModules = import.meta.glob<MDXModule>(
+  '../../../packages/react/src/components/**/*.docs.mdx',
+  { eager: true },
+);
+
+/**
+ * Legacy Storybook-free MDX kept on a narrow allowlist until regenerated
+ * through the skill. Do not add Storybook-dependent MDX here — Vite will
+ * fail to compile it.
+ */
+const legacyMdxModules = import.meta.glob<MDXModule>(
   [
-    '../../../packages/react/src/components/Button/*.mdx',
-    '../../../packages/react/src/components/TextInput/*.mdx',
+    '../../../packages/react/src/components/Button/Button.mdx',
+    '../../../packages/react/src/components/TextInput/TextInput.mdx',
   ],
   { eager: true },
 );
@@ -28,11 +37,20 @@ function slugToMdxKey(slug: string): string | undefined {
     .split('-')
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join('');
-  const entry = Object.entries(mdxModules).find(([path]) =>
+  const docsEntry = Object.entries(docsMdxModules).find(([path]) =>
+    path.endsWith(`/${name}/${name}.docs.mdx`),
+  );
+  if (docsEntry) return docsEntry[0];
+  const legacyEntry = Object.entries(legacyMdxModules).find(([path]) =>
     path.endsWith(`/${name}/${name}.mdx`),
   );
-  return entry?.[0];
+  return legacyEntry?.[0];
 }
+
+const mdxModules: Record<string, MDXModule> = {
+  ...legacyMdxModules,
+  ...docsMdxModules,
+};
 
 export interface RegistryEntry {
   slug: string;
