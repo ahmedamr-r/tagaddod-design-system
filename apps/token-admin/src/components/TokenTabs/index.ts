@@ -1,1 +1,0 @@
-export { TokenTabs } from './TokenTabs';

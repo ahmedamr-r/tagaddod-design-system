@@ -15,11 +15,8 @@ yarn dev
 
 # Start specific packages
 yarn dev:tokens      # Watch mode for design tokens
-yarn dev:react       # Watch mode for React components  
-yarn dev:storybook   # Run Storybook on port 6006
-
-# Token admin app (Next.js)
-cd apps/token-admin && yarn dev
+yarn dev:react       # Watch mode for React components
+yarn dev:docs        # Run Vite docs site on port 6010
 ```
 
 ### Building
@@ -105,24 +102,18 @@ This ensures:
   - Accessibility testing with addon-a11y
   - LLM documentation served at `/llms.txt`
 
-- **token-admin**: Next.js 15 app for token management
-  - Token editing with real-time validation
-  - GitHub sync functionality
-  - Zustand for state management
-  - WCAG contrast checking
-
 ### Key Technical Details
 
 **Monorepo Management**: Uses Turborepo with dependency-aware task orchestration. Tasks like `build` have proper `dependsOn` chains - tokens build first, then React components, then Storybook.
 
 **Theming System**: Runtime theme switching via ThemeProvider context. Themes are CSS custom properties that can be swapped dynamically. The system supports brand themes (tagaddod/greenpan), locales (en/ar), and directions (ltr/rtl).
 
-**Token Pipeline**: Style Dictionary transforms JSON tokens into multiple formats (CSS, SCSS, JS). Tokens support brand overrides and locale-specific values. The token-admin app provides a GUI for editing tokens and syncing with GitHub.
+**Token Pipeline**: Style Dictionary transforms JSON tokens into multiple formats (CSS, SCSS, JS). Tokens support brand overrides and locale-specific values. Edit tokens directly in `packages/tokens/src/`.
 
 **Component Architecture**: React components use CSS Modules with design token CSS custom properties. Components are built on Radix UI primitives for accessibility. The library is tree-shakeable with proper ESM/CJS dual exports.
 
 **Development Workflow**: 
-1. Edit tokens in `packages/tokens/src/` or via token-admin GUI
+1. Edit tokens in `packages/tokens/src/`
 2. Build tokens: `yarn build:tokens` (auto-runs on watch)
 3. Build React components: `yarn build:react` (depends on tokens)
 4. Test in Storybook: `yarn dev:storybook`
@@ -133,8 +124,6 @@ This ensures:
 ## Important Notes
 
 - Always run `yarn build:tokens` before building React components
-- The token-admin app requires specific environment variables for GitHub sync
-- Storybook copies the latest `llms.txt` from React package during build/dev
 - CSS imports must follow the pattern: `import '@tagaddod-design/react/styles'`
 - When adding new components, follow existing CSS Module patterns and ensure proper token usage
 - Run `yarn lint` and `yarn type-check` before committing changes
